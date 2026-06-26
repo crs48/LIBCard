@@ -700,7 +700,7 @@ const cardModeSchema = z
 ## Implementation Checklist
 
 **Phase 1 — CSS-only card mode**
-- [ ] Add `cardMode` to the Zod config schema in `src/lib/schema.mjs`
+- [x] Add `cardMode` to the Zod config schema in `src/lib/schema.mjs`
       (`enabled`/`qr`/`hint`/`wakeLock`, string-or-object-free object form), and
       regenerate `libcard.schema.json` (`pnpm run generate:schema`).
 - [ ] Add a `getCardMode()` resolver in `src/lib/config.ts` (defaults: enabled,

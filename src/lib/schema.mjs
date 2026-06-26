@@ -61,6 +61,25 @@ const socialSchema = z
   })
   .strict();
 
+// `cardMode:` — the landscape "rotate your phone to flash a business card" view.
+// Pure CSS by default (zero client JS): the overlay and the portrait hint are
+// revealed by an orientation media query. The only JavaScript is the optional
+// screen wake lock, shipped solely when `wakeLock: true` (like the theme
+// switcher). Omit the whole block to accept the defaults.
+const cardModeSchema = z
+  .object({
+    // Show the landscape card overlay (and the portrait "rotate" hint).
+    enabled: z.boolean().default(true),
+    // What the card's QR encodes: the link-in-bio page, the offline vCard, or both.
+    qr: z.enum(["page", "contact", "both"]).default("page"),
+    // The subtle "⟲ Rotate to show your card" nudge shown in portrait on phones.
+    hint: z.boolean().default(true),
+    // Opt-in: keep the screen lit while the card is shown (ships a tiny script).
+    wakeLock: z.boolean().default(false),
+  })
+  .strict()
+  .default({});
+
 export const libcardSchema = z.object({
   profile: z
     .object({
@@ -101,6 +120,7 @@ export const libcardSchema = z.object({
     })
     .strict()
     .default({}),
+  cardMode: cardModeSchema,
   site: z
     .object({
       url: z.string().url(),
