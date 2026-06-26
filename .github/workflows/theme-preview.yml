@@ -1,0 +1,123 @@
+name: Theme preview
+
+# Renders a preview image of a submitted theme and embeds it in the PR comment —
+# for fork PRs too. Uses `pull_request_target`, so it runs with the base repo's
+# token (write access) even for forks.
+#
+# SECURITY: this must never execute untrusted PR code. It checks out the BASE
+# repo (trusted scripts, lockfile, config) and overlays ONLY the PR's `themes/`
+# directory — which is pure data (validated `*.yaml` token files, no code). The
+# render scripts and dependencies all come from base. The PR can influence the
+# image content and the changed-theme slugs (validated below), nothing more.
+on:
+  pull_request_target:
+    paths:
+      - "themes/**"
+
+permissions:
+  contents: write # push preview PNGs to the theme-previews branch
+  pull-requests: write # post the preview comment
+
+concurrency:
+  group: theme-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      # Trusted base checkout — our scripts, package.json, and lockfile.
+      - name: Checkout base
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install (base lockfile)
+        run: pnpm install --frozen-lockfile
+
+      # Overlay ONLY the PR's theme files (data). The pathspec keeps this scoped
+      # to themes/ — no scripts, config, or workflows from the PR are taken.
+      - name: Overlay PR theme data
+        run: |
+          git fetch --no-tags --depth=1 origin "pull/${{ github.event.pull_request.number }}/head:pr-head"
+          git checkout pr-head -- themes
+
+      # loadThemes() validates every theme and throws on a bad one, so an invalid
+      # submission fails here (and is already reported by the Theme CI gate).
+      - name: Render previews
+        run: pnpm run shoot-themes
+
+      - name: Upload preview & comment
+        # A preview hiccup shouldn't block a good theme — the gate is separate.
+        continue-on-error: true
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs");
+            const { owner, repo } = context.repo;
+            const pr = context.payload.pull_request;
+            const headSha = pr.head.sha.slice(0, 7);
+
+            // Changed theme slugs from this PR (added/modified themes/*.yaml).
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner, repo, pull_number: pr.number, per_page: 100,
+            });
+            const slugs = files
+              .filter((f) => f.status !== "removed")
+              .map((f) => f.filename)
+              .filter((p) => /^themes\/[^/]+\.ya?ml$/.test(p))
+              .map((p) => p.replace(/^themes\//, "").replace(/\.ya?ml$/, ""))
+              .filter((s) => /^[a-z0-9-]+$/.test(s) && s !== "community-example");
+
+            if (slugs.length === 0) {
+              core.info("No theme files changed; nothing to preview.");
+              return;
+            }
+
+            // Push each rendered PNG to the theme-previews branch at a unique,
+            // per-commit path (so raw URLs never serve a stale cached image).
+            const branch = "theme-previews";
+            const blocks = [];
+            for (const slug of slugs) {
+              const local = `themes/.previews/${slug}.png`;
+              if (!fs.existsSync(local)) {
+                core.warning(`No preview rendered for ${slug}; skipping.`);
+                continue;
+              }
+              const path = `pr-${pr.number}/${headSha}/${slug}.png`;
+              await github.rest.repos.createOrUpdateFileContents({
+                owner, repo, branch, path,
+                message: `preview: ${slug} for PR #${pr.number}`,
+                content: fs.readFileSync(local).toString("base64"),
+              });
+              const url = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}`;
+              blocks.push(`### \`${slug}\`\n<img src="${url}" alt="${slug} theme preview" width="420">`);
+            }
+            if (blocks.length === 0) return;
+
+            const tag = "<!-- theme-preview -->";
+            const body = [
+              tag,
+              "🎨 **Theme preview** — here's how this theme renders on a sample card:",
+              "",
+              blocks.join("\n\n"),
+              "",
+              `<sub>Updated for ${headSha}. Re-renders on each push.</sub>`,
+            ].join("\n");
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner, repo, issue_number: pr.number, per_page: 100,
+            });
+            const existing = comments.find((c) => c.body && c.body.includes(tag));
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number: pr.number, body });
+            }
