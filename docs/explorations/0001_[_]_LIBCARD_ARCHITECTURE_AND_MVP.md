@@ -665,13 +665,13 @@ jobs:
 - [x] (Stretch) build-time **OG image** via `astro-og-canvas`.
 
 **Distribution & deploy**
-- [ ] `.github/workflows/deploy.yml` using `withastro/action@v6`.
-- [ ] `scripts/setup.mjs` interactive wizard (writes config, sets `site`/`base`),
+- [x] `.github/workflows/deploy.yml` using `withastro/action@v6`.
+- [x] `scripts/setup.mjs` interactive wizard (writes config, sets `site`/`base`),
       run via `pnpm run setup`.
-- [ ] Mark the repo as a **template** ("Use this template").
-- [ ] Update `README.md` quick-start to match the real flow; document the
+- [x] Mark the repo as a **template** ("Use this template").
+- [x] Update `README.md` quick-start to match the real flow; document the
       URL-QR vs vCard-QR tradeoff and the `base` requirement.
-- [ ] Document the **AI-agent setup path** (point the agent at
+- [x] Document the **AI-agent setup path** (point the agent at
       `libcard.schema.json`).
 
 ## Validation Checklist
