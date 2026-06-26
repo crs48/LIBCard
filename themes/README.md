@@ -20,6 +20,7 @@ Browse them live on the `/themes` page.
 | **Default** (`default`) | light | [LibCard](https://github.com/crs48/LIBCard) | MIT | ✅ |
 | **Midnight** (`midnight`) | dark | [LibCard](https://github.com/crs48/LIBCard) | MIT | ✅ |
 | **Mono** (`mono`) | light | [LibCard](https://github.com/crs48/LIBCard) | MIT | ✅ |
+| **Ocean** (`ocean`) | dark | [LibCard](https://github.com/crs48/LIBCard) | MIT | ✅ |
 | **Paper** (`paper`) | light | [LibCard](https://github.com/crs48/LIBCard) | MIT | ✅ |
 | **Sunset** (`sunset`) | dark | [LibCard](https://github.com/crs48/LIBCard) | MIT | ✅ |
 | **Terminal** (`terminal`) | dark | [LibCard](https://github.com/crs48/LIBCard) | MIT | ✅ |
