@@ -19,6 +19,8 @@ export interface ThemeTokens {
 export interface ThemeMeta {
   slug: string;
   name: string;
+  /** Source filename in themes/ (e.g. "midnight.yaml") — used to link the theme. */
+  file: string;
   author: string;
   authorUrl: string;
   license: string;
@@ -38,6 +40,14 @@ const bySlug = new Map(themes.map((t) => [t.slug, t]));
 /** Look up one theme's metadata by slug. */
 export function getThemeMeta(slug: string): ThemeMeta | undefined {
   return bySlug.get(slug);
+}
+
+/** The LibCard gallery repo — where themes live and are credited. */
+export const LIBCARD_REPO = "https://github.com/crs48/LIBCard";
+
+/** Link to a theme's source file in the gallery, e.g. for the footer credit. */
+export function themeSourceUrl(file: string): string {
+  return `${LIBCARD_REPO}/blob/main/themes/${file}`;
 }
 
 // Permissive licenses where keeping the "Theme by" credit is goodwill, not a

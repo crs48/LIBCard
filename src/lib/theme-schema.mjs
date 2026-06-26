@@ -114,7 +114,7 @@ export function loadThemes(dir) {
       throw new Error(`Invalid theme "themes/${file}":\n${detail}`);
     }
     const slug = parsed.slug ?? slugFromFile;
-    themes.push({ ...parsed, slug, isExample: EXAMPLE_SLUGS.has(slug) });
+    themes.push({ ...parsed, slug, file, isExample: EXAMPLE_SLUGS.has(slug) });
   }
 
   // Default theme first (it's the CSS :root fallback), then official, then A→Z.
@@ -131,6 +131,7 @@ export function toRegistryEntry(theme) {
   return {
     slug: theme.slug,
     name: theme.name,
+    file: theme.file, // source filename in themes/, for linking to the theme's source
     author: theme.author,
     authorUrl: theme.authorUrl || "",
     license: theme.license,

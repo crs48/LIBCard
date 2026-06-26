@@ -1,22 +1,22 @@
 ---
-// The footer attribution badge: "Powered by LibCard · Theme by <author>".
+// The footer attribution badge: "Powered by LibCard · <Name> theme by <author>".
 //
 //  • "Powered by LibCard" — shown unless footer.poweredBy is false (MIT core,
 //    so it's removable goodwill).
-//  • "Theme by <author>"  — credits the ACTIVE theme's author. It's shown
+//  • "<Name> theme by <author>" — credits the ACTIVE theme by name (linked to
+//    its source file in the gallery) and its author (linked to authorUrl). Shown
 //    unless footer.themeCredit is false AND the theme's license permits removal
 //    (permissive licenses); a CC-BY theme keeps its credit regardless.
 //
-// The "Theme by" span carries id="lc-theme-by" so the live switcher can update
-// it to the displayed theme's author as you cycle.
+// The credit carries id="lc-theme-by" so the live switcher can update both the
+// theme name and the author as you cycle.
 import { getConfig, getActiveTheme } from "../lib/config";
-import { getThemeMeta, licenseRequiresAttribution } from "../lib/themes";
+import { getThemeMeta, licenseRequiresAttribution, LIBCARD_REPO, themeSourceUrl } from "../lib/themes";
 
 const cfg = await getConfig();
 const active = await getActiveTheme();
 const meta = getThemeMeta(active.name);
 
-const repo = "https://github.com/crs48/LIBCard";
 const poweredBy = cfg.footer.poweredBy;
 
 // Show the credit if the owner kept it on, or the license demands it.
@@ -29,7 +29,7 @@ const sep = poweredBy ? " · " : "";
     {
       poweredBy && (
         <a
-          href={repo}
+          href={LIBCARD_REPO}
           target="_blank"
           rel="noopener noreferrer"
           class="underline-offset-4 hover:text-accent hover:underline"
@@ -39,7 +39,16 @@ const sep = poweredBy ? " · " : "";
       )
     }
     <span id="lc-theme-by" hidden={!showCredit}>
-      {sep}Theme by{" "}
+      {sep}
+      <a
+        href={meta ? themeSourceUrl(meta.file) : LIBCARD_REPO}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="underline-offset-4 hover:text-accent hover:underline"
+      >
+        {meta?.name}
+      </a>{" "}
+      theme by{" "}
       {
         meta?.authorUrl ? (
           <a
