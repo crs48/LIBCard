@@ -1,0 +1,41 @@
+{
+  "name": "libcard",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "description": "Free, open-source link-in-bio page + virtual business card. Static site, deploys to GitHub Pages.",
+  "packageManager": "pnpm@10.11.1",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "prebuild": "node scripts/generate-schema.mjs",
+    "build": "astro build",
+    "preview": "astro preview",
+    "setup": "node scripts/setup.mjs",
+    "generate:schema": "node scripts/generate-schema.mjs",
+    "typecheck": "astro check",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "astro": "^5.13.0",
+    "qrcode": "^1.5.4",
+    "sharp": "^0.34.0",
+    "yaml": "^2.6.1",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@tailwindcss/vite": "^4.1.13",
+    "@types/qrcode": "^1.5.5",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5",
+    "zod-to-json-schema": "^3.24.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild", "sharp"]
+  }
+}

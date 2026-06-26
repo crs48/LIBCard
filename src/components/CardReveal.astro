@@ -1,0 +1,49 @@
+---
+import { withBase } from "../lib/site";
+import QRCode from "./QRCode.astro";
+import SaveContact from "./SaveContact.astro";
+import Icon from "./Icon.astro";
+
+interface Props {
+  /** Absolute URL the QR code should point to (the live card). */
+  url: string;
+}
+
+const { url } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const cardPage = withBase(base, "/card");
+const vcardQr = withBase(base, "/contact-qr.svg");
+
+// Native <details>/<summary> reveal — fully accessible and ZERO JavaScript.
+---
+<details class="group w-full rounded-card border border-border bg-surface shadow-sm">
+  <summary
+    class="flex cursor-pointer items-center justify-center gap-2 rounded-card px-4 py-3 font-medium text-fg select-none list-none transition hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent [&::-webkit-details-marker]:hidden"
+  >
+    <Icon name="qr-code" class="size-5" />
+    <span>Show my digital business card</span>
+  </summary>
+
+  <div class="flex flex-col items-center gap-4 border-t border-border px-4 py-5">
+    <QRCode value={url} size={200} />
+    <p class="text-sm text-muted text-center">Scan to open this card on a phone</p>
+    <div class="flex flex-col items-center gap-2 w-full">
+      <SaveContact class="w-full" />
+      <a
+        href={vcardQr}
+        download="contact-qr.svg"
+        class="inline-flex items-center gap-2 text-sm text-muted underline-offset-4 hover:text-accent hover:underline"
+      >
+        <Icon name="download" class="size-4" />
+        <span>Download contact QR (for printing)</span>
+      </a>
+      <a
+        href={cardPage}
+        class="inline-flex items-center gap-2 text-sm text-muted underline-offset-4 hover:text-accent hover:underline"
+      >
+        <Icon name="external-link" class="size-4" />
+        <span>Open full-screen business card</span>
+      </a>
+    </div>
+  </div>
+</details>

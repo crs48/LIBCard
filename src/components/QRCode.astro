@@ -1,0 +1,28 @@
+---
+import QRCode from "qrcode";
+
+interface Props {
+  value: string;
+  size?: number;
+  class?: string;
+}
+
+const { value, size = 220, class: className } = Astro.props;
+
+// Generated at BUILD TIME — the page ships a plain inline <svg>, no client JS.
+// Dark-on-white with a quiet zone keeps it reliably scannable on any theme.
+const svg = await QRCode.toString(value, {
+  type: "svg",
+  margin: 2,
+  width: size,
+  errorCorrectionLevel: "M",
+  color: { dark: "#000000", light: "#ffffff" },
+});
+---
+<div
+  class:list={["inline-block rounded-xl bg-white p-3 shadow-sm", className]}
+  role="img"
+  aria-label="QR code"
+  set:html={svg}
+>
+</div>

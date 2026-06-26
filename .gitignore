@@ -17,25 +17,16 @@ Thumbs.db
 # ---- Claude Code (keep shared skills, ignore local settings) ----
 .claude/settings.local.json
 
-# ---- Node tooling (if you add a bundler/formatter later) ----
+# ---- Node tooling (pnpm) ----
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 pnpm-debug.log*
 .pnpm-store/
 .cache/
 
-# ---- Build output (Vite / generic static builders) ----
+# ---- Build output (Astro / Vite) ----
 dist/
-build/
+.astro/
 .tmp/
-
-# ---- Jekyll (GitHub Pages' built-in static site generator) ----
-_site/
-.jekyll-cache/
-.jekyll-metadata
-.sass-cache/
 
 # ---- Env / secrets ----
 .env

@@ -1,0 +1,58 @@
+# yaml-language-server: $schema=./libcard.schema.json
+#
+# ┌─────────────────────────────────────────────────────────────────────┐
+# │  This is the ONLY file you need to edit to make LibCard your own.    │
+# │  Change the values below, commit, and push — GitHub Pages rebuilds.  │
+# │  The `$schema` line above gives you autocomplete + validation in     │
+# │  editors like VS Code (and tells AI agents exactly what's allowed).  │
+# └─────────────────────────────────────────────────────────────────────┘
+
+# --- Who you are (the card header) ---
+profile:
+  name: Chris Smothers
+  tagline: Building LibCard — your free link-in-bio + virtual business card
+  avatar: /avatar.svg # a file in /public, or a full https:// URL
+  location: San Francisco, CA
+
+# --- Contact details ---
+# These power the "Save contact" button (a downloadable vCard) and the QR
+# business card. Every field is optional — include only what you want to share.
+contact:
+  email: chris.smothers@gmail.com
+  phone: "" # e.g. "+1-555-123-4567"
+  organization: LibCard
+  title: Maintainer
+  website: https://crs48.github.io/LIBCard
+
+# --- Your links (the buttons) ---
+links:
+  - label: GitHub repo
+    url: https://github.com/crs48/LIBCard
+    icon: github
+  - label: My website
+    url: https://crs48.github.io/LIBCard
+    icon: globe
+
+# --- Social icon row (icon-only, shown under the links) ---
+socials:
+  - platform: github
+    url: https://github.com/crs48
+  - platform: x
+    url: https://x.com/
+
+# --- Look & feel ---
+# One of the built-in themes: default | midnight | sunset | mono
+theme: midnight
+
+# --- SEO / link previews (optional) ---
+seo:
+  description: My links, all in one place — and a tap-to-save digital business card.
+  # ogImage: /og.png   # optional custom Open Graph image (a /public path or URL)
+
+# --- Where this site lives (the setup wizard fills these in) ---
+# url:  your GitHub Pages origin, e.g. https://you.github.io
+# base: the sub-path. "/repo-name" for project pages, "/" for a user site or
+#       a custom domain. Getting `base` wrong is the #1 cause of broken assets.
+site:
+  url: https://crs48.github.io
+  base: /LIBCard
