@@ -4,6 +4,7 @@
   "type": "module",
   "private": true,
   "description": "Free, open-source link-in-bio page + virtual business card. Static site, deploys to GitHub Pages.",
+  "license": "MIT",
   "packageManager": "pnpm@10.11.1",
   "engines": {
     "node": ">=20"
