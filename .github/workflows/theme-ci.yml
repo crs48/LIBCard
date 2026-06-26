@@ -1,0 +1,69 @@
+name: Theme CI
+
+# Validate, contrast-check, and preview theme submissions.
+on:
+  pull_request:
+    paths:
+      - "themes/**"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  themes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # Fails the check if any themes/*.yaml is invalid (bad token, missing
+      # field, unknown font, …) — themes are data, so this is the gate.
+      - name: Validate themes
+        run: pnpm run gen:themes
+
+      # Fails the check if a theme falls below WCAG AA on the key pairs.
+      - name: Check contrast
+        run: pnpm run check-contrast
+
+      # Render a preview PNG per theme and attach it to the run.
+      - name: Render previews
+        run: pnpm run shoot-themes
+
+      - name: Upload previews
+        uses: actions/upload-artifact@v4
+        with:
+          name: theme-previews
+          path: themes/.previews/
+
+      # Leave a friendly note on same-repo PRs (skipped for forks, whose token is
+      # read-only — the previews are still attached as an artifact above).
+      - name: Comment on PR
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        continue-on-error: true
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const tag = '<!-- theme-ci -->';
+            const body = `${tag}\n✅ **Theme CI passed** — validated, contrast-checked, and previews rendered.\nDownload the **theme-previews** artifact from this run to see each theme.`;
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number,
+            });
+            const existing = comments.find((c) => c.body && c.body.includes(tag));
+            if (existing) {
+              await github.rest.issues.updateComment({ owner: context.repo.owner, repo: context.repo.repo, comment_id: existing.id, body });
+            } else {
+              await github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number, body });
+            }

@@ -41,8 +41,23 @@ socials:
     url: https://x.com/
 
 # --- Look & feel ---
-# One of the built-in themes: default | midnight | sunset | mono
-theme: midnight
+# Pick ONE theme (zero JavaScript):
+#
+#   theme: midnight        # default | midnight | sunset | mono | paper | terminal
+#
+# ...or turn on the live theme switcher so visitors can cycle through themes on
+# the page (this is the only feature that ships a tiny bit of JavaScript):
+theme:
+  name: midnight # the default everyone sees first (and crawlers/no-JS visitors)
+  switcher: true # show the "Try a theme" button
+  animate: true # animate the change with a circular reveal
+  # allow: [midnight, sunset, terminal, paper] # optional subset; omit = all themes
+
+# --- Footer credit ---
+# "Powered by LibCard · Theme by <author>". Both default on.
+footer:
+  poweredBy: true # set false to drop "Powered by LibCard" (it's MIT)
+  themeCredit: true # "Theme by <author>" — required for CC-BY themes regardless
 
 # --- SEO / link previews (optional) ---
 seo:

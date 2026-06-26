@@ -12,11 +12,16 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "prebuild": "node scripts/generate-schema.mjs",
+    "prebuild": "node scripts/gen-themes.mjs && node scripts/generate-schema.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "setup": "node scripts/setup.mjs",
     "generate:schema": "node scripts/generate-schema.mjs",
+    "gen:themes": "node scripts/gen-themes.mjs",
+    "new-theme": "node scripts/new-theme.mjs",
+    "check-contrast": "node scripts/check-contrast.mjs",
+    "shoot-themes": "node scripts/shoot-themes.mjs",
+    "update-themes": "node scripts/update-themes.mjs",
     "typecheck": "astro check",
     "test": "vitest run"
   },

@@ -1,0 +1,16 @@
+---
+// No-flash theme restore. Rendered in <head> only when the switcher is on, so it
+// runs before first paint: if a returning visitor previously chose a theme, apply
+// it immediately (no flash of the owner's default). Kept in its own component so
+// the inline script body is emitted as raw JS rather than inside a JSX
+// expression (where it would be stringified, not executed).
+interface Props {
+  /** The themes the switcher allows — guards against a stale/invalid stored value. */
+  allowed: string[];
+}
+const { allowed } = Astro.props;
+---
+<script is:inline define:vars={{ allowed }}>
+  const stored = localStorage.getItem("libcard-theme");
+  if (stored && allowed.includes(stored)) document.documentElement.dataset.theme = stored;
+</script>

@@ -1,35 +1,39 @@
 ---
 import "../styles/global.css";
 import BaseHead from "../components/BaseHead.astro";
-import { getConfig } from "../lib/config";
+import Footer from "../components/Footer.astro";
+import ThemeSwitcher from "../components/ThemeSwitcher.astro";
+import ThemeBoot from "../components/ThemeBoot.astro";
+import { getActiveTheme } from "../lib/config";
 
 interface Props {
   title?: string;
+  /** Widen the container (used by the multi-column theme gallery). */
+  wide?: boolean;
 }
 
-const cfg = await getConfig();
-const { title } = Astro.props;
+const { title, wide } = Astro.props;
+const maxWidth = wide ? "max-w-3xl" : "max-w-md";
+// The owner's chosen theme is server-rendered into <html data-theme> so first
+// paint, crawlers, and no-JS visitors all see it. The switcher (if enabled) only
+// re-themes on interaction.
+const theme = await getActiveTheme();
 ---
 <!doctype html>
-<html lang="en" data-theme={cfg.theme}>
+<html lang="en" data-theme={theme.name}>
   <head>
     <BaseHead title={title} />
+    {/* No-flash restore (before paint). Only when the switcher is on — otherwise
+        the page ships zero JS. */}
+    {theme.switcher && <ThemeBoot allowed={theme.cycle} />}
   </head>
   <body class="min-h-dvh bg-bg font-sans antialiased">
-    <div class="mx-auto flex min-h-dvh w-full max-w-md flex-col items-center px-4 py-10 sm:py-14">
+    <div class:list={["mx-auto flex min-h-dvh w-full flex-col items-center px-4 py-10 sm:py-14", maxWidth]}>
       <main class="flex w-full flex-1 flex-col items-center gap-6">
         <slot />
       </main>
-      <footer class="mt-10 text-center text-xs text-muted">
-        <a
-          href="https://github.com/crs48/LIBCard"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="underline-offset-4 hover:text-accent hover:underline"
-        >
-          Made with LibCard
-        </a>
-      </footer>
+      {theme.switcher && <ThemeSwitcher />}
+      <Footer />
     </div>
   </body>
 </html>

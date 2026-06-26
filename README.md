@@ -10,6 +10,7 @@ LibCard is a tiny [Astro](https://astro.build) static site you host on **GitHub 
 - **Fast to set up** — edit one config file, push. Your page is live.
 - **Tap to save contact** — a "Save contact" button downloads a vCard, so anyone can add you to their phone's address book in one tap.
 - **QR business card** — built-in QR codes for conferences: one points to your page, another saves your contact offline.
+- **Themes you can cycle** — a gallery of built-in themes plus an optional live switcher, so visitors can try your card in each look. Add your own with a pull request.
 - **Yours to own** — no third-party platform between you and your audience; you control the content and the domain.
 - **Fast & private** — zero client-side JavaScript by default; nothing to track you.
 
@@ -42,12 +43,30 @@ socials:
     url: https://github.com/ada
 contact:
   email: ada@example.com
-theme: midnight   # default | midnight | sunset | mono
+theme: midnight   # default | midnight | sunset | mono | paper | terminal
 ```
 
 ### Themes
 
-Set `theme:` to one of `default`, `midnight`, `sunset`, or `mono`. Themes are plain CSS-variable token sets in [`src/themes/`](./src/themes/) — copy one to add your own.
+Pick one of the built-in themes (`default`, `midnight`, `sunset`, `mono`, `paper`, `terminal`):
+
+```yaml
+theme: midnight
+```
+
+…or turn on the **live theme switcher** so visitors can cycle through themes right on your card (this is the only feature that ships a tiny bit of JavaScript — when it's off, your page stays zero-JS):
+
+```yaml
+theme:
+  name: midnight       # the default everyone sees first
+  switcher: true       # show the "Try a theme" button
+  animate: true        # animate the change with a circular reveal
+  # allow: [midnight, sunset, terminal]   # optional subset; omit = all themes
+```
+
+Browse them all on the `/themes` gallery page. The footer credits the active theme's author — **"Powered by LibCard · Theme by &lt;author&gt;"**.
+
+**Themes are data, not code.** Each theme is a single validated `themes/*.yaml` token file — no CSS, no JavaScript — so it's safe to accept from anyone. Add your own with `pnpm run new-theme` and open a pull request; see [`themes/README.md`](./themes/README.md) for the contribution guide. Community themes default to **CC-BY-4.0** (your credit stays), while LibCard itself is **MIT**.
 
 ### Custom domain (optional)
 
@@ -66,18 +85,21 @@ Because [`libcard.schema.json`](./libcard.schema.json) is committed and generate
 ## Local development
 
 ```bash
-pnpm install      # install dependencies (uses pnpm)
-pnpm dev          # local preview at http://localhost:4321
-pnpm build        # production build into dist/ (regenerates libcard.schema.json)
-pnpm run setup    # interactive config wizard
-pnpm test         # run the vCard unit tests
-pnpm typecheck    # astro check
+pnpm install         # install dependencies (uses pnpm)
+pnpm dev             # local preview at http://localhost:4321
+pnpm build           # production build into dist/ (regenerates schemas + theme CSS)
+pnpm run setup       # interactive config wizard
+pnpm run new-theme   # scaffold a new theme into themes/
+pnpm run gen:themes  # regenerate theme CSS + registry from themes/*.yaml
+pnpm run check-contrast  # WCAG AA check for all themes
+pnpm test            # run the vCard unit tests
+pnpm typecheck       # astro check
 ```
 
 ## How it works
 
 - **Astro** static output → fast, CDN-friendly HTML with no runtime JS.
-- **Tailwind CSS v4** for styling; theming via CSS-variable `@theme` tokens.
+- **Tailwind CSS v4** for styling; themes are `themes/*.yaml` token files compiled to CSS-variable `@theme` tokens at build time.
 - One **Zod** schema is the single source of truth: it validates the config at build time *and* generates `libcard.schema.json` for editors/agents.
 - The **vCard** (`/contact.vcf`) and **QR codes** (page-URL QR + offline vCard-QR) are generated at build time — zero client JavaScript.
 

@@ -1,0 +1,59 @@
+---
+// The footer attribution badge: "Powered by LibCard · Theme by <author>".
+//
+//  • "Powered by LibCard" — shown unless footer.poweredBy is false (MIT core,
+//    so it's removable goodwill).
+//  • "Theme by <author>"  — credits the ACTIVE theme's author. It's shown
+//    unless footer.themeCredit is false AND the theme's license permits removal
+//    (permissive licenses); a CC-BY theme keeps its credit regardless.
+//
+// The "Theme by" span carries id="lc-theme-by" so the live switcher can update
+// it to the displayed theme's author as you cycle.
+import { getConfig, getActiveTheme } from "../lib/config";
+import { getThemeMeta, licenseRequiresAttribution } from "../lib/themes";
+
+const cfg = await getConfig();
+const active = await getActiveTheme();
+const meta = getThemeMeta(active.name);
+
+const repo = "https://github.com/crs48/LIBCard";
+const poweredBy = cfg.footer.poweredBy;
+
+// Show the credit if the owner kept it on, or the license demands it.
+const showCredit =
+  !!meta && (cfg.footer.themeCredit || licenseRequiresAttribution(meta.license));
+const sep = poweredBy ? " · " : "";
+---
+<footer class="mt-10 text-center text-xs text-muted">
+  <p>
+    {
+      poweredBy && (
+        <a
+          href={repo}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="underline-offset-4 hover:text-accent hover:underline"
+        >
+          Powered by LibCard
+        </a>
+      )
+    }
+    <span id="lc-theme-by" hidden={!showCredit}>
+      {sep}Theme by{" "}
+      {
+        meta?.authorUrl ? (
+          <a
+            href={meta.authorUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="underline-offset-4 hover:text-accent hover:underline"
+          >
+            {meta?.author}
+          </a>
+        ) : (
+          <span>{meta?.author}</span>
+        )
+      }
+    </span>
+  </p>
+</footer>

@@ -117,14 +117,63 @@
           "default": []
         },
         "theme": {
-          "type": "string",
-          "enum": [
-            "default",
-            "midnight",
-            "sunset",
-            "mono"
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "switcher": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "order": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "animate": {
+                  "type": "boolean",
+                  "default": true
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "additionalProperties": false
+            }
           ],
           "default": "default"
+        },
+        "footer": {
+          "type": "object",
+          "properties": {
+            "poweredBy": {
+              "type": "boolean",
+              "default": true
+            },
+            "themeCredit": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false,
+          "default": {}
         },
         "seo": {
           "type": "object",

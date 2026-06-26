@@ -4,10 +4,40 @@
 // (src/content.config.ts, for build-time validation + types) AND by a plain
 // Node script (scripts/generate-schema.mjs, which turns it into the JSON Schema
 // that powers editor autocomplete). One schema, two consumers, zero drift.
+import { readFileSync } from "node:fs";
 import { z } from "zod";
 
-/** Built-in theme names. Keep in sync with src/themes/*.css. */
-export const THEMES = ["default", "midnight", "sunset", "mono"];
+/**
+ * Available theme slugs, read from the generated registry (src/data/themes.json,
+ * produced from themes/*.yaml by `pnpm run gen:themes`). Used by the setup wizard
+ * to list choices. Falls back to just "default" before the first generation.
+ */
+export const THEMES = readThemeSlugs();
+function readThemeSlugs() {
+  try {
+    const registry = JSON.parse(readFileSync(new URL("../data/themes.json", import.meta.url), "utf-8"));
+    return registry.map((t) => t.slug);
+  } catch {
+    return ["default"];
+  }
+}
+
+// `theme:` accepts either a bare slug (one theme, zero client JS) or an object
+// that can turn on the live theme switcher. The simple string form stays valid.
+const themeConfigSchema = z
+  .union([
+    z.string().min(1),
+    z
+      .object({
+        name: z.string().min(1),
+        switcher: z.boolean().default(false),
+        allow: z.array(z.string().min(1)).optional(),
+        order: z.array(z.string().min(1)).optional(),
+        animate: z.boolean().default(true),
+      })
+      .strict(),
+  ])
+  .default("default");
 
 /** Allow a valid value, or an empty string (so users can leave fields blank). */
 const optionalEmail = z.union([z.string().email(), z.literal("")]).optional();
@@ -50,7 +80,18 @@ export const libcardSchema = z.object({
     .default({}),
   links: z.array(linkSchema).default([]),
   socials: z.array(socialSchema).default([]),
-  theme: z.enum(THEMES).default("default"),
+  theme: themeConfigSchema,
+  footer: z
+    .object({
+      // "Powered by LibCard" — on by default, but yours to turn off (MIT).
+      poweredBy: z.boolean().default(true),
+      // "Theme by <author>" — on by default. Setting this false only hides the
+      // credit for permissively-licensed themes (MIT/CC0/…). Themes under a
+      // license that requires attribution (e.g. CC-BY-4.0) keep their credit.
+      themeCredit: z.boolean().default(true),
+    })
+    .strict()
+    .default({}),
   seo: z
     .object({
       description: z.string().optional(),

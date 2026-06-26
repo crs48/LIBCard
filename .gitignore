@@ -28,6 +28,9 @@ dist/
 .astro/
 .tmp/
 
+# ---- Generated theme previews (rebuilt by `pnpm run shoot-themes` / theme CI) ----
+themes/.previews/
+
 # ---- Env / secrets ----
 .env
 .env.local

@@ -1,0 +1,97 @@
+---
+// The opt-in live theme switcher — the ONLY client JavaScript LibCard ships, and
+// only when `theme.switcher: true` in libcard.config.yaml. A tiny inline script
+// (no framework) cycles `data-theme` through the configured ring, persists the
+// choice to localStorage, animates the change with the View Transitions API
+// (falling back to an instant swap), and live-updates the footer "Theme by"
+// credit to the displayed theme's author.
+import { getConfig, getActiveTheme } from "../lib/config";
+import { getThemeMeta, licenseRequiresAttribution } from "../lib/themes";
+
+const cfg = await getConfig();
+const active = await getActiveTheme();
+
+// Metadata for just the themes in the cycle ring — embedded for the client so it
+// can update the credit badge without another request.
+const items = active.cycle.map((slug) => {
+  const m = getThemeMeta(slug);
+  return {
+    slug,
+    name: m?.name ?? slug,
+    author: m?.author ?? "",
+    authorUrl: m?.authorUrl ?? "",
+    requiresAttr: m ? licenseRequiresAttribution(m.license) : true,
+  };
+});
+
+const sep = cfg.footer.poweredBy ? " · " : "";
+const themeCredit = cfg.footer.themeCredit;
+const animate = active.animate;
+---
+<div class="flex w-full justify-center">
+  <button
+    id="lc-theme-next"
+    type="button"
+    aria-label="Try the next theme"
+    class="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-2 text-sm font-medium text-fg transition hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+  >
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="size-4" aria-hidden="true">
+      <circle cx="13.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"></circle>
+      <circle cx="17.5" cy="10.5" r="1.2" fill="currentColor" stroke="none"></circle>
+      <circle cx="8.5" cy="7.5" r="1.2" fill="currentColor" stroke="none"></circle>
+      <circle cx="6.5" cy="12.5" r="1.2" fill="currentColor" stroke="none"></circle>
+      <path d="M12 2a10 10 0 1 0 0 20c1.5 0 2-1 2-2 0-1.5-1.5-1.5-1.5-3 0-1 .8-1.5 2-1.5h1.5A4.5 4.5 0 0 0 22 11 10 10 0 0 0 12 2Z"></path>
+    </svg>
+    <span>Try a theme</span>
+  </button>
+  <span id="lc-theme-live" class="sr-only" aria-live="polite"></span>
+</div>
+
+<script is:inline define:vars={{ items, sep, themeCredit, animate }}>
+  const root = document.documentElement;
+  const btn = document.getElementById("lc-theme-next");
+  const live = document.getElementById("lc-theme-live");
+  const slugs = items.map((i) => i.slug);
+
+  function escapeAttr(s) {
+    return String(s).replace(/"/g, "&quot;");
+  }
+  function badgeHtml(it) {
+    const who = it.authorUrl
+      ? `<a href="${escapeAttr(it.authorUrl)}" target="_blank" rel="noopener noreferrer" class="underline-offset-4 hover:text-accent hover:underline">${it.author}</a>`
+      : `<span>${it.author}</span>`;
+    return `${sep}Theme by ${who}`;
+  }
+
+  function apply(slug) {
+    const it = items[slugs.indexOf(slug)];
+    const swap = () => {
+      root.dataset.theme = slug;
+      try {
+        localStorage.setItem("libcard-theme", slug);
+      } catch {}
+      const badge = document.getElementById("lc-theme-by");
+      if (badge) {
+        const show = it.requiresAttr || themeCredit;
+        badge.hidden = !show;
+        if (show) badge.innerHTML = badgeHtml(it);
+      }
+      if (live) live.textContent = `Theme: ${it.name}`;
+    };
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (animate && !reduced && document.startViewTransition) {
+      document.startViewTransition(swap);
+    } else {
+      swap();
+    }
+  }
+
+  btn?.addEventListener("click", (e) => {
+    // Anchor the circular reveal at the button for a polished wipe.
+    root.style.setProperty("--lc-vt-x", `${e.clientX}px`);
+    root.style.setProperty("--lc-vt-y", `${e.clientY}px`);
+    const current = root.dataset.theme || slugs[0];
+    const idx = slugs.indexOf(current);
+    apply(slugs[(idx + 1) % slugs.length]);
+  });
+</script>

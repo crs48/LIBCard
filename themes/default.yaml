@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=./theme.schema.json
+name: Default
+author: LibCard
+authorUrl: https://github.com/crs48/LIBCard
+license: MIT
+official: true
+mode: light
+tags: [light, clean, blue]
+description: Clean, bright, and neutral — the safe default.
+tokens:
+  bg: "#f1f5f9"
+  surface: "#ffffff"
+  fg: "#0f172a"
+  muted: "#64748b"
+  accent: "#2563eb"
+  accentContrast: "#ffffff"
+  border: "#e2e8f0"
+  font: sans
+  radius: 1rem

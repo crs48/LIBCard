@@ -1,0 +1,125 @@
+{
+  "$ref": "#/definitions/LibcardTheme",
+  "definitions": {
+    "LibcardTheme": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "author": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authorUrl": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uri"
+            },
+            {
+              "type": "string",
+              "const": ""
+            }
+          ]
+        },
+        "license": {
+          "type": "string",
+          "default": "CC-BY-4.0"
+        },
+        "official": {
+          "type": "boolean",
+          "default": false
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "light",
+            "dark"
+          ],
+          "default": "light"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "description": {
+          "type": "string"
+        },
+        "tokens": {
+          "type": "object",
+          "properties": {
+            "bg": {
+              "type": "string",
+              "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+            },
+            "surface": {
+              "type": "string",
+              "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+            },
+            "fg": {
+              "type": "string",
+              "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+            },
+            "muted": {
+              "type": "string",
+              "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+            },
+            "accent": {
+              "type": "string",
+              "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+            },
+            "accentContrast": {
+              "type": "string",
+              "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+            },
+            "border": {
+              "type": "string",
+              "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+            },
+            "font": {
+              "type": "string",
+              "enum": [
+                "sans",
+                "serif",
+                "mono",
+                "rounded"
+              ],
+              "default": "sans"
+            },
+            "radius": {
+              "type": "string",
+              "pattern": "^\\d*\\.?\\d+(px|rem|em)$",
+              "default": "1rem"
+            }
+          },
+          "required": [
+            "bg",
+            "surface",
+            "fg",
+            "muted",
+            "accent",
+            "accentContrast",
+            "border"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "name",
+        "author",
+        "tokens"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}
