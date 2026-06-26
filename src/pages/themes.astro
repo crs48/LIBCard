@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { themes } from "../lib/themes";
+import { themes, themeSourceUrl } from "../lib/themes";
 import { withBase } from "../lib/site";
 
 // The theme gallery. Each card is wrapped in its own `data-theme`, so the mini
@@ -58,7 +58,14 @@ const contribute = "https://github.com/crs48/LIBCard/tree/main/themes";
           {/* Meta strip. */}
           <div class="border-t border-border bg-surface px-5 py-3">
             <div class="flex items-baseline justify-between gap-2">
-              <span class="font-semibold text-fg">{t.name}</span>
+              <a
+                href={themeSourceUrl(t.file)}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-semibold text-fg underline-offset-4 hover:text-accent hover:underline"
+              >
+                {t.name}
+              </a>
               <span class="text-xs text-muted">{t.mode}</span>
             </div>
             <p class="mt-0.5 text-xs text-muted">

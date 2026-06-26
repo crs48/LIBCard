@@ -2,6 +2,7 @@
   {
     "slug": "default",
     "name": "Default",
+    "file": "default.yaml",
     "author": "LibCard",
     "authorUrl": "https://github.com/crs48/LIBCard",
     "license": "MIT",
@@ -29,6 +30,7 @@
   {
     "slug": "midnight",
     "name": "Midnight",
+    "file": "midnight.yaml",
     "author": "LibCard",
     "authorUrl": "https://github.com/crs48/LIBCard",
     "license": "MIT",
@@ -56,6 +58,7 @@
   {
     "slug": "mono",
     "name": "Mono",
+    "file": "mono.yaml",
     "author": "LibCard",
     "authorUrl": "https://github.com/crs48/LIBCard",
     "license": "MIT",
@@ -83,6 +86,7 @@
   {
     "slug": "ocean",
     "name": "Ocean",
+    "file": "ocean.yaml",
     "author": "LibCard",
     "authorUrl": "https://github.com/crs48/LIBCard",
     "license": "MIT",
@@ -110,6 +114,7 @@
   {
     "slug": "paper",
     "name": "Paper",
+    "file": "paper.yaml",
     "author": "LibCard",
     "authorUrl": "https://github.com/crs48/LIBCard",
     "license": "MIT",
@@ -137,6 +142,7 @@
   {
     "slug": "sunset",
     "name": "Sunset",
+    "file": "sunset.yaml",
     "author": "LibCard",
     "authorUrl": "https://github.com/crs48/LIBCard",
     "license": "MIT",
@@ -164,6 +170,7 @@
   {
     "slug": "terminal",
     "name": "Terminal",
+    "file": "terminal.yaml",
     "author": "LibCard",
     "authorUrl": "https://github.com/crs48/LIBCard",
     "license": "MIT",

@@ -7,19 +7,20 @@
 //   • (always, when included) syncs the footer "Theme by" credit to whatever
 //     theme is active on load — which ThemeBoot may have randomized or restored.
 import { getConfig, getActiveTheme } from "../lib/config";
-import { getThemeMeta, licenseRequiresAttribution } from "../lib/themes";
+import { getThemeMeta, licenseRequiresAttribution, themeSourceUrl } from "../lib/themes";
 
 const cfg = await getConfig();
 const active = await getActiveTheme();
 const switcher = active.switcher;
 
 // Metadata for just the themes in the cycle ring — embedded for the client so it
-// can update the credit badge without another request.
+// can update the credit badge ("<Name> theme by <author>") without a request.
 const items = active.cycle.map((slug) => {
   const m = getThemeMeta(slug);
   return {
     slug,
     name: m?.name ?? slug,
+    sourceUrl: m ? themeSourceUrl(m.file) : "",
     author: m?.author ?? "",
     authorUrl: m?.authorUrl ?? "",
     requiresAttr: m ? licenseRequiresAttribution(m.license) : true,
@@ -62,10 +63,12 @@ const animate = active.animate;
     return String(s).replace(/"/g, "&quot;");
   }
   function badgeHtml(it) {
+    const linkCls = "underline-offset-4 hover:text-accent hover:underline";
+    const nameLink = `<a href="${escapeAttr(it.sourceUrl)}" target="_blank" rel="noopener noreferrer" class="${linkCls}">${it.name}</a>`;
     const who = it.authorUrl
-      ? `<a href="${escapeAttr(it.authorUrl)}" target="_blank" rel="noopener noreferrer" class="underline-offset-4 hover:text-accent hover:underline">${it.author}</a>`
+      ? `<a href="${escapeAttr(it.authorUrl)}" target="_blank" rel="noopener noreferrer" class="${linkCls}">${it.author}</a>`
       : `<span>${it.author}</span>`;
-    return `${sep}Theme by ${who}`;
+    return `${sep}${nameLink} theme by ${who}`;
   }
   // Reflect a theme in the footer credit (the footer is parsed after this script,
   // so callers run this on DOMContentLoaded or later).
