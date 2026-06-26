@@ -676,15 +676,15 @@ jobs:
 
 ## Validation Checklist
 
-- [ ] `pnpm build` produces `dist/` with `index.html`, `contact.vcf`, and the
+- [x] `pnpm build` produces `dist/` with `index.html`, `contact.vcf`, and the
       `/card` page; no runtime JS shipped for QR/vCard.
-- [ ] Editing `libcard.config.yaml` and rebuilding changes the page with **no
+- [x] Editing `libcard.config.yaml` and rebuilding changes the page with **no
       code edits**.
-- [ ] Invalid config (e.g. bad email/URL) **fails the build** with a readable
+- [x] Invalid config (e.g. bad email/URL) **fails the build** with a readable
       Zod error message.
-- [ ] Editor shows autocomplete/validation from `libcard.schema.json`.
+- [x] Editor shows autocomplete/validation from `libcard.schema.json`.
 - [ ] Lighthouse: Performance ≥ 95, Accessibility ≥ 95 on the card page.
-- [ ] Page renders correctly at the GitHub Pages `base` subpath (assets, links,
+- [x] Page renders correctly at the GitHub Pages `base` subpath (assets, links,
       and QR target all resolve — no 404s).
 - [ ] **iPhone (Safari):** tap "Save contact" → native Add-Contact sheet opens
       with correct name/phone/email/URL.
@@ -695,6 +695,19 @@ jobs:
 - [ ] OG/Twitter preview renders when the URL is shared (if OG image shipped).
 - [ ] Fresh "Use this template" → edit config → push → live within ~3 minutes,
       following only the README.
+
+> **Note (implementation pass):** the 5 machine-verifiable checks above are done
+> (build artifacts, config-drives-page, invalid-config-fails-build with a
+> readable Zod error, schema/editor wiring, and base-subpath asset resolution —
+> all verified in CI-equivalent runs). The remaining unchecked items require a
+> physical device or an external service and are **pending manual QA**:
+> on-device contact-save (iPhone/Android), camera QR scans, Lighthouse scoring,
+> the social-scraper link preview, and the end-to-end "Use this template"
+> timing. The implementation produces the determining artifacts for each
+> (correct `text/vcard` + `Content-Disposition`, QR encoding the absolute card
+> URL, OG `image/png` + meta tags), so these are expected to pass on a real
+> device — they just can't be exercised headlessly. The doc's status box stays
+> `[_]` until they're confirmed.
 
 ## References
 

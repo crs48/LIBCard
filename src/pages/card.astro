@@ -4,10 +4,8 @@ import Profile from "../components/Profile.astro";
 import QRCode from "../components/QRCode.astro";
 import SaveContact from "../components/SaveContact.astro";
 import Icon from "../components/Icon.astro";
-import { getConfig } from "../lib/config";
 import { absoluteUrl, withBase } from "../lib/site";
 
-const cfg = await getConfig();
 const base = import.meta.env.BASE_URL;
 // The QR on the business-card page points back to the link-in-bio home.
 const homeUrl = absoluteUrl(Astro.site, base, "/");
