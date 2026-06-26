@@ -1,0 +1,168 @@
+{
+  "$ref": "#/definitions/LibcardConfig",
+  "definitions": {
+    "LibcardConfig": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "tagline": {
+              "type": "string"
+            },
+            "avatar": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "additionalProperties": false
+        },
+        "contact": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "email"
+                },
+                {
+                  "type": "string",
+                  "const": ""
+                }
+              ]
+            },
+            "phone": {
+              "type": "string"
+            },
+            "organization": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "website": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uri"
+                },
+                {
+                  "type": "string",
+                  "const": ""
+                }
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "default": {}
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "icon": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label",
+              "url"
+            ],
+            "additionalProperties": false
+          },
+          "default": []
+        },
+        "socials": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "platform": {
+                "type": "string",
+                "minLength": 1
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "platform",
+              "url"
+            ],
+            "additionalProperties": false
+          },
+          "default": []
+        },
+        "theme": {
+          "type": "string",
+          "enum": [
+            "default",
+            "midnight",
+            "sunset",
+            "mono"
+          ],
+          "default": "default"
+        },
+        "seo": {
+          "type": "object",
+          "properties": {
+            "description": {
+              "type": "string"
+            },
+            "ogImage": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "default": {}
+        },
+        "site": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "base": {
+              "type": "string",
+              "default": "/"
+            }
+          },
+          "required": [
+            "url"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "profile",
+        "site"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

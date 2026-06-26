@@ -1,0 +1,35 @@
+---
+import "../styles/global.css";
+import BaseHead from "../components/BaseHead.astro";
+import { getConfig } from "../lib/config";
+
+interface Props {
+  title?: string;
+}
+
+const cfg = await getConfig();
+const { title } = Astro.props;
+---
+<!doctype html>
+<html lang="en" data-theme={cfg.theme}>
+  <head>
+    <BaseHead title={title} />
+  </head>
+  <body class="min-h-dvh bg-bg font-sans antialiased">
+    <div class="mx-auto flex min-h-dvh w-full max-w-md flex-col items-center px-4 py-10 sm:py-14">
+      <main class="flex w-full flex-1 flex-col items-center gap-6">
+        <slot />
+      </main>
+      <footer class="mt-10 text-center text-xs text-muted">
+        <a
+          href="https://github.com/crs48/LIBCard"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="underline-offset-4 hover:text-accent hover:underline"
+        >
+          Made with LibCard
+        </a>
+      </footer>
+    </div>
+  </body>
+</html>

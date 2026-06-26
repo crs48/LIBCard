@@ -1,0 +1,23 @@
+---
+import type { LibcardLink } from "../lib/config";
+import Icon from "./Icon.astro";
+
+interface Props {
+  link: LibcardLink;
+}
+
+const { link } = Astro.props;
+const external = /^https?:\/\//i.test(link.url);
+const rel = external ? "noopener noreferrer" : undefined;
+const target = external ? "_blank" : undefined;
+---
+<a
+  href={link.url}
+  target={target}
+  rel={rel}
+  class="group flex items-center gap-3 w-full rounded-card bg-surface border border-border px-4 py-3.5 text-fg font-medium shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+>
+  {link.icon && <Icon name={link.icon} class="size-5 shrink-0 text-muted group-hover:text-accent transition-colors" />}
+  <span class="flex-1 text-center">{link.label}</span>
+  <Icon name="external-link" class="size-4 shrink-0 text-muted opacity-0 group-hover:opacity-100 transition-opacity" />
+</a>

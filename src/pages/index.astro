@@ -1,0 +1,32 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Profile from "../components/Profile.astro";
+import LinkButton from "../components/LinkButton.astro";
+import SocialRow from "../components/SocialRow.astro";
+import CardReveal from "../components/CardReveal.astro";
+import { getConfig } from "../lib/config";
+import { absoluteUrl } from "../lib/site";
+
+const cfg = await getConfig();
+// Absolute URL to this very page — what the QR code resolves to when scanned.
+const cardUrl = absoluteUrl(Astro.site, import.meta.env.BASE_URL, "/");
+---
+<Layout>
+  <Profile />
+
+  {
+    cfg.links.length > 0 && (
+      <ul class="flex w-full flex-col gap-3">
+        {cfg.links.map((link) => (
+          <li>
+            <LinkButton link={link} />
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  <SocialRow />
+
+  <CardReveal url={cardUrl} />
+</Layout>

@@ -1,0 +1,23 @@
+---
+import { getConfig } from "../lib/config";
+import Icon from "./Icon.astro";
+
+const { socials } = await getConfig();
+---
+{
+  socials.length > 0 && (
+    <nav aria-label="Social profiles" class="flex flex-wrap items-center justify-center gap-2">
+      {socials.map((social) => (
+        <a
+          href={social.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={social.label ?? social.platform}
+          class="flex size-11 items-center justify-center rounded-full border border-border bg-surface text-muted transition hover:text-accent hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          <Icon name={social.platform} class="size-5" />
+        </a>
+      ))}
+    </nav>
+  )
+}

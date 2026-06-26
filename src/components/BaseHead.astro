@@ -1,0 +1,44 @@
+---
+import { getConfig } from "../lib/config";
+import { absoluteUrl, withBase } from "../lib/site";
+
+interface Props {
+  title?: string;
+}
+
+const cfg = await getConfig();
+const { title } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+const pageTitle = title ? `${title} · ${cfg.profile.name}` : `${cfg.profile.name} · LibCard`;
+const description = cfg.seo?.description ?? cfg.profile.tagline ?? `${cfg.profile.name}'s links, all in one place.`;
+
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname;
+
+const ogImage = cfg.seo?.ogImage
+  ? cfg.seo.ogImage.startsWith("http")
+    ? cfg.seo.ogImage
+    : absoluteUrl(Astro.site, base, cfg.seo.ogImage)
+  : absoluteUrl(Astro.site, base, "/og.png");
+
+const favicon = withBase(base, "/favicon.svg");
+---
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{pageTitle}</title>
+<meta name="description" content={description} />
+<link rel="icon" href={favicon} type="image/svg+xml" />
+<link rel="canonical" href={canonical} />
+
+<!-- Open Graph / Twitter -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:url" content={canonical} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<meta name="generator" content={Astro.generator} />
