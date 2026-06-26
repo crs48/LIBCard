@@ -36,7 +36,8 @@ explorations / implementation work have a clear target.
 runtime, build-time CSS) for styling/theming + a single root
 **`libcard.config.yaml`** (validated by a **Zod** schema, with a committed
 **JSON Schema** for editor/AI autocomplete) + **GitHub Pages** via the official
-**`withastro/action@v6`** workflow. **No React component library** (shadcn/ui,
+**`withastro/action@v6`** workflow, with **pnpm** as the standardized package
+manager (committed `pnpm-lock.yaml`). **No React component library** (shadcn/ui,
 Base UI, Radix) — see [§E](#e-styling--component-library) for why a client-side
 React runtime is the wrong fit for a near-static card.
 
@@ -53,7 +54,7 @@ React runtime is the wrong fit for a near-static card.
 4. **Theming via config tokens** (CSS custom properties) with a few starter
    themes selectable by one line.
 5. Distribution as a **GitHub template repo** with an interactive
-   `npm run setup` wizard *and* a clean config + JSON Schema so an AI agent can
+   `pnpm run setup` wizard *and* a clean config + JSON Schema so an AI agent can
    fill it in.
 
 **Why Astro over the alternatives:** zero-JS-by-default static output (perfect
@@ -127,7 +128,8 @@ editing one well-documented file (by hand or by an agent).*
 ### Astro → GitHub Pages (deployment)
 
 - Astro maintains the official **`withastro/action@v6`** GitHub Action; it
-  auto-detects the package manager from the lockfile and defaults to **Node 24**.
+  auto-detects the package manager from the committed lockfile (we ship
+  `pnpm-lock.yaml` → it uses **pnpm**) and defaults to **Node 24**.
 - You add `.github/workflows/deploy.yml`, set repo **Pages source = GitHub
   Actions**, and pushes to `main` build + deploy automatically.
 - `astro.config.mjs` must set **`site`** (and **`base`** when hosted at
@@ -206,7 +208,7 @@ flowchart TD
 
 | Option | Pros | Cons | Verdict |
 |---|---|---|---|
-| **Astro (static)** | Zero-JS by default → instant loads; islands if we ever need interactivity; Zod-validated `file()` config; component theming; official GH Pages action; great human+agent DX | Node toolchain (npm install) needed for local dev | **Recommended** |
+| **Astro (static)** | Zero-JS by default → instant loads; islands if we ever need interactivity; Zod-validated `file()` config; component theming; official GH Pages action; great human+agent DX | Node toolchain (pnpm install) needed for local dev | **Recommended** |
 | Plain HTML/CSS/JS | Zero build, dead simple | No templating/themes; every change is manual; hard to keep config separate from markup | Good for a "no-build" fallback theme, not the core |
 | Eleventy (11ty) | Very fast, minimal, flexible | Weaker component/theming ergonomics; templating-language sprawl | Strong runner-up if we want to avoid a framework |
 | Jekyll | Native on GH Pages (no Action needed) | Ruby toolchain; slow local rebuilds; Liquid | What Linkyee uses; we can do better on DX |
@@ -256,10 +258,10 @@ flowchart LR
         F["Fork"]
         C["degit / create-libcard CLI"]
     end
-    T --> S["npm install"]
+    T --> S["pnpm install"]
     F --> S
     C --> S
-    S --> W["npm run setup (interactive wizard)"]
+    S --> W["pnpm run setup (interactive wizard)"]
     S --> AI["…or let an AI agent fill libcard.config.yaml from the JSON Schema"]
     W --> Push["git push → live"]
     AI --> Push
@@ -267,7 +269,7 @@ flowchart LR
 
 - **Template repo** ("Use this template") is the headline path — one click, no
   fork relationship, clean history.
-- A `npm run setup` **wizard** (prompts for name, tagline, links, theme; writes
+- A `pnpm run setup` **wizard** (prompts for name, tagline, links, theme; writes
   `libcard.config.yaml`; sets `site`/`base` in `astro.config.mjs` from the
   detected repo) removes the deployment footguns.
 - The **JSON Schema** makes the agent path first-class: "Claude, set up my
@@ -309,7 +311,7 @@ flowchart TD
   (`@theme { --color-… }`) is *the same mechanism* as the CSS-custom-property
   theming already recommended, so the two reinforce rather than compete: a
   `theme:` key in `libcard.config.yaml` can map to a set of `@theme` tokens.
-  Astro support is official: `npx astro add tailwind` wires the
+  Astro support is official: `pnpm astro add tailwind` wires the
   `@tailwindcss/vite` plugin (the older `@astrojs/tailwind` integration is
   deprecated for v4); requires Astro ≥ 5.2.
 - **shadcn/ui and Base UI are the wrong layer for this product.** Both are
@@ -369,7 +371,7 @@ LIBCard/
 ├── astro.config.mjs           # site/base; set by setup wizard
 ├── package.json
 ├── scripts/
-│   └── setup.mjs              # `npm run setup` interactive wizard
+│   └── setup.mjs              # `pnpm run setup` interactive wizard
 ├── src/
 │   ├── content.config.ts      # file() loader + Zod schema for libcard.config.yaml
 │   ├── lib/
@@ -408,7 +410,7 @@ sequenceDiagram
     GH->>Repo: Create user/repo (or user.github.io)
     User->>Repo: Edit libcard.config.yaml (name, links, theme)
     Note over User,Repo: Editor shows autocomplete from libcard.schema.json
-    User->>Repo: (optional) npm run setup wizard sets site/base
+    User->>Repo: (optional) pnpm run setup wizard sets site/base
     User->>Repo: git push to main
     Repo->>CI: Trigger withastro/action@v6
     CI->>CI: astro build → HTML + contact.vcf + QR svg
@@ -624,10 +626,16 @@ jobs:
 ## Implementation Checklist
 
 **Scaffold & config**
-- [ ] `npm create astro@latest` with the minimal/empty template; commit
+- [ ] `pnpm create astro@latest` with the minimal/empty template; commit
       `package.json`, `astro.config.mjs`, `tsconfig.json`.
+- [ ] **Standardize on pnpm:** set `"packageManager": "pnpm@<version>"` in
+      `package.json`, commit **`pnpm-lock.yaml`** (never `package-lock.json` /
+      `yarn.lock`), and add an `.npmrc` if needed. `withastro/action`
+      auto-detects pnpm from the committed lockfile — no extra CI config. (All
+      docs/scripts use `pnpm`; invoke the wizard as `pnpm run setup`, since bare
+      `pnpm setup` is pnpm's own built-in command.)
 - [ ] Set `output: 'static'`, and `site`/`base` in `astro.config.mjs`.
-- [ ] `npx astro add tailwind` (Tailwind v4 via `@tailwindcss/vite`, Astro ≥ 5.2);
+- [ ] `pnpm astro add tailwind` (Tailwind v4 via `@tailwindcss/vite`, Astro ≥ 5.2);
       add `src/styles/global.css` with `@import "tailwindcss"` + base `@theme`
       tokens, imported once in the layout. **Do not** add any React UI kit.
 - [ ] Trim now-unused Jekyll lines from `.gitignore` (keep `dist/`).
@@ -658,7 +666,8 @@ jobs:
 
 **Distribution & deploy**
 - [ ] `.github/workflows/deploy.yml` using `withastro/action@v6`.
-- [ ] `scripts/setup.mjs` interactive wizard (writes config, sets `site`/`base`).
+- [ ] `scripts/setup.mjs` interactive wizard (writes config, sets `site`/`base`),
+      run via `pnpm run setup`.
 - [ ] Mark the repo as a **template** ("Use this template").
 - [ ] Update `README.md` quick-start to match the real flow; document the
       URL-QR vs vCard-QR tradeoff and the `base` requirement.
@@ -667,7 +676,7 @@ jobs:
 
 ## Validation Checklist
 
-- [ ] `npm run build` produces `dist/` with `index.html`, `contact.vcf`, and the
+- [ ] `pnpm build` produces `dist/` with `index.html`, `contact.vcf`, and the
       `/card` page; no runtime JS shipped for QR/vCard.
 - [ ] Editing `libcard.config.yaml` and rebuilding changes the page with **no
       code edits**.
