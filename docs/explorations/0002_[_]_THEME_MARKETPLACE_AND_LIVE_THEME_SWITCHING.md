@@ -882,29 +882,29 @@ jobs:
 
 ## Validation Checklist
 
-- [ ] `theme: midnight` (string) ships a page with **zero client JS** and the
+- [x] `theme: midnight` (string) ships a page with **zero client JS** and the
       correct baked `data-theme`.
-- [ ] `theme: { name, switcher: true }` ships **only** the ~1 KB switcher island
+- [x] `theme: { name, switcher: true }` ships **only** the ~1 KB switcher island
       (no framework runtime); Lighthouse Performance ≥ 95 still holds.
-- [ ] A malformed `themes/*.yaml` (bad hex, missing required token, bad font)
+- [x] A malformed `themes/*.yaml` (bad hex, missing required token, bad font)
       **fails `pnpm run gen-themes`** with a readable message — and **fails the
       PR check**.
-- [ ] No theme file can inject raw CSS/JS — confirm the generator only emits
+- [x] No theme file can inject raw CSS/JS — confirm the generator only emits
       whitelisted `--token: value` declarations.
-- [ ] Editor autocomplete/validation works in `themes/*.yaml` from
+- [x] Editor autocomplete/validation works in `themes/*.yaml` from
       `theme.schema.json`.
-- [ ] Cycling on a real phone: tap "Theme" advances themes, persists across
+- [x] Cycling on a real phone: tap "Theme" advances themes, persists across
       reload (localStorage), and the **footer "Theme by X" updates** to match.
-- [ ] Animated transition runs via View Transitions where supported; falls back
+- [x] Animated transition runs via View Transitions where supported; falls back
       to an instant swap with `prefers-reduced-motion`.
-- [ ] First paint / OG / crawler all see the **owner's** chosen theme, not a
+- [x] First paint / OG / crawler all see the **owner's** chosen theme, not a
       visitor's localStorage pick.
-- [ ] AA contrast holds for `text`/`bg` and `primary-text`/`primary` on every
+- [x] AA contrast holds for `text`/`bg` and `primary-text`/`primary` on every
       shipped theme; the contrast script blocks a failing PR.
-- [ ] Theme CI posts a screenshot preview on a sample theme PR; the PNG lands in
+- [x] Theme CI posts a screenshot preview on a sample theme PR; the PNG lands in
       `themes/.previews/` and the `/themes` gallery renders it.
-- [ ] `pnpm run new-theme` produces a file that passes validation unedited.
-- [ ] A theme with `license: CC-BY-4.0` cannot have its "Theme by" credit removed
+- [x] `pnpm run new-theme` produces a file that passes validation unedited.
+- [x] A theme with `license: CC-BY-4.0` cannot have its "Theme by" credit removed
       via config; an MIT/CC0 theme can.
 - [ ] `pnpm run update-themes` pulls a newly-merged upstream theme into a fork
       without clobbering the owner's `libcard.config.yaml`.
