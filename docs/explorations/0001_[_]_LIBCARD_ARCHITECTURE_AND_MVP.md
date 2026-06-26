@@ -32,10 +32,13 @@ explorations / implementation work have a clear target.
 
 ## Executive Summary
 
-**Recommended stack:** **Astro** (static output) + a single root
+**Recommended stack:** **Astro** (static output) + **Tailwind CSS v4** (zero-
+runtime, build-time CSS) for styling/theming + a single root
 **`libcard.config.yaml`** (validated by a **Zod** schema, with a committed
 **JSON Schema** for editor/AI autocomplete) + **GitHub Pages** via the official
-**`withastro/action@v6`** workflow.
+**`withastro/action@v6`** workflow. **No React component library** (shadcn/ui,
+Base UI, Radix) — see [§E](#e-styling--component-library) for why a client-side
+React runtime is the wrong fit for a near-static card.
 
 **Recommended core features for the MVP:**
 
@@ -270,6 +273,69 @@ flowchart LR
 - The **JSON Schema** makes the agent path first-class: "Claude, set up my
   LibCard" → agent reads schema, writes config, commits.
 
+### E. Styling & component library
+
+The card's UI surface is small and **nearly static**: a profile header, a column
+of link buttons, a social-icon row, a QR, and a download link. The only
+"interactive" moment is optionally revealing the QR/business-card view. That
+shape should drive the styling choice — we want great theming ergonomics with
+**zero client-side runtime**.
+
+```mermaid
+flowchart TD
+    Q{How do we style + theme the card?}
+    Q --> TW["Tailwind CSS v4<br/>(build-time CSS, 0 JS)"]
+    Q --> Vanilla["Hand-written CSS<br/>+ custom properties"]
+    Q --> Shad["shadcn/ui<br/>(React + Radix/Base + Tailwind)"]
+    Q --> Base["Base UI<br/>(headless React)"]
+
+    TW -->|"+ 0 runtime, @theme tokens, agent-familiar, official Astro support"| TWPro["✅ Recommended"]
+    Vanilla -->|"+ 0 deps, - reinvents tokens/utilities, more upkeep"| VanCon["Fine fallback"]
+    Shad -->|"- ships React + Radix runtime for app widgets we don't have"| ShadCon["❌ Wrong fit"]
+    Base -->|"- headless React runtime for interactivity we don't need"| BaseCon["❌ Wrong fit"]
+```
+
+| Option | Runtime cost | Theming story | Human/agent DX | Fit for a near-static card | Verdict |
+|---|---|---|---|---|---|
+| **Tailwind CSS v4** | **Zero JS** — pure build-time CSS | `@theme` + CSS custom properties (dovetails with the token-based theming in §recommendation) | Agents know Tailwind cold; utilities are fast to author | ★★★ | **Recommended** |
+| Hand-written CSS + custom properties | Zero JS | Manual but full control | Simple, but we re-build a utility/token layer | ★★☆ | Acceptable fallback / "no-build" theme |
+| **shadcn/ui** | **Ships React + Radix (or Base UI)** client JS (~28–31KB for a Dialog) | Tailwind-based, but components are app-widget-shaped | Great *for React apps* | ★ | **Not recommended** |
+| **Base UI** | **Ships React** headless runtime (~18KB Dialog) | Unstyled — you bring the CSS anyway | Great *for interactive React apps* | ★ | **Not recommended** |
+
+**Recommendation: adopt Tailwind v4, skip the React component libraries.**
+
+- **Tailwind v4 is a clean win.** It compiles to static CSS — **no runtime JS**,
+  so it preserves the "instant load" promise. Tailwind v4's CSS-first config
+  (`@theme { --color-… }`) is *the same mechanism* as the CSS-custom-property
+  theming already recommended, so the two reinforce rather than compete: a
+  `theme:` key in `libcard.config.yaml` can map to a set of `@theme` tokens.
+  Astro support is official: `npx astro add tailwind` wires the
+  `@tailwindcss/vite` plugin (the older `@astrojs/tailwind` integration is
+  deprecated for v4); requires Astro ≥ 5.2.
+- **shadcn/ui and Base UI are the wrong layer for this product.** Both are
+  **React** systems that ship a **client-side runtime**, and they exist to build
+  *interactive application UIs* (dialogs, comboboxes, dropdowns, menus, data
+  tables). LibCard has essentially none of that. Adding React + Radix/Base just
+  to style buttons would:
+  - **Break the zero-JS-by-default value prop** — we'd hydrate islands and ship a
+    framework runtime for a page that should be flat HTML + CSS.
+  - **Add dependency weight and upgrade surface** for components we won't use.
+  - **Worsen the agent/human config story** — more moving parts, not fewer.
+  - Note shadcn/ui isn't even a library you depend on; it's **copy-pasted
+    components built on top of Radix or Base UI + Tailwind**, so it drags React
+    along regardless.
+- **The one interactive moment doesn't need them.** Revealing the QR /
+  business-card view can be a native `<dialog>` or `<details>`/`<summary>` styled
+  with Tailwind — **zero JS, fully accessible** out of the box. If we ever add
+  genuinely interactive features (a copy-to-clipboard toast, a theme switcher),
+  Astro can hydrate a *single tiny island* — reach for that surgically, not by
+  adopting a whole React UI kit up front.
+
+> **Bottom line:** Tailwind = yes (it strengthens the theming plan at zero
+> runtime cost). shadcn/ui & Base UI = no for the core — they solve an
+> interactive-app problem LibCard doesn't have, at the cost of the static, fast,
+> simple identity that *is* the product.
+
 ## Recommendation
 
 Build the **MVP on Astro (static output)** with this shape:
@@ -285,8 +351,10 @@ Build the **MVP on Astro (static output)** with this shape:
    inlines SVG, zero client JS).
 5. **Build-time OG image** (so shared links look good) via
    `astro-og-canvas`/`satori` — nice-to-have, can slip past MVP.
-6. **Theming** through CSS custom properties driven by a `theme:` key in config,
-   with 3–4 starter themes.
+6. **Styling with Tailwind CSS v4** (`@tailwindcss/vite`, zero runtime JS) and
+   **theming** through Tailwind `@theme` tokens / CSS custom properties driven by
+   a `theme:` key in config, with 3–4 starter themes. **No React UI kit**
+   (shadcn/ui, Base UI) — see §E.
 7. **Deployment** via `withastro/action@v6` + a `setup` wizard that fixes
    `site`/`base`.
 8. **Distribution** as a GitHub **template repo**, README quick-start kept in
@@ -313,12 +381,13 @@ LIBCard/
 │   │   ├── SocialRow.astro
 │   │   ├── QRCode.astro       # build-time SVG via `qrcode`
 │   │   └── SaveContact.astro  # <a download href="/contact.vcf">
-│   ├── themes/                # CSS custom-property theme files
-│   ├── pages/
-│   │   ├── index.astro        # the card
-│   │   ├── card.astro         # QR + save-contact "business card" view
-│   │   └── contact.vcf.ts     # prerendered vCard endpoint
-│   └── styles/
+│   ├── styles/
+│   │   └── global.css         # @import "tailwindcss"; @theme { … } base tokens
+│   ├── themes/                # per-theme @theme token overrides (CSS custom props)
+│   └── pages/
+│       ├── index.astro        # the card
+│       ├── card.astro         # QR + save-contact "business card" view
+│       └── contact.vcf.ts     # prerendered vCard endpoint
 ├── .github/workflows/deploy.yml
 └── docs/explorations/0001_[_]_LIBCARD_ARCHITECTURE_AND_MVP.md
 ```
@@ -558,6 +627,9 @@ jobs:
 - [ ] `npm create astro@latest` with the minimal/empty template; commit
       `package.json`, `astro.config.mjs`, `tsconfig.json`.
 - [ ] Set `output: 'static'`, and `site`/`base` in `astro.config.mjs`.
+- [ ] `npx astro add tailwind` (Tailwind v4 via `@tailwindcss/vite`, Astro ≥ 5.2);
+      add `src/styles/global.css` with `@import "tailwindcss"` + base `@theme`
+      tokens, imported once in the layout. **Do not** add any React UI kit.
 - [ ] Trim now-unused Jekyll lines from `.gitignore` (keep `dist/`).
 - [ ] Define the **Zod schema** + `file()` loader in `src/content.config.ts`.
 - [ ] Add `src/lib/config.ts` typed accessor over the collection entry.
@@ -568,8 +640,10 @@ jobs:
 **Core page & components**
 - [ ] `Profile.astro`, `LinkButton.astro`, `SocialRow.astro` components.
 - [ ] `pages/index.astro` assembling the card from config.
-- [ ] Theme system: CSS custom properties + 3–4 starter themes in `src/themes/`,
-      selected by `theme:` in config.
+- [ ] Theme system: Tailwind `@theme` tokens / CSS custom properties + 3–4
+      starter themes in `src/themes/`, selected by `theme:` in config.
+- [ ] Build the QR/business-card reveal with a native `<dialog>` or
+      `<details>`/`<summary>` (zero JS) rather than a React modal component.
 - [ ] Responsive down to 320px; accessible (focus states, contrast, ARIA).
 
 **Business-card features**
@@ -620,6 +694,10 @@ jobs:
 - [withastro/github-pages template](https://github.com/withastro/github-pages)
 - [Astro Content Collections — Docs](https://docs.astro.build/en/guides/content-collections/)
 - [Astro Configuration overview](https://docs.astro.build/en/guides/configuring-astro/)
+- [Install Tailwind CSS with Astro (official)](https://tailwindcss.com/docs/installation/framework-guides/astro)
+- [Astro 5.2 — Tailwind v4 / `@tailwindcss/vite` support](https://astro.build/blog/astro-520/)
+- [shadcn/ui vs Base UI vs Radix — components in 2026 (PkgPulse)](https://www.pkgpulse.com/guides/shadcn-ui-vs-base-ui-vs-radix-components-2026)
+- [Base UI vs shadcn/ui vs Radix UI comparison (Tailkits)](https://tailkits.com/blog/base-ui-vs-shadcn-ui-vs-radix-ui-comparison/)
 - [Linkyee — open-source LinkTree alternative on GitHub Pages](https://github.com/ZhgChgLi/linkyee)
 - [LinkFree (MichaelBarney)](https://github.com/MichaelBarney/LinkFree)
 - [LinkStack — self-hosted Linktree alternative](https://linkstack.org/)
