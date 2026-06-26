@@ -1,0 +1,93 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { themes } from "../lib/themes";
+import { withBase } from "../lib/site";
+
+// The theme gallery. Each card is wrapped in its own `data-theme`, so the mini
+// preview renders in that theme's *actual* colors and corner radius — a live
+// preview with no screenshots required.
+const base = import.meta.env.BASE_URL;
+const home = withBase(base, "/");
+const contribute = "https://github.com/crs48/LIBCard/tree/main/themes";
+---
+<Layout title="Theme gallery" wide>
+  <header class="flex w-full flex-col items-center gap-2 text-center">
+    <h1 class="text-2xl font-bold tracking-tight text-fg">Theme gallery</h1>
+    <p class="max-w-prose text-balance text-muted">
+      Set <code class="rounded bg-surface px-1.5 py-0.5 text-sm">theme:</code> in
+      <code class="rounded bg-surface px-1.5 py-0.5 text-sm">libcard.config.yaml</code> to any
+      of these — or turn on the switcher to let visitors cycle through them.
+    </p>
+    <a
+      href={contribute}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="text-sm text-accent underline-offset-4 hover:underline"
+    >
+      Add your own theme →
+    </a>
+  </header>
+
+  <ul class="grid w-full gap-4 sm:grid-cols-2">
+    {
+      themes.map((t) => (
+        <li
+          data-theme={t.slug}
+          class="overflow-hidden rounded-card border border-border bg-bg"
+        >
+          {/* Live mini preview, rendered in this theme's own tokens. */}
+          <div class="flex flex-col gap-3 p-5 font-sans" style={`font-family: var(--lc-font)`}>
+            <div class="flex items-center gap-3">
+              <div class="size-10 rounded-full bg-surface ring-2 ring-border" />
+              <div class="flex-1">
+                <div class="h-2.5 w-24 rounded bg-fg" />
+                <div class="mt-1.5 h-2 w-16 rounded bg-muted" />
+              </div>
+            </div>
+            <div class="rounded-card bg-accent px-3 py-2 text-center text-sm font-medium text-accent-contrast">
+              Sample link
+            </div>
+            <div class="flex items-center gap-1.5" aria-hidden="true">
+              <span class="size-4 rounded-full bg-accent" />
+              <span class="size-4 rounded-full bg-surface ring-1 ring-border" />
+              <span class="size-4 rounded-full bg-fg" />
+              <span class="size-4 rounded-full bg-muted" />
+            </div>
+          </div>
+
+          {/* Meta strip. */}
+          <div class="border-t border-border bg-surface px-5 py-3">
+            <div class="flex items-baseline justify-between gap-2">
+              <span class="font-semibold text-fg">{t.name}</span>
+              <span class="text-xs text-muted">{t.mode}</span>
+            </div>
+            <p class="mt-0.5 text-xs text-muted">
+              by{" "}
+              {t.authorUrl ? (
+                <a
+                  href={t.authorUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-accent underline-offset-2 hover:underline"
+                >
+                  {t.author}
+                </a>
+              ) : (
+                t.author
+              )}{" "}
+              · {t.license}
+            </p>
+            <code class="mt-2 block rounded bg-bg px-2 py-1 text-xs text-fg">theme: {t.slug}</code>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+
+  <a
+    href={home}
+    class="text-sm text-muted underline-offset-4 hover:text-accent hover:underline"
+  >
+    ← Back to the card
+  </a>
+</Layout>

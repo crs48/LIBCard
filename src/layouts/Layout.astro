@@ -7,9 +7,12 @@ import { getActiveTheme } from "../lib/config";
 
 interface Props {
   title?: string;
+  /** Widen the container (used by the multi-column theme gallery). */
+  wide?: boolean;
 }
 
-const { title } = Astro.props;
+const { title, wide } = Astro.props;
+const maxWidth = wide ? "max-w-3xl" : "max-w-md";
 // The owner's chosen theme is server-rendered into <html data-theme> so first
 // paint, crawlers, and no-JS visitors all see it. The switcher (if enabled) only
 // re-themes on interaction.
@@ -31,7 +34,7 @@ const theme = await getActiveTheme();
     }
   </head>
   <body class="min-h-dvh bg-bg font-sans antialiased">
-    <div class="mx-auto flex min-h-dvh w-full max-w-md flex-col items-center px-4 py-10 sm:py-14">
+    <div class:list={["mx-auto flex min-h-dvh w-full flex-col items-center px-4 py-10 sm:py-14", maxWidth]}>
       <main class="flex w-full flex-1 flex-col items-center gap-6">
         <slot />
       </main>

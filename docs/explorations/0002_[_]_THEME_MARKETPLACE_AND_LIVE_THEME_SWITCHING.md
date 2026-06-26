@@ -859,8 +859,8 @@ jobs:
 - [x] Add `themes/community-example.yaml` as a copy-me starter.
 
 **Gallery & generator**
-- [ ] `src/pages/themes.astro` — gallery grid (screenshot + name + author + tags).
-- [ ] `scripts/new-theme.mjs` (`pnpm run new-theme`) — interactive scaffolder
+- [x] `src/pages/themes.astro` — gallery grid (screenshot + name + author + tags).
+- [x] `scripts/new-theme.mjs` (`pnpm run new-theme`) — interactive scaffolder
       (prompts name/author/colors → writes a valid `themes/<slug>.yaml`).
 
 **Governance & CI**
