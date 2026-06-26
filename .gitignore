@@ -1,0 +1,43 @@
+# ---- OS junk ----
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ---- Editors / IDEs ----
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ---- Claude Code (keep shared skills, ignore local settings) ----
+.claude/settings.local.json
+
+# ---- Node tooling (if you add a bundler/formatter later) ----
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+.cache/
+
+# ---- Build output (Vite / generic static builders) ----
+dist/
+build/
+.tmp/
+
+# ---- Jekyll (GitHub Pages' built-in static site generator) ----
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+
+# ---- Env / secrets ----
+.env
+.env.local
+.env.*.local
