@@ -906,7 +906,7 @@ jobs:
 - [x] `pnpm run new-theme` produces a file that passes validation unedited.
 - [x] A theme with `license: CC-BY-4.0` cannot have its "Theme by" credit removed
       via config; an MIT/CC0 theme can.
-- [ ] `pnpm run update-themes` pulls a newly-merged upstream theme into a fork
+- [x] `pnpm run update-themes` pulls a newly-merged upstream theme into a fork
       without clobbering the owner's `libcard.config.yaml`.
 
 ## References
