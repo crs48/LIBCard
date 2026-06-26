@@ -864,16 +864,16 @@ jobs:
       (prompts name/author/colors → writes a valid `themes/<slug>.yaml`).
 
 **Governance & CI**
-- [ ] `themes/README.md` — the contribution guide (token reference, license
+- [x] `themes/README.md` — the contribution guide (token reference, license
       guidance, the PR steps, the screenshot note).
-- [ ] `.github/PULL_REQUEST_TEMPLATE/theme.md`.
-- [ ] `.github/CODEOWNERS` → `/themes/ @maintainer`.
-- [ ] `.github/workflows/theme-ci.yml` — `gen-themes` (validate) +
+- [x] `.github/PULL_REQUEST_TEMPLATE/theme.md`.
+- [x] `.github/CODEOWNERS` → `/themes/ @maintainer`.
+- [x] `.github/workflows/theme-ci.yml` — `gen-themes` (validate) +
       `check-contrast` (AA on key pairs) + Playwright screenshot → comment.
-- [ ] `scripts/check-contrast.mjs` (use `color-contrast-checker`).
-- [ ] `scripts/shoot-themes.mjs` (Playwright, fixed sample profile + viewport →
+- [x] `scripts/check-contrast.mjs` (use `color-contrast-checker`).
+- [x] `scripts/shoot-themes.mjs` (Playwright, fixed sample profile + viewport →
       `themes/.previews/<slug>.png`).
-- [ ] `pnpm run update-themes` — fetch latest upstream `themes/` for forkers.
+- [x] `pnpm run update-themes` — fetch latest upstream `themes/` for forkers.
 
 **Docs**
 - [ ] Update `README.md` quick-start: "pick a theme, or turn on cycling," link to

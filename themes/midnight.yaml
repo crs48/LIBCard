@@ -12,7 +12,7 @@ tokens:
   surface: "#131c31"
   fg: "#e8edf7"
   muted: "#94a3b8"
-  accent: "#6366f1"
+  accent: "#5457e6"
   accentContrast: "#ffffff"
   border: "#24304a"
   font: sans
