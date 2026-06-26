@@ -83,4 +83,9 @@ pnpm typecheck    # astro check
 
 ## License
 
-TBD.
+[MIT](./LICENSE) — free to use, fork, modify, and redistribute, including
+commercially. Just keep the copyright notice.
+
+The MIT License covers the **code**, not the **name**. The "LibCard" name and
+logo are not licensed for reuse — if you fork it, ship it under your own name.
+See [TRADEMARK.md](./TRADEMARK.md).
