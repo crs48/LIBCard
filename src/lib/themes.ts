@@ -53,13 +53,22 @@ export function licenseRequiresAttribution(license: string): boolean {
 /** The config's `theme:` field — a bare slug, or the object switcher form. */
 export type ThemeConfig =
   | string
-  | { name: string; switcher?: boolean; allow?: string[]; order?: string[]; animate?: boolean };
+  | {
+      name: string;
+      switcher?: boolean;
+      random?: boolean;
+      allow?: string[];
+      order?: string[];
+      animate?: boolean;
+    };
 
 export interface ResolvedTheme {
   /** Owner's default theme slug — server-rendered into <html data-theme>. */
   name: string;
   /** Whether to ship the live switcher island (and its tiny script). */
   switcher: boolean;
+  /** Pick a random theme from `cycle` on every page load. */
+  random: boolean;
   /** Animate theme changes with the View Transitions API when supported. */
   animate: boolean;
   /** The ordered ring of theme slugs the switcher cycles through. */
@@ -94,6 +103,7 @@ export function resolveTheme(theme: ThemeConfig): ResolvedTheme {
   return {
     name: obj.name,
     switcher: typeof theme === "string" ? false : (obj.switcher ?? false),
+    random: typeof theme === "string" ? false : (obj.random ?? false),
     animate: typeof theme === "string" ? true : (obj.animate ?? true),
     cycle,
   };

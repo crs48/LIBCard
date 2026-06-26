@@ -133,6 +133,10 @@
                   "type": "boolean",
                   "default": false
                 },
+                "random": {
+                  "type": "boolean",
+                  "default": false
+                },
                 "allow": {
                   "type": "array",
                   "items": {

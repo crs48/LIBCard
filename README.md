@@ -54,12 +54,13 @@ Pick one of the built-in themes (`default`, `midnight`, `sunset`, `mono`, `paper
 theme: midnight
 ```
 
-…or turn on the **live theme switcher** so visitors can cycle through themes right on your card (this is the only feature that ships a tiny bit of JavaScript — when it's off, your page stays zero-JS):
+…or turn on the **live theme switcher** and/or **random mode** so visitors can see the themes right on your card (these are the only features that ship a tiny bit of JavaScript — when they're off, your page stays zero-JS):
 
 ```yaml
 theme:
-  name: midnight       # the default everyone sees first
+  name: midnight       # the default everyone sees first (crawlers/no-JS too)
   switcher: true       # show the "Try a theme" button
+  random: true         # pick a random theme on every page load (fun demo)
   animate: true        # animate the change with a circular reveal
   # allow: [midnight, sunset, terminal]   # optional subset; omit = all themes
 ```
