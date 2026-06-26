@@ -1,0 +1,35 @@
+# yaml-language-server: $schema=./theme.schema.json
+#
+# ┌───────────────────────────────────────────────────────────────────────┐
+# │  Want to add a theme to the gallery? Copy this file!                   │
+# │                                                                        │
+# │    cp themes/community-example.yaml themes/your-theme-name.yaml        │
+# │                                                                        │
+# │  ...then edit the values below and open a pull request. The filename   │
+# │  (minus .yaml) becomes your theme's slug. See themes/README.md for the │
+# │  full guide. CI will validate it, check contrast, and post a preview.  │
+# │                                                                        │
+# │  This example file is NOT shipped as a real theme — it's just a        │
+# │  template. Your copy WILL ship once merged.                            │
+# └───────────────────────────────────────────────────────────────────────┘
+
+name: Community Example # shown in the picker and the footer badge
+author: Your Name # you'll be credited: "Theme by <author>"
+authorUrl: https://github.com/your-handle # optional; makes the credit a link
+license: CC-BY-4.0 # SPDX id. CC-BY-4.0 (default) requires the credit be kept.
+mode: dark # light | dark — sets native control colors
+
+tags: [dark, teal, example]
+description: A starting point — recolor this and make it yours.
+
+# All seven colors are required (hex). font/radius are optional.
+tokens:
+  bg: "#0c1413" # page background
+  surface: "#13201e" # cards & buttons
+  fg: "#e6fffb" # primary text
+  muted: "#8fb6ae" # secondary text
+  accent: "#2dd4bf" # links, buttons, focus rings
+  accentContrast: "#04201b" # text on top of `accent`
+  border: "#1f3733" # hairlines & dividers
+  font: sans # sans | serif | mono | rounded
+  radius: 0.75rem # any CSS length, e.g. 1rem / 8px / 0.25rem

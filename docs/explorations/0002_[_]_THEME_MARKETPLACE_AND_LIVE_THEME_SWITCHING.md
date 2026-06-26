@@ -827,36 +827,36 @@ jobs:
 ## Implementation Checklist
 
 **Schema & loader**
-- [ ] Add `src/lib/themes.ts` — Zod `themeSchema` + `tokens` + `themeToCss()`
+- [x] Add `src/lib/themes.ts` — Zod `themeSchema` + `tokens` + `themeToCss()`
       (the only CSS producer).
-- [ ] Generate `themes/theme.schema.json` from the Zod schema (reuse doc #1's
+- [x] Generate `themes/theme.schema.json` from the Zod schema (reuse doc #1's
       `zod-to-json-schema` prebuild); wire `# yaml-language-server: $schema=` in
       theme files.
-- [ ] Freeze the **v1 token contract** (~10 tokens) and document each.
-- [ ] Add `scripts/gen-themes.mjs` → emits `src/styles/themes.gen.css` +
+- [x] Freeze the **v1 token contract** (~10 tokens) and document each.
+- [x] Add `scripts/gen-themes.mjs` → emits `src/styles/themes.gen.css` +
       `src/data/themes.json` + a README theme table; run it in `prebuild`.
 
 **Config & rendering**
-- [ ] Evolve `theme:` in the config Zod schema to `string | { name, switcher?,
+- [x] Evolve `theme:` in the config Zod schema to `string | { name, switcher?,
       allow?, order?, animate? }` (backward-compatible with `theme: midnight`).
-- [ ] Resolve the active theme in `src/lib/config.ts`; bake
+- [x] Resolve the active theme in `src/lib/config.ts`; bake
       `<html data-theme="…">` server-side.
-- [ ] `src/styles/global.css`: `@theme` base mapping `--color-*` → token vars;
+- [x] `src/styles/global.css`: `@theme` base mapping `--color-*` → token vars;
       `@import` the generated themes CSS.
-- [ ] `Footer.astro`: "Powered by LibCard · Theme by `<author>`" from the active
+- [x] `Footer.astro`: "Powered by LibCard · Theme by `<author>`" from the active
       manifest; honor `footer.poweredBy` and the theme license for removability.
 
 **Switcher (opt-in)**
-- [ ] `ThemeSwitcher.astro` vanilla island; include only when `switcher: true`.
-- [ ] Inline no-flash head snippet restoring `localStorage.libcard-theme`.
-- [ ] View Transitions clip-reveal with `prefers-reduced-motion` + no-support
+- [x] `ThemeSwitcher.astro` vanilla island; include only when `switcher: true`.
+- [x] Inline no-flash head snippet restoring `localStorage.libcard-theme`.
+- [x] View Transitions clip-reveal with `prefers-reduced-motion` + no-support
       fallback; live-update the footer badge on cycle.
-- [ ] Verify **zero JS** is emitted when `switcher` is absent/false.
+- [x] Verify **zero JS** is emitted when `switcher` is absent/false.
 
 **Built-in themes**
-- [ ] Author ~6 built-ins (`default`, `midnight`, `mono`, `sunset`, `paper`,
+- [x] Author ~6 built-ins (`default`, `midnight`, `mono`, `sunset`, `paper`,
       `terminal`) as `themes/*.yaml` with `official: true`, `author: LibCard`.
-- [ ] Add `themes/community-example.yaml` as a copy-me starter.
+- [x] Add `themes/community-example.yaml` as a copy-me starter.
 
 **Gallery & generator**
 - [ ] `src/pages/themes.astro` — gallery grid (screenshot + name + author + tags).

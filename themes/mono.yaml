@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=./theme.schema.json
+name: Mono
+author: LibCard
+authorUrl: https://github.com/crs48/LIBCard
+license: MIT
+official: true
+mode: light
+tags: [light, minimal, monospace]
+description: Minimal black & white with a monospace voice.
+tokens:
+  bg: "#ffffff"
+  surface: "#ffffff"
+  fg: "#111111"
+  muted: "#6b7280"
+  accent: "#111111"
+  accentContrast: "#ffffff"
+  border: "#111111"
+  font: mono
+  radius: 0.25rem

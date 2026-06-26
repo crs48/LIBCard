@@ -1,0 +1,165 @@
+[
+  {
+    "slug": "default",
+    "name": "Default",
+    "author": "LibCard",
+    "authorUrl": "https://github.com/crs48/LIBCard",
+    "license": "MIT",
+    "official": true,
+    "mode": "light",
+    "tags": [
+      "light",
+      "clean",
+      "blue"
+    ],
+    "description": "Clean, bright, and neutral — the safe default.",
+    "preview": "themes/.previews/default.png",
+    "tokens": {
+      "bg": "#f1f5f9",
+      "surface": "#ffffff",
+      "fg": "#0f172a",
+      "muted": "#64748b",
+      "accent": "#2563eb",
+      "accentContrast": "#ffffff",
+      "border": "#e2e8f0",
+      "font": "sans",
+      "radius": "1rem"
+    }
+  },
+  {
+    "slug": "midnight",
+    "name": "Midnight",
+    "author": "LibCard",
+    "authorUrl": "https://github.com/crs48/LIBCard",
+    "license": "MIT",
+    "official": true,
+    "mode": "dark",
+    "tags": [
+      "dark",
+      "high-contrast",
+      "indigo"
+    ],
+    "description": "Deep navy with an indigo accent — easy on the eyes at night.",
+    "preview": "themes/.previews/midnight.png",
+    "tokens": {
+      "bg": "#0b1120",
+      "surface": "#131c31",
+      "fg": "#e8edf7",
+      "muted": "#94a3b8",
+      "accent": "#6366f1",
+      "accentContrast": "#ffffff",
+      "border": "#24304a",
+      "font": "sans",
+      "radius": "1rem"
+    }
+  },
+  {
+    "slug": "mono",
+    "name": "Mono",
+    "author": "LibCard",
+    "authorUrl": "https://github.com/crs48/LIBCard",
+    "license": "MIT",
+    "official": true,
+    "mode": "light",
+    "tags": [
+      "light",
+      "minimal",
+      "monospace"
+    ],
+    "description": "Minimal black & white with a monospace voice.",
+    "preview": "themes/.previews/mono.png",
+    "tokens": {
+      "bg": "#ffffff",
+      "surface": "#ffffff",
+      "fg": "#111111",
+      "muted": "#6b7280",
+      "accent": "#111111",
+      "accentContrast": "#ffffff",
+      "border": "#111111",
+      "font": "mono",
+      "radius": "0.25rem"
+    }
+  },
+  {
+    "slug": "paper",
+    "name": "Paper",
+    "author": "LibCard",
+    "authorUrl": "https://github.com/crs48/LIBCard",
+    "license": "MIT",
+    "official": true,
+    "mode": "light",
+    "tags": [
+      "light",
+      "warm",
+      "serif"
+    ],
+    "description": "Warm off-white with a serif voice — like a printed card.",
+    "preview": "themes/.previews/paper.png",
+    "tokens": {
+      "bg": "#faf6ef",
+      "surface": "#fffdf8",
+      "fg": "#2b2620",
+      "muted": "#6f6657",
+      "accent": "#b4541f",
+      "accentContrast": "#fffdf8",
+      "border": "#e7ddcb",
+      "font": "serif",
+      "radius": "0.5rem"
+    }
+  },
+  {
+    "slug": "sunset",
+    "name": "Sunset",
+    "author": "LibCard",
+    "authorUrl": "https://github.com/crs48/LIBCard",
+    "license": "MIT",
+    "official": true,
+    "mode": "dark",
+    "tags": [
+      "dark",
+      "warm",
+      "pink"
+    ],
+    "description": "Dusky plum with a warm coral accent.",
+    "preview": "themes/.previews/sunset.png",
+    "tokens": {
+      "bg": "#1c1117",
+      "surface": "#2a1a22",
+      "fg": "#fdefe6",
+      "muted": "#d7a99b",
+      "accent": "#fb7185",
+      "accentContrast": "#2a1015",
+      "border": "#43242f",
+      "font": "sans",
+      "radius": "1.25rem"
+    }
+  },
+  {
+    "slug": "terminal",
+    "name": "Terminal",
+    "author": "LibCard",
+    "authorUrl": "https://github.com/crs48/LIBCard",
+    "license": "MIT",
+    "official": true,
+    "mode": "dark",
+    "tags": [
+      "dark",
+      "green",
+      "monospace",
+      "retro"
+    ],
+    "description": "Green-on-black, like a friendly old CRT.",
+    "preview": "themes/.previews/terminal.png",
+    "tokens": {
+      "bg": "#0a0e0a",
+      "surface": "#0f160f",
+      "fg": "#4ade80",
+      "muted": "#5fae7f",
+      "accent": "#22c55e",
+      "accentContrast": "#03130a",
+      "border": "#1c2b1c",
+      "font": "mono",
+      "radius": "0.125rem"
+    }
+  }
+]

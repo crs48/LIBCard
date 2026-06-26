@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=./theme.schema.json
+name: Terminal
+author: LibCard
+authorUrl: https://github.com/crs48/LIBCard
+license: MIT
+official: true
+mode: dark
+tags: [dark, green, monospace, retro]
+description: Green-on-black, like a friendly old CRT.
+tokens:
+  bg: "#0a0e0a"
+  surface: "#0f160f"
+  fg: "#4ade80"
+  muted: "#5fae7f"
+  accent: "#22c55e"
+  accentContrast: "#03130a"
+  border: "#1c2b1c"
+  font: mono
+  radius: 0.125rem

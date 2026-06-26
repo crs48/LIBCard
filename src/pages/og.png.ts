@@ -1,22 +1,24 @@
 import type { APIRoute } from "astro";
 import sharp from "sharp";
-import { getConfig } from "../lib/config";
+import { getConfig, getActiveTheme } from "../lib/config";
+import { getThemeMeta } from "../lib/themes";
 
 // Build-time Open Graph image (1200×630 PNG) so shared links render a rich
 // preview. We compose an SVG from the config and rasterize it with sharp (PNG,
 // because social scrapers reject SVG). Skipped automatically if the user sets a
-// custom `seo.ogImage`.
+// custom `seo.ogImage`. Colors come from the active theme's own tokens, so the
+// preview always matches the live card (including community themes).
 export const prerender = true;
 
 const WIDTH = 1200;
 const HEIGHT = 630;
 
-// Per-theme background / accent, mirroring src/themes/*.css.
-const THEME_COLORS: Record<string, { bg: string; bg2: string; fg: string; accent: string; muted: string }> = {
-  default: { bg: "#0f172a", bg2: "#1e293b", fg: "#f8fafc", accent: "#2563eb", muted: "#94a3b8" },
-  midnight: { bg: "#0b1120", bg2: "#131c31", fg: "#e8edf7", accent: "#6366f1", muted: "#94a3b8" },
-  sunset: { bg: "#1c1117", bg2: "#2a1a22", fg: "#fdefe6", accent: "#fb7185", muted: "#d7a99b" },
-  mono: { bg: "#111111", bg2: "#1c1c1c", fg: "#ffffff", accent: "#ffffff", muted: "#9ca3af" },
+const FALLBACK = {
+  bg: "#0b1120",
+  surface: "#131c31",
+  fg: "#e8edf7",
+  accent: "#6366f1",
+  muted: "#94a3b8",
 };
 
 function escapeXml(value: string): string {
@@ -34,7 +36,11 @@ function truncate(value: string, max: number): string {
 
 export const GET: APIRoute = async () => {
   const cfg = await getConfig();
-  const c = THEME_COLORS[cfg.theme] ?? THEME_COLORS.default;
+  const active = await getActiveTheme();
+  const t = getThemeMeta(active.name)?.tokens;
+  const c = t
+    ? { bg: t.bg, bg2: t.surface, fg: t.fg, accent: t.accent, muted: t.muted }
+    : { bg: FALLBACK.bg, bg2: FALLBACK.surface, fg: FALLBACK.fg, accent: FALLBACK.accent, muted: FALLBACK.muted };
 
   const name = escapeXml(truncate(cfg.profile.name, 40));
   const tagline = escapeXml(truncate(cfg.seo?.description ?? cfg.profile.tagline ?? "", 70));

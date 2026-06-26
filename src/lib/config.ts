@@ -1,4 +1,5 @@
 import { getEntry } from "astro:content";
+import { resolveTheme, type ResolvedTheme } from "./themes";
 
 /**
  * Typed accessor for the validated LibCard config. Call this from any `.astro`
@@ -15,6 +16,17 @@ export async function getConfig() {
     );
   }
   return entry.data;
+}
+
+/**
+ * The active theme, normalized from the config's string|object `theme` field
+ * (and validated against the generated registry). Use this anywhere you need the
+ * resolved theme — the Layout bakes `name` into `<html data-theme>`, the footer
+ * reads its author, and the switcher cycles `cycle`.
+ */
+export async function getActiveTheme(): Promise<ResolvedTheme> {
+  const cfg = await getConfig();
+  return resolveTheme(cfg.theme);
 }
 
 /** The validated config object's type, inferred from the Zod schema. */

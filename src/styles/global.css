@@ -1,11 +1,10 @@
 @import "tailwindcss";
 
 /* Theme token sets — each defines the --lc-* custom properties for a theme.
-   The theme is selected by `data-theme` on <html>, driven by libcard.config.yaml. */
-@import "../themes/default.css";
-@import "../themes/midnight.css";
-@import "../themes/sunset.css";
-@import "../themes/mono.css";
+   The theme is selected by `data-theme` on <html>, driven by libcard.config.yaml.
+   This file is GENERATED from themes/*.yaml by `pnpm run gen:themes` (and the
+   `prebuild` hook). Edit themes in themes/*.yaml, never the generated CSS. */
+@import "./themes.gen.css";
 
 /* Map the semantic --lc-* custom properties into Tailwind's theme so utilities
    like `bg-bg`, `text-fg`, `bg-accent`, `border-border` work AND respond to the
@@ -37,5 +36,26 @@ html {
   *::after {
     animation-duration: 0.001ms !important;
     transition-duration: 0.001ms !important;
+  }
+}
+
+/* Theme switcher (opt-in): animate a theme change as a circular reveal anchored
+   at the switcher button. The switcher only calls startViewTransition() when
+   motion is allowed and the API exists, so this never runs under reduced motion
+   or on unsupported browsers (which fall back to an instant swap). */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none; /* drop the default cross-fade; we clip instead */
+    mix-blend-mode: normal;
+  }
+  ::view-transition-new(root) {
+    clip-path: circle(0% at var(--lc-vt-x, 50%) var(--lc-vt-y, 50%));
+    animation: lc-theme-reveal 0.42s ease-out;
+  }
+  @keyframes lc-theme-reveal {
+    to {
+      clip-path: circle(150% at var(--lc-vt-x, 50%) var(--lc-vt-y, 50%));
+    }
   }
 }

@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=./theme.schema.json
+name: Midnight
+author: LibCard
+authorUrl: https://github.com/crs48/LIBCard
+license: MIT
+official: true
+mode: dark
+tags: [dark, high-contrast, indigo]
+description: Deep navy with an indigo accent — easy on the eyes at night.
+tokens:
+  bg: "#0b1120"
+  surface: "#131c31"
+  fg: "#e8edf7"
+  muted: "#94a3b8"
+  accent: "#6366f1"
+  accentContrast: "#ffffff"
+  border: "#24304a"
+  font: sans
+  radius: 1rem
