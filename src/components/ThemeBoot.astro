@@ -1,16 +1,28 @@
 ---
-// No-flash theme restore. Rendered in <head> only when the switcher is on, so it
-// runs before first paint: if a returning visitor previously chose a theme, apply
-// it immediately (no flash of the owner's default). Kept in its own component so
-// the inline script body is emitted as raw JS rather than inside a JSX
-// expression (where it would be stringified, not executed).
+// Pre-paint theme boot, rendered in <head> only when the switcher and/or random
+// mode is on, so it runs before first paint:
+//   • random:  pick a random allowed theme on every load (a fun way to show off
+//     the gallery — the page lands on a different theme each reload);
+//   • otherwise: restore a returning visitor's previously chosen theme (no flash
+//     of the owner's default).
+// Either way the server still renders the owner's default into <html data-theme>,
+// so crawlers and no-JS visitors see a stable, deterministic theme.
+//
+// Kept in its own component so the inline script body is emitted as raw JS rather
+// than inside a JSX expression (where it would be stringified, not executed).
 interface Props {
-  /** The themes the switcher allows — guards against a stale/invalid stored value. */
+  /** The themes the switcher allows — the random pool, and the restore allowlist. */
   allowed: string[];
+  /** Pick a random theme on every load instead of restoring the saved one. */
+  random?: boolean;
 }
-const { allowed } = Astro.props;
+const { allowed, random = false } = Astro.props;
 ---
-<script is:inline define:vars={{ allowed }}>
-  const stored = localStorage.getItem("libcard-theme");
-  if (stored && allowed.includes(stored)) document.documentElement.dataset.theme = stored;
+<script is:inline define:vars={{ allowed, random }}>
+  if (random && allowed.length) {
+    document.documentElement.dataset.theme = allowed[Math.floor(Math.random() * allowed.length)];
+  } else {
+    const stored = localStorage.getItem("libcard-theme");
+    if (stored && allowed.includes(stored)) document.documentElement.dataset.theme = stored;
+  }
 </script>

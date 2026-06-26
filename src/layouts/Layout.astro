@@ -15,24 +15,26 @@ interface Props {
 const { title, wide } = Astro.props;
 const maxWidth = wide ? "max-w-3xl" : "max-w-md";
 // The owner's chosen theme is server-rendered into <html data-theme> so first
-// paint, crawlers, and no-JS visitors all see it. The switcher (if enabled) only
-// re-themes on interaction.
+// paint, crawlers, and no-JS visitors all see it. The switcher/random mode (if
+// enabled) only re-themes on the client.
 const theme = await getActiveTheme();
+// Client theme JS ships only when the switcher and/or random mode is on.
+const themeJs = theme.switcher || theme.random;
 ---
 <!doctype html>
 <html lang="en" data-theme={theme.name}>
   <head>
     <BaseHead title={title} />
-    {/* No-flash restore (before paint). Only when the switcher is on — otherwise
-        the page ships zero JS. */}
-    {theme.switcher && <ThemeBoot allowed={theme.cycle} />}
+    {/* Pre-paint theme boot (random pick or no-flash restore). Only when the
+        switcher/random is on — otherwise the page ships zero JS. */}
+    {themeJs && <ThemeBoot allowed={theme.cycle} random={theme.random} />}
   </head>
   <body class="min-h-dvh bg-bg font-sans antialiased">
     <div class:list={["mx-auto flex min-h-dvh w-full flex-col items-center px-4 py-10 sm:py-14", maxWidth]}>
       <main class="flex w-full flex-1 flex-col items-center gap-6">
         <slot />
       </main>
-      {theme.switcher && <ThemeSwitcher />}
+      {themeJs && <ThemeSwitcher />}
       <Footer />
     </div>
   </body>

@@ -31,6 +31,8 @@ const themeConfigSchema = z
       .object({
         name: z.string().min(1),
         switcher: z.boolean().default(false),
+        // Pick a random theme on every page load (a fun demo of the gallery).
+        random: z.boolean().default(false),
         allow: z.array(z.string().min(1)).optional(),
         order: z.array(z.string().min(1)).optional(),
         animate: z.boolean().default(true),

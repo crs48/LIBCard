@@ -45,11 +45,12 @@ socials:
 #
 #   theme: midnight        # default | midnight | sunset | mono | paper | terminal
 #
-# ...or turn on the live theme switcher so visitors can cycle through themes on
-# the page (this is the only feature that ships a tiny bit of JavaScript):
+# ...or turn on the live theme switcher / random mode so visitors can see the
+# themes on the page (these are the only features that ship a little JavaScript):
 theme:
   name: midnight # the default everyone sees first (and crawlers/no-JS visitors)
   switcher: true # show the "Try a theme" button
+  random: true # pick a random theme on every page load (fun demo of the gallery)
   animate: true # animate the change with a circular reveal
   # allow: [midnight, sunset, terminal, paper] # optional subset; omit = all themes
 
