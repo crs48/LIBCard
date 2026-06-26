@@ -646,13 +646,13 @@ jobs:
 - [x] Author a fully-commented starter `libcard.config.yaml`.
 
 **Core page & components**
-- [ ] `Profile.astro`, `LinkButton.astro`, `SocialRow.astro` components.
-- [ ] `pages/index.astro` assembling the card from config.
-- [ ] Theme system: Tailwind `@theme` tokens / CSS custom properties + 3–4
+- [x] `Profile.astro`, `LinkButton.astro`, `SocialRow.astro` components.
+- [x] `pages/index.astro` assembling the card from config.
+- [x] Theme system: Tailwind `@theme` tokens / CSS custom properties + 3–4
       starter themes in `src/themes/`, selected by `theme:` in config.
 - [ ] Build the QR/business-card reveal with a native `<dialog>` or
       `<details>`/`<summary>` (zero JS) rather than a React modal component.
-- [ ] Responsive down to 320px; accessible (focus states, contrast, ARIA).
+- [x] Responsive down to 320px; accessible (focus states, contrast, ARIA).
 
 **Business-card features**
 - [ ] `src/lib/vcard.ts` with RFC-correct escaping + unit tests.
