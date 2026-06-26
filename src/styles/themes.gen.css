@@ -41,6 +41,19 @@
   --lc-radius: 0.25rem;
 }
 
+[data-theme="ocean"] {
+  color-scheme: dark;
+  --lc-bg: #08131a;
+  --lc-surface: #0f2230;
+  --lc-fg: #e6f6ff;
+  --lc-muted: #8bb3c7;
+  --lc-accent: #22d3ee;
+  --lc-accent-contrast: #04181f;
+  --lc-border: #163243;
+  --lc-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --lc-radius: 1rem;
+}
+
 [data-theme="paper"] {
   color-scheme: light;
   --lc-bg: #faf6ef;

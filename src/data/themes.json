@@ -81,6 +81,33 @@
     }
   },
   {
+    "slug": "ocean",
+    "name": "Ocean",
+    "author": "LibCard",
+    "authorUrl": "https://github.com/crs48/LIBCard",
+    "license": "MIT",
+    "official": true,
+    "mode": "dark",
+    "tags": [
+      "dark",
+      "cool",
+      "cyan"
+    ],
+    "description": "Deep sea blues with a bright cyan accent.",
+    "preview": "themes/.previews/ocean.png",
+    "tokens": {
+      "bg": "#08131a",
+      "surface": "#0f2230",
+      "fg": "#e6f6ff",
+      "muted": "#8bb3c7",
+      "accent": "#22d3ee",
+      "accentContrast": "#04181f",
+      "border": "#163243",
+      "font": "sans",
+      "radius": "1rem"
+    }
+  },
+  {
     "slug": "paper",
     "name": "Paper",
     "author": "LibCard",
