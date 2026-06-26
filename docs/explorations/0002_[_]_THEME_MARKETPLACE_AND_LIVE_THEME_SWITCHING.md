@@ -876,9 +876,9 @@ jobs:
 - [x] `pnpm run update-themes` — fetch latest upstream `themes/` for forkers.
 
 **Docs**
-- [ ] Update `README.md` quick-start: "pick a theme, or turn on cycling," link to
+- [x] Update `README.md` quick-start: "pick a theme, or turn on cycling," link to
       `/themes` and `themes/README.md`.
-- [ ] Note community license default (CC-BY-4.0) and core license (MIT).
+- [x] Note community license default (CC-BY-4.0) and core license (MIT).
 
 ## Validation Checklist
 

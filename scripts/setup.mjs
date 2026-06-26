@@ -63,7 +63,9 @@ async function main() {
   const title = await ask("Job title", contact.title ?? "");
   const website = await ask("Website", contact.website ?? "");
 
-  const theme = await ask(`Theme (${THEMES.join(" | ")})`, existing.theme ?? "default");
+  // `theme` may be a bare slug or the object (switcher) form — read the name.
+  const currentTheme = typeof existing.theme === "string" ? existing.theme : (existing.theme?.name ?? "default");
+  const theme = await ask(`Theme (${THEMES.join(" | ")})`, currentTheme);
   const description = await ask("SEO description", seo.description ?? tagline);
 
   const siteUrl = await ask("GitHub Pages URL", site.url ?? guessed.url);
@@ -89,12 +91,17 @@ async function main() {
 
   const socials = Array.isArray(existing.socials) ? existing.socials : [];
 
+  // Keep the switcher settings if the user already had the object form.
+  const chosen = THEMES.includes(theme) ? theme : "default";
+  const themeOut =
+    existing.theme && typeof existing.theme === "object" ? { ...existing.theme, name: chosen } : chosen;
+
   const config = {
     profile: clean({ name, tagline, avatar, location }),
     contact: clean({ email, phone, organization, title, website }),
     links,
     socials,
-    theme: THEMES.includes(theme) ? theme : "default",
+    theme: themeOut,
     seo: clean({ description }),
     site: { url: siteUrl, base: siteBase || "/" },
   };
