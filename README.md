@@ -86,6 +86,7 @@ pnpm typecheck    # astro check
 [MIT](./LICENSE) — free to use, fork, modify, and redistribute, including
 commercially. Just keep the copyright notice.
 
-The MIT License covers the **code**, not the **name**. The "LibCard" name and
-logo are not licensed for reuse — if you fork it, ship it under your own name.
-See [TRADEMARK.md](./TRADEMARK.md).
+**Forking to make your own card? That's the whole point — you can keep the
+"LibCard" name.** Just leave the "Made with LibCard" footer link in place and
+don't pass your fork off as the *official* LibCard or as your own creation. The
+MIT License covers the code; the name is covered by [TRADEMARK.md](./TRADEMARK.md).
