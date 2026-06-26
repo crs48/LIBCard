@@ -626,24 +626,24 @@ jobs:
 ## Implementation Checklist
 
 **Scaffold & config**
-- [ ] `pnpm create astro@latest` with the minimal/empty template; commit
+- [x] `pnpm create astro@latest` with the minimal/empty template; commit
       `package.json`, `astro.config.mjs`, `tsconfig.json`.
-- [ ] **Standardize on pnpm:** set `"packageManager": "pnpm@<version>"` in
+- [x] **Standardize on pnpm:** set `"packageManager": "pnpm@<version>"` in
       `package.json`, commit **`pnpm-lock.yaml`** (never `package-lock.json` /
       `yarn.lock`), and add an `.npmrc` if needed. `withastro/action`
       auto-detects pnpm from the committed lockfile — no extra CI config. (All
       docs/scripts use `pnpm`; invoke the wizard as `pnpm run setup`, since bare
       `pnpm setup` is pnpm's own built-in command.)
-- [ ] Set `output: 'static'`, and `site`/`base` in `astro.config.mjs`.
-- [ ] `pnpm astro add tailwind` (Tailwind v4 via `@tailwindcss/vite`, Astro ≥ 5.2);
+- [x] Set `output: 'static'`, and `site`/`base` in `astro.config.mjs`.
+- [x] `pnpm astro add tailwind` (Tailwind v4 via `@tailwindcss/vite`, Astro ≥ 5.2);
       add `src/styles/global.css` with `@import "tailwindcss"` + base `@theme`
       tokens, imported once in the layout. **Do not** add any React UI kit.
-- [ ] Trim now-unused Jekyll lines from `.gitignore` (keep `dist/`).
-- [ ] Define the **Zod schema** + `file()` loader in `src/content.config.ts`.
-- [ ] Add `src/lib/config.ts` typed accessor over the collection entry.
-- [ ] Generate `libcard.schema.json` from Zod (`zod-to-json-schema`) in a
+- [x] Trim now-unused Jekyll lines from `.gitignore` (keep `dist/`).
+- [x] Define the **Zod schema** + `file()` loader in `src/content.config.ts`.
+- [x] Add `src/lib/config.ts` typed accessor over the collection entry.
+- [x] Generate `libcard.schema.json` from Zod (`zod-to-json-schema`) in a
       prebuild script; wire the `# yaml-language-server` directive.
-- [ ] Author a fully-commented starter `libcard.config.yaml`.
+- [x] Author a fully-commented starter `libcard.config.yaml`.
 
 **Core page & components**
 - [ ] `Profile.astro`, `LinkButton.astro`, `SocialRow.astro` components.
