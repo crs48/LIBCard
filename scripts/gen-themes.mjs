@@ -17,7 +17,15 @@ import { loadThemes, toRegistryEntry, themeToCss, themeSchema, TOKEN_CONTRACT } 
 const root = new URL("../", import.meta.url);
 const themesDir = fileURLToPath(new URL("themes", root));
 
-const all = loadThemes(themesDir);
+let all;
+try {
+  all = loadThemes(themesDir);
+} catch (err) {
+  // A bad theme should fail the build/PR with a clean, readable message — not a
+  // stack trace. (loadThemes throws "Invalid theme … : • field: message".)
+  console.error("\n✗ " + (err?.message ?? err) + "\n");
+  process.exit(1);
+}
 const shipped = all.filter((t) => !t.isExample);
 
 // 1) Generated CSS — one scoped block per shipped theme.

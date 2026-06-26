@@ -3,6 +3,7 @@ import "../styles/global.css";
 import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
 import ThemeSwitcher from "../components/ThemeSwitcher.astro";
+import ThemeBoot from "../components/ThemeBoot.astro";
 import { getActiveTheme } from "../lib/config";
 
 interface Props {
@@ -22,16 +23,9 @@ const theme = await getActiveTheme();
 <html lang="en" data-theme={theme.name}>
   <head>
     <BaseHead title={title} />
-    {
-      /* No-flash: restore a returning visitor's chosen theme before first paint.
-         Only emitted when the switcher is on — otherwise the page ships zero JS. */
-      theme.switcher && (
-        <script is:inline define:vars={{ allowed: theme.cycle }}>
-          {`const t = localStorage.getItem("libcard-theme");
-            if (t && allowed.includes(t)) document.documentElement.dataset.theme = t;`}
-        </script>
-      )
-    }
+    {/* No-flash restore (before paint). Only when the switcher is on — otherwise
+        the page ships zero JS. */}
+    {theme.switcher && <ThemeBoot allowed={theme.cycle} />}
   </head>
   <body class="min-h-dvh bg-bg font-sans antialiased">
     <div class:list={["mx-auto flex min-h-dvh w-full flex-col items-center px-4 py-10 sm:py-14", maxWidth]}>
