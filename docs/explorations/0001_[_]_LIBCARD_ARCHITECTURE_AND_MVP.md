@@ -662,7 +662,7 @@ jobs:
 - [x] `pages/card.astro` (or modal) showing QR + Save-Contact, using absolute
       `site+base` URL for the QR.
 - [x] (Stretch) downloadable high-res **vCard-QR** PNG/SVG for printed badges.
-- [ ] (Stretch) build-time **OG image** via `astro-og-canvas`.
+- [x] (Stretch) build-time **OG image** via `astro-og-canvas`.
 
 **Distribution & deploy**
 - [ ] `.github/workflows/deploy.yml` using `withastro/action@v6`.
