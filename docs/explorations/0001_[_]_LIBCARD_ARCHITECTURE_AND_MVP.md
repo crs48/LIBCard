@@ -650,18 +650,18 @@ jobs:
 - [x] `pages/index.astro` assembling the card from config.
 - [x] Theme system: Tailwind `@theme` tokens / CSS custom properties + 3–4
       starter themes in `src/themes/`, selected by `theme:` in config.
-- [ ] Build the QR/business-card reveal with a native `<dialog>` or
+- [x] Build the QR/business-card reveal with a native `<dialog>` or
       `<details>`/`<summary>` (zero JS) rather than a React modal component.
 - [x] Responsive down to 320px; accessible (focus states, contrast, ARIA).
 
 **Business-card features**
-- [ ] `src/lib/vcard.ts` with RFC-correct escaping + unit tests.
-- [ ] `pages/contact.vcf.ts` prerendered endpoint.
-- [ ] `SaveContact.astro` (`<a download href={base + 'contact.vcf'}>`).
-- [ ] `QRCode.astro` build-time SVG via `qrcode`.
-- [ ] `pages/card.astro` (or modal) showing QR + Save-Contact, using absolute
+- [x] `src/lib/vcard.ts` with RFC-correct escaping + unit tests.
+- [x] `pages/contact.vcf.ts` prerendered endpoint.
+- [x] `SaveContact.astro` (`<a download href={base + 'contact.vcf'}>`).
+- [x] `QRCode.astro` build-time SVG via `qrcode`.
+- [x] `pages/card.astro` (or modal) showing QR + Save-Contact, using absolute
       `site+base` URL for the QR.
-- [ ] (Stretch) downloadable high-res **vCard-QR** PNG/SVG for printed badges.
+- [x] (Stretch) downloadable high-res **vCard-QR** PNG/SVG for printed badges.
 - [ ] (Stretch) build-time **OG image** via `astro-og-canvas`.
 
 **Distribution & deploy**

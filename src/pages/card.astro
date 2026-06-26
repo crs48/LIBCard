@@ -1,0 +1,41 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Profile from "../components/Profile.astro";
+import QRCode from "../components/QRCode.astro";
+import SaveContact from "../components/SaveContact.astro";
+import Icon from "../components/Icon.astro";
+import { getConfig } from "../lib/config";
+import { absoluteUrl, withBase } from "../lib/site";
+
+const cfg = await getConfig();
+const base = import.meta.env.BASE_URL;
+// The QR on the business-card page points back to the link-in-bio home.
+const homeUrl = absoluteUrl(Astro.site, base, "/");
+const home = withBase(base, "/");
+const vcardQr = withBase(base, "/contact-qr.svg");
+---
+<Layout title="Digital business card">
+  <Profile />
+
+  <section class="flex w-full flex-col items-center gap-4 rounded-card border border-border bg-surface p-6 shadow-sm">
+    <QRCode value={homeUrl} size={240} />
+    <p class="text-center text-sm text-muted">Point a phone camera here to open my card</p>
+    <SaveContact class="w-full" />
+    <a
+      href={vcardQr}
+      download="contact-qr.svg"
+      class="inline-flex items-center gap-2 text-sm text-muted underline-offset-4 hover:text-accent hover:underline"
+    >
+      <Icon name="download" class="size-4" />
+      <span>Download contact QR (scan to save offline)</span>
+    </a>
+  </section>
+
+  <a
+    href={home}
+    class="inline-flex items-center gap-2 text-sm text-muted underline-offset-4 hover:text-accent hover:underline"
+  >
+    <Icon name="arrow-left" class="size-4" />
+    <span>Back to all links</span>
+  </a>
+</Layout>
