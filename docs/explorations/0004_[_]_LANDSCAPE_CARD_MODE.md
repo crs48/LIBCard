@@ -728,9 +728,9 @@ const cardModeSchema = z
 - [x] (Optional) Add fullscreen-on-tap behind the same flag.
 
 **Docs**
-- [ ] Document `cardMode` in `libcard.config.yaml` comments and the `README.md`
+- [x] Document `cardMode` in `libcard.config.yaml` comments and the `README.md`
       "Configure it" section ("Rotate your phone to flash a business card").
-- [ ] Note in `README` that wake lock is the only JS card mode can ship and it's
+- [x] Note in `README` that wake lock is the only JS card mode can ship and it's
       opt-in (parity with the theme-switcher framing).
 
 ## Validation Checklist
