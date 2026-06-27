@@ -50,6 +50,19 @@ const linkSchema = z
     label: z.string().min(1),
     url: z.string().url(),
     icon: z.string().optional(),
+    // Show a "★ Star" sub-button when this link points at a GitHub repo. It
+    // opens the repo (you can't star from another site), so a logged-in
+    // visitor lands right on GitHub's own Star button. Ignored for non-repo
+    // URLs (e.g. a profile or a deep path).
+    star: z.boolean().default(false),
+    // How (if at all) to show the star count next to the pill:
+    //   "off"   — pill only, no number (zero JS, zero third-party request)
+    //   "build" — bake the count into the page at build time (zero runtime
+    //             cost; refreshed whenever the site rebuilds)
+    //   "badge" — a shields.io <img> (no JS, but one third-party request per
+    //             visit, so it opts out of LibCard's "nothing to track you")
+    // Any value other than "off" implies the pill, so `star` is optional then.
+    stars: z.enum(["off", "build", "badge"]).default("off"),
   })
   .strict();
 

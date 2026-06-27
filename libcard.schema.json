@@ -81,6 +81,19 @@
               },
               "icon": {
                 "type": "string"
+              },
+              "star": {
+                "type": "boolean",
+                "default": false
+              },
+              "stars": {
+                "type": "string",
+                "enum": [
+                  "off",
+                  "build",
+                  "badge"
+                ],
+                "default": "off"
               }
             },
             "required": [
