@@ -487,7 +487,7 @@ const analytics = await getAnalytics();
 - [x] Document the feature in [README.md](../../README.md) beside the `stars`
       tradeoff table: pixel = zero-JS, beacon = tiny-JS + clicks, cookieless,
       no banner, honest ePrivacy caveat.
-- [ ] Decide the maintainer's own setting (GoatCounter pixel vs. Umami Cloud)
+- [x] Decide the maintainer's own setting (GoatCounter pixel vs. Umami Cloud)
       and enable it in the deployed config.
 
 ## Validation Checklist
