@@ -17,14 +17,14 @@ Browse them live on the `/themes` page.
 
 | Theme | Mode | Author | License | Built-in |
 |---|---|---|---|---|
-| **Default** (`default`) | light | [LibCard](https://github.com/crs48/LIBCard) | MIT | ✅ |
+| **Default** (`default`) | light | [@crs48](https://github.com/crs48) | MIT | ✅ |
 | **Frost** (`frost`) | light | [LibCard](https://github.com/crs48/LIBCard) | MIT | ✅ |
-| **Midnight** (`midnight`) | dark | [LibCard](https://github.com/crs48/LIBCard) | MIT | ✅ |
-| **Mono** (`mono`) | light | [LibCard](https://github.com/crs48/LIBCard) | MIT | ✅ |
-| **Ocean** (`ocean`) | dark | [LibCard](https://github.com/crs48/LIBCard) | MIT | ✅ |
-| **Paper** (`paper`) | light | [LibCard](https://github.com/crs48/LIBCard) | MIT | ✅ |
-| **Sunset** (`sunset`) | dark | [LibCard](https://github.com/crs48/LIBCard) | MIT | ✅ |
-| **Terminal** (`terminal`) | dark | [LibCard](https://github.com/crs48/LIBCard) | MIT | ✅ |
+| **Midnight** (`midnight`) | dark | [@crs48](https://github.com/crs48) | MIT | ✅ |
+| **Mono** (`mono`) | light | [@crs48](https://github.com/crs48) | MIT | ✅ |
+| **Ocean** (`ocean`) | dark | [@crs48](https://github.com/crs48) | MIT | ✅ |
+| **Paper** (`paper`) | light | [@crs48](https://github.com/crs48) | MIT | ✅ |
+| **Sunset** (`sunset`) | dark | [@crs48](https://github.com/crs48) | MIT | ✅ |
+| **Terminal** (`terminal`) | dark | [@crs48](https://github.com/crs48) | MIT | ✅ |
 
 <!-- THEMES:END -->
 

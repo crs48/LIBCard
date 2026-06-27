@@ -45,9 +45,9 @@ const badgeSrc = repo && link.stars === "badge" ? shieldsStarsUrl(repo) : null;
         target="_blank"
         rel="noopener noreferrer"
         aria-label={`Star ${repo.owner}/${repo.repo} on GitHub`}
-        class="lc-link group flex shrink-0 items-center gap-1.5 rounded-card border border-border bg-surface px-3 text-sm font-medium text-muted shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        class="lc-link group flex shrink-0 items-center gap-1.5 rounded-card border border-border bg-surface px-3 text-sm font-medium text-muted shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:text-[#e3b341] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
-        <Icon name="star" class="size-4 shrink-0 transition-colors group-hover:text-accent" />
+        <Icon name="star" class="size-4 shrink-0 transition-colors group-hover:text-[#e3b341]" />
         {count && <span>{count}</span>}
         {badgeSrc && <img src={badgeSrc} alt="GitHub stars" height="18" loading="lazy" decoding="async" />}
       </a>
