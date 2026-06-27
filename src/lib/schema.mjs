@@ -32,7 +32,10 @@ const themeConfigSchema = z
         name: z.string().min(1),
         switcher: z.boolean().default(false),
         // Pick a random theme on every page load (a fun demo of the gallery).
-        random: z.boolean().default(false),
+        // `true` randomizes over the whole cycle; an array curates the pool —
+        // only those themes can be landed on at random, while the switcher
+        // button still cycles through everything in `allow`/`order`.
+        random: z.union([z.boolean(), z.array(z.string().min(1))]).default(false),
         allow: z.array(z.string().min(1)).optional(),
         order: z.array(z.string().min(1)).optional(),
         animate: z.boolean().default(true),
