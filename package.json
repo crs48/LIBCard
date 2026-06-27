@@ -1,6 +1,6 @@
 {
   "name": "libcard",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "private": true,
   "description": "Free, open-source link-in-bio page + virtual business card. Static site, deploys to GitHub Pages.",
