@@ -266,8 +266,15 @@ export function themeToCss(theme) {
   // Glass surfaces → translucent fill + backdrop blur (the frosted edge comes
   // from the theme's own light border token; see effects.css).
   if (theme.buttons?.fill === "glass") {
-    decls.push(`  --lc-glass-pct: ${Math.round(theme.buttons.glassFillOpacity * 100)}%;`);
+    const pct = Math.round(theme.buttons.glassFillOpacity * 100);
+    decls.push(`  --lc-glass-pct: ${pct}%;`);
     decls.push(`  --lc-glass-filter: blur(12px) saturate(150%);`);
+    // Accent CTAs (Save contact, form submits) become frosted glass with the
+    // accent as text + ring, so they match the frosted surfaces instead of
+    // reading as a flat block of color. Accent-on-glass keeps AA (gate verifies).
+    decls.push(`  --lc-cta-bg: color-mix(in oklab, var(--lc-surface) ${pct}%, transparent);`);
+    decls.push(`  --lc-cta-fg: var(--lc-accent);`);
+    decls.push(`  --lc-cta-border: var(--lc-accent);`);
   }
 
   // Pattern → ink (fg at low alpha) + tile size; the gradient recipe is emitted
