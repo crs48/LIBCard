@@ -132,6 +132,13 @@ footer:
   poweredBy: true # set false to drop "Powered by LibCard" (it's MIT)
   themeCredit: true # "Theme by <author>" — required for CC-BY themes regardless
 
+# --- First-run nudge (template only, off by default) ---
+# A fresh "Use this template" card can show a subtle "edit libcard.config.yaml"
+# banner until it's customized. Uncomment to switch it on, then delete it once the
+# card is yours — a real, customized card should never show the nudge.
+# meta:
+#   default: true
+
 # --- SEO / link previews (optional) ---
 seo:
   description: My links, all in one place — and a tap-to-save digital business card.

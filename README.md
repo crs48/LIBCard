@@ -64,6 +64,28 @@ links:
   - { label: Tip jar,    url: "https://paypal.me/you/5",          icon: heart }
 ```
 
+#### Pass it on — a "Make your own" link
+
+Because a link is just a label + URL, the easiest way to help visitors spin up
+their *own* card is a plain link back to this template — no special feature
+required:
+
+```yaml
+links:
+  - { label: Make your own LibCard, url: "https://github.com/crs48/LIBCard", icon: github }
+```
+
+…or, if you'd rather phrase it inline, a one-line content block does the same job:
+
+```yaml
+blocks:
+  - { type: text, markdown: "Like this page? **[Make your own LibCard](https://github.com/crs48/LIBCard)** — it's free." }
+```
+
+The footer's **"Powered by LibCard"** credit already links home, so this is
+optional — but it makes the invitation explicit, and it's the same loop that lets
+LibCard spread from card to card.
+
 ### Content blocks
 
 For anything richer than a button, add a `blocks:` list — an ordered set of typed
@@ -285,6 +307,6 @@ resolving a config conflict, rolling back, and what changed in each release
 commercially. Just keep the copyright notice.
 
 **Forking to make your own card? That's the whole point — you can keep the
-"LibCard" name.** Just leave the "Made with LibCard" footer link in place and
+"LibCard" name.** Just leave the "Powered by LibCard" footer link in place and
 don't pass your fork off as the *official* LibCard or as your own creation. The
 MIT License covers the code; the name is covered by [TRADEMARK.md](./TRADEMARK.md).

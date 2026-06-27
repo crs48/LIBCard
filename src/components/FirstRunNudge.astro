@@ -1,0 +1,18 @@
+---
+// A subtle, first-run-only nudge for an unedited card. It renders ONLY when the
+// config opts in with `meta.default: true` — the marker a fresh "Use this
+// template" card carries and a real, customized card omits. Editing the config to
+// drop the marker (or set it false) hides it. Zero JavaScript; it's static markup.
+import { getConfig } from "../lib/config";
+
+const cfg = await getConfig();
+const show = cfg.meta.default;
+---
+{
+  show && (
+    <div class="w-full rounded-lg border border-dashed border-border px-4 py-3 text-center text-sm text-muted text-balance">
+      👋 This is a fresh LibCard — edit{" "}
+      <code class="font-mono">libcard.config.yaml</code> to make it yours.
+    </div>
+  )
+}

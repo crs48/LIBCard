@@ -14,7 +14,7 @@ Here's the simple version.
 
 ### 🙏 Please keep (it's already there by default)
 
-- The **"Made with LibCard"** link in the page footer, pointing back to the
+- The **"Powered by LibCard"** link in the page footer, pointing back to the
   original project. It costs you nothing, and it's how other people find LibCard.
 
 ### 🚫 Not okay — this is what "trademark" is about

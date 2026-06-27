@@ -762,6 +762,17 @@
           "additionalProperties": false,
           "default": {}
         },
+        "meta": {
+          "type": "object",
+          "properties": {
+            "default": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false,
+          "default": {}
+        },
         "cardMode": {
           "type": "object",
           "properties": {

@@ -73,3 +73,13 @@ build(deps): add Tailwind CSS v4 via @tailwindcss/vite
   upstream. When updating a user's card, never overwrite their content; the build
   regenerates derived files (`libcard.schema.json`, `src/data/themes.json`,
   `src/styles/themes.gen.css`, `themes/theme.schema.json`) so don't hand-edit those.
+- **The landing page is just a card — every affordance is a toggle.** The deployed
+  demo site is the maintainer's own `libcard.config.yaml`, not a separate marketing
+  build. So there is no such thing as a "landing-page-only" feature: anything the
+  demo shows off (the theme randomizer, switcher, "Powered by LibCard" badge, ★-star
+  buttons, About/FAQ content blocks, card mode) is an ordinary config flag any user
+  can switch on or off. **Acceptance test for any new "landing page" idea: can a user
+  reproduce it by config alone? If not, it doesn't ship.** Don't add bespoke
+  marketing components or a second/`examples/landing` config — extend the shared
+  feature set instead. Background:
+  [`docs/explorations/0008_[_]_LANDING_PAGE_AND_VIRAL_LOOP.md`](./docs/explorations/).

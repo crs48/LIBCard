@@ -18,6 +18,13 @@ const active = await getActiveTheme();
 const meta = getThemeMeta(active.name);
 
 const poweredBy = cfg.footer.poweredBy;
+// Coarse, non-identifying attribution on the badge link. It ships no JS and sets
+// no cookies. The real signal is the click's Referer header, which shows up under
+// the repo's Insights → Traffic → "Referring sites" — so the badge link keeps
+// rel="noopener" (security) but drops "noreferrer" so the referring card is
+// visible. The ?ref tag is just an explicit breadcrumb; nothing per-visitor is
+// tracked. (The theme-credit link below keeps noreferrer; only this one needs it.)
+const poweredByHref = `${LIBCARD_REPO}?ref=card`;
 // Be honest about the one place the "nothing tracks you" promise has an asterisk:
 // a live embed (video/booking/map/…) loads third-party content in its iframe.
 // Video defaults to a click-to-load facade, so nothing loads until interaction.
@@ -33,9 +40,9 @@ const sep = poweredBy ? " · " : "";
     {
       poweredBy && (
         <a
-          href={LIBCARD_REPO}
+          href={poweredByHref}
           target="_blank"
-          rel="noopener noreferrer"
+          rel="noopener"
           class="underline-offset-4 hover:text-accent hover:underline"
         >
           Powered by LibCard
