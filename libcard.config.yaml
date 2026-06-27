@@ -32,6 +32,8 @@ links:
   - label: xNet
     url: https://github.com/crs48/xNet
     icon: github
+    star: true # add a "★ Star" sub-button that opens the repo
+    stars: build # bake the star count in at build time (zero runtime JS)
   - label: xnet.fyi
     url: https://xnet.fyi/
     icon: globe
@@ -43,12 +45,18 @@ links:
   - label: murmuration
     url: https://github.com/crs48/murmuration
     icon: github
+    star: true # add a "★ Star" sub-button that opens the repo
+    stars: build # bake the star count in at build time (zero runtime JS)
   - label: warp-voyage
     url: https://github.com/crs48/warp-voyage
     icon: github
+    star: true
+    stars: build
   - label: cause
     url: https://github.com/crs48/cause
     icon: github
+    star: true
+    stars: build
   - label: My website
     url: https://crs48.github.io/LIBCard
     icon: globe
