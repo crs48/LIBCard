@@ -15,6 +15,8 @@ const cardUrl = absoluteUrl(Astro.site, import.meta.env.BASE_URL, "/");
 <Layout>
   <Profile />
 
+  <SocialRow />
+
   {
     cfg.links.length > 0 && (
       <ul class="flex w-full flex-col gap-3">
@@ -36,8 +38,6 @@ const cardUrl = absoluteUrl(Astro.site, import.meta.env.BASE_URL, "/");
       </div>
     )
   }
-
-  <SocialRow />
 
   <CardReveal url={cardUrl} />
 </Layout>
