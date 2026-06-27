@@ -5,6 +5,7 @@ import Footer from "../components/Footer.astro";
 import ThemeSwitcher from "../components/ThemeSwitcher.astro";
 import ThemeBoot from "../components/ThemeBoot.astro";
 import BusinessCardMode from "../components/BusinessCardMode.astro";
+import CardWakeLock from "../components/CardWakeLock.astro";
 import { getActiveTheme, getCardMode } from "../lib/config";
 
 interface Props {
@@ -42,6 +43,7 @@ const showCardMode = card.enabled && !wide;
       {themeJs && <ThemeSwitcher />}
       <Footer />
       {showCardMode && <BusinessCardMode qr={card.qr} hint={card.hint} />}
+      {showCardMode && card.wakeLock && <CardWakeLock />}
     </div>
   </body>
 </html>

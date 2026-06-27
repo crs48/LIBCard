@@ -722,10 +722,10 @@ const cardModeSchema = z
       media query if it clutters the card.
 
 **Phase 2 — opt-in enhancement**
-- [ ] Create `src/components/CardWakeLock.astro` (`<script is:inline>` wake-lock
+- [x] Create `src/components/CardWakeLock.astro` (`<script is:inline>` wake-lock
       sync on the same media query; `visibilitychange` re-acquire); ship only when
       `cardMode.wakeLock: true`.
-- [ ] (Optional) Add fullscreen-on-tap behind the same flag.
+- [x] (Optional) Add fullscreen-on-tap behind the same flag.
 
 **Docs**
 - [ ] Document `cardMode` in `libcard.config.yaml` comments and the `README.md`
