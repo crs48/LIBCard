@@ -76,6 +76,14 @@ html {
   body {
     overflow: hidden;
   }
+  /* The opaque overlay covers the whole page; drop the chrome it hides
+     (the link-in-bio content, footer, and theme switcher) out of the layout
+     and focus order so only the card remains. */
+  main,
+  footer,
+  #lc-theme-next {
+    display: none;
+  }
 }
 
 /* The card keeps a real business-card proportion (3.5"×2" ≈ 1.75:1), sized to

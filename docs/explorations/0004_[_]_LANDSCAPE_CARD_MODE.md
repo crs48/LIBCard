@@ -718,7 +718,7 @@ const cardModeSchema = z
       (DRY; keeps Save-contact + back link).
 - [x] Choose the QR target per `cardMode.qr` (`page` → `homeUrl`, `contact` →
       `/contact-qr.svg` payload, `both`).
-- [ ] Hide page chrome (theme switcher, footer minus credit) inside the card-mode
+- [x] Hide page chrome (theme switcher, footer minus credit) inside the card-mode
       media query if it clutters the card.
 
 **Phase 2 — opt-in enhancement**
