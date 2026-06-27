@@ -15,6 +15,54 @@
   --lc-radius: 1rem;
 }
 
+[data-theme="dawn"] {
+  color-scheme: light;
+  --lc-bg: #fdf4ee;
+  --lc-surface: #ffffff;
+  --lc-fg: #3c2a26;
+  --lc-muted: #7e5e54;
+  --lc-accent: #c4316a;
+  --lc-accent-contrast: #ffffff;
+  --lc-border: #ffffff;
+  --lc-font: ui-rounded, "SF Pro Rounded", "Hiragino Maru Gothic ProN", system-ui, sans-serif;
+  --lc-radius: 1.25rem;
+  --lc-mesh-1: #ffe1d0;
+  --lc-mesh-2: #ffe9c9;
+  --lc-mesh-3: #ffd9e3;
+  --lc-mesh-4: #fce3c5;
+  --lc-bg-blur: 60px;
+  --lc-bg-anim: running;
+  --lc-glass-pct: 40%;
+  --lc-glass-filter: blur(12px) saturate(150%);
+  --lc-cta-bg: color-mix(in oklab, var(--lc-surface) 40%, transparent);
+  --lc-cta-fg: var(--lc-accent);
+  --lc-cta-border: var(--lc-accent);
+}
+
+[data-theme="dusk"] {
+  color-scheme: dark;
+  --lc-bg: #0c1024;
+  --lc-surface: #161b33;
+  --lc-fg: #eef1ff;
+  --lc-muted: #a7b0d0;
+  --lc-accent: #9aa8ff;
+  --lc-accent-contrast: #0c1024;
+  --lc-border: #2a3358;
+  --lc-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --lc-radius: 1.25rem;
+  --lc-mesh-1: #3b2a6b;
+  --lc-mesh-2: #1f4b6b;
+  --lc-mesh-3: #4a2a5e;
+  --lc-mesh-4: #23485e;
+  --lc-bg-blur: 60px;
+  --lc-bg-anim: running;
+  --lc-glass-pct: 40%;
+  --lc-glass-filter: blur(12px) saturate(150%);
+  --lc-cta-bg: color-mix(in oklab, var(--lc-surface) 40%, transparent);
+  --lc-cta-fg: var(--lc-accent);
+  --lc-cta-border: var(--lc-accent);
+}
+
 [data-theme="frost"] {
   color-scheme: light;
   --lc-bg: #f5f6fb;
@@ -50,6 +98,30 @@
   --lc-border: #24304a;
   --lc-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --lc-radius: 1rem;
+}
+
+[data-theme="mist"] {
+  color-scheme: light;
+  --lc-bg: #f3f5f8;
+  --lc-surface: #ffffff;
+  --lc-fg: #272b33;
+  --lc-muted: #6b7280;
+  --lc-accent: #2f6d80;
+  --lc-accent-contrast: #ffffff;
+  --lc-border: #ffffff;
+  --lc-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --lc-radius: 1rem;
+  --lc-mesh-1: #e6ebf2;
+  --lc-mesh-2: #e9eef0;
+  --lc-mesh-3: #eaeef5;
+  --lc-mesh-4: #edf0f3;
+  --lc-bg-blur: 60px;
+  --lc-bg-anim: running;
+  --lc-glass-pct: 45%;
+  --lc-glass-filter: blur(12px) saturate(150%);
+  --lc-cta-bg: color-mix(in oklab, var(--lc-surface) 45%, transparent);
+  --lc-cta-fg: var(--lc-accent);
+  --lc-cta-border: var(--lc-accent);
 }
 
 [data-theme="mono"] {

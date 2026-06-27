@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=./theme.schema.json
+name: Mist
+author: "@crs48"
+authorUrl: https://github.com/crs48
+license: MIT
+official: true
+mode: light
+tags: [light, neutral, minimal, glass, calm]
+description: A barely-there grey-blue fog behind clean frosted glass.
+tokens:
+  bg: "#f3f5f8"
+  surface: "#ffffff"
+  fg: "#272b33"
+  muted: "#6b7280"
+  accent: "#2f6d80" # muted slate-teal — quiet, not loud
+  accentContrast: "#ffffff"
+  border: "#ffffff"
+  font: sans
+  radius: 1rem
+background:
+  kind: pastel-mesh
+  stops: ["#e6ebf2", "#e9eef0", "#eaeef5", "#edf0f3"] # almost neutral, faintly cool
+  blur: 60
+  animate: true
+buttons:
+  fill: glass
+  glassFillOpacity: 0.45

@@ -34,6 +34,98 @@
     }
   },
   {
+    "slug": "dawn",
+    "name": "Dawn",
+    "file": "dawn.yaml",
+    "author": "@crs48",
+    "authorUrl": "https://github.com/crs48",
+    "license": "MIT",
+    "official": true,
+    "mode": "light",
+    "tags": [
+      "light",
+      "warm",
+      "sunrise",
+      "glass",
+      "soft"
+    ],
+    "description": "A soft sunrise haze of peach and amber behind frosted glass.",
+    "preview": "themes/.previews/dawn.png",
+    "tokens": {
+      "bg": "#fdf4ee",
+      "surface": "#ffffff",
+      "fg": "#3c2a26",
+      "muted": "#7e5e54",
+      "accent": "#c4316a",
+      "accentContrast": "#ffffff",
+      "border": "#ffffff",
+      "font": "rounded",
+      "radius": "1.25rem"
+    },
+    "background": {
+      "kind": "pastel-mesh",
+      "stops": [
+        "#ffe1d0",
+        "#ffe9c9",
+        "#ffd9e3",
+        "#fce3c5"
+      ],
+      "blur": 60,
+      "animate": true
+    },
+    "pattern": null,
+    "buttons": {
+      "fill": "glass",
+      "glassFillOpacity": 0.4
+    }
+  },
+  {
+    "slug": "dusk",
+    "name": "Dusk",
+    "file": "dusk.yaml",
+    "author": "@crs48",
+    "authorUrl": "https://github.com/crs48",
+    "license": "MIT",
+    "official": true,
+    "mode": "dark",
+    "tags": [
+      "dark",
+      "aurora",
+      "gradient",
+      "glass",
+      "calm"
+    ],
+    "description": "Deep twilight aurora behind smoked-glass panels.",
+    "preview": "themes/.previews/dusk.png",
+    "tokens": {
+      "bg": "#0c1024",
+      "surface": "#161b33",
+      "fg": "#eef1ff",
+      "muted": "#a7b0d0",
+      "accent": "#9aa8ff",
+      "accentContrast": "#0c1024",
+      "border": "#2a3358",
+      "font": "sans",
+      "radius": "1.25rem"
+    },
+    "background": {
+      "kind": "pastel-mesh",
+      "stops": [
+        "#3b2a6b",
+        "#1f4b6b",
+        "#4a2a5e",
+        "#23485e"
+      ],
+      "blur": 60,
+      "animate": true
+    },
+    "pattern": null,
+    "buttons": {
+      "fill": "glass",
+      "glassFillOpacity": 0.4
+    }
+  },
+  {
     "slug": "frost",
     "name": "Frost",
     "file": "frost.yaml",
@@ -111,6 +203,52 @@
     "buttons": {
       "fill": "solid",
       "glassFillOpacity": 0.18
+    }
+  },
+  {
+    "slug": "mist",
+    "name": "Mist",
+    "file": "mist.yaml",
+    "author": "@crs48",
+    "authorUrl": "https://github.com/crs48",
+    "license": "MIT",
+    "official": true,
+    "mode": "light",
+    "tags": [
+      "light",
+      "neutral",
+      "minimal",
+      "glass",
+      "calm"
+    ],
+    "description": "A barely-there grey-blue fog behind clean frosted glass.",
+    "preview": "themes/.previews/mist.png",
+    "tokens": {
+      "bg": "#f3f5f8",
+      "surface": "#ffffff",
+      "fg": "#272b33",
+      "muted": "#6b7280",
+      "accent": "#2f6d80",
+      "accentContrast": "#ffffff",
+      "border": "#ffffff",
+      "font": "sans",
+      "radius": "1rem"
+    },
+    "background": {
+      "kind": "pastel-mesh",
+      "stops": [
+        "#e6ebf2",
+        "#e9eef0",
+        "#eaeef5",
+        "#edf0f3"
+      ],
+      "blur": 60,
+      "animate": true
+    },
+    "pattern": null,
+    "buttons": {
+      "fill": "glass",
+      "glassFillOpacity": 0.45
     }
   },
   {

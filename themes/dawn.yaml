@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=./theme.schema.json
+name: Dawn
+author: "@crs48"
+authorUrl: https://github.com/crs48
+license: MIT
+official: true
+mode: light
+tags: [light, warm, sunrise, glass, soft]
+description: A soft sunrise haze of peach and amber behind frosted glass.
+tokens:
+  bg: "#fdf4ee" # warm near-white
+  surface: "#ffffff"
+  fg: "#3c2a26" # warm dark ink → easily readable on pale glass
+  muted: "#7e5e54"
+  accent: "#c4316a" # deep rose (dark enough to clear AA on glass)
+  accentContrast: "#ffffff"
+  border: "#ffffff"
+  font: rounded
+  radius: 1.25rem
+background:
+  kind: pastel-mesh
+  stops: ["#ffe1d0", "#ffe9c9", "#ffd9e3", "#fce3c5"] # peach / amber / blush / cream
+  blur: 60
+  animate: true
+buttons:
+  fill: glass
+  glassFillOpacity: 0.4
