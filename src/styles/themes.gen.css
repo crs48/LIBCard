@@ -17,35 +17,23 @@
 
 [data-theme="frost"] {
   color-scheme: light;
-  --lc-bg: #eef2ff;
+  --lc-bg: #f5f6fb;
   --lc-surface: #ffffff;
-  --lc-fg: #27213a;
-  --lc-muted: #6b6588;
-  --lc-accent: #8b2fd6;
-  --lc-accent-contrast: #fcfaff;
+  --lc-fg: #2c2740;
+  --lc-muted: #6f6a85;
+  --lc-accent: #7c3aed;
+  --lc-accent-contrast: #ffffff;
   --lc-border: #ffffff;
   --lc-font: ui-rounded, "SF Pro Rounded", "Hiragino Maru Gothic ProN", system-ui, sans-serif;
   --lc-radius: 1.25rem;
-  --lc-mesh-1: #a78bfa;
-  --lc-mesh-2: #6ee7b7;
-  --lc-mesh-3: #7dd3fc;
-  --lc-mesh-4: #f9a8d4;
-  --lc-bg-blur: 45px;
+  --lc-mesh-1: #e3ddf7;
+  --lc-mesh-2: #dcf2e8;
+  --lc-mesh-3: #dfeafb;
+  --lc-mesh-4: #f7e3ee;
+  --lc-bg-blur: 60px;
   --lc-bg-anim: running;
-  --lc-glass-pct: 18%;
-  --lc-glass-filter: blur(12px) saturate(160%);
-  --lc-glass-border: hsl(0 0% 100% / 0.45);
-  --lc-glass-sheen: hsl(0 0% 100% / 0.4);
-  --lc-ink: color-mix(in oklab, var(--lc-fg) 5%, transparent);
-}
-
-[data-theme="frost"] .lc-pattern {
-  --s: var(--lc-pat-size, 44px);
-  background:
-    radial-gradient(circle at 50% 0, transparent 70%, var(--lc-ink) 71%),
-    radial-gradient(circle at 50% 100%, var(--lc-ink) 70%, transparent 71%);
-  background-size: var(--s) var(--s);
-  background-position: 0 0, calc(var(--s) / 2) calc(var(--s) / 2);
+  --lc-glass-pct: 40%;
+  --lc-glass-filter: blur(12px) saturate(150%);
 }
 
 [data-theme="midnight"] {
