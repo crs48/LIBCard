@@ -50,6 +50,9 @@ links:
   - label: xnet.fyi
     url: https://xnet.fyi/
     icon: globe
+  - label: xnet.fyi/why
+    url: https://xnet.fyi/why/
+    icon: globe
   - label: LIBCard
     url: https://github.com/crs48/LIBCard
     icon: github
