@@ -677,10 +677,10 @@ sequenceDiagram
 ## Implementation Checklist
 
 **Phase 0 — Tier-0 link polish (pure HTML)**
-- [ ] Add icons to [`Icon.astro`](../../src/components/Icon.astro): `phone`,
+- [x] Add icons to [`Icon.astro`](../../src/components/Icon.astro): `phone`,
       `message`, `whatsapp`, `telegram`, `signal`, `play`, `music`, `figma`,
       `rss`, `heart`.
-- [ ] In [`LinkButton.astro`](../../src/components/LinkButton.astro), only show
+- [x] In [`LinkButton.astro`](../../src/components/LinkButton.astro), only show
       the trailing `external-link` glyph for `http(s)` links (not `tel:`/`mailto:`).
 - [ ] Optionally auto-render tap-to-call / email buttons from `contact.phone` /
       `contact.email`.
