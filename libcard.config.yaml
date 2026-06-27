@@ -12,7 +12,7 @@
 # --- Who you are (the card header) ---
 profile:
   name: Christopher Smothers
-  tagline: Building LibCard — your free link-in-bio + virtual business card
+  tagline: Building xNet — a local-first platform for apps that work offline, sync peer-to-peer, and keep your data under your control
   avatar: /avatar.jpg # a file in /public, or a full https:// URL
   location: San Francisco, CA
 
@@ -22,9 +22,22 @@ profile:
 contact:
   email: chris.smothers@gmail.com
   phone: "" # e.g. "+1-555-123-4567"
-  organization: LibCard
+  organization: xNet
   title: Maintainer
-  website: https://crs48.github.io/LIBCard
+  website: https://xnet.fyi
+
+# --- Social icon row (icon-only, shown above the links) ---
+socials:
+  - platform: github
+    url: https://github.com/crs48
+  - platform: x
+    url: https://x.com/becomingbabyman
+  - platform: youtube
+    url: https://www.youtube.com/channel/UC3MAaU1oKalapO7rjZps7hQ
+  - platform: instagram
+    url: https://www.instagram.com/becomingbabyman/
+  - platform: telegram
+    url: https://t.me/becomingbabyman
 
 # --- Your links (the buttons) ---
 # My pinned GitHub repos, in pinned order.
@@ -37,29 +50,35 @@ links:
   - label: xnet.fyi
     url: https://xnet.fyi/
     icon: globe
-  - label: LIBCard (powers this site)
+  - label: LIBCard
     url: https://github.com/crs48/LIBCard
     icon: github
     star: true # add a "★ Star" sub-button that opens the repo
     stars: build # bake the star count in at build time (zero runtime JS)
-  - label: murmuration (flocking simulation)
+  - label: My personal site
+    url: https://crs48.github.io/LIBCard
+    icon: globe
+  - label: murmuration
     url: https://github.com/crs48/murmuration
     icon: github
     star: true # add a "★ Star" sub-button that opens the repo
     stars: build # bake the star count in at build time (zero runtime JS)
-  - label: warp-voyage (browser game)
+  - label: flocking simulation
+    url: https://crs48.github.io/murmuration
+    icon: globe
+  - label: warp-voyage
     url: https://github.com/crs48/warp-voyage
     icon: github
     star: true
     stars: build
+  - label: tunnel broser game
+    url: https://crs48.github.io/warp-voyage
+    icon: globe
   - label: cause (Clojure EDN CRDT)
     url: https://github.com/crs48/cause
     icon: github
     star: true
     stars: build
-  - label: My website
-    url: https://crs48.github.io/LIBCard
-    icon: globe
 
 # --- Rich content blocks (optional, ordered) ---
 # An ordered list of typed blocks rendered between your links and the social row.
@@ -71,10 +90,10 @@ blocks:
   - type: divider
     label: More
   - type: heading
-    text: About LibCard
+    text: About This Site
   - type: text
     markdown: >
-      A free, fast, **zero-JavaScript** link-in-bio page and virtual business
+      I made LIBCard a free, fast, **zero-JavaScript** link-in-bio page and virtual business
       card you host yourself on GitHub Pages. Edit one file, push, done.
   - type: faq
     items:
@@ -95,19 +114,6 @@ blocks:
   # - { type: tweet, url: https://x.com/you/status/1750000000000000000 }     # baked at build time
   # - { type: rss, url: https://yourblog.com/feed.xml, title: Latest posts }
   # - { type: github, user: you, repo: yourrepo }
-
-# --- Social icon row (icon-only, shown under the links) ---
-socials:
-  - platform: github
-    url: https://github.com/crs48
-  - platform: x
-    url: https://x.com/becomingbabyman
-  - platform: youtube
-    url: https://www.youtube.com/channel/UC3MAaU1oKalapO7rjZps7hQ
-  - platform: instagram
-    url: https://www.instagram.com/becomingbabyman/
-  - platform: telegram
-    url: https://t.me/becomingbabyman
 
 # --- Look & feel ---
 # Pick ONE theme (zero JavaScript):
@@ -141,7 +147,7 @@ footer:
 
 # --- SEO / link previews (optional) ---
 seo:
-  description: My links, all in one place — and a tap-to-save digital business card.
+  description: Building xNet — a local-first platform for apps that work offline, sync peer-to-peer, and keep your data under your control
   # ogImage: /og.png   # optional custom Open Graph image (a /public path or URL)
 
 # --- Landscape "card mode" (rotate your phone to flash a business card) ---
