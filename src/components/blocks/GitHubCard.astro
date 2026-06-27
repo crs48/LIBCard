@@ -1,0 +1,39 @@
+---
+import type { BlockOf } from "../../lib/config";
+import { fetchGitHub } from "../../lib/social-fetch";
+import Icon from "../Icon.astro";
+
+interface Props {
+  block: BlockOf<"github">;
+}
+
+const { block } = Astro.props;
+// Public GitHub API, fetched at build (unauthenticated; rate-limited). Fail-soft
+// → a plain link to the profile/repo.
+const stats = await fetchGitHub(block.user, block.repo);
+const fallbackUrl = block.repo
+  ? `https://github.com/${block.user}/${block.repo}`
+  : `https://github.com/${block.user}`;
+const nf = new Intl.NumberFormat("en-US");
+---
+<a
+  href={stats?.url ?? fallbackUrl}
+  target="_blank"
+  rel="noopener noreferrer"
+  class="group flex w-full flex-col gap-2 rounded-card border border-border bg-surface px-4 py-3.5 shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+>
+  <span class="flex items-center gap-2">
+    <Icon name="github" class="size-5 shrink-0 text-fg" />
+    <span class="font-semibold text-fg">{stats?.title ?? fallbackUrl.replace("https://github.com/", "")}</span>
+  </span>
+  {stats?.description && <span class="text-sm text-muted">{stats.description}</span>}
+  {
+    stats && (stats.stars !== undefined || stats.forks !== undefined || stats.language) && (
+      <span class="flex flex-wrap items-center gap-3 text-xs text-muted">
+        {stats.language && <span>{stats.language}</span>}
+        {stats.stars !== undefined && <span>★ {nf.format(stats.stars)}</span>}
+        {stats.forks !== undefined && <span>⑂ {nf.format(stats.forks)}</span>}
+      </span>
+    )
+  }
+</a>

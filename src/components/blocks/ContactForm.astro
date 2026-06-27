@@ -1,0 +1,58 @@
+---
+import type { BlockOf } from "../../lib/config";
+
+interface Props {
+  block: BlockOf<"form">;
+}
+
+const { block } = Astro.props;
+const button = block.button ?? "Send";
+// Works with any service that accepts a form-encoded POST (Formspree, Web3Forms,
+// Getform, Basin…). Zero JS / zero backend; the no-JS cost is a redirect to the
+// provider's thank-you page (or your own via `redirect` where supported).
+const inputClass =
+  "w-full rounded-card border border-border bg-bg px-3 py-2.5 text-fg outline-none focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
+---
+<form
+  action={block.action}
+  method="post"
+  target="_blank"
+  class="flex w-full flex-col gap-3 rounded-card border border-border bg-surface p-4 shadow-sm"
+>
+  {block.title && <p class="text-center font-semibold text-fg">{block.title}</p>}
+  {block.description && <p class="text-center text-sm text-muted">{block.description}</p>}
+
+  {/* Honeypot: hidden from people, tempting to bots. Most providers (Formspree
+      `_gotcha`, Web3Forms `botcheck`) silently drop a submission when it's set;
+      we name it `_gotcha` for the common case. */}
+  <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="lc-hp" />
+  {block.redirect && <input type="hidden" name="_next" value={block.redirect} />}
+
+  {
+    block.fields.map((f, i) => {
+      const id = `lc-field-${i}`;
+      return (
+        <div class="flex flex-col gap-1">
+          {f.label && (
+            <label for={id} class="text-sm font-medium text-fg">
+              {f.label}
+              {f.required && <span class="text-accent"> *</span>}
+            </label>
+          )}
+          {f.type === "textarea" ? (
+            <textarea id={id} name={f.name} placeholder={f.placeholder} required={f.required} rows={4} class={inputClass} />
+          ) : (
+            <input id={id} type={f.type} name={f.name} placeholder={f.placeholder} required={f.required} class={inputClass} />
+          )}
+        </div>
+      );
+    })
+  }
+
+  <button
+    type="submit"
+    class="rounded-card bg-accent px-4 py-2.5 font-medium text-accent-contrast shadow-sm transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+  >
+    {button}
+  </button>
+</form>

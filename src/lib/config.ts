@@ -44,3 +44,16 @@ export type LibcardConfig = Awaited<ReturnType<typeof getConfig>>;
 export type LibcardLink = LibcardConfig["links"][number];
 export type LibcardSocial = LibcardConfig["socials"][number];
 export type LibcardCardMode = LibcardConfig["cardMode"];
+
+/** A single rich content block (discriminated union member). */
+export type LibcardBlock = LibcardConfig["blocks"][number];
+/** Narrow a block to one `type`, e.g. `BlockOf<"video">`. */
+export type BlockOf<T extends LibcardBlock["type"]> = Extract<LibcardBlock, { type: T }>;
+
+/** Block types whose live iframes load third-party content (drives the footer
+ *  disclosure). Build-time blocks (tweet/rss/github) are excluded — they ship
+ *  no third-party request at runtime. */
+const LIVE_EMBED_TYPES = new Set(["video", "embed", "booking", "map"]);
+export function hasLiveEmbeds(cfg: LibcardConfig): boolean {
+  return cfg.blocks.some((b) => LIVE_EMBED_TYPES.has(b.type));
+}

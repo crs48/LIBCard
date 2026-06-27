@@ -682,7 +682,7 @@ sequenceDiagram
       `rss`, `heart`.
 - [x] In [`LinkButton.astro`](../../src/components/LinkButton.astro), only show
       the trailing `external-link` glyph for `http(s)` links (not `tel:`/`mailto:`).
-- [ ] Optionally auto-render tap-to-call / email buttons from `contact.phone` /
+- [x] Optionally auto-render tap-to-call / email buttons from `contact.phone` /
       `contact.email`.
 - [ ] Document special-scheme links (`tel:`, `sms:?&body=`, `wa.me`, `t.me`,
       `mailto:`, `geo:`, PayPal.me, Stripe Payment Links) in the README with
@@ -691,34 +691,34 @@ sequenceDiagram
 **Phase 1 — Tier-1 static blocks**
 - [x] Add `blocks: z.array(blockSchema).default([])` (discriminated union) to
       [`schema.mjs`](../../src/lib/schema.mjs); regenerate `libcard.schema.json`.
-- [ ] `Block.astro` dispatcher + components: `Heading`, `Text` (build-time
+- [x] `Block.astro` dispatcher + components: `Heading`, `Text` (build-time
       Markdown), `Divider`, `Faq` (`<details>`), `Gallery` (CSS scroll-snap),
       `ContactButtons`.
-- [ ] Render `blocks` in order in [`index.astro`](../../src/pages/index.astro).
+- [x] Render `blocks` in order in [`index.astro`](../../src/pages/index.astro).
 - [x] Sanitize/limit Markdown in `text` blocks (no raw HTML) at build time.
 
 **Phase 2 — Tier-2 forms (POST)**
-- [ ] `Signup` block (Buttondown/Mailchimp/Kit/Formspree) → plain
+- [x] `Signup` block (Buttondown/Mailchimp/Kit/Formspree) → plain
       `<form method="post">` with CSS honeypot + redirect field.
-- [ ] `Form` (contact) block (Formspree/Web3Forms) with `fields[]`, honeypot,
+- [x] `Form` (contact) block (Formspree/Web3Forms) with `fields[]`, honeypot,
       `_next`/`redirect`.
 - [ ] `.sr-only` honeypot utility; document the redirect-thank-you behavior.
 
 **Phase 3 — Tier-3 live iframes**
 - [x] `src/lib/embeds.ts` provider allowlist + safe iframe builder
       (`loading="lazy"`, `sandbox`, `referrerpolicy`, `nocookie`).
-- [ ] `VideoEmbed.astro` privacy facade (`<details>` + lazy iframe), default on.
-- [ ] `Embed.astro` (figma/maps/twitch/tiktok/bluesky/gforms/…) +
+- [x] `VideoEmbed.astro` privacy facade (`<details>` + lazy iframe), default on.
+- [x] `Embed.astro` (figma/maps/twitch/tiktok/bluesky/gforms/…) +
       `Booking.astro` (calendly/calcom/gcal) + `Map.astro`.
-- [ ] Reserve aspect-ratio boxes (no CLS); footer/docs disclosure when live
+- [x] Reserve aspect-ratio boxes (no CLS); footer/docs disclosure when live
       embeds are present.
-- [ ] (Optional) build-time **oEmbed fallback** adapter for long-tail providers.
+- [x] (Optional) build-time **oEmbed fallback** adapter for long-tail providers.
 
 **Phase 4 — Tier-4 build-time embeds**
-- [ ] `tweet` block: build-time fetch (syndication / `react-tweet`-style) →
+- [x] `tweet` block: build-time fetch (syndication / `react-tweet`-style) →
       inline static HTML; cache; fallback to quote+link on empty.
-- [ ] `rss` block: fetch+parse feed → static cards.
-- [ ] `github` block: public API → static stats card.
+- [x] `rss` block: fetch+parse feed → static cards.
+- [x] `github` block: public API → static stats card.
 - [ ] Add a `schedule: cron` trigger to
       [`.github/workflows/deploy.yml`](../../.github/workflows/deploy.yml) so
       Tier-4 content refreshes without a push; fail-soft on network errors.

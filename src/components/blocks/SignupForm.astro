@@ -1,0 +1,73 @@
+---
+import type { BlockOf } from "../../lib/config";
+
+interface Props {
+  block: BlockOf<"signup">;
+}
+
+const { block } = Astro.props;
+
+// A native <form method="post"> — zero JS, zero backend. CORS doesn't apply to
+// form navigation, so posting cross-origin from a *.github.io page just works;
+// the only no-JS cost is a full-page redirect to the provider's thank-you page
+// (or your own via `redirect`, where the provider supports it).
+type Cfg = { action: string; emailField: string; extra: Array<[string, string]>; redirectField?: string; honeypot?: string };
+
+function resolve(): Cfg {
+  const { provider, username, action } = block;
+  switch (provider) {
+    case "buttondown": {
+      const a = action || (username && `https://buttondown.com/api/emails/embed-subscribe/${username}`);
+      if (!a) throw new Error("signup(buttondown): set `username` or `action`");
+      return { action: a, emailField: "email", extra: [["embed", "1"]] };
+    }
+    case "mailchimp":
+      if (!action) throw new Error("signup(mailchimp): set `action` to your list's /subscribe/post URL");
+      return { action, emailField: "EMAIL", extra: [] };
+    case "kit":
+      if (!action) throw new Error("signup(kit): set `action` to your form's /subscriptions URL");
+      return { action, emailField: "email_address", extra: [] };
+    case "formspree":
+    default:
+      if (!action) throw new Error("signup(formspree): set `action` to your https://formspree.io/f/<id> URL");
+      return { action, emailField: "email", extra: [], redirectField: "_next", honeypot: "_gotcha" };
+  }
+}
+
+const cfg = resolve();
+const placeholder = block.placeholder ?? "you@example.com";
+const button = block.button ?? "Subscribe";
+---
+<form
+  action={cfg.action}
+  method="post"
+  target="_blank"
+  class="flex w-full flex-col gap-2 rounded-card border border-border bg-surface p-4 shadow-sm"
+>
+  {block.title && <p class="text-center font-semibold text-fg">{block.title}</p>}
+  {block.description && <p class="text-center text-sm text-muted">{block.description}</p>}
+
+  {cfg.extra.map(([name, value]) => <input type="hidden" name={name} value={value} />)}
+  {cfg.redirectField && block.redirect && <input type="hidden" name={cfg.redirectField} value={block.redirect} />}
+  {cfg.honeypot && (
+    <input type="text" name={cfg.honeypot} tabindex="-1" autocomplete="off" aria-hidden="true" class="lc-hp" />
+  )}
+
+  <label class="sr-only" for="lc-signup-email">Email address</label>
+  <div class="flex flex-col gap-2 sm:flex-row">
+    <input
+      id="lc-signup-email"
+      type="email"
+      name={cfg.emailField}
+      placeholder={placeholder}
+      required
+      class="min-w-0 flex-1 rounded-card border border-border bg-bg px-3 py-2.5 text-fg outline-none focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+    />
+    <button
+      type="submit"
+      class="rounded-card bg-accent px-4 py-2.5 font-medium text-accent-contrast shadow-sm transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+    >
+      {button}
+    </button>
+  </div>
+</form>

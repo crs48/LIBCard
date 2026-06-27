@@ -1,0 +1,27 @@
+---
+import type { BlockOf } from "../../lib/config";
+import Icon from "../Icon.astro";
+
+interface Props {
+  block: BlockOf<"faq">;
+}
+
+const { block } = Astro.props;
+---
+{/* Native <details>/<summary> accordions — fully accessible, ZERO JavaScript. */}
+<div class="flex w-full flex-col gap-2">
+  {
+    block.items.map((item) => (
+      <details class="group w-full rounded-card border border-border bg-surface shadow-sm">
+        <summary class="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 font-medium text-fg select-none transition hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent [&::-webkit-details-marker]:hidden">
+          <span class="text-left">{item.q}</span>
+          <Icon
+            name="chevron-down"
+            class="size-4 shrink-0 text-muted transition-transform group-open:rotate-180"
+          />
+        </summary>
+        <p class="border-t border-border px-4 py-3 text-sm text-muted">{item.a}</p>
+      </details>
+    ))
+  }
+</div>

@@ -1,0 +1,13 @@
+---
+import type { BlockOf } from "../../lib/config";
+
+interface Props {
+  block: BlockOf<"heading">;
+}
+
+const { block } = Astro.props;
+const Tag = `h${block.level}` as "h2" | "h3" | "h4";
+const size =
+  block.level === 2 ? "text-lg font-semibold" : block.level === 3 ? "text-base font-semibold" : "text-sm font-semibold uppercase tracking-wide";
+---
+<Tag class:list={["w-full text-center text-fg", size]}>{block.text}</Tag>
