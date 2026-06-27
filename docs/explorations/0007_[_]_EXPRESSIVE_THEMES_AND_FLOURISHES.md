@@ -315,8 +315,15 @@ specific flagship theme needs something the library can't yet express — and pr
 | Option | Pros | Cons | Verdict |
 |---|---|---|---|
 | Single `bg` color (today) | trivial | flat, no identity | baseline |
-| **Tagged union** `solid \| gradient \| mesh \| aurora \| dots \| grid` | rich, data-only, all CSS-gradient based (no assets) | more schema | **Recommended (community-safe set)** |
+| **Tagged union** `solid \| gradient \| pastel-mesh \| aurora \| pattern{…}` | rich, data-only, all CSS-gradient based (no assets) | more schema | **Recommended (community-safe set)** |
 | + `image{src,overlay}` | photographic looks | external URL risk | **Owner-only**, local `/public` paths |
+
+A **separate `pattern` layer** (a repeating CSS-gradient texture) can sit over
+*any* background and under the card — see the
+[Frost deep dive](#deep-dive-the-frost-flagship--blurry-pastel-gradient-glass-buttons--a-pattern-library)
+for the full catalog (`stripes`, `checker`, `dots`, `zigzag`, `triangles`, `iso`,
+`scales`, `graph`, `plus`, `rays`, `waves`) — all "more interesting than a grid,"
+all pure CSS, all subtle-by-default via an `intensity` knob + edge-fade mask.
 
 ### C. Effects: CSS-only vs a JS island
 
@@ -366,10 +373,12 @@ erDiagram
     THEME ||--|| BUTTONS : has
     COLORS { hex bg; hex surface; hex fg; hex muted; hex accent; hex accentContrast; hex border }
     TACTILE { num depth "0..1"; num grain "0..1"; enum border "none|hairline|normal|heavy"; len radiusCard; len radiusButton }
-    BACKGROUND { enum kind "solid|gradient|mesh|aurora|dots|grid"; hex[] stops; num angle }
+    BACKGROUND { enum kind "solid|gradient|pastel-mesh|aurora"; hex[] stops; num blur; bool animate }
+    PATTERN { enum kind "stripes|checker|dots|zigzag|triangles|iso|scales|graph|plus|rays|waves"; num intensity; bool maskFade }
     EFFECTS { enum name "glass|grain|scanlines|glow|caret|gradient-text|sparkle|confetti"; enum intensity "subtle|medium|bold" }
     TYPE { enum headingFont; enum bodyFont }
-    BUTTONS { enum fill "solid|soft|outline|ghost|glass"; enum shadow "none|soft|hard|glow" }
+    BUTTONS { enum fill "solid|soft|outline|ghost|glass"; num glassFillOpacity "≥0.15"; enum shadow "none|soft|hard|glow" }
+    THEME ||--o| PATTERN : "optional texture layer"
 ```
 
 ### The six fully-committed official identities
@@ -383,6 +392,7 @@ all data-only:
 | **terminal** | engineer | JetBrains Mono, `effects:[scanlines,glow,caret]`, `bg:grid`, sharp radius, outline buttons, prompt `chrome` (phase 2) |
 | **studio** | artist | Fraunces headings + readable body, `effects:[grain]`, soft `depth`, warm off-white, polaroid avatar (phase 2) |
 | **glow** | pink & sparkly | `bg:aurora` (pink/violet), `effects:[gradient-text,sparkle]`, `glass` buttons, large radius, accent `glow` |
+| **frost** *(new)* | soft, dreamy, calm | `bg:pastel-mesh` (blurred pastel blobs), **`buttons:glass`** (frosted translucency over the gradient), optional `pattern:scales` at low intensity, generous radius, no sparkle — *quietly* pretty. See the deep dive below. |
 | **editorial** | magazine | Newsreader/Spectral, high-contrast neutrals, no flourish, generous spacing |
 | **midnight** *(redesigned)* | refined dark | OKLCH-derived deep neutral, subtle `grain`+`depth`, `glass` surface, restrained accent — *material*, not "darker hex" |
 
@@ -563,6 +573,261 @@ export function scaleFromAccent(hex) {
 // on-color: contrast-color() in CSS where supported; build-time APCA verify as the gate.
 ```
 
+## Deep Dive: The Frost Flagship — Blurry Pastel Gradient, Glass Buttons & a Pattern Library
+
+A concrete walk-through of a requested theme: **a blurry pastel-gradient
+background with frosted, translucent buttons** — plus a catalog of generated
+repeating patterns "more interesting than a grid." This is the highest-value test
+of the whole model: it needs a *real* background (the buttons blur what's behind
+them), so it exercises backgrounds, glass surfaces, patterns, and the a11y guards
+together. Everything below is **pure CSS, zero-JS, data-only** — the theme names
+`pastel-mesh` / `glass` / `scales`; the project owns the CSS.
+
+### How it layers
+
+```mermaid
+flowchart TB
+    A["① Background stage<br/>position:fixed; z-index:-2<br/>blurred pastel blobs (the 'blur')"] --> B
+    B["② Pattern layer (optional)<br/>z-index:-1 · repeating CSS-gradient<br/>e.g. scales @ intensity 0.05 + edge-fade mask"] --> C
+    C["③ Card + content<br/>normal flow"] --> D
+    D["④ Glass buttons<br/>backdrop-filter blurs layers ①+② behind them<br/>semi-opaque fill = the readability scrim"]
+```
+
+The "blurry" quality the glass needs comes from layer ①; the glass buttons in ④
+sample and re-blur ①+② through `backdrop-filter`. They only look like frosted
+glass because there's something soft and colorful *behind* them — which is exactly
+why pastel-mesh and glass ship as a pair.
+
+### The theme as data — `themes/frost.yaml`
+
+```yaml
+# yaml-language-server: $schema=./theme.schema.json
+name: Frost
+author: LibCard
+license: MIT
+mode: light
+tags: [light, pastel, gradient, glass, soft]
+description: A dreamy blurred-pastel wash with frosted-glass buttons.
+tokens:
+  bg: "#eef2ff"          # pale base that peeks through the blobs
+  surface: "#ffffff"     # only used by the @supports fallback (opaque buttons)
+  fg: "#27213a"          # dark ink → AA over pale glass (see contrast floor)
+  muted: "#6b6588"
+  accent: "#a855f7"
+  accentContrast: "#fcfaff"
+  border: "#ffffff"      # the light hairline that catches the "glass" edge
+  depth: 0.3
+  radius: 1.25rem
+  heading-font: space-grotesk
+  body-font: sans
+background:
+  kind: pastel-mesh
+  stops: ["#c4b5fd", "#a7f3d0", "#bae6fd", "#fbcfe8"]  # violet/mint/sky/pink
+  blur: 70              # px of softening on the blob layer (0 = crisp mesh)
+  animate: true         # slow drift; auto-disabled under reduced-motion
+pattern:
+  kind: scales          # subtle overlapping arcs under the card
+  intensity: 0.05       # 0..0.15; the single subtlety dial
+  mask-fade: true       # radial vignette so it never competes at edges
+buttons:
+  fill: glass           # backdrop-blur translucency
+  glass-fill-opacity: 0.18   # readability floor — schema clamps to ≥ 0.15
+  shadow: soft
+```
+
+### Recipe A — the blurry pastel background
+
+Two vetted approaches; `blur: 0` selects the cheap mesh, `blur > 0` the lush
+blobs. Both fade to a pale `bg` so content stays readable.
+
+```css
+/* pastel-mesh, blur:0 — layered radial "spotlights", cheapest paint */
+[data-bg="pastel-mesh"] body {
+  background-color: var(--lc-bg);
+  background-image:
+    radial-gradient(at 15% 25%, color-mix(in oklab, var(--lc-mesh-1) 55%, transparent) 0, transparent 50%),
+    radial-gradient(at 85% 15%, color-mix(in oklab, var(--lc-mesh-2) 55%, transparent) 0, transparent 50%),
+    radial-gradient(at 50% 85%, color-mix(in oklab, var(--lc-mesh-3) 50%, transparent) 0, transparent 50%),
+    radial-gradient(at 75% 55%, color-mix(in oklab, var(--lc-mesh-4) 50%, transparent) 0, transparent 50%);
+}
+
+/* pastel-mesh, blur>0 — soft blobs on a fixed -z layer (the Stripe/aurora look) */
+[data-bg="pastel-mesh"][style*="--lc-bg-blur"] .lc-bg-stage {
+  position: fixed; inset: 0; z-index: -2; overflow: hidden; background: var(--lc-bg);
+}
+.lc-bg-stage::before, .lc-bg-stage::after {
+  content: ""; position: absolute; width: 55vmax; height: 55vmax; border-radius: 50%;
+  filter: blur(var(--lc-bg-blur, 70px)); opacity: 0.7;   /* ← the "blurry" */
+}
+.lc-bg-stage::before { top: -10vmax; left: -10vmax; background: radial-gradient(circle, var(--lc-mesh-1), transparent 70%); }
+.lc-bg-stage::after  { bottom: -15vmax; right: -10vmax; background: radial-gradient(circle, var(--lc-mesh-2), transparent 70%); }
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-bg-animate] .lc-bg-stage::before { animation: lc-drift 24s ease-in-out infinite alternate; }
+  @keyframes lc-drift { to { transform: translate3d(6vmax, 4vmax, 0) scale(1.1); } }
+}
+```
+
+The blob layer is `position: fixed; z-index: -2` so `backdrop-filter` on the
+buttons can blur it. **Cost:** `filter: blur()` on a viewport-sized layer is the
+priciest paint here — cap to ~3–4 blobs on one isolated fixed layer, never blur
+the content layer. (Sources:
+[CSS-Tricks radial recipes](https://css-tricks.com/radial-gradient-recipes/),
+[mesh/aurora blur guide](https://better-gradient.com/blog/mesh-gradient-css-guide),
+[`@property` gradient animation](https://dev.to/afif/we-can-finally-animate-css-gradient-kdk).)
+
+### Recipe B — frosted-glass buttons
+
+```css
+[data-fx~="glass"] .lc-btn {
+  /* fill IS the readability scrim — schema floors --lc-glass-a at 0.15 */
+  background: hsl(0 0% 100% / var(--lc-glass-a, 0.18));
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+          backdrop-filter: blur(12px) saturate(160%);
+  border: 1px solid hsl(0 0% 100% / 0.35);   /* lit hairline edge */
+  box-shadow: 0 4px 24px hsl(0 0% 0% / 0.12);
+  position: relative; isolation: isolate;
+}
+[data-fx~="glass"] .lc-btn::before {        /* subtle top highlight = "lit glass" */
+  content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: -1;
+  background: linear-gradient(to bottom, hsl(0 0% 100% / 0.35), transparent 45%);
+  pointer-events: none;
+}
+
+/* MANDATORY fallback: opaque when backdrop-filter is unsupported */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  [data-fx~="glass"] .lc-btn { background: var(--lc-surface); border-color: var(--lc-border); }
+}
+/* honor the user's transparency / contrast / motion prefs */
+@media (prefers-reduced-transparency: reduce) {
+  [data-fx~="glass"] .lc-btn { background: var(--lc-surface); backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
+@media (forced-colors: active) {
+  [data-fx~="glass"] .lc-btn { background: ButtonFace; color: ButtonText; border: 1px solid ButtonText; backdrop-filter: none; }
+}
+```
+
+**Contrast is the catch.** A translucent button over a gradient has *no fixed
+contrast* — legibility depends on the pixels behind it. Guards: (1) the fill
+opacity is **floored at ~0.15** in the schema (the build rejects lower); (2) the
+contrast gate must check the label against the **worst-case point** of the
+background under the button, not a flat color; (3) `fg` should be a strong dark
+(or light) ink so it wins against both the lightest and darkest mesh pixels.
+(Sources: [Comeau on backdrop-filter](https://www.joshwcomeau.com/css/backdrop-filter/),
+[MDN backdrop-filter](https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter),
+WCAG [F83](https://www.w3.org/TR/WCAG20-TECHS/F83.html).) **Never animate
+`backdrop-filter`** (each frame re-snapshots + re-blurs the backdrop) and keep
+glass panels to a handful per viewport.
+
+### Recipe C — a pattern catalog "more interesting than a grid"
+
+A `pattern` is a repeating CSS-gradient texture on a `z-index:-1` layer under the
+card, inked from a scheme-aware token at low alpha. The ink and `intensity` are
+the only knobs a theme sets; everything else is owned by the library.
+
+```css
+:root { --lc-ink: hsl(0 0% 0% / calc(var(--lc-pat-intensity, 0.05))); }
+@media (prefers-color-scheme: dark) { :root { --lc-ink: hsl(0 0% 100% / calc(var(--lc-pat-intensity, 0.06))); } }
+[data-pattern][data-pattern-mask] .lc-pattern {
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 40%, transparent 100%);
+          mask-image: radial-gradient(ellipse at center, #000 40%, transparent 100%);   /* edge fade */
+}
+```
+
+| `pattern.kind` | One-liner recipe (ink = `--lc-ink`, size = `--s`) | Vibe |
+|---|---|---|
+| `scales` ★ | two offset `radial-gradient` arcs, `bg-size: --s --s` | soft overlapping shells — elegant under cards |
+| `graph` ★ | two `conic-gradient(from 90deg at 1–2px …)` at `--s` and `--s/5` | engineer's notebook (major+minor) |
+| `stripes` ★ | `repeating-linear-gradient(45deg, ink 0 calc(--s/2), transparent 0 --s)` | barber-pole workhorse |
+| `checker` | `repeating-conic-gradient(ink 0% 25%, transparent 0% 50%) 50%/ --s --s` | tidy; `from 45deg` → diamonds |
+| `dots` ★ | two offset `radial-gradient(ink 20%, transparent 20%)`, staggered | friendly polka |
+| `zigzag` | four 45°/135°/225°/315° `linear-gradient`s at `--s` | woven retro chevrons |
+| `triangles` | `conic-gradient(from 45deg, 4 ink stops) 50%/ --s --s` | faceted tiling |
+| `iso` | `conic-gradient(from -60deg at 50% 33%, …)` with `0.866/1.732` sizing | 3-D stacked cubes (the "wow") |
+| `plus` | two offset 2px `linear-gradient` lines | dotted-cross grid alternative |
+| `rays` | `repeating-conic-gradient` with `--n` segments | sunburst / speed lines (hero only) |
+| `waves` | overlapping `radial-gradient` rings, offset half a tile | gentle ripple |
+
+Two worked examples (the rest follow the same gradient techniques —
+[css-pattern.com](https://css-pattern.com/) has byte-exact variants of all of
+them, and [Temani Afif's conic-gradient article](https://css-tricks.com/background-patterns-simplified-by-conic-gradients/)
+documents the method):
+
+```css
+/* scales — soft overlapping arcs */
+[data-pattern="scales"] .lc-pattern {
+  --s: 44px;
+  background:
+    radial-gradient(circle at 50% 0,   transparent 70%, var(--lc-ink) 71%),
+    radial-gradient(circle at 50% 100%, var(--lc-ink) 70%, transparent 71%);
+  background-size: var(--s) var(--s);
+  background-position: 0 0, calc(var(--s)/2) calc(var(--s)/2);
+}
+/* graph paper — major + minor lines */
+[data-pattern="graph"] .lc-pattern {
+  --s: 96px; --_g: #0000 90deg, var(--lc-ink) 0;
+  background:
+    conic-gradient(from 90deg at 2px 2px, var(--_g)) 0 0 / var(--s) var(--s),
+    conic-gradient(from 90deg at 1px 1px, var(--_g)) 0 0 / calc(var(--s)/5) calc(var(--s)/5);
+}
+```
+
+Subtlety is enforced by construction: ink alpha defaults to ~0.05, the
+`intensity` knob is clamped low, and `mask-fade` vignettes the edges. Patterns are
+decorative (`aria-hidden`, behind content); under `forced-colors: active`
+non-`url()` gradients are dropped automatically — desired, since the real card
+background underneath survives. (Source:
+[MDN forced-colors](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/forced-colors).)
+
+### Schema additions (still fully data-only)
+
+```js
+// background union gains pastel-mesh + blur/animate; aurora gets the same knobs
+z.object({ kind: z.literal("pastel-mesh"),
+  stops: z.array(color).min(2).max(4),
+  blur: z.number().min(0).max(120).default(0),   // px; >0 → blob layer
+  animate: z.boolean().default(false),
+}).strict(),
+
+// a NEW optional texture layer, orthogonal to background
+const pattern = z.object({
+  kind: z.enum(["stripes","checker","dots","zigzag","triangles","iso","scales","graph","plus","rays","waves"]),
+  intensity: z.number().min(0).max(0.15).default(0.05),  // the subtlety dial
+  size: z.string().regex(LENGTH).optional(),
+  "mask-fade": z.boolean().default(true),
+}).strict();
+
+// buttons.glass gains an opacity FLOOR the build enforces
+buttons: z.object({
+  fill: z.enum(["solid","soft","outline","ghost","glass"]).default("solid"),
+  "glass-fill-opacity": z.number().min(0.15).max(0.6).default(0.18),  // ← readability floor
+  shadow: z.enum(["none","soft","hard","glow"]).default("soft"),
+}).strict()
+```
+
+### What it actually takes (scoped to this slice)
+
+1. **Schema** ([`theme-schema.mjs`](../../src/lib/theme-schema.mjs)): add the
+   `pastel-mesh`/`aurora` background variants (+ `blur`/`animate`), the optional
+   `pattern` block, and the `glass-fill-opacity` floor — all bounded
+   numbers/enums, so the data-only guarantee is unchanged.
+2. **Emit** (`themeToCss`): map stops → `--lc-mesh-*`, `blur` → `--lc-bg-blur`,
+   pattern → `data-pattern` + `--lc-pat-*`, glass opacity → `--lc-glass-a`; set
+   `data-bg`/`data-fx`/`data-pattern` attributes on `<html>`.
+3. **Library CSS** (new `src/styles/effects.css`): the three recipes above, with
+   the `@supports`/reduced-motion/reduced-transparency/forced-colors guards baked
+   in; `@import`ed from [`global.css`](../../src/styles/global.css).
+4. **Markup hooks**: a `.lc-bg-stage` div + a `.lc-pattern` layer in
+   [`Layout.astro`](../../src/layouts/Layout.astro) (rendered only when a theme
+   uses them), and a `glass` branch in
+   [`LinkButton.astro`](../../src/components/LinkButton.astro)/SaveContact.
+5. **Tree-shake + gate**: `gen-themes.mjs` inlines only the background/pattern/
+   glass CSS the active theme set uses; the contrast gate evaluates the label over
+   the worst-case background point.
+
+This is a **Phase 2** deliverable in the rollout — and `frost` makes a perfect
+first flagship for the effect library because it stresses every guard at once.
+
 ## Risks And Open Questions
 
 - **CSS payload growth.** A full effect library, shipped wholesale, fights the
@@ -621,6 +886,20 @@ export function scaleFromAccent(hex) {
       full cycle) and inline only the effect CSS that set uses.
 - [ ] Fail the build/CI on unknown effect/background names.
 
+**Phase 2b — the Frost flagship (blurry pastel + glass + patterns)**
+- [ ] `pastel-mesh` background (layered radials at `blur:0`; blurred `.lc-bg-stage`
+      blobs at `blur>0`), with the slow-drift animation gated by reduced-motion.
+- [ ] `glass` button branch (backdrop-filter + `@supports` opaque fallback +
+      `prefers-reduced-transparency` + `forced-colors`), with the
+      `glass-fill-opacity` **floor (≥0.15)** enforced in the schema.
+- [ ] The `pattern` layer + catalog (`scales`/`graph`/`stripes`/`checker`/`dots`/
+      `zigzag`/`triangles`/`iso`/`plus`/`rays`/`waves`), scheme-aware ink,
+      `intensity` clamp, and the `mask-fade` edge vignette.
+- [ ] Ship `themes/frost.yaml`; add a `.lc-bg-stage` + `.lc-pattern` slot to
+      `Layout.astro` (rendered only when used).
+- [ ] Contrast gate evaluates the button label over the background's **worst-case
+      point** (not a flat color) when `buttons.fill: glass`.
+
 **Phase 3 — expressive type**
 - [ ] Integrate Astro Fonts API; build the OFL allowlist (exclude non-OFL);
       add `heading-font`/`body-font` enums; load only the active set's subset.
@@ -637,8 +916,8 @@ export function scaleFromAccent(hex) {
       overrides layered over the chosen theme.
 
 **Phase 6 — redesign official themes**
-- [ ] Rebuild `minimal`/`terminal`/`studio`/`glow`/`editorial`/`midnight` as
-      reference identities; (optional) `chrome` partials (prompt line, polaroid).
+- [ ] Rebuild `minimal`/`terminal`/`studio`/`glow`/`frost`/`editorial`/`midnight`
+      as reference identities; (optional) `chrome` partials (prompt line, polaroid).
 - [ ] Curate the shipped set; regenerate previews; refresh the gallery.
 
 ## Validation Checklist
@@ -657,6 +936,14 @@ export function scaleFromAccent(hex) {
       legible and on-brand.
 - [ ] `forced-colors: active`: borders/boundaries restored; no information lost.
 - [ ] `@supports` fallback verified for `glass` (no backdrop-filter → opaque).
+- [ ] **Frost:** `glass-fill-opacity < 0.15` is rejected by the build; the button
+      label clears AA over both the lightest and darkest pixels of the
+      `pastel-mesh` background; `prefers-reduced-transparency` → opaque buttons.
+- [ ] **Frost:** the `pastel-mesh` `blur>0` blob layer renders behind content,
+      drifts only when motion is allowed, and doesn't tank scroll FPS (profiled).
+- [ ] **Pattern:** each catalog entry renders, stays subtle at `intensity 0.05`,
+      flips ink with `prefers-color-scheme`, and vanishes (gracefully) under
+      `forced-colors`.
 - [ ] Owner sets one `accent`: derived scale renders, on-colors are AA, build
       fails loudly if a chosen accent can't meet contrast.
 - [ ] Side-by-side: the redesigned dark `midnight` reads as *refined/material*,
@@ -679,6 +966,10 @@ export function scaleFromAccent(hex) {
 
 **Flourish techniques**
 - [Comeau — backdrop-filter](https://www.joshwcomeau.com/css/backdrop-filter/) · [CSS-Tricks — grainy gradients](https://css-tricks.com/grainy-gradients/) · [Animating CSS gradients (`@property`)](https://dev.to/afif/we-can-finally-animate-css-gradient-kdk) · [CRT effect](https://aleclownes.com/2017/02/01/crt-display.html) · [canvas-confetti](https://github.com/catdad/canvas-confetti) · [Grid/dot backgrounds](https://ibelick.com/blog/create-grid-and-dot-backgrounds-with-css-tailwind-css)
+
+**Pastel mesh / glass / pattern catalog (Frost deep dive)**
+- [CSS-Tricks — radial gradient recipes (mesh)](https://css-tricks.com/radial-gradient-recipes/) · [Mesh/aurora blur guide](https://better-gradient.com/blog/mesh-gradient-css-guide) · [MDN — backdrop-filter](https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter) · [MDN — prefers-reduced-transparency](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-transparency)
+- [css-pattern.com (157 CSS patterns, Temani Afif)](https://css-pattern.com/) · [Patterns via conic gradients](https://css-tricks.com/background-patterns-simplified-by-conic-gradients/) · [CSS graph paper](https://css-tip.com/css-graph-paper/) · [Lea Verou — CSS3 patterns gallery](https://projects.verou.me/css3patterns/) · [Edge-fade with CSS masks](https://css-tricks.com/css-borders-using-masks/)
 
 **Type**
 - [Astro Fonts API](https://docs.astro.build/en/guides/fonts/) · [Fontsource](https://fontsource.org/) · [web.dev — optimize web fonts](https://web.dev/learn/performance/optimize-web-fonts)
