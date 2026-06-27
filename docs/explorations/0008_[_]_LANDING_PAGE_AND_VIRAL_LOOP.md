@@ -547,29 +547,29 @@ update the prose to match, e.g. in [`README.md`](../../README.md):
 - [x] *(Optional)* **First-run nudge** behind a `meta.default` marker, default-off; remove on first edit.
 
 **Explicitly out of scope (do not build):**
-- [ ] ~~`examples/landing/` config + `LIBCARD_CONFIG` override + second deploy~~ — dropped.
-- [ ] ~~Bespoke `hero` / `features` / `cta` / `builder` block types~~ — use existing blocks.
+- [x] ~~`examples/landing/` config + `LIBCARD_CONFIG` override + second deploy~~ — dropped.
+- [x] ~~Bespoke `hero` / `features` / `cta` / `builder` block types~~ — use existing blocks.
 
 ## Validation Checklist
 
-- [ ] The deployed GitHub Pages URL renders exactly what `libcard.config.yaml`
+- [x] The deployed GitHub Pages URL renders exactly what `libcard.config.yaml`
       describes — i.e. the landing page and a user's card are the *same* page.
-- [ ] With `footer.poweredBy: true`, the footer shows **"Powered by LibCard"**
+- [x] With `footer.poweredBy: true`, the footer shows **"Powered by LibCard"**
       linking to the repo; `false` removes it cleanly.
-- [ ] README and TRADEMARK say **"Powered by LibCard"** (matching the rendered UI).
-- [ ] A visitor can reach "make your own" in ≤1 click from any card (badge or the
+- [x] README and TRADEMARK say **"Powered by LibCard"** (matching the rendered UI).
+- [x] A visitor can reach "make your own" in ≤1 click from any card (badge or the
       documented CTA link).
-- [ ] Every affordance the example site uses is reproducible by a new user **by
+- [x] Every affordance the example site uses is reproducible by a new user **by
       config alone** — no engine edits (spot-check randomizer, switcher, badge,
       star buttons, About/FAQ blocks).
-- [ ] *(If added)* the badge `?ref=` appears in GitHub repo **traffic insights**;
+- [x] *(If added)* the badge `?ref=` appears in GitHub repo **traffic insights**;
       the badge still ships **0 KB JS** and sets no cookies.
-- [ ] *(If added)* the first-run nudge shows on a fresh template deploy and
+- [x] *(If added)* the first-run nudge shows on a fresh template deploy and
       disappears after the first meaningful config edit; it never shows on a real
       card.
-- [ ] Lighthouse on the deployed card stays ≥95 Performance / ≥95 Accessibility
+- [x] Lighthouse on the deployed card stays ≥95 Performance / ≥95 Accessibility
       (the "landing page" is as fast as any card — because it is one).
-- [ ] Fresh "Use this template" → edit config → push → live card **with badge**
+- [x] Fresh "Use this template" → edit config → push → live card **with badge**
       within ~3 minutes following only the README.
 
 ## References
