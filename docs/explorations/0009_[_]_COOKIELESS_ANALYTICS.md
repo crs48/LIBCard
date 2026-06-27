@@ -482,7 +482,7 @@ const analytics = await getAnalytics();
       [Footer.astro](../../src/components/Footer.astro).
 - [x] (Umami) Add the optional outbound auto-tagger, gated on
       `outboundClicks`.
-- [ ] Add a commented `analytics:` block to
+- [x] Add a commented `analytics:` block to
       [libcard.config.yaml](../../libcard.config.yaml) (off by default).
 - [ ] Document the feature in [README.md](../../README.md) beside the `stars`
       tradeoff table: pixel = zero-JS, beacon = tiny-JS + clicks, cookieless,
