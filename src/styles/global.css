@@ -86,7 +86,12 @@ html {
   }
   ::view-transition-new(root) {
     clip-path: circle(0% at var(--lc-vt-x, 50%) var(--lc-vt-y, 50%));
-    animation: lc-theme-reveal 0.42s ease-out;
+    /* `forwards` keeps the final (fully-revealed) keyframe applied until the
+       transition tears down. Without it the shorthand's default fill-mode of
+       `none` snaps the layer back to its base circle(0%) the instant the reveal
+       ends — uncovering the old-theme layer for a frame, i.e. an end-of-animation
+       flicker of the previous theme. */
+    animation: lc-theme-reveal 0.42s ease-out forwards;
   }
   @keyframes lc-theme-reveal {
     to {
