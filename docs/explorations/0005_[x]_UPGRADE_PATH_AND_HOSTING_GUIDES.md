@@ -488,7 +488,7 @@ on:
       `.templatesyncignore` for owners who want auto-PRs.
 
 **Release hygiene (so there's something to update *to*)**
-- [ ] Cut the **first GitHub Release** + tag; adopt semver-ish tags going
+- [x] Cut the **first GitHub Release** + tag; adopt semver-ish tags going
       forward.
 - [x] Start a **`CHANGELOG.md`** (one line per change; mark "action needed" when
       config changes), and reference it from UPGRADING.md.
