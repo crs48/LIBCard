@@ -64,22 +64,48 @@
   -webkit-backdrop-filter: var(--lc-glass-filter, none);
   backdrop-filter: var(--lc-glass-filter, none);
 }
-/* Guards: drop the translucency where the browser/user can't do it well. */
+/* Accent CTAs (Save contact, form submits) frost too: in a glass theme they
+   become a frosted glass pill with the accent as text + ring (via --lc-cta-*),
+   so they read as part of the frosted set rather than a flat block of color. The
+   vars default to the solid accent fill + accent-contrast text, so a non-glass
+   theme is byte-identical. (SaveContact carries a transparent border so the ring
+   has somewhere to land without shifting layout — border-box, no size change.) */
+.bg-accent:not(.lc-solid) {
+  background-color: var(--lc-cta-bg, var(--lc-accent));
+  color: var(--lc-cta-fg, var(--lc-accent-contrast));
+  border-color: var(--lc-cta-border, transparent);
+  -webkit-backdrop-filter: var(--lc-glass-filter, none);
+  backdrop-filter: var(--lc-glass-filter, none);
+}
+/* Guards: drop the translucency where the browser/user can't do it well (the CTA
+   falls back to its solid accent fill + light text). */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .bg-surface:not(.lc-solid) {
+  .bg-surface:not(.lc-solid),
+  .bg-accent:not(.lc-solid) {
     --lc-glass-pct: 100%;
     --lc-glass-filter: none;
+    --lc-cta-bg: var(--lc-accent);
+    --lc-cta-fg: var(--lc-accent-contrast);
+    --lc-cta-border: transparent;
   }
 }
 @media (prefers-reduced-transparency: reduce) {
-  .bg-surface:not(.lc-solid) {
+  .bg-surface:not(.lc-solid),
+  .bg-accent:not(.lc-solid) {
     --lc-glass-pct: 100%;
     --lc-glass-filter: none;
+    --lc-cta-bg: var(--lc-accent);
+    --lc-cta-fg: var(--lc-accent-contrast);
+    --lc-cta-border: transparent;
   }
 }
 @media (forced-colors: active) {
-  .bg-surface:not(.lc-solid) {
+  .bg-surface:not(.lc-solid),
+  .bg-accent:not(.lc-solid) {
     --lc-glass-pct: 100%;
     --lc-glass-filter: none;
+    --lc-cta-bg: var(--lc-accent);
+    --lc-cta-fg: var(--lc-accent-contrast);
+    --lc-cta-border: transparent;
   }
 }

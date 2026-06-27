@@ -92,6 +92,18 @@ for (const t of themes) {
       }
       lines.push(`    ${ok ? "✓" : "✗"} glass label over ${stop} ${r.toFixed(2)}:1  (worst-case)`);
     }
+    // The frosted accent CTA shows accent-colored text on the glass surface fill
+    // (see --lc-cta-* in theme-schema.mjs). Verify the accent text over that fill
+    // composited on the lightest backdrop (worst case for the accent's contrast).
+    const lightest = behind.reduce((a1, b1) => (luminance(b1) > luminance(a1) ? b1 : a1));
+    const ctaFill = over(t.tokens.surface, lightest, a); // same fill as other glass panels
+    const cr = ratio(t.tokens.accent, ctaFill);
+    const cok = cr >= AA;
+    if (!cok) {
+      themeFailed = true;
+      failures++;
+    }
+    lines.push(`    ${cok ? "✓" : "✗"} frosted CTA accent text ${cr.toFixed(2)}:1  (worst-case)`);
   }
 
   console.log(`${themeFailed ? "✗" : "✓"} ${t.slug}`);

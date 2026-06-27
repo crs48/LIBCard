@@ -34,6 +34,9 @@
   --lc-bg-anim: running;
   --lc-glass-pct: 40%;
   --lc-glass-filter: blur(12px) saturate(150%);
+  --lc-cta-bg: color-mix(in oklab, var(--lc-surface) 40%, transparent);
+  --lc-cta-fg: var(--lc-accent);
+  --lc-cta-border: var(--lc-accent);
 }
 
 [data-theme="midnight"] {
