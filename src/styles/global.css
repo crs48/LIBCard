@@ -1,0 +1,154 @@
+@import "tailwindcss";
+
+/* Theme token sets — each defines the --lc-* custom properties for a theme.
+   The theme is selected by `data-theme` on <html>, driven by libcard.config.yaml.
+   This file is GENERATED from themes/*.yaml by `pnpm run gen:themes` (and the
+   `prebuild` hook). Edit themes in themes/*.yaml, never the generated CSS. */
+@import "./themes.gen.css";
+
+/* Map the semantic --lc-* custom properties into Tailwind's theme so utilities
+   like `bg-bg`, `text-fg`, `bg-accent`, `border-border` work AND respond to the
+   active `data-theme` at runtime. `inline` keeps the var() reference live. */
+@theme inline {
+  --color-bg: var(--lc-bg);
+  --color-surface: var(--lc-surface);
+  --color-fg: var(--lc-fg);
+  --color-muted: var(--lc-muted);
+  --color-accent: var(--lc-accent);
+  --color-accent-contrast: var(--lc-accent-contrast);
+  --color-border: var(--lc-border);
+
+  --font-sans: var(--lc-font);
+  --radius-card: var(--lc-radius);
+}
+
+html {
+  background-color: var(--lc-bg);
+  color: var(--lc-fg);
+  font-family: var(--lc-font);
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Honeypot field for zero-JS spam protection: a real input that humans never
+   see (and can't tab to) but naive bots fill in. The form ignores submissions
+   where it's non-empty. Off-screen rather than display:none so it still posts. */
+.lc-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Light typography for `text` blocks (renderMarkdown output) — no plugin. */
+.lc-prose a {
+  color: var(--lc-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.lc-prose strong {
+  font-weight: 700;
+}
+.lc-prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9em;
+  background-color: color-mix(in oklab, var(--lc-fg) 8%, transparent);
+  padding: 0.1em 0.35em;
+  border-radius: 0.25rem;
+}
+.lc-prose p + p {
+  margin-top: 0.75rem;
+}
+
+/* Respect users who prefer reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Theme switcher (opt-in): animate a theme change as a circular reveal anchored
+   at the switcher button. The switcher only calls startViewTransition() when
+   motion is allowed and the API exists, so this never runs under reduced motion
+   or on unsupported browsers (which fall back to an instant swap). */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none; /* drop the default cross-fade; we clip instead */
+    mix-blend-mode: normal;
+  }
+  ::view-transition-new(root) {
+    clip-path: circle(0% at var(--lc-vt-x, 50%) var(--lc-vt-y, 50%));
+    animation: lc-theme-reveal 0.42s ease-out;
+  }
+  @keyframes lc-theme-reveal {
+    to {
+      clip-path: circle(150% at var(--lc-vt-x, 50%) var(--lc-vt-y, 50%));
+    }
+  }
+}
+
+/* === Landscape card mode ============================================== */
+/* Turn the phone sideways → flash a business card. The overlay and the
+   portrait hint start hidden (the `hidden` utility on each element); these
+   unlayered rules reveal them on the right viewport, with ZERO JavaScript.
+
+   "A phone held in landscape" = landscape (width > height) + a short viewport
+   (max-height excludes laptops and most tablets) + a coarse pointer (a touch
+   device, not a small-but-wide desktop window). */
+@media (orientation: landscape) and (max-height: 540px) and (pointer: coarse) {
+  .lc-card-mode {
+    display: grid;
+  }
+  /* Freeze the link-in-bio scrolling behind the overlay. */
+  body {
+    overflow: hidden;
+  }
+  /* The opaque overlay covers the whole page; drop the chrome it hides
+     (the link-in-bio content, footer, and theme switcher) out of the layout
+     and focus order so only the card remains. */
+  main,
+  footer,
+  #lc-theme-next {
+    display: none;
+  }
+}
+
+/* The card keeps a real business-card proportion (3.5"×2" ≈ 1.75:1), sized to
+   the short landscape viewport. Width is derived from height (rather than left to
+   `auto`) so long names/taglines truncate WITHIN the card instead of stretching
+   it wider. Only the landscape variant carries this class. */
+.lc-bizcard {
+  aspect-ratio: 1.75 / 1;
+  height: min(86vh, 320px);
+  width: min(96vw, calc(min(86vh, 320px) * 1.75));
+}
+
+/* A gentle fade-in where motion is welcome (the reduce block above already
+   neutralizes animations for prefers-reduced-motion: reduce). */
+@media (prefers-reduced-motion: no-preference) and (orientation: landscape) and (max-height: 540px) and (pointer: coarse) {
+  .lc-card-mode {
+    animation: lc-card-in 0.22s ease-out;
+  }
+  @keyframes lc-card-in {
+    from {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* Discoverability + rotation-lock fallback: the nudge shows only on phones in
+   portrait, and links to /card so it works even when auto-rotate is locked. */
+@media (orientation: portrait) and (pointer: coarse) {
+  .lc-rotate-hint {
+    display: inline-flex;
+  }
+}

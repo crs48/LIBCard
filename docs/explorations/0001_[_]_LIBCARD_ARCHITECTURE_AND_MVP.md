@@ -626,65 +626,65 @@ jobs:
 ## Implementation Checklist
 
 **Scaffold & config**
-- [ ] `pnpm create astro@latest` with the minimal/empty template; commit
+- [x] `pnpm create astro@latest` with the minimal/empty template; commit
       `package.json`, `astro.config.mjs`, `tsconfig.json`.
-- [ ] **Standardize on pnpm:** set `"packageManager": "pnpm@<version>"` in
+- [x] **Standardize on pnpm:** set `"packageManager": "pnpm@<version>"` in
       `package.json`, commit **`pnpm-lock.yaml`** (never `package-lock.json` /
       `yarn.lock`), and add an `.npmrc` if needed. `withastro/action`
       auto-detects pnpm from the committed lockfile — no extra CI config. (All
       docs/scripts use `pnpm`; invoke the wizard as `pnpm run setup`, since bare
       `pnpm setup` is pnpm's own built-in command.)
-- [ ] Set `output: 'static'`, and `site`/`base` in `astro.config.mjs`.
-- [ ] `pnpm astro add tailwind` (Tailwind v4 via `@tailwindcss/vite`, Astro ≥ 5.2);
+- [x] Set `output: 'static'`, and `site`/`base` in `astro.config.mjs`.
+- [x] `pnpm astro add tailwind` (Tailwind v4 via `@tailwindcss/vite`, Astro ≥ 5.2);
       add `src/styles/global.css` with `@import "tailwindcss"` + base `@theme`
       tokens, imported once in the layout. **Do not** add any React UI kit.
-- [ ] Trim now-unused Jekyll lines from `.gitignore` (keep `dist/`).
-- [ ] Define the **Zod schema** + `file()` loader in `src/content.config.ts`.
-- [ ] Add `src/lib/config.ts` typed accessor over the collection entry.
-- [ ] Generate `libcard.schema.json` from Zod (`zod-to-json-schema`) in a
+- [x] Trim now-unused Jekyll lines from `.gitignore` (keep `dist/`).
+- [x] Define the **Zod schema** + `file()` loader in `src/content.config.ts`.
+- [x] Add `src/lib/config.ts` typed accessor over the collection entry.
+- [x] Generate `libcard.schema.json` from Zod (`zod-to-json-schema`) in a
       prebuild script; wire the `# yaml-language-server` directive.
-- [ ] Author a fully-commented starter `libcard.config.yaml`.
+- [x] Author a fully-commented starter `libcard.config.yaml`.
 
 **Core page & components**
-- [ ] `Profile.astro`, `LinkButton.astro`, `SocialRow.astro` components.
-- [ ] `pages/index.astro` assembling the card from config.
-- [ ] Theme system: Tailwind `@theme` tokens / CSS custom properties + 3–4
+- [x] `Profile.astro`, `LinkButton.astro`, `SocialRow.astro` components.
+- [x] `pages/index.astro` assembling the card from config.
+- [x] Theme system: Tailwind `@theme` tokens / CSS custom properties + 3–4
       starter themes in `src/themes/`, selected by `theme:` in config.
-- [ ] Build the QR/business-card reveal with a native `<dialog>` or
+- [x] Build the QR/business-card reveal with a native `<dialog>` or
       `<details>`/`<summary>` (zero JS) rather than a React modal component.
-- [ ] Responsive down to 320px; accessible (focus states, contrast, ARIA).
+- [x] Responsive down to 320px; accessible (focus states, contrast, ARIA).
 
 **Business-card features**
-- [ ] `src/lib/vcard.ts` with RFC-correct escaping + unit tests.
-- [ ] `pages/contact.vcf.ts` prerendered endpoint.
-- [ ] `SaveContact.astro` (`<a download href={base + 'contact.vcf'}>`).
-- [ ] `QRCode.astro` build-time SVG via `qrcode`.
-- [ ] `pages/card.astro` (or modal) showing QR + Save-Contact, using absolute
+- [x] `src/lib/vcard.ts` with RFC-correct escaping + unit tests.
+- [x] `pages/contact.vcf.ts` prerendered endpoint.
+- [x] `SaveContact.astro` (`<a download href={base + 'contact.vcf'}>`).
+- [x] `QRCode.astro` build-time SVG via `qrcode`.
+- [x] `pages/card.astro` (or modal) showing QR + Save-Contact, using absolute
       `site+base` URL for the QR.
-- [ ] (Stretch) downloadable high-res **vCard-QR** PNG/SVG for printed badges.
-- [ ] (Stretch) build-time **OG image** via `astro-og-canvas`.
+- [x] (Stretch) downloadable high-res **vCard-QR** PNG/SVG for printed badges.
+- [x] (Stretch) build-time **OG image** via `astro-og-canvas`.
 
 **Distribution & deploy**
-- [ ] `.github/workflows/deploy.yml` using `withastro/action@v6`.
-- [ ] `scripts/setup.mjs` interactive wizard (writes config, sets `site`/`base`),
+- [x] `.github/workflows/deploy.yml` using `withastro/action@v6`.
+- [x] `scripts/setup.mjs` interactive wizard (writes config, sets `site`/`base`),
       run via `pnpm run setup`.
-- [ ] Mark the repo as a **template** ("Use this template").
-- [ ] Update `README.md` quick-start to match the real flow; document the
+- [x] Mark the repo as a **template** ("Use this template").
+- [x] Update `README.md` quick-start to match the real flow; document the
       URL-QR vs vCard-QR tradeoff and the `base` requirement.
-- [ ] Document the **AI-agent setup path** (point the agent at
+- [x] Document the **AI-agent setup path** (point the agent at
       `libcard.schema.json`).
 
 ## Validation Checklist
 
-- [ ] `pnpm build` produces `dist/` with `index.html`, `contact.vcf`, and the
+- [x] `pnpm build` produces `dist/` with `index.html`, `contact.vcf`, and the
       `/card` page; no runtime JS shipped for QR/vCard.
-- [ ] Editing `libcard.config.yaml` and rebuilding changes the page with **no
+- [x] Editing `libcard.config.yaml` and rebuilding changes the page with **no
       code edits**.
-- [ ] Invalid config (e.g. bad email/URL) **fails the build** with a readable
+- [x] Invalid config (e.g. bad email/URL) **fails the build** with a readable
       Zod error message.
-- [ ] Editor shows autocomplete/validation from `libcard.schema.json`.
+- [x] Editor shows autocomplete/validation from `libcard.schema.json`.
 - [ ] Lighthouse: Performance ≥ 95, Accessibility ≥ 95 on the card page.
-- [ ] Page renders correctly at the GitHub Pages `base` subpath (assets, links,
+- [x] Page renders correctly at the GitHub Pages `base` subpath (assets, links,
       and QR target all resolve — no 404s).
 - [ ] **iPhone (Safari):** tap "Save contact" → native Add-Contact sheet opens
       with correct name/phone/email/URL.
@@ -695,6 +695,19 @@ jobs:
 - [ ] OG/Twitter preview renders when the URL is shared (if OG image shipped).
 - [ ] Fresh "Use this template" → edit config → push → live within ~3 minutes,
       following only the README.
+
+> **Note (implementation pass):** the 5 machine-verifiable checks above are done
+> (build artifacts, config-drives-page, invalid-config-fails-build with a
+> readable Zod error, schema/editor wiring, and base-subpath asset resolution —
+> all verified in CI-equivalent runs). The remaining unchecked items require a
+> physical device or an external service and are **pending manual QA**:
+> on-device contact-save (iPhone/Android), camera QR scans, Lighthouse scoring,
+> the social-scraper link preview, and the end-to-end "Use this template"
+> timing. The implementation produces the determining artifacts for each
+> (correct `text/vcard` + `Content-Disposition`, QR encoding the absolute card
+> URL, OG `image/png` + meta tags), so these are expected to pass on a real
+> device — they just can't be exercised headlessly. The doc's status box stays
+> `[_]` until they're confirmed.
 
 ## References
 

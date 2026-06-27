@@ -1,0 +1,33 @@
+---
+// Pre-paint theme boot, rendered in <head> only when the switcher and/or random
+// mode is on, so it runs before first paint:
+//   • random:  pick a random theme from the curated `pool` on every load (a fun
+//     way to show off the gallery — the page lands on a different theme each
+//     reload; the pool may be narrower than the switcher's full cycle ring);
+//   • otherwise: restore a returning visitor's previously chosen theme (no flash
+//     of the owner's default).
+// Either way the server still renders the owner's default into <html data-theme>,
+// so crawlers and no-JS visitors see a stable, deterministic theme.
+//
+// Kept in its own component so the inline script body is emitted as raw JS rather
+// than inside a JSX expression (where it would be stringified, not executed).
+interface Props {
+  /** The curated themes the random picker may land on (a subset of `allowed`,
+   *  or the full ring). Empty unless random mode is on. */
+  pool: string[];
+  /** The themes a returning visitor's saved choice is restored from — the full
+   *  switcher ring, which may be wider than the random `pool`. */
+  allowed: string[];
+  /** Pick a random theme from `pool` on every load instead of restoring. */
+  random?: boolean;
+}
+const { pool, allowed, random = false } = Astro.props;
+---
+<script is:inline define:vars={{ pool, allowed, random }}>
+  if (random && pool.length) {
+    document.documentElement.dataset.theme = pool[Math.floor(Math.random() * pool.length)];
+  } else {
+    const stored = localStorage.getItem("libcard-theme");
+    if (stored && allowed.includes(stored)) document.documentElement.dataset.theme = stored;
+  }
+</script>

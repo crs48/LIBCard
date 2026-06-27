@@ -1,0 +1,49 @@
+---
+import "../styles/global.css";
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import ThemeSwitcher from "../components/ThemeSwitcher.astro";
+import ThemeBoot from "../components/ThemeBoot.astro";
+import BusinessCardMode from "../components/BusinessCardMode.astro";
+import CardWakeLock from "../components/CardWakeLock.astro";
+import { getActiveTheme, getCardMode } from "../lib/config";
+
+interface Props {
+  title?: string;
+  /** Widen the container (used by the multi-column theme gallery). */
+  wide?: boolean;
+}
+
+const { title, wide } = Astro.props;
+const maxWidth = wide ? "max-w-3xl" : "max-w-md";
+// The owner's chosen theme is server-rendered into <html data-theme> so first
+// paint, crawlers, and no-JS visitors all see it. The switcher/random mode (if
+// enabled) only re-themes on the client.
+const theme = await getActiveTheme();
+// Client theme JS ships only when the switcher and/or random mode is on.
+const themeJs = theme.switcher || theme.random;
+// Landscape "card mode": the rotate-to-reveal business card. Suppressed on the
+// wide gallery layout, where flipping to a card overlay makes no sense.
+const card = await getCardMode();
+const showCardMode = card.enabled && !wide;
+---
+<!doctype html>
+<html lang="en" data-theme={theme.name}>
+  <head>
+    <BaseHead title={title} />
+    {/* Pre-paint theme boot (random pick or no-flash restore). Only when the
+        switcher/random is on — otherwise the page ships zero JS. */}
+    {themeJs && <ThemeBoot pool={theme.randomPool} allowed={theme.cycle} random={theme.random} />}
+  </head>
+  <body class="min-h-dvh bg-bg font-sans antialiased">
+    <div class:list={["mx-auto flex min-h-dvh w-full flex-col items-center px-4 py-12 sm:py-14", maxWidth]}>
+      <main class="flex w-full flex-1 flex-col items-center gap-6">
+        <slot />
+      </main>
+      {themeJs && <ThemeSwitcher />}
+      <Footer />
+      {showCardMode && <BusinessCardMode qr={card.qr} hint={card.hint} />}
+      {showCardMode && card.wakeLock && <CardWakeLock />}
+    </div>
+  </body>
+</html>

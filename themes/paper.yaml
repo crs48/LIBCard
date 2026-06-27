@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=./theme.schema.json
+name: Paper
+author: LibCard
+authorUrl: https://github.com/crs48/LIBCard
+license: MIT
+official: true
+mode: light
+tags: [light, warm, serif]
+description: Warm off-white with a serif voice — like a printed card.
+tokens:
+  bg: "#faf6ef"
+  surface: "#fffdf8"
+  fg: "#2b2620"
+  muted: "#6f6657"
+  accent: "#b4541f"
+  accentContrast: "#fffdf8"
+  border: "#e7ddcb"
+  font: serif
+  radius: 0.5rem

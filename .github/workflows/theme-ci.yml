@@ -1,0 +1,40 @@
+name: Theme CI
+
+# The gate for theme submissions: validate the data and check contrast. Runs with
+# a read-only token on the untrusted PR context. The visual preview comment is a
+# separate, privileged workflow (theme-preview.yml).
+on:
+  pull_request:
+    paths:
+      - "themes/**"
+
+permissions:
+  contents: read
+
+jobs:
+  themes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # Fails the check if any themes/*.yaml is invalid (bad token, missing
+      # field, unknown font, …) — themes are data, so this is the gate.
+      - name: Validate themes
+        run: pnpm run gen:themes
+
+      # Fails the check if a theme falls below WCAG AA on the key pairs.
+      - name: Check contrast
+        run: pnpm run check-contrast

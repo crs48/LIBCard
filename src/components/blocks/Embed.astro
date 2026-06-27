@@ -1,0 +1,53 @@
+---
+import type { BlockOf } from "../../lib/config";
+import { buildEmbed, type EmbedSpec } from "../../lib/embeds";
+import { fetchOEmbed } from "../../lib/social-fetch";
+import EmbedFrame from "./EmbedFrame.astro";
+import Icon from "../Icon.astro";
+
+interface Props {
+  block: BlockOf<"embed">;
+}
+
+const { block } = Astro.props;
+const url = block.url || undefined;
+// Some providers gate embedding on the embedding domain (Twitch `parent`, Figma
+// `embed_host`); pass this site's host.
+const host = Astro.site?.hostname ?? "libcard";
+
+let spec: EmbedSpec | null = null;
+
+if (block.provider === "bluesky" || block.provider === "oembed") {
+  // Resolved at build time via oEmbed (handle→DID for Bluesky; long-tail
+  // providers generically). Fail-soft → link fallback below.
+  if (url) {
+    const o = await fetchOEmbed(url);
+    if (o) {
+      spec = { src: o.src, title: block.title ?? o.title, sizing: { height: o.height ?? 500 } };
+    }
+  }
+} else {
+  // Throws on a known provider with missing/invalid input → fails the build
+  // loudly rather than shipping a broken card.
+  spec = buildEmbed(block.provider, { url, id: block.id, host });
+  if (block.title) spec = { ...spec, title: block.title };
+}
+---
+{
+  spec ? (
+    <EmbedFrame spec={spec} height={block.height} />
+  ) : (
+    url && (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="group flex w-full items-center gap-3 rounded-card border border-border bg-surface px-4 py-3.5 font-medium text-fg shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      >
+        <Icon name="link" class="size-5 shrink-0 text-muted group-hover:text-accent" />
+        <span class="flex-1 text-center">{block.title ?? "View embedded content"}</span>
+        <Icon name="external-link" class="size-4 shrink-0 text-muted opacity-0 transition-opacity group-hover:opacity-100" />
+      </a>
+    )
+  )
+}

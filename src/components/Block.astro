@@ -1,0 +1,41 @@
+---
+// Dispatcher: render a single content block by its `type`. The discriminated
+// union narrows inside each `&&`, so each component receives its exact variant.
+import type { LibcardBlock } from "../lib/config";
+import Heading from "./blocks/Heading.astro";
+import TextBlock from "./blocks/TextBlock.astro";
+import Divider from "./blocks/Divider.astro";
+import ContactButtons from "./blocks/ContactButtons.astro";
+import Gallery from "./blocks/Gallery.astro";
+import Faq from "./blocks/Faq.astro";
+import VideoEmbed from "./blocks/VideoEmbed.astro";
+import Embed from "./blocks/Embed.astro";
+import Booking from "./blocks/Booking.astro";
+import MapEmbed from "./blocks/MapEmbed.astro";
+import SignupForm from "./blocks/SignupForm.astro";
+import ContactForm from "./blocks/ContactForm.astro";
+import Tweet from "./blocks/Tweet.astro";
+import Rss from "./blocks/Rss.astro";
+import GitHubCard from "./blocks/GitHubCard.astro";
+
+interface Props {
+  block: LibcardBlock;
+}
+
+const { block } = Astro.props;
+---
+{block.type === "heading" && <Heading block={block} />}
+{block.type === "text" && <TextBlock block={block} />}
+{block.type === "divider" && <Divider block={block} />}
+{block.type === "contact-buttons" && <ContactButtons block={block} />}
+{block.type === "gallery" && <Gallery block={block} />}
+{block.type === "faq" && <Faq block={block} />}
+{block.type === "video" && <VideoEmbed block={block} />}
+{block.type === "embed" && <Embed block={block} />}
+{block.type === "booking" && <Booking block={block} />}
+{block.type === "map" && <MapEmbed block={block} />}
+{block.type === "signup" && <SignupForm block={block} />}
+{block.type === "form" && <ContactForm block={block} />}
+{block.type === "tweet" && <Tweet block={block} />}
+{block.type === "rss" && <Rss block={block} />}
+{block.type === "github" && <GitHubCard block={block} />}

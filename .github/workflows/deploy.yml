@@ -1,0 +1,52 @@
+name: Deploy LibCard to GitHub Pages
+
+on:
+  # Deploy on every push to main...
+  push:
+    branches: [main]
+  # ...allow manual runs from the Actions tab...
+  workflow_dispatch:
+  # ...and rebuild daily so build-time content stays fresh without a push:
+  # GitHub star counts (links with `stars: build`) and build-time embeds
+  # (tweet/rss/github blocks). Harmless no-op when the config uses neither.
+  schedule:
+    - cron: "0 6 * * *"
+
+# Grant GITHUB_TOKEN the permissions required to deploy to GitHub Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment; let an in-progress run finish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build with Astro
+        # Auto-detects pnpm from pnpm-lock.yaml, installs, runs `astro build`
+        # (which runs the `prebuild` schema generation), and uploads the Pages
+        # artifact. `site`/`base` come from libcard.config.yaml via astro.config.
+        uses: withastro/action@v6
+        env:
+          # Lets `stars: build` links fetch star counts at 5,000 req/hr instead
+          # of the anonymous 60. Read-only (contents: read above); fails soft if
+          # absent, so forks without it still build fine.
+          GITHUB_TOKEN: ${{ github.token }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

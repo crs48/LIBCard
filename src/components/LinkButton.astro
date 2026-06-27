@@ -1,0 +1,56 @@
+---
+import type { LibcardLink } from "../lib/config";
+import Icon from "./Icon.astro";
+import { parseRepo, formatStars, shieldsStarsUrl, fetchStarCount } from "../lib/github";
+
+interface Props {
+  link: LibcardLink;
+}
+
+const { link } = Astro.props;
+const external = /^https?:\/\//i.test(link.url);
+const rel = external ? "noopener noreferrer" : undefined;
+const target = external ? "_blank" : undefined;
+
+// Show the "★ Star" pill when the link points at a GitHub repo and the owner
+// opted in (either `star: true`, or any `stars` mode other than "off").
+const repo = link.star || link.stars !== "off" ? parseRepo(link.url) : null;
+
+// Bake the live count into the page at build time (fails soft to no count).
+let count: string | null = null;
+if (repo && link.stars === "build") {
+  const n = await fetchStarCount(repo);
+  if (n !== null) count = formatStars(n);
+}
+const badgeSrc = repo && link.stars === "badge" ? shieldsStarsUrl(repo) : null;
+---
+<div class="flex w-full items-stretch gap-2">
+  <a
+    href={link.url}
+    target={target}
+    rel={rel}
+    class="group flex min-w-0 flex-1 items-center gap-3 rounded-card bg-surface border border-border px-4 py-3.5 text-fg font-medium shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+  >
+    {link.icon && <Icon name={link.icon} class="size-5 shrink-0 text-muted group-hover:text-accent transition-colors" />}
+    <span class="min-w-0 flex-1 truncate text-center">{link.label}</span>
+    {/* Only http(s) links open elsewhere; tel:/mailto:/sms: act in-context, so the
+        "leaves the page" glyph would be misleading for them. */}
+    {external && <Icon name="external-link" class="size-4 shrink-0 text-muted opacity-0 group-hover:opacity-100 transition-opacity" />}
+  </a>
+
+  {
+    repo && (
+      <a
+        href={link.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Star ${repo.owner}/${repo.repo} on GitHub`}
+        class="group flex shrink-0 items-center gap-1.5 rounded-card border border-border bg-surface px-3 text-sm font-medium text-muted shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      >
+        <Icon name="star" class="size-4 shrink-0 transition-colors group-hover:text-accent" />
+        {count && <span>{count}</span>}
+        {badgeSrc && <img src={badgeSrc} alt="GitHub stars" height="18" loading="lazy" decoding="async" />}
+      </a>
+    )
+  }
+</div>

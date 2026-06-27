@@ -1,0 +1,37 @@
+---
+import Layout from "../layouts/Layout.astro";
+import BusinessCard from "../components/BusinessCard.astro";
+import SaveContact from "../components/SaveContact.astro";
+import Icon from "../components/Icon.astro";
+import { withBase } from "../lib/site";
+
+const base = import.meta.env.BASE_URL;
+// The manual, always-works business card (the fallback when a phone's auto-rotate
+// is locked and the landscape card-mode media query never fires). It shares the
+// exact same BusinessCard face as the rotate-to-reveal overlay — just stacked.
+const home = withBase(base, "/");
+const vcardQr = withBase(base, "/contact-qr.svg");
+---
+<Layout title="Digital business card">
+  <BusinessCard variant="portrait" qr="page" class="w-full" />
+
+  <div class="flex w-full flex-col items-center gap-3">
+    <SaveContact class="w-full" />
+    <a
+      href={vcardQr}
+      download="contact-qr.svg"
+      class="inline-flex items-center gap-2 text-sm text-muted underline-offset-4 hover:text-accent hover:underline"
+    >
+      <Icon name="download" class="size-4" />
+      <span>Download contact QR (scan to save offline)</span>
+    </a>
+  </div>
+
+  <a
+    href={home}
+    class="inline-flex items-center gap-2 text-sm text-muted underline-offset-4 hover:text-accent hover:underline"
+  >
+    <Icon name="arrow-left" class="size-4" />
+    <span>Back to all links</span>
+  </a>
+</Layout>

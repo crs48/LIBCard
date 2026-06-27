@@ -1,0 +1,49 @@
+---
+import type { BlockOf } from "../../lib/config";
+import { fetchTweet } from "../../lib/social-fetch";
+import Icon from "../Icon.astro";
+
+interface Props {
+  block: BlockOf<"tweet">;
+}
+
+const { block } = Astro.props;
+// Fetched at build via the public syndication endpoint (no API key); the page
+// ships static HTML and contacts no third party at runtime. Fail-soft → link.
+const tweet = await fetchTweet(block.url);
+---
+{
+  tweet ? (
+    <blockquote class="flex w-full flex-col gap-3 rounded-card border border-border bg-surface p-4 shadow-sm">
+      <div class="flex items-center gap-2">
+        <Icon name="x" class="size-4 text-fg" />
+        {tweet.name && (
+          <span class="text-sm font-semibold text-fg">
+            {tweet.name}
+            {tweet.username && <span class="font-normal text-muted"> @{tweet.username}</span>}
+          </span>
+        )}
+      </div>
+      <p class="text-sm whitespace-pre-wrap text-fg">{tweet.text}</p>
+      <a
+        href={tweet.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-xs text-muted underline-offset-4 hover:text-accent hover:underline"
+      >
+        View on X
+      </a>
+    </blockquote>
+  ) : (
+    <a
+      href={block.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="group flex w-full items-center gap-3 rounded-card border border-border bg-surface px-4 py-3.5 font-medium text-fg shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+    >
+      <Icon name="x" class="size-5 shrink-0 text-muted group-hover:text-accent" />
+      <span class="flex-1 text-center">View this post on X</span>
+      <Icon name="external-link" class="size-4 shrink-0 text-muted opacity-0 transition-opacity group-hover:opacity-100" />
+    </a>
+  )
+}

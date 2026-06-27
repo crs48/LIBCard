@@ -1,0 +1,77 @@
+---
+// The footer attribution badge: "Powered by LibCard · <Name> theme by <author>".
+//
+//  • "Powered by LibCard" — shown unless footer.poweredBy is false (MIT core,
+//    so it's removable goodwill).
+//  • "<Name> theme by <author>" — credits the ACTIVE theme by name (linked to
+//    its source file in the gallery) and its author (linked to authorUrl). Shown
+//    unless footer.themeCredit is false AND the theme's license permits removal
+//    (permissive licenses); a CC-BY theme keeps its credit regardless.
+//
+// The credit carries id="lc-theme-by" so the live switcher can update both the
+// theme name and the author as you cycle.
+import { getConfig, getActiveTheme, hasLiveEmbeds } from "../lib/config";
+import { getThemeMeta, licenseRequiresAttribution, LIBCARD_REPO, themeSourceUrl } from "../lib/themes";
+
+const cfg = await getConfig();
+const active = await getActiveTheme();
+const meta = getThemeMeta(active.name);
+
+const poweredBy = cfg.footer.poweredBy;
+// Be honest about the one place the "nothing tracks you" promise has an asterisk:
+// a live embed (video/booking/map/…) loads third-party content in its iframe.
+// Video defaults to a click-to-load facade, so nothing loads until interaction.
+const liveEmbeds = hasLiveEmbeds(cfg);
+
+// Show the credit if the owner kept it on, or the license demands it.
+const showCredit =
+  !!meta && (cfg.footer.themeCredit || licenseRequiresAttribution(meta.license));
+const sep = poweredBy ? " · " : "";
+---
+<footer class="mt-10 text-center text-xs text-muted">
+  <p>
+    {
+      poweredBy && (
+        <a
+          href={LIBCARD_REPO}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="underline-offset-4 hover:text-accent hover:underline"
+        >
+          Powered by LibCard
+        </a>
+      )
+    }
+    <span id="lc-theme-by" hidden={!showCredit}>
+      {sep}
+      <a
+        href={meta ? themeSourceUrl(meta.file) : LIBCARD_REPO}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="underline-offset-4 hover:text-accent hover:underline"
+      >
+        {meta?.name}
+      </a>{" "}
+      theme by{" "}
+      {
+        meta?.authorUrl ? (
+          <a
+            href={meta.authorUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="underline-offset-4 hover:text-accent hover:underline"
+          >
+            {meta?.author}
+          </a>
+        ) : (
+          <span>{meta?.author}</span>
+        )
+      }
+    </span>
+  </p>
+  {
+    liveEmbeds && (
+      <p class="mt-1 text-[0.7rem] text-muted/80">Some embedded content loads from third parties.</p>
+    )
+  }
+</footer>

@@ -1,0 +1,121 @@
+---
+// The client theme controller — the only client JavaScript LibCard ships, and
+// only when `theme.switcher` and/or `theme.random` is on. It:
+//   • (switcher) renders a "Try a theme" button that cycles `data-theme` through
+//     the configured ring, persisting the choice and animating with the View
+//     Transitions API (instant-swap fallback);
+//   • (always, when included) syncs the footer "Theme by" credit to whatever
+//     theme is active on load — which ThemeBoot may have randomized or restored.
+import { getConfig, getActiveTheme } from "../lib/config";
+import { getThemeMeta, licenseRequiresAttribution, themeSourceUrl } from "../lib/themes";
+
+const cfg = await getConfig();
+const active = await getActiveTheme();
+const switcher = active.switcher;
+
+// Metadata for just the themes in the cycle ring — embedded for the client so it
+// can update the credit badge ("<Name> theme by <author>") without a request.
+const items = active.cycle.map((slug) => {
+  const m = getThemeMeta(slug);
+  return {
+    slug,
+    name: m?.name ?? slug,
+    sourceUrl: m ? themeSourceUrl(m.file) : "",
+    author: m?.author ?? "",
+    authorUrl: m?.authorUrl ?? "",
+    requiresAttr: m ? licenseRequiresAttribution(m.license) : true,
+  };
+});
+
+const sep = cfg.footer.poweredBy ? " · " : "";
+const themeCredit = cfg.footer.themeCredit;
+const animate = active.animate;
+---
+{
+  switcher && (
+    <div class="mt-8 flex w-full justify-center">
+      <button
+        id="lc-theme-next"
+        type="button"
+        aria-label="Try the next theme"
+        class="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-2 text-sm font-medium text-fg transition hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="size-4" aria-hidden="true">
+          <circle cx="13.5" cy="6.5" r="1.2" fill="currentColor" stroke="none" />
+          <circle cx="17.5" cy="10.5" r="1.2" fill="currentColor" stroke="none" />
+          <circle cx="8.5" cy="7.5" r="1.2" fill="currentColor" stroke="none" />
+          <circle cx="6.5" cy="12.5" r="1.2" fill="currentColor" stroke="none" />
+          <path d="M12 2a10 10 0 1 0 0 20c1.5 0 2-1 2-2 0-1.5-1.5-1.5-1.5-3 0-1 .8-1.5 2-1.5h1.5A4.5 4.5 0 0 0 22 11 10 10 0 0 0 12 2Z" />
+        </svg>
+        <span>Try a theme</span>
+      </button>
+      <span id="lc-theme-live" class="sr-only" aria-live="polite" />
+    </div>
+  )
+}
+
+<script is:inline define:vars={{ items, sep, themeCredit, animate }}>
+  const root = document.documentElement;
+  const btn = document.getElementById("lc-theme-next");
+  const slugs = items.map((i) => i.slug);
+
+  function escapeAttr(s) {
+    return String(s).replace(/"/g, "&quot;");
+  }
+  function badgeHtml(it) {
+    const linkCls = "underline-offset-4 hover:text-accent hover:underline";
+    const nameLink = `<a href="${escapeAttr(it.sourceUrl)}" target="_blank" rel="noopener noreferrer" class="${linkCls}">${it.name}</a>`;
+    const who = it.authorUrl
+      ? `<a href="${escapeAttr(it.authorUrl)}" target="_blank" rel="noopener noreferrer" class="${linkCls}">${it.author}</a>`
+      : `<span>${it.author}</span>`;
+    return `${sep}${nameLink} theme by ${who}`;
+  }
+  // Reflect a theme in the footer credit (the footer is parsed after this script,
+  // so callers run this on DOMContentLoaded or later).
+  function syncBadge(slug) {
+    const it = items[slugs.indexOf(slug)];
+    if (!it) return;
+    const badge = document.getElementById("lc-theme-by");
+    if (!badge) return;
+    const show = it.requiresAttr || themeCredit;
+    badge.hidden = !show;
+    if (show) badge.innerHTML = badgeHtml(it);
+  }
+
+  function apply(slug) {
+    const it = items[slugs.indexOf(slug)];
+    const swap = () => {
+      root.dataset.theme = slug;
+      try {
+        localStorage.setItem("libcard-theme", slug);
+      } catch {}
+      syncBadge(slug);
+      const live = document.getElementById("lc-theme-live");
+      if (live && it) live.textContent = `Theme: ${it.name}`;
+    };
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (animate && !reduced && document.startViewTransition) {
+      document.startViewTransition(swap);
+    } else {
+      swap();
+    }
+  }
+
+  btn?.addEventListener("click", (e) => {
+    // Anchor the circular reveal at the button for a polished wipe.
+    root.style.setProperty("--lc-vt-x", `${e.clientX}px`);
+    root.style.setProperty("--lc-vt-y", `${e.clientY}px`);
+    const current = root.dataset.theme || slugs[0];
+    const idx = slugs.indexOf(current);
+    apply(slugs[(idx + 1) % slugs.length]);
+  });
+
+  // On load, make the footer credit match whatever theme is active (ThemeBoot may
+  // have randomized or restored it after the server render).
+  const onReady = () => syncBadge(root.dataset.theme);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", onReady);
+  } else {
+    onReady();
+  }
+</script>

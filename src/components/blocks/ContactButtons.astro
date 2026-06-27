@@ -1,0 +1,48 @@
+---
+import type { BlockOf } from "../../lib/config";
+import { getConfig } from "../../lib/config";
+import Icon from "../Icon.astro";
+
+interface Props {
+  block: BlockOf<"contact-buttons">;
+}
+
+const { block } = Astro.props;
+const { contact } = await getConfig();
+
+// `call`/`email: true` reuse the contact card's phone/email so they don't have
+// to be repeated; a string overrides. wa.me wants digits only; tel/sms keep the
+// formatting the dialer ignores anyway.
+const digits = (s: string) => s.replace(/[^\d]/g, "");
+const phone = typeof block.call === "string" ? block.call : block.call ? contact.phone : undefined;
+const email = typeof block.email === "string" ? block.email : block.email ? contact.email : undefined;
+
+type Btn = { href: string; label: string; icon: string };
+const buttons: Btn[] = [];
+if (phone) buttons.push({ href: `tel:${phone}`, label: "Call", icon: "phone" });
+if (block.sms) buttons.push({ href: `sms:${block.sms}`, label: "Text", icon: "message" });
+if (block.whatsapp) buttons.push({ href: `https://wa.me/${digits(block.whatsapp)}`, label: "WhatsApp", icon: "whatsapp" });
+if (block.telegram)
+  buttons.push({ href: `https://t.me/${block.telegram.replace(/^@/, "")}`, label: "Telegram", icon: "telegram" });
+if (block.signal) buttons.push({ href: `https://signal.me/#p/${block.signal}`, label: "Signal", icon: "signal" });
+if (email) buttons.push({ href: `mailto:${email}`, label: "Email", icon: "mail" });
+
+const external = (href: string) => /^https?:\/\//i.test(href);
+---
+{
+  buttons.length > 0 && (
+    <div class="grid w-full grid-cols-2 gap-2 sm:grid-cols-3">
+      {buttons.map((b) => (
+        <a
+          href={b.href}
+          target={external(b.href) ? "_blank" : undefined}
+          rel={external(b.href) ? "noopener noreferrer" : undefined}
+          class="flex items-center justify-center gap-2 rounded-card border border-border bg-surface px-3 py-2.5 text-sm font-medium text-fg shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          <Icon name={b.icon} class="size-4 shrink-0 text-muted" />
+          <span>{b.label}</span>
+        </a>
+      ))}
+    </div>
+  )
+}
