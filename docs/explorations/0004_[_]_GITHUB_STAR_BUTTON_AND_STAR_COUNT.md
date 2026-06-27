@@ -511,9 +511,9 @@ for the public-repo read (it is).
       [`.github/workflows/deploy.yml`](../../.github/workflows/deploy.yml).
 - [x] Demo it: set `star: true` (+ `stars: "build"`) on the GitHub repo link
       in [`libcard.config.yaml`](../../libcard.config.yaml).
-- [ ] Update the README "Configure it" / links section with the new fields
+- [x] Update the README "Configure it" / links section with the new fields
       and the privacy note on `badge`/widget opt-ins.
-- [ ] (Optional) Document an opt-in github-buttons live widget for owners
+- [x] (Optional) Document an opt-in github-buttons live widget for owners
       who want a live count and accept the third-party JS.
 
 ## Validation Checklist
