@@ -684,7 +684,7 @@ sequenceDiagram
       the trailing `external-link` glyph for `http(s)` links (not `tel:`/`mailto:`).
 - [x] Optionally auto-render tap-to-call / email buttons from `contact.phone` /
       `contact.email`.
-- [ ] Document special-scheme links (`tel:`, `sms:?&body=`, `wa.me`, `t.me`,
+- [x] Document special-scheme links (`tel:`, `sms:?&body=`, `wa.me`, `t.me`,
       `mailto:`, `geo:`, PayPal.me, Stripe Payment Links) in the README with
       copy-paste examples.
 
@@ -702,7 +702,7 @@ sequenceDiagram
       `<form method="post">` with CSS honeypot + redirect field.
 - [x] `Form` (contact) block (Formspree/Web3Forms) with `fields[]`, honeypot,
       `_next`/`redirect`.
-- [ ] `.sr-only` honeypot utility; document the redirect-thank-you behavior.
+- [x] `.sr-only` honeypot utility; document the redirect-thank-you behavior.
 
 **Phase 3 — Tier-3 live iframes**
 - [x] `src/lib/embeds.ts` provider allowlist + safe iframe builder

@@ -47,6 +47,82 @@ contact:
 theme: midnight   # default | midnight | sunset | mono | paper | terminal
 ```
 
+### Links & contact buttons
+
+A `links` entry is just a label + URL, so you're not limited to web links — any
+URL scheme works, which gives you tap-to-call, tap-to-text, and chat buttons for
+free (and they open the right native app, not a new tab):
+
+```yaml
+links:
+  - { label: Call me,    url: "tel:+15551234567",                 icon: phone }
+  - { label: Text me,    url: "sms:+15551234567?&body=Hi%20Chris", icon: message }
+  - { label: WhatsApp,   url: "https://wa.me/15551234567?text=Hi", icon: whatsapp }  # digits only, no +
+  - { label: Telegram,   url: "https://t.me/yourhandle",          icon: telegram }
+  - { label: Email me,   url: "mailto:you@example.com?subject=Hi", icon: mail }
+  - { label: Book a call, url: "https://cal.com/you/30min",        icon: calendar }
+  - { label: Tip jar,    url: "https://paypal.me/you/5",          icon: heart }
+```
+
+### Content blocks
+
+For anything richer than a button, add a `blocks:` list — an ordered set of typed
+content blocks rendered between your links and the social row. Blocks are
+**validated data, never raw HTML**, so a config stays safe to share, and they
+keep LibCard's promise: **zero of our JavaScript and no server.** They come in
+four tiers:
+
+| Tier | Blocks | How it stays zero-JS / zero-server |
+|---|---|---|
+| **Static** | `heading`, `text` (Markdown), `divider`, `faq`, `gallery`, `contact-buttons` | pure HTML/CSS |
+| **Forms** | `signup` (newsletter), `form` (contact) | a plain `<form method="post">` to a third party |
+| **Live embeds** | `video`, `embed`, `booking`, `map` | a sandboxed `<iframe>` — **we** ship no JS |
+| **Build-time** | `tweet`, `rss`, `github` | fetched during the build, baked to static HTML |
+
+```yaml
+blocks:
+  - { type: heading, text: "Featured" }
+  - { type: text, markdown: "I build **LibCard**. [Say hi](mailto:you@x.com)." }
+  - type: contact-buttons          # tap-to-call/text/chat in one row
+    call: true                     # true → reuse contact.phone; or a number string
+    whatsapp: "+1-555-123-4567"
+    email: true                    # true → reuse contact.email
+  - { type: booking, provider: calcom, url: "https://cal.com/you/30min", title: "Book a call" }
+  - { type: video, provider: youtube, id: "dQw4w9WgXcQ", title: "My talk" }
+  - { type: embed, provider: figma, url: "https://www.figma.com/design/KEY/Title" }
+  - { type: embed, provider: spotify, url: "https://open.spotify.com/track/ID" }
+  - { type: map, provider: gmaps, src: "https://www.google.com/maps/embed?pb=..." }
+  - type: faq
+    items:
+      - { q: "Is it free?", a: "Yes — hosted free on GitHub Pages." }
+  - { type: signup, provider: buttondown, username: "you", title: "Newsletter" }
+  - { type: tweet, url: "https://x.com/you/status/1750000000000000000" }
+  - { type: rss, url: "https://yourblog.com/feed.xml", title: "Latest posts" }
+```
+
+A few things worth knowing:
+
+- **Privacy.** Live embeds load third-party content inside their iframe. `video`
+  defaults to a **click-to-load facade** — nothing loads (no cookies, no
+  trackers) until a visitor clicks play. YouTube uses `youtube-nocookie`, every
+  iframe is `loading="lazy"` with `referrerpolicy="no-referrer"`, and the footer
+  notes when a page carries live embeds. (Set `facade: false` on a `video` for an
+  eager player.)
+- **Forms.** `signup`/`form` post straight to your provider (Buttondown, Kit,
+  Mailchimp, Formspree, Web3Forms…). With no JavaScript there's no inline
+  "thanks!" — the browser navigates to the provider's confirmation page, or to
+  your own page if you set `redirect:` (Formspree's `_next`, etc.). Spam is
+  caught by a hidden honeypot field rather than a JS captcha.
+- **Build-time blocks** (`tweet`, `rss`, `github`) are fetched while the site
+  builds, so the live page ships static HTML and contacts no one. They refresh on
+  the next build — a daily GitHub Actions `cron` is wired up so they stay current
+  without a push. If a fetch fails, the block degrades to a plain link.
+
+The full field list for every block type lives in
+[`libcard.schema.json`](./libcard.schema.json) (so your editor autocompletes
+them), and there's a worked example in
+[`docs/explorations/0006_*_RICH_CONTENT_BLOCKS_AND_ZERO_JS_EMBEDS.md`](./docs/explorations/).
+
 ### Themes
 
 Pick one of the built-in themes (`default`, `midnight`, `sunset`, `mono`, `paper`, `terminal`):
