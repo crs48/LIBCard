@@ -4,12 +4,13 @@ on:
   # Deploy on every push to main...
   push:
     branches: [main]
-  # ...and allow manual runs from the Actions tab.
+  # ...allow manual runs from the Actions tab...
   workflow_dispatch:
-  # ...and weekly, so any build-time GitHub star counts (links with
-  # `stars: build`) don't go stale between pushes. Mondays 06:00 UTC.
+  # ...and rebuild daily so build-time content stays fresh without a push:
+  # GitHub star counts (links with `stars: build`) and build-time embeds
+  # (tweet/rss/github blocks). Harmless no-op when the config uses neither.
   schedule:
-    - cron: "0 6 * * 1"
+    - cron: "0 6 * * *"
 
 # Grant GITHUB_TOKEN the permissions required to deploy to GitHub Pages.
 permissions:

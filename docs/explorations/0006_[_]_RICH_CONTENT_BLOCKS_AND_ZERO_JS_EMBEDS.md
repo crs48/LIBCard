@@ -719,7 +719,7 @@ sequenceDiagram
       inline static HTML; cache; fallback to quote+link on empty.
 - [x] `rss` block: fetch+parse feed → static cards.
 - [x] `github` block: public API → static stats card.
-- [ ] Add a `schedule: cron` trigger to
+- [x] Add a `schedule: cron` trigger to
       [`.github/workflows/deploy.yml`](../../.github/workflows/deploy.yml) so
       Tier-4 content refreshes without a push; fail-soft on network errors.
 
