@@ -495,27 +495,27 @@ on:
 
 ## Validation Checklist
 
-- [ ] **Template user, clean case:** fresh "Use this template" → edit only
+- [x] **Template user, clean case:** fresh "Use this template" → edit only
       `libcard.config.yaml` → `pnpm run update` after an upstream engine change →
       `pnpm build` passes → config + `public/` + custom theme all intact.
-- [ ] **`--dry-run`** lists the same add/update/skip set it would apply, and
+- [x] **`--dry-run`** lists the same add/update/skip set it would apply, and
       writes nothing.
-- [ ] **Config is never touched** by `pnpm run update` (diff `libcard.config.yaml`
+- [x] **Config is never touched** by `pnpm run update` (diff `libcard.config.yaml`
       before/after — byte-identical), matching the `update-themes` guarantee.
-- [ ] **Owner-authored theme survives** an update that also adds a new upstream
+- [x] **Owner-authored theme survives** an update that also adds a new upstream
       theme (neither is lost).
-- [ ] **`public/CNAME`** (custom domain) survives an update.
-- [ ] **Forked user:** "Sync fork" / `git merge upstream/main` brings engine
+- [x] **`public/CNAME`** (custom domain) survives an update.
+- [x] **Forked user:** "Sync fork" / `git merge upstream/main` brings engine
       changes; the only conflict is `libcard.config.yaml`, resolvable by keeping
       theirs; `pnpm build` passes; card deploys.
-- [ ] **Advanced template merge** (`--allow-unrelated-histories --squash`) is
+- [x] **Advanced template merge** (`--allow-unrelated-histories --squash`) is
       documented with a worked example and actually produces a building card.
-- [ ] **Breaking-change drill:** an upstream config-schema change makes the
+- [x] **Breaking-change drill:** an upstream config-schema change makes the
       post-update `pnpm build` fail with a readable error *before* any deploy,
       and the CHANGELOG entry told the owner what to do.
-- [ ] **Rollback** (`git revert` / restore the pre-update commit) returns the
+- [x] **Rollback** (`git revert` / restore the pre-update commit) returns the
       live card to its prior state.
-- [ ] **README + UPGRADING.md only:** a person following just those two docs can
+- [x] **README + UPGRADING.md only:** a person following just those two docs can
       update end-to-end without external help — and the docs footprint is exactly
       one README section + one guide (no sprawl).
 
