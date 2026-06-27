@@ -703,16 +703,16 @@ const cardModeSchema = z
 - [x] Add `cardMode` to the Zod config schema in `src/lib/schema.mjs`
       (`enabled`/`qr`/`hint`/`wakeLock`, string-or-object-free object form), and
       regenerate `libcard.schema.json` (`pnpm run generate:schema`).
-- [ ] Add a `getCardMode()` resolver in `src/lib/config.ts` (defaults: enabled,
+- [x] Add a `getCardMode()` resolver in `src/lib/config.ts` (defaults: enabled,
       `qr: page`, `hint: true`, `wakeLock: false`).
-- [ ] Create `src/components/BusinessCard.astro` (presentational card face;
+- [x] Create `src/components/BusinessCard.astro` (presentational card face;
       `landscape`/`portrait` variants; theme-token styling; reuses `QRCode`).
-- [ ] Create `src/components/BusinessCardMode.astro` (fixed overlay wrapping
+- [x] Create `src/components/BusinessCardMode.astro` (fixed overlay wrapping
       `BusinessCard` + the portrait rotate hint linking to `/card`).
-- [ ] Append the reveal rules to `src/styles/global.css` (overlay in
+- [x] Append the reveal rules to `src/styles/global.css` (overlay in
       phone-landscape, hint in phone-portrait, `aspect-ratio: 1.75/1`,
       reduced-motion-safe fade).
-- [ ] Mount `{card.enabled && <BusinessCardMode/>}` in `src/layouts/Layout.astro`;
+- [x] Mount `{card.enabled && <BusinessCardMode/>}` in `src/layouts/Layout.astro`;
       decide gallery (`wide`) suppression.
 - [ ] Refactor `src/pages/card.astro` to reuse `<BusinessCard variant="portrait"/>`
       (DRY; keeps Save-contact + back link).

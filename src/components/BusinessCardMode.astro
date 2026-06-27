@@ -1,0 +1,42 @@
+---
+// Landscape "card mode": a full-viewport overlay that reveals a business-card
+// face when a phone is held sideways. The reveal is PURE CSS (see global.css) —
+// an orientation media query toggles `.lc-card-mode`; this component ships no
+// JavaScript itself. The optional screen wake lock lives in CardWakeLock.astro
+// and is mounted separately only when cardMode.wakeLock is on.
+//
+// A portrait-only hint ("⟲ Rotate to show your card") makes the gesture
+// discoverable and doubles as a tap target to /card, so the feature still works
+// when the phone's auto-rotate is locked (and the media query never fires).
+import BusinessCard from "./BusinessCard.astro";
+import { withBase } from "../lib/site";
+
+interface Props {
+  /** What the card's QR encodes (page | contact | both). */
+  qr?: "page" | "contact" | "both";
+  /** Show the portrait "rotate" nudge. */
+  hint?: boolean;
+}
+
+const { qr = "page", hint = true } = Astro.props;
+const cardPage = withBase(import.meta.env.BASE_URL, "/card");
+---
+{/* Hidden by default; revealed only on a phone in landscape (global.css). */}
+<div
+  class="lc-card-mode fixed inset-0 z-50 hidden place-items-center bg-bg p-[4vmin]"
+  aria-label="Digital business card"
+>
+  <BusinessCard variant="landscape" qr={qr} />
+</div>
+
+{
+  hint && (
+    <a
+      href={cardPage}
+      class="lc-rotate-hint hidden items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-xs text-muted shadow-sm transition hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+    >
+      <span aria-hidden="true">⟲</span>
+      <span>Rotate to show your card</span>
+    </a>
+  )
+}

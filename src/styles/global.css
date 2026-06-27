@@ -59,3 +59,56 @@ html {
     }
   }
 }
+
+/* === Landscape card mode ============================================== */
+/* Turn the phone sideways → flash a business card. The overlay and the
+   portrait hint start hidden (the `hidden` utility on each element); these
+   unlayered rules reveal them on the right viewport, with ZERO JavaScript.
+
+   "A phone held in landscape" = landscape (width > height) + a short viewport
+   (max-height excludes laptops and most tablets) + a coarse pointer (a touch
+   device, not a small-but-wide desktop window). */
+@media (orientation: landscape) and (max-height: 540px) and (pointer: coarse) {
+  .lc-card-mode {
+    display: grid;
+  }
+  /* Freeze the link-in-bio scrolling behind the overlay. */
+  body {
+    overflow: hidden;
+  }
+}
+
+/* The card keeps a real business-card proportion (3.5"×2" ≈ 1.75:1), sized to
+   the short landscape viewport. Only the landscape variant carries this class. */
+.lc-bizcard {
+  aspect-ratio: 1.75 / 1;
+  height: min(86vh, 320px);
+  width: auto;
+  max-width: 96vw;
+}
+
+/* A gentle fade-in where motion is welcome (the reduce block above already
+   neutralizes animations for prefers-reduced-motion: reduce). */
+@media (prefers-reduced-motion: no-preference) and (orientation: landscape) and (max-height: 540px) and (pointer: coarse) {
+  .lc-card-mode {
+    animation: lc-card-in 0.22s ease-out;
+  }
+  @keyframes lc-card-in {
+    from {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* Discoverability + rotation-lock fallback: the nudge shows only on phones in
+   portrait, and links to /card so it works even when auto-rotate is locked. */
+@media (orientation: portrait) and (pointer: coarse) {
+  .lc-rotate-hint {
+    display: inline-flex;
+  }
+}
