@@ -313,6 +313,16 @@ export const libcardSchema = z.object({
     })
     .strict()
     .default({}),
+  // Page metadata. `default: true` marks an unedited/template card and shows a
+  // subtle one-line "edit me" nudge on the page — handy right after "Use this
+  // template". It's OFF by default, so a real, customized card never shows it;
+  // remove the marker (or set it false) once you've made the card yours.
+  meta: z
+    .object({
+      default: z.boolean().default(false),
+    })
+    .strict()
+    .default({}),
   cardMode: cardModeSchema,
   site: z
     .object({

@@ -543,8 +543,8 @@ update the prose to match, e.g. in [`README.md`](../../README.md):
 - [x] **Unify wording** to "Powered by LibCard" in [`README.md`](../../README.md) and [`TRADEMARK.md`](../../TRADEMARK.md) (match `Footer.astro`).
 - [x] **Document the "make your own" CTA pattern** (a `link` / one-line `text` block) in the README's links/blocks section.
 - [x] **Add the §C "every affordance is a toggle" principle** to [`AGENTS.md`](../../AGENTS.md) as a design guardrail.
-- [ ] *(Optional)* **Coarse `?ref=card`** on the badge href — no JS, no cookies.
-- [ ] *(Optional)* **First-run nudge** behind a `meta.default` marker, default-off; remove on first edit.
+- [x] *(Optional)* **Coarse `?ref=card`** on the badge href — no JS, no cookies.
+- [x] *(Optional)* **First-run nudge** behind a `meta.default` marker, default-off; remove on first edit.
 
 **Explicitly out of scope (do not build):**
 - [ ] ~~`examples/landing/` config + `LIBCARD_CONFIG` override + second deploy~~ — dropped.
