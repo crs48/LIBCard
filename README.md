@@ -4,6 +4,17 @@
 
 LibCard is a tiny [Astro](https://astro.build) static site you host on **GitHub Pages for free**. Think Linktree, but it's *yours*: a single page that collects all your links and doubles as a virtual business card you can share with people at conferences, in your social bios, or anywhere a QR code or short link fits.
 
+<table align="center">
+  <tr>
+    <td align="center" width="40%"><strong>Portrait — your whole page</strong></td>
+    <td align="center" width="60%"><strong>Landscape — rotate to flash a card</strong></td>
+  </tr>
+  <tr>
+    <td align="center" valign="middle"><img src="docs/screenshots/portrait.png" alt="LibCard link-in-bio page in portrait on a phone" width="220"></td>
+    <td align="center" valign="middle"><img src="docs/screenshots/landscape-card.png" alt="LibCard business-card view with QR code when the phone is rotated to landscape" width="520"></td>
+  </tr>
+</table>
+
 ## Why LibCard?
 
 - **Free hosting** — runs entirely on GitHub Pages, no server or subscription.
