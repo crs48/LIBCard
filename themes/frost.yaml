@@ -1,33 +1,29 @@
 # yaml-language-server: $schema=./theme.schema.json
 name: Frost
-author: LibCard
-authorUrl: https://github.com/crs48/LIBCard
+author: "@crs48"
+authorUrl: https://github.com/crs48
 license: MIT
 official: true
 mode: light
 tags: [light, pastel, gradient, glass, soft]
-description: A dreamy blurred-pastel wash with frosted-glass buttons.
+description: A soft, frosted pastel wash with translucent glass panels.
 tokens:
-  bg: "#eef2ff" # pale base the blobs sit on
+  bg: "#f5f6fb" # near-white base the wash sits on
   surface: "#ffffff" # the glass tint (and the opaque fallback)
-  fg: "#27213a" # dark ink → readable over pale glass
-  muted: "#6b6588"
-  accent: "#8b2fd6"
-  accentContrast: "#fcfaff"
-  border: "#ffffff" # light hairline that catches the glass edge
+  fg: "#2c2740" # dark ink → easily readable on the pale glass
+  muted: "#6f6a85"
+  accent: "#7c3aed"
+  accentContrast: "#ffffff"
+  border: "#ffffff" # a light hairline that reads as a frosted edge
   font: rounded
   radius: 1.25rem
-# A soft, slowly-drifting pastel mesh (violet / mint / sky / pink), heavily blurred.
+# A very pale, slowly-drifting pastel wash — soft, not gaudy.
 background:
   kind: pastel-mesh
-  stops: ["#a78bfa", "#6ee7b7", "#7dd3fc", "#f9a8d4"]
-  blur: 45
+  stops: ["#e3ddf7", "#dcf2e8", "#dfeafb", "#f7e3ee"] # faint violet / mint / sky / pink
+  blur: 60
   animate: true
-# A whisper-subtle "scales" texture under the card.
-pattern:
-  kind: scales
-  intensity: 0.05
-# Frosted, translucent buttons that blur the gradient behind them.
+# Frosted, translucent panels across the whole card (links, blocks, socials, …).
 buttons:
   fill: glass
-  glassFillOpacity: 0.18
+  glassFillOpacity: 0.4

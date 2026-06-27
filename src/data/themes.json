@@ -37,8 +37,8 @@
     "slug": "frost",
     "name": "Frost",
     "file": "frost.yaml",
-    "author": "LibCard",
-    "authorUrl": "https://github.com/crs48/LIBCard",
+    "author": "@crs48",
+    "authorUrl": "https://github.com/crs48",
     "license": "MIT",
     "official": true,
     "mode": "light",
@@ -49,15 +49,15 @@
       "glass",
       "soft"
     ],
-    "description": "A dreamy blurred-pastel wash with frosted-glass buttons.",
+    "description": "A soft, frosted pastel wash with translucent glass panels.",
     "preview": "themes/.previews/frost.png",
     "tokens": {
-      "bg": "#eef2ff",
+      "bg": "#f5f6fb",
       "surface": "#ffffff",
-      "fg": "#27213a",
-      "muted": "#6b6588",
-      "accent": "#8b2fd6",
-      "accentContrast": "#fcfaff",
+      "fg": "#2c2740",
+      "muted": "#6f6a85",
+      "accent": "#7c3aed",
+      "accentContrast": "#ffffff",
       "border": "#ffffff",
       "font": "rounded",
       "radius": "1.25rem"
@@ -65,22 +65,18 @@
     "background": {
       "kind": "pastel-mesh",
       "stops": [
-        "#a78bfa",
-        "#6ee7b7",
-        "#7dd3fc",
-        "#f9a8d4"
+        "#e3ddf7",
+        "#dcf2e8",
+        "#dfeafb",
+        "#f7e3ee"
       ],
-      "blur": 45,
+      "blur": 60,
       "animate": true
     },
-    "pattern": {
-      "kind": "scales",
-      "intensity": 0.05,
-      "maskFade": true
-    },
+    "pattern": null,
     "buttons": {
       "fill": "glass",
-      "glassFillOpacity": 0.18
+      "glassFillOpacity": 0.4
     }
   },
   {

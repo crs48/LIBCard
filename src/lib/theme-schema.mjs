@@ -263,13 +263,11 @@ export function themeToCss(theme) {
     decls.push(`  --lc-bg-anim: ${bg.animate ? "running" : "paused"};`);
   }
 
-  // Glass buttons → the .lc-link/.lc-social vars (white sheen reads as a lit edge
-  // on both light and dark glass).
+  // Glass surfaces → translucent fill + backdrop blur (the frosted edge comes
+  // from the theme's own light border token; see effects.css).
   if (theme.buttons?.fill === "glass") {
     decls.push(`  --lc-glass-pct: ${Math.round(theme.buttons.glassFillOpacity * 100)}%;`);
-    decls.push(`  --lc-glass-filter: blur(12px) saturate(160%);`);
-    decls.push(`  --lc-glass-border: hsl(0 0% 100% / 0.45);`);
-    decls.push(`  --lc-glass-sheen: hsl(0 0% 100% / 0.4);`);
+    decls.push(`  --lc-glass-filter: blur(12px) saturate(150%);`);
   }
 
   // Pattern → ink (fg at low alpha) + tile size; the gradient recipe is emitted
