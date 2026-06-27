@@ -63,4 +63,13 @@ build(deps): add Tailwind CSS v4 via @tailwindcss/vite
   `NNNN_[_]_TITLE.md` naming convention (the `[_]` flips to `[x]` once the
   recommendations are implemented). Start design work by reading the latest
   exploration. Commit docs with the `docs(exploration): …` scope.
-- Keep the **README quick-start in sync** with the actual setup flow.
+- Keep the **README in sync** with the actual flow — both the quick-start
+  (getting set up) and the **"Updating your card"** section / `docs/UPGRADING.md`
+  (staying current). A change to either flow should update its docs in the same PR.
+- **Content vs. engine boundary.** A user's files are sacred: `libcard.config.yaml`,
+  everything in `public/`, and any theme they authored. Everything else —
+  `src/**`, `scripts/**`, build config, `.github/workflows/**`, and the built-in
+  `themes/*.yaml` — is the replaceable *engine* that `pnpm run update` syncs from
+  upstream. When updating a user's card, never overwrite their content; the build
+  regenerates derived files (`libcard.schema.json`, `src/data/themes.json`,
+  `src/styles/themes.gen.css`, `themes/theme.schema.json`) so don't hand-edit those.

@@ -118,6 +118,8 @@ pnpm run setup       # interactive config wizard
 pnpm run new-theme   # scaffold a new theme into themes/
 pnpm run gen:themes  # regenerate theme CSS + registry from themes/*.yaml
 pnpm run check-contrast  # WCAG AA check for all themes
+pnpm run update      # pull the latest LibCard engine from upstream (keeps your content)
+pnpm run update-themes   # pull just the latest community themes from upstream
 pnpm test            # run the vCard unit tests
 pnpm typecheck       # astro check
 ```
@@ -128,6 +130,37 @@ pnpm typecheck       # astro check
 - **Tailwind CSS v4** for styling; themes are `themes/*.yaml` token files compiled to CSS-variable `@theme` tokens at build time.
 - One **Zod** schema is the single source of truth: it validates the config at build time *and* generates `libcard.schema.json` for editors/agents.
 - The **vCard** (`/contact.vcf`) and **QR codes** (page-URL QR + offline vCard-QR) are generated at build time — zero client JavaScript.
+
+## Updating your card
+
+Your card keeps working forever with zero upkeep — **updating is optional**, just
+a way to pick up new themes, features, and fixes from upstream. The only files
+that are *yours* are `libcard.config.yaml`, anything in `public/` (your avatar,
+`CNAME`, OG image), and any themes you wrote; everything else is the LibCard
+**engine** and is safe to replace.
+
+**If you used "Use this template":**
+
+```bash
+pnpm run update              # pulls the latest engine, keeps your content
+pnpm install && pnpm build   # reinstalls deps + regenerates derived files;
+                             # fails loudly if anything's off, so nothing broken deploys
+git add -A && git commit -m "chore: update LibCard" && git push
+```
+
+**If you forked:** click **Sync fork** on your repo's page, or from the CLI:
+
+```bash
+git remote add upstream https://github.com/crs48/LIBCard.git   # one time
+git fetch upstream && git merge upstream/main                  # keep your config if it conflicts
+pnpm install && pnpm build && git push
+```
+
+**Just want the new themes?** `pnpm run update-themes && pnpm run gen:themes`
+
+See [docs/UPGRADING.md](./docs/UPGRADING.md) for the file-by-file breakdown,
+resolving a config conflict, rolling back, and what changed in each release
+([CHANGELOG.md](./CHANGELOG.md)).
 
 ## License
 

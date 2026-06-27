@@ -21,6 +21,7 @@
     "new-theme": "node scripts/new-theme.mjs",
     "check-contrast": "node scripts/check-contrast.mjs",
     "shoot-themes": "node scripts/shoot-themes.mjs",
+    "update": "node scripts/update.mjs",
     "update-themes": "node scripts/update-themes.mjs",
     "typecheck": "astro check",
     "test": "vitest run"

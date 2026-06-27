@@ -5,6 +5,8 @@
 # │  Change the values below, commit, and push — GitHub Pages rebuilds.  │
 # │  The `$schema` line above gives you autocomplete + validation in     │
 # │  editors like VS Code (and tells AI agents exactly what's allowed).  │
+# │  To pull in new themes/features later: `pnpm run update` — it leaves │
+# │  this file untouched. Full guide: docs/UPGRADING.md                  │
 # └─────────────────────────────────────────────────────────────────────┘
 
 # --- Who you are (the card header) ---
