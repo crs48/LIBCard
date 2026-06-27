@@ -1,5 +1,5 @@
 import { getEntry } from "astro:content";
-import { resolveTheme, type ResolvedTheme } from "./themes";
+import { resolveTheme, effectsForSlugs, type ResolvedTheme } from "./themes";
 
 /**
  * Typed accessor for the validated LibCard config. Call this from any `.astro`
@@ -27,6 +27,18 @@ export async function getConfig() {
 export async function getActiveTheme(): Promise<ResolvedTheme> {
   const cfg = await getConfig();
   return resolveTheme(cfg.theme);
+}
+
+/**
+ * Which effect markup the Layout must mount (the page-level pastel-mesh blob
+ * stage and/or pattern layer). Computed over the set of themes that can become
+ * active — the whole switcher ring when the switcher/random is on, else just the
+ * chosen theme — so a switchable card carries the markup every theme in it needs.
+ */
+export async function getThemeEffects(): Promise<{ bgStage: boolean; pattern: boolean }> {
+  const t = await getActiveTheme();
+  const active = t.switcher || t.random ? t.cycle : [t.name];
+  return effectsForSlugs(active);
 }
 
 /**

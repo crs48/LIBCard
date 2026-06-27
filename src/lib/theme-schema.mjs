@@ -48,6 +48,89 @@ const LENGTH = /^\d*\.?\d+(px|rem|em)$/;
 
 const color = z.string().regex(HEX, "must be a hex color like #1a2b3c");
 
+/**
+ * Repeating CSS-gradient patterns. Each maps to a vetted recipe in PATTERN_RECIPES
+ * below — themes pick one by NAME, they never write the CSS. (Catalog from
+ * exploration 0007; "more interesting than a grid", with `grid` still on offer.)
+ */
+export const PATTERN_KINDS = ["scales", "dots", "grid", "stripes", "checker", "zigzag"];
+
+/**
+ * The CSS each pattern emits (scoped to `[data-theme] .lc-pattern` by themeToCss).
+ * Ink + tile size come from the theme's `--lc-ink` / `--lc-pat-size` vars, so the
+ * project owns every byte of the gradient — a theme only references it by name.
+ */
+export const PATTERN_RECIPES = {
+  scales:
+    "--s: var(--lc-pat-size, 44px);\n" +
+    "  background:\n" +
+    "    radial-gradient(circle at 50% 0, transparent 70%, var(--lc-ink) 71%),\n" +
+    "    radial-gradient(circle at 50% 100%, var(--lc-ink) 70%, transparent 71%);\n" +
+    "  background-size: var(--s) var(--s);\n" +
+    "  background-position: 0 0, calc(var(--s) / 2) calc(var(--s) / 2);",
+  dots:
+    "--s: var(--lc-pat-size, 22px);\n" +
+    "  background-image: radial-gradient(var(--lc-ink) 1.6px, transparent 1.7px);\n" +
+    "  background-size: var(--s) var(--s);",
+  grid:
+    "--s: var(--lc-pat-size, 32px);\n" +
+    "  background-image:\n" +
+    "    linear-gradient(var(--lc-ink) 1px, transparent 1px),\n" +
+    "    linear-gradient(90deg, var(--lc-ink) 1px, transparent 1px);\n" +
+    "  background-size: var(--s) var(--s);",
+  stripes:
+    "--s: var(--lc-pat-size, 18px);\n" +
+    "  background: repeating-linear-gradient(45deg, var(--lc-ink) 0 calc(var(--s) / 2), transparent 0 var(--s));",
+  checker:
+    "--s: var(--lc-pat-size, 36px);\n" +
+    "  background: repeating-conic-gradient(var(--lc-ink) 0% 25%, transparent 0% 50%) 50% / var(--s) var(--s);",
+  zigzag:
+    "--s: var(--lc-pat-size, 24px);\n" +
+    "  background:\n" +
+    "    linear-gradient(135deg, var(--lc-ink) 25%, transparent 25%) 0 0,\n" +
+    "    linear-gradient(225deg, var(--lc-ink) 25%, transparent 25%) 0 0,\n" +
+    "    linear-gradient(315deg, var(--lc-ink) 25%, transparent 25%) calc(var(--s) / 2) calc(var(--s) / 2),\n" +
+    "    linear-gradient(45deg, var(--lc-ink) 25%, transparent 25%) calc(var(--s) / 2) calc(var(--s) / 2);\n" +
+    "  background-size: var(--s) var(--s);",
+};
+
+/** Page background: a flat color (default), or a soft (optionally blurred) pastel mesh. */
+const backgroundSchema = z
+  .discriminatedUnion("kind", [
+    z.object({ kind: z.literal("solid") }).strict(),
+    z
+      .object({
+        kind: z.literal("pastel-mesh"),
+        stops: z.array(color).min(2).max(4), // blob colors
+        blur: z.number().min(0).max(120).default(0), // px of softening on the blobs
+        animate: z.boolean().default(false), // slow drift (auto-off under reduced motion)
+      })
+      .strict(),
+  ])
+  .optional();
+
+/** An optional repeating-gradient texture layer, under the card. */
+const patternSchema = z
+  .object({
+    kind: z.enum(PATTERN_KINDS),
+    intensity: z.number().min(0).max(0.15).default(0.05), // ink alpha — the subtlety dial
+    size: z.string().regex(LENGTH).optional(),
+    maskFade: z.boolean().default(true), // radial edge vignette
+  })
+  .strict()
+  .optional();
+
+/** Button treatment. `glass` = frosted translucency (needs a real background behind it). */
+const buttonsSchema = z
+  .object({
+    fill: z.enum(["solid", "glass"]).default("solid"),
+    // Readability floor: a translucent button over a gradient has no fixed
+    // contrast, so the fill doubles as the scrim. Below 0.15 it's unreadable.
+    glassFillOpacity: z.number().min(0.15).max(0.6).default(0.18),
+  })
+  .strict()
+  .default({ fill: "solid", glassFillOpacity: 0.18 });
+
 /** The token map every theme must provide. Colors required; font/radius default. */
 export const tokensSchema = z
   .object({
@@ -81,6 +164,11 @@ export const themeSchema = z
     tags: z.array(z.string()).default([]),
     description: z.string().optional(),
     tokens: tokensSchema,
+    // Optional expressive layers (exploration 0007). All default to today's flat
+    // look, so existing themes are unchanged.
+    background: backgroundSchema,
+    pattern: patternSchema,
+    buttons: buttonsSchema,
   })
   .strict();
 
@@ -143,6 +231,11 @@ export function toRegistryEntry(theme) {
     // Raw token values, so non-CSS consumers (the OG image, contrast checks) can
     // read a theme's colors without re-parsing the YAML.
     tokens: theme.tokens,
+    // Expressive layers — the Layout reads these to decide which effect markup
+    // (mesh blob stage, pattern layer) to mount for the active theme set.
+    background: theme.background ?? null,
+    pattern: theme.pattern ?? null,
+    buttons: theme.buttons,
   };
 }
 
@@ -160,7 +253,39 @@ export function themeToCss(theme) {
   // `color-scheme` makes native form controls & scrollbars match the theme.
   decls.unshift(`  color-scheme: ${theme.mode};`);
 
+  // --- Expressive layers (all opt-in; absent → today's flat look) ---
+  // Pastel-mesh background → blob color vars + blur + drift toggle (the shared
+  // .lc-bg-stage CSS reads these; unset means transparent → invisible).
+  const bg = theme.background;
+  if (bg?.kind === "pastel-mesh") {
+    for (let i = 0; i < 4; i++) decls.push(`  --lc-mesh-${i + 1}: ${bg.stops[i % bg.stops.length]};`);
+    decls.push(`  --lc-bg-blur: ${bg.blur}px;`);
+    decls.push(`  --lc-bg-anim: ${bg.animate ? "running" : "paused"};`);
+  }
+
+  // Glass buttons → the .lc-link/.lc-social vars (white sheen reads as a lit edge
+  // on both light and dark glass).
+  if (theme.buttons?.fill === "glass") {
+    decls.push(`  --lc-glass-pct: ${Math.round(theme.buttons.glassFillOpacity * 100)}%;`);
+    decls.push(`  --lc-glass-filter: blur(12px) saturate(160%);`);
+    decls.push(`  --lc-glass-border: hsl(0 0% 100% / 0.45);`);
+    decls.push(`  --lc-glass-sheen: hsl(0 0% 100% / 0.4);`);
+  }
+
+  // Pattern → ink (fg at low alpha) + tile size; the gradient recipe is emitted
+  // as a scoped block below.
+  if (theme.pattern) {
+    const pct = Number((theme.pattern.intensity * 100).toFixed(2));
+    decls.push(`  --lc-ink: color-mix(in oklab, var(--lc-fg) ${pct}%, transparent);`);
+    if (theme.pattern.size) decls.push(`  --lc-pat-size: ${theme.pattern.size};`);
+  }
+
   const selector =
     theme.slug === "default" ? `:root,\n[data-theme="default"]` : `[data-theme="${theme.slug}"]`;
-  return `${selector} {\n${decls.join("\n")}\n}`;
+  let css = `${selector} {\n${decls.join("\n")}\n}`;
+
+  if (theme.pattern && PATTERN_RECIPES[theme.pattern.kind]) {
+    css += `\n\n[data-theme="${theme.slug}"] .lc-pattern {\n  ${PATTERN_RECIPES[theme.pattern.kind]}\n}`;
+  }
+  return css;
 }

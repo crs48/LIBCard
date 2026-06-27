@@ -1,0 +1,102 @@
+/* Theme effects — opt-in expressive layers driven by data in themes/*.yaml
+   (exploration 0007). A theme sets `--lc-*` vars / picks an effect by name; the
+   CSS here is owned and audited by the project. Everything degrades to today's
+   flat look when the vars are unset, so non-effect themes are unaffected.
+
+   These rules are intentionally UNLAYERED so the glass overrides win over
+   Tailwind's `bg-surface`/`border-border` utilities (layered = lower priority). */
+
+/* === Pastel-mesh background ============================================ */
+/* A dense, soft mesh: four large radial-gradient washes covering a fixed layer
+   behind everything, then blurred for the dreamy quality. Colors come from the
+   active theme's --lc-mesh-* vars (unset → transparent → just the page color, so
+   it's safe to mount for any theme set). The stage is oversized (inset: -14%) so
+   the blur — and the optional slow drift — never reveal a hard edge. */
+.lc-bg-stage {
+  position: fixed;
+  inset: -14%;
+  z-index: -2;
+  pointer-events: none;
+  background-color: var(--lc-bg);
+  background-image:
+    radial-gradient(70% 65% at 12% 8%, var(--lc-mesh-1, transparent), transparent 72%),
+    radial-gradient(70% 65% at 88% 12%, var(--lc-mesh-2, transparent), transparent 72%),
+    radial-gradient(75% 70% at 16% 92%, var(--lc-mesh-3, transparent), transparent 72%),
+    radial-gradient(75% 70% at 90% 88%, var(--lc-mesh-4, transparent), transparent 72%);
+  filter: blur(var(--lc-bg-blur, 0px)) saturate(1.15);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lc-bg-stage {
+    animation: lc-drift 30s ease-in-out infinite alternate;
+    animation-play-state: var(--lc-bg-anim, paused);
+  }
+  @keyframes lc-drift {
+    to {
+      transform: translate3d(-3%, -2%, 0) scale(1.08) rotate(2deg);
+    }
+  }
+}
+
+/* === Pattern texture layer ============================================= */
+/* The per-pattern recipe (gradients) is generated into themes.gen.css, scoped by
+   [data-theme] so it switches with the theme. This is the shared base + the
+   subtle edge-fade vignette. */
+.lc-pattern {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 38%, transparent 100%);
+  mask-image: radial-gradient(ellipse at center, #000 38%, transparent 100%);
+}
+
+/* === Frosted-glass buttons ============================================= */
+/* Entirely driven by the active theme's --lc-glass-* vars: unset → opaque
+   surface + no blur (identical to a non-glass theme). The translucent fill IS
+   the readability scrim (its opacity floor is enforced in the schema). */
+.lc-link,
+.lc-social {
+  position: relative;
+  isolation: isolate;
+  background-color: color-mix(in oklab, var(--lc-surface) var(--lc-glass-pct, 100%), transparent);
+  border-color: var(--lc-glass-border, var(--lc-border));
+  -webkit-backdrop-filter: var(--lc-glass-filter, none);
+  backdrop-filter: var(--lc-glass-filter, none);
+}
+/* The lit top edge — invisible unless a theme sets --lc-glass-sheen. */
+.lc-link::before,
+.lc-social::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(to bottom, var(--lc-glass-sheen, transparent), transparent 45%);
+}
+/* Guards: drop the translucency where the browser/user can't do it well. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .lc-link,
+  .lc-social {
+    --lc-glass-pct: 100%;
+    --lc-glass-filter: none;
+    --lc-glass-border: var(--lc-border);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .lc-link,
+  .lc-social {
+    --lc-glass-pct: 100%;
+    --lc-glass-filter: none;
+  }
+}
+@media (forced-colors: active) {
+  .lc-link,
+  .lc-social {
+    background: ButtonFace;
+    color: ButtonText;
+    border-color: ButtonText;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}

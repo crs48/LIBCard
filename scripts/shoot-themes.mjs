@@ -39,22 +39,47 @@ function esc(s) {
   return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+// Approximate a pastel-mesh background as soft, blurred radial blobs so the
+// preview is honest for mesh themes (the live card uses real CSS).
+function meshBackground(theme) {
+  const stops = theme.background?.kind === "pastel-mesh" ? theme.background.stops : null;
+  if (!stops) return `<rect width="${W}" height="${H}" fill="${theme.tokens.bg}"/>`;
+  const pos = [[0.12, 0.1], [0.88, 0.12], [0.18, 0.92], [0.86, 0.86]];
+  const defs = stops
+    .map(
+      (c, i) =>
+        `<radialGradient id="m${i}"><stop offset="0%" stop-color="${c}" stop-opacity="0.95"/>` +
+        `<stop offset="100%" stop-color="${c}" stop-opacity="0"/></radialGradient>`,
+    )
+    .join("");
+  const blobs = stops
+    .map((_, i) => {
+      const [fx, fy] = pos[i % pos.length];
+      return `<ellipse cx="${(fx * W).toFixed(0)}" cy="${(fy * H).toFixed(0)}" rx="${(W * 0.55).toFixed(0)}" ry="${(H * 0.6).toFixed(0)}" fill="url(#m${i})"/>`;
+    })
+    .join("");
+  return `<defs>${defs}<filter id="blur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="30"/></filter></defs>
+  <rect width="${W}" height="${H}" fill="${theme.tokens.bg}"/><g filter="url(#blur)">${blobs}</g>`;
+}
+
 function svgFor(theme) {
   const t = theme.tokens;
   const r = Math.min(px(t.radius), 28);
   const font = SVG_FONT[t.font] ?? SVG_FONT.sans;
+  const glass = theme.buttons?.fill === "glass";
+  const surfA = glass ? theme.buttons.glassFillOpacity : 1; // translucent buttons for glass themes
   const cardX = 40;
   const cardW = W - 80;
   const button = (y, label, primary) => `
     <rect x="${cardX + 24}" y="${y}" width="${cardW - 48}" height="48" rx="${r}"
-      fill="${primary ? t.accent : t.surface}" stroke="${t.border}" stroke-width="1"/>
+      fill="${primary ? t.accent : t.surface}" fill-opacity="${primary ? 1 : surfA}" stroke="${primary ? t.accent : t.border}" stroke-width="1"/>
     <text x="${W / 2}" y="${y + 30}" font-size="18" font-family="${font}" text-anchor="middle"
       fill="${primary ? t.accentContrast : t.fg}">${esc(label)}</text>`;
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
-  <rect width="${W}" height="${H}" fill="${t.bg}"/>
+  ${meshBackground(theme)}
   <rect x="${cardX}" y="32" width="${cardW}" height="${H - 64}" rx="${Math.min(r + 6, 32)}"
-    fill="${t.surface}" stroke="${t.border}" stroke-width="1"/>
-  <circle cx="${W / 2}" cy="92" r="30" fill="${t.bg}" stroke="${t.border}" stroke-width="2"/>
+    fill="${t.surface}" fill-opacity="${glass ? 0.25 : 1}" stroke="${t.border}" stroke-width="1"/>
+  <circle cx="${W / 2}" cy="92" r="30" fill="${t.surface}" fill-opacity="${glass ? 0.6 : 1}" stroke="${t.border}" stroke-width="2"/>
   <text x="${W / 2}" y="150" font-size="24" font-weight="700" font-family="${font}" text-anchor="middle" fill="${t.fg}">${esc(SAMPLE.name)}</text>
   <text x="${W / 2}" y="178" font-size="15" font-family="${font}" text-anchor="middle" fill="${t.muted}">${esc(SAMPLE.tagline)}</text>
   ${button(210, SAMPLE.links[0], false)}

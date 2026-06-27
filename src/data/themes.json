@@ -25,6 +25,62 @@
       "border": "#e2e8f0",
       "font": "sans",
       "radius": "1rem"
+    },
+    "background": null,
+    "pattern": null,
+    "buttons": {
+      "fill": "solid",
+      "glassFillOpacity": 0.18
+    }
+  },
+  {
+    "slug": "frost",
+    "name": "Frost",
+    "file": "frost.yaml",
+    "author": "LibCard",
+    "authorUrl": "https://github.com/crs48/LIBCard",
+    "license": "MIT",
+    "official": true,
+    "mode": "light",
+    "tags": [
+      "light",
+      "pastel",
+      "gradient",
+      "glass",
+      "soft"
+    ],
+    "description": "A dreamy blurred-pastel wash with frosted-glass buttons.",
+    "preview": "themes/.previews/frost.png",
+    "tokens": {
+      "bg": "#eef2ff",
+      "surface": "#ffffff",
+      "fg": "#27213a",
+      "muted": "#6b6588",
+      "accent": "#8b2fd6",
+      "accentContrast": "#fcfaff",
+      "border": "#ffffff",
+      "font": "rounded",
+      "radius": "1.25rem"
+    },
+    "background": {
+      "kind": "pastel-mesh",
+      "stops": [
+        "#a78bfa",
+        "#6ee7b7",
+        "#7dd3fc",
+        "#f9a8d4"
+      ],
+      "blur": 45,
+      "animate": true
+    },
+    "pattern": {
+      "kind": "scales",
+      "intensity": 0.05,
+      "maskFade": true
+    },
+    "buttons": {
+      "fill": "glass",
+      "glassFillOpacity": 0.18
     }
   },
   {
@@ -53,6 +109,12 @@
       "border": "#24304a",
       "font": "sans",
       "radius": "1rem"
+    },
+    "background": null,
+    "pattern": null,
+    "buttons": {
+      "fill": "solid",
+      "glassFillOpacity": 0.18
     }
   },
   {
@@ -81,6 +143,12 @@
       "border": "#111111",
       "font": "mono",
       "radius": "0.25rem"
+    },
+    "background": null,
+    "pattern": null,
+    "buttons": {
+      "fill": "solid",
+      "glassFillOpacity": 0.18
     }
   },
   {
@@ -109,6 +177,12 @@
       "border": "#163243",
       "font": "sans",
       "radius": "1rem"
+    },
+    "background": null,
+    "pattern": null,
+    "buttons": {
+      "fill": "solid",
+      "glassFillOpacity": 0.18
     }
   },
   {
@@ -137,6 +211,12 @@
       "border": "#e7ddcb",
       "font": "serif",
       "radius": "0.5rem"
+    },
+    "background": null,
+    "pattern": null,
+    "buttons": {
+      "fill": "solid",
+      "glassFillOpacity": 0.18
     }
   },
   {
@@ -165,6 +245,12 @@
       "border": "#43242f",
       "font": "sans",
       "radius": "1.25rem"
+    },
+    "background": null,
+    "pattern": null,
+    "buttons": {
+      "fill": "solid",
+      "glassFillOpacity": 0.18
     }
   },
   {
@@ -194,6 +280,12 @@
       "border": "#1c2b1c",
       "font": "mono",
       "radius": "0.125rem"
+    },
+    "background": null,
+    "pattern": null,
+    "buttons": {
+      "fill": "solid",
+      "glassFillOpacity": 0.18
     }
   }
 ]
