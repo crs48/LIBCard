@@ -132,7 +132,7 @@ theme:
   # Random mode: `true` randomizes over every theme; an array curates the pool —
   # only these land on a random reload, while the switcher still rotates through
   # all of them. Here: my hand-picked set for the page's first impression.
-  random: [default, paper, mono, frost, dusk, dawn]
+  random: [default, paper, mono, frost, dusk, dawn, mist]
   animate: true # animate the change with a circular reveal
   # allow: [midnight, sunset, terminal, paper] # optional subset; omit = all themes
 
