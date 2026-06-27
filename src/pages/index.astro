@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import Profile from "../components/Profile.astro";
 import LinkButton from "../components/LinkButton.astro";
+import Block from "../components/Block.astro";
 import SocialRow from "../components/SocialRow.astro";
 import CardReveal from "../components/CardReveal.astro";
 import { getConfig } from "../lib/config";
@@ -23,6 +24,16 @@ const cardUrl = absoluteUrl(Astro.site, import.meta.env.BASE_URL, "/");
           </li>
         ))}
       </ul>
+    )
+  }
+
+  {
+    cfg.blocks.length > 0 && (
+      <div class="flex w-full flex-col gap-4">
+        {cfg.blocks.map((block) => (
+          <Block block={block} />
+        ))}
+      </div>
     )
   }
 

@@ -1,0 +1,43 @@
+---
+import type { BlockOf } from "../../lib/config";
+import { buildVideo, videoThumbnail, withAutoplay, sizingStyle } from "../../lib/embeds";
+import EmbedFrame from "./EmbedFrame.astro";
+import Icon from "../Icon.astro";
+
+interface Props {
+  block: BlockOf<"video">;
+}
+
+const { block } = Astro.props;
+const spec = buildVideo(block.provider, block.id);
+const style = sizingStyle(spec.sizing);
+const thumb = videoThumbnail(block.provider, block.id);
+const label = block.title ?? "Play video";
+
+// The privacy facade (default): an <iframe loading="lazy"> inside a closed
+// <details>. Verified empirically — the lazy attr means NO request to the
+// provider (no cookies, no trackers) until the visitor opens it. autoplay=1 so
+// it starts on reveal. Set `facade: false` for an eager iframe.
+const facadeSpec = { ...spec, src: withAutoplay(spec.src) };
+---
+{
+  block.facade ? (
+    <details class="lc-video group w-full">
+      <summary
+        class="relative flex cursor-pointer list-none items-center justify-center overflow-hidden rounded-card border border-border bg-surface shadow-sm transition hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent [&::-webkit-details-marker]:hidden group-open:hidden"
+        style={style}
+        aria-label={label}
+      >
+        {thumb && (
+          <img src={thumb} alt="" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover" />
+        )}
+        <span class="relative flex size-16 items-center justify-center rounded-full bg-black/55 text-white backdrop-blur-sm">
+          <Icon name="play" class="size-7 translate-x-0.5" title={label} />
+        </span>
+      </summary>
+      <EmbedFrame spec={facadeSpec} />
+    </details>
+  ) : (
+    <EmbedFrame spec={spec} />
+  )
+}

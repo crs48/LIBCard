@@ -93,6 +93,182 @@ const cardModeSchema = z
   .strict()
   .default({});
 
+// --- Rich content blocks (optional, ordered) -------------------------------
+//
+// `blocks:` is an ordered list of typed content blocks rendered between the
+// links and the social row. Each block is a tight, validated shape — we never
+// accept raw HTML/<iframe> from config, so a config file stays "data, not code"
+// and is safe to accept from anyone (the same guarantee the theme system relies
+// on).
+//
+// Blocks fall into four tiers by how they render under the zero-JS / zero-server
+// promise: (1) pure static HTML/CSS, (2) third-party <form> POST, (3) live
+// provider iframes (privacy-safe defaults), and (4) build-time fetched embeds
+// (zero runtime JS). See
+// docs/explorations/0006_*_RICH_CONTENT_BLOCKS_AND_ZERO_JS_EMBEDS.md.
+
+const imageSchema = z
+  .object({
+    src: z.string().min(1),
+    alt: z.string().optional(),
+    href: optionalUrl,
+  })
+  .strict();
+
+const faqItemSchema = z
+  .object({ q: z.string().min(1), a: z.string().min(1) })
+  .strict();
+
+const formFieldSchema = z
+  .object({
+    name: z.string().min(1),
+    label: z.string().optional(),
+    type: z.enum(["text", "email", "tel", "textarea"]).default("text"),
+    required: z.boolean().default(false),
+    placeholder: z.string().optional(),
+  })
+  .strict();
+
+/** Providers handled by the safe iframe builder (src/lib/embeds.ts). */
+export const EMBED_PROVIDERS = [
+  "spotify",
+  "applemusic",
+  "soundcloud",
+  "bandcamp",
+  "figma",
+  "twitch",
+  "tiktok",
+  "bluesky",
+  "mastodon",
+  "gforms",
+  "typeform",
+  "airtable",
+  "codepen",
+  "oembed",
+];
+
+const blockSchema = z.discriminatedUnion("type", [
+  // Tier 1 — pure static HTML/CSS
+  z
+    .object({
+      type: z.literal("heading"),
+      text: z.string().min(1),
+      level: z.number().int().min(2).max(4).default(2),
+    })
+    .strict(),
+  z.object({ type: z.literal("text"), markdown: z.string().min(1) }).strict(),
+  z.object({ type: z.literal("divider"), label: z.string().optional() }).strict(),
+  z
+    .object({
+      type: z.literal("contact-buttons"),
+      // `call`/`email`: true → pull from contact.phone / contact.email; or a
+      // literal value to override. sms/whatsapp/telegram/signal: a value.
+      call: z.union([z.boolean(), z.string()]).optional(),
+      sms: z.string().optional(),
+      whatsapp: z.string().optional(),
+      telegram: z.string().optional(),
+      signal: z.string().optional(),
+      email: z.union([z.boolean(), z.string()]).optional(),
+    })
+    .strict(),
+  z
+    .object({
+      type: z.literal("gallery"),
+      images: z.array(imageSchema).min(1),
+    })
+    .strict(),
+  z
+    .object({
+      type: z.literal("faq"),
+      items: z.array(faqItemSchema).min(1),
+    })
+    .strict(),
+  // Tier 3 — live provider iframes (privacy-safe defaults)
+  z
+    .object({
+      type: z.literal("video"),
+      provider: z.enum(["youtube", "vimeo", "loom"]),
+      id: z.string().min(1),
+      title: z.string().optional(),
+      // Default: a pure-HTML click-to-load facade so nothing loads (and nothing
+      // tracks) until the visitor clicks. Set false for an eager iframe.
+      facade: z.boolean().default(true),
+    })
+    .strict(),
+  z
+    .object({
+      type: z.literal("embed"),
+      provider: z.enum(EMBED_PROVIDERS),
+      url: optionalUrl,
+      id: z.string().optional(),
+      title: z.string().optional(),
+      height: z.number().int().positive().optional(),
+    })
+    .strict(),
+  z
+    .object({
+      type: z.literal("booking"),
+      provider: z.enum(["calendly", "calcom", "gcal"]),
+      url: z.string().url(),
+      title: z.string().optional(),
+      height: z.number().int().positive().optional(),
+    })
+    .strict(),
+  z
+    .object({
+      type: z.literal("map"),
+      provider: z.enum(["gmaps", "osm"]).default("gmaps"),
+      // The provider's "embed" URL (Google Maps share→embed, or OSM export). We
+      // validate the host in the builder; we never inject arbitrary iframes.
+      src: z.string().url(),
+      title: z.string().optional(),
+      height: z.number().int().positive().optional(),
+    })
+    .strict(),
+  // Tier 2 — third-party <form> POST (zero JS, zero backend)
+  z
+    .object({
+      type: z.literal("signup"),
+      provider: z.enum(["buttondown", "mailchimp", "kit", "formspree"]),
+      username: z.string().optional(),
+      action: optionalUrl,
+      title: z.string().optional(),
+      description: z.string().optional(),
+      button: z.string().optional(),
+      placeholder: z.string().optional(),
+      redirect: optionalUrl,
+    })
+    .strict(),
+  z
+    .object({
+      type: z.literal("form"),
+      action: z.string().url(),
+      title: z.string().optional(),
+      description: z.string().optional(),
+      fields: z.array(formFieldSchema).min(1),
+      button: z.string().optional(),
+      redirect: optionalUrl,
+    })
+    .strict(),
+  // Tier 4 — build-time fetched embeds (zero runtime JS; refreshed on rebuild)
+  z.object({ type: z.literal("tweet"), url: z.string().url() }).strict(),
+  z
+    .object({
+      type: z.literal("rss"),
+      url: z.string().url(),
+      limit: z.number().int().min(1).max(20).default(5),
+      title: z.string().optional(),
+    })
+    .strict(),
+  z
+    .object({
+      type: z.literal("github"),
+      user: z.string().min(1),
+      repo: z.string().optional(),
+    })
+    .strict(),
+]);
+
 export const libcardSchema = z.object({
   profile: z
     .object({
@@ -113,6 +289,7 @@ export const libcardSchema = z.object({
     .strict()
     .default({}),
   links: z.array(linkSchema).default([]),
+  blocks: z.array(blockSchema).default([]),
   socials: z.array(socialSchema).default([]),
   theme: themeConfigSchema,
   footer: z

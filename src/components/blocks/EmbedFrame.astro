@@ -1,0 +1,30 @@
+---
+// Shared safe-iframe wrapper for live embeds (Tier 3). Reserves space via the
+// spec's sizing (aspect-ratio or fixed height) so there's no layout shift, and
+// applies the privacy/safety defaults uniformly: lazy loading, no referrer, a
+// title, and a minimal `allow`.
+import { sizingStyle, type EmbedSpec } from "../../lib/embeds";
+
+interface Props {
+  spec: EmbedSpec;
+  /** Optional per-block height override (px). */
+  height?: number;
+}
+
+const { spec, height } = Astro.props;
+const style = sizingStyle(spec.sizing, height);
+---
+<div
+  class="w-full overflow-hidden rounded-card border border-border bg-surface shadow-sm"
+  style={style}
+>
+  <iframe
+    src={spec.src}
+    title={spec.title}
+    loading="lazy"
+    referrerpolicy="no-referrer"
+    allow={spec.allow}
+    allowfullscreen
+    class="block h-full w-full border-0"
+  ></iframe>
+</div>

@@ -1,0 +1,14 @@
+---
+import type { BlockOf } from "../../lib/config";
+import { renderMarkdown } from "../../lib/markdown";
+
+interface Props {
+  block: BlockOf<"text">;
+}
+
+const { block } = Astro.props;
+// Rendered at build time from limited, HTML-escaped Markdown — no raw HTML can
+// pass through (see src/lib/markdown.ts).
+const html = renderMarkdown(block.markdown);
+---
+<div class="lc-prose w-full text-center text-sm text-muted text-balance" set:html={html} />

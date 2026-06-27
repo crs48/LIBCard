@@ -1,0 +1,16 @@
+---
+import type { BlockOf } from "../../lib/config";
+import { buildMap } from "../../lib/embeds";
+import EmbedFrame from "./EmbedFrame.astro";
+
+interface Props {
+  block: BlockOf<"map">;
+}
+
+const { block } = Astro.props;
+// Throws unless `src` is on the provider's own host — config can't smuggle in an
+// arbitrary iframe.
+let spec = buildMap(block.provider, block.src);
+if (block.title) spec = { ...spec, title: block.title };
+---
+<EmbedFrame spec={spec} height={block.height} />

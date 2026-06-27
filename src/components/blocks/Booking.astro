@@ -1,0 +1,15 @@
+---
+import type { BlockOf } from "../../lib/config";
+import { buildBooking } from "../../lib/embeds";
+import EmbedFrame from "./EmbedFrame.astro";
+
+interface Props {
+  block: BlockOf<"booking">;
+}
+
+const { block } = Astro.props;
+let spec = buildBooking(block.provider, block.url);
+if (block.title) spec = { ...spec, title: block.title };
+---
+{block.title && <h2 class="w-full text-center text-lg font-semibold text-fg">{block.title}</h2>}
+<EmbedFrame spec={spec} height={block.height} />

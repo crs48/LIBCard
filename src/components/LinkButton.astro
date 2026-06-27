@@ -33,7 +33,9 @@ const badgeSrc = repo && link.stars === "badge" ? shieldsStarsUrl(repo) : null;
   >
     {link.icon && <Icon name={link.icon} class="size-5 shrink-0 text-muted group-hover:text-accent transition-colors" />}
     <span class="min-w-0 flex-1 truncate text-center">{link.label}</span>
-    <Icon name="external-link" class="size-4 shrink-0 text-muted opacity-0 group-hover:opacity-100 transition-opacity" />
+    {/* Only http(s) links open elsewhere; tel:/mailto:/sms: act in-context, so the
+        "leaves the page" glyph would be misleading for them. */}
+    {external && <Icon name="external-link" class="size-4 shrink-0 text-muted opacity-0 group-hover:opacity-100 transition-opacity" />}
   </a>
 
   {

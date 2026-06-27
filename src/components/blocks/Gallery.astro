@@ -1,0 +1,35 @@
+---
+import type { BlockOf } from "../../lib/config";
+import { withBase } from "../../lib/site";
+
+interface Props {
+  block: BlockOf<"gallery">;
+}
+
+const { block } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const resolve = (src: string) => (src.startsWith("http") ? src : withBase(base, src));
+---
+{/* CSS scroll-snap carousel — zero JS, swipe/scroll on touch + trackpad. */}
+<div class="-mx-1 flex w-full snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-2">
+  {
+    block.images.map((img) => {
+      const el = (
+        <img
+          src={resolve(img.src)}
+          alt={img.alt ?? ""}
+          loading="lazy"
+          decoding="async"
+          class="h-44 w-auto max-w-[80%] shrink-0 snap-center rounded-card border border-border object-cover shadow-sm"
+        />
+      );
+      return img.href ? (
+        <a href={img.href} target="_blank" rel="noopener noreferrer" class="shrink-0 snap-center">
+          {el}
+        </a>
+      ) : (
+        el
+      );
+    })
+  }
+</div>

@@ -35,3 +35,6 @@ themes/.previews/
 .env
 .env.local
 .env.*.local
+
+# Playwright MCP scratch output
+.playwright-mcp/

@@ -37,6 +37,41 @@ links:
     url: https://crs48.github.io/LIBCard
     icon: globe
 
+# --- Rich content blocks (optional, ordered) ---
+# An ordered list of typed blocks rendered between your links and the social row.
+# Every block is validated data — never raw HTML — so it stays safe and simple.
+# Four tiers, all with ZERO of our JavaScript: (1) static HTML/CSS, (2) third-
+# party form POST, (3) live provider iframes (privacy-safe defaults), and
+# (4) build-time embeds (baked to static HTML, refreshed on rebuild).
+blocks:
+  - type: divider
+    label: More
+  - type: heading
+    text: About LibCard
+  - type: text
+    markdown: >
+      A free, fast, **zero-JavaScript** link-in-bio page and virtual business
+      card you host yourself on GitHub Pages. Edit one file, push, done.
+  - type: faq
+    items:
+      - q: Is it really free?
+        a: Yes — it runs on GitHub Pages with no server and no subscription.
+      - q: Can I use my own domain?
+        a: Yes. Add a CNAME and set site.base to "/".
+  - type: contact-buttons
+    call: true # uses contact.phone above; or set a number string
+    email: true # uses contact.email above
+  # --- More block types you can add (uncomment and edit) ---
+  # - { type: booking, provider: calcom, url: https://cal.com/you/30min, title: Book a call }
+  # - { type: video, provider: youtube, id: dQw4w9WgXcQ, title: My talk }   # click-to-load facade
+  # - { type: embed, provider: spotify, url: https://open.spotify.com/track/ID }
+  # - { type: embed, provider: figma, url: https://www.figma.com/design/KEY/Title }
+  # - { type: map, provider: gmaps, src: "https://www.google.com/maps/embed?pb=..." }
+  # - { type: signup, provider: buttondown, username: you, title: Newsletter }
+  # - { type: tweet, url: https://x.com/you/status/1750000000000000000 }     # baked at build time
+  # - { type: rss, url: https://yourblog.com/feed.xml, title: Latest posts }
+  # - { type: github, user: you, repo: yourrepo }
+
 # --- Social icon row (icon-only, shown under the links) ---
 socials:
   - platform: github

@@ -1,0 +1,53 @@
+---
+import type { BlockOf } from "../../lib/config";
+import { fetchFeed } from "../../lib/social-fetch";
+import Icon from "../Icon.astro";
+
+interface Props {
+  block: BlockOf<"rss">;
+}
+
+const { block } = Astro.props;
+// Fetched + parsed at build time; refreshed on the next rebuild (a scheduled
+// GitHub Actions cron). Fail-soft → a link to the feed.
+const items = await fetchFeed(block.url, block.limit);
+
+const fmt = (d?: string) => {
+  if (!d) return undefined;
+  const t = new Date(d);
+  return Number.isNaN(t.getTime()) ? undefined : t.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+};
+---
+{block.title && <h2 class="w-full text-center text-lg font-semibold text-fg">{block.title}</h2>}
+{
+  items.length > 0 ? (
+    <ul class="flex w-full flex-col gap-2">
+      {items.map((item) => (
+        <li>
+          <a
+            href={item.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex w-full items-center gap-3 rounded-card border border-border bg-surface px-4 py-3 shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            <Icon name="rss" class="size-4 shrink-0 text-muted group-hover:text-accent" />
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-sm font-medium text-fg">{item.title}</span>
+              {fmt(item.date) && <span class="block text-xs text-muted">{fmt(item.date)}</span>}
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <a
+      href={block.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="group flex w-full items-center gap-3 rounded-card border border-border bg-surface px-4 py-3.5 font-medium text-fg shadow-sm transition hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+    >
+      <Icon name="rss" class="size-5 shrink-0 text-muted group-hover:text-accent" />
+      <span class="flex-1 text-center">View the feed</span>
+    </a>
+  )
+}
