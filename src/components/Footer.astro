@@ -10,7 +10,7 @@
 //
 // The credit carries id="lc-theme-by" so the live switcher can update both the
 // theme name and the author as you cycle.
-import { getConfig, getActiveTheme, hasLiveEmbeds } from "../lib/config";
+import { getConfig, getActiveTheme, hasLiveEmbeds, getAnalytics } from "../lib/config";
 import { getThemeMeta, licenseRequiresAttribution, LIBCARD_REPO, themeSourceUrl } from "../lib/themes";
 
 const cfg = await getConfig();
@@ -29,6 +29,9 @@ const poweredByHref = `${LIBCARD_REPO}?ref=card`;
 // a live embed (video/booking/map/…) loads third-party content in its iframe.
 // Video defaults to a click-to-load facade, so nothing loads until interaction.
 const liveEmbeds = hasLiveEmbeds(cfg);
+// Honest one-liner when cookieless analytics is on — same spirit as the live-
+// embed disclosure above. Only shown when the owner opted in; never by default.
+const analytics = await getAnalytics();
 
 // Show the credit if the owner kept it on, or the license demands it.
 const showCredit =
@@ -79,6 +82,11 @@ const sep = poweredBy ? " · " : "";
   {
     liveEmbeds && (
       <p class="mt-1 text-[0.7rem] text-muted/80">Some embedded content loads from third parties.</p>
+    )
+  }
+  {
+    analytics && (
+      <p class="mt-1 text-[0.7rem] text-muted/80">This page counts anonymous visits — no cookies, no personal data.</p>
     )
   }
 </footer>

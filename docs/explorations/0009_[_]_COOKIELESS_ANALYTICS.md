@@ -472,15 +472,15 @@ const analytics = await getAnalytics();
       `libcardSchema`.
 - [x] Regenerate `libcard.schema.json` via `pnpm run generate:schema` (and
       confirm the `prebuild` hook keeps it in sync).
-- [ ] Add `getAnalytics()` + `LibcardAnalytics` type to
+- [x] Add `getAnalytics()` + `LibcardAnalytics` type to
       [src/lib/config.ts](../../src/lib/config.ts).
-- [ ] Inject beacons in [BaseHead.astro](../../src/components/BaseHead.astro) and
+- [x] Inject beacons in [BaseHead.astro](../../src/components/BaseHead.astro) and
       the GoatCounter pixel near `</body>` in
       [Layout.astro](../../src/layouts/Layout.astro), each behind the config
       check.
-- [ ] Add the conditional footer disclosure to
+- [x] Add the conditional footer disclosure to
       [Footer.astro](../../src/components/Footer.astro).
-- [ ] (Umami) Add the optional outbound auto-tagger, gated on
+- [x] (Umami) Add the optional outbound auto-tagger, gated on
       `outboundClicks`.
 - [ ] Add a commented `analytics:` block to
       [libcard.config.yaml](../../libcard.config.yaml) (off by default).
