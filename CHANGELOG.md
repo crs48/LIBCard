@@ -9,13 +9,15 @@ often to `libcard.config.yaml`); everything else is picked up automatically by
 
 ## Unreleased
 
-- **Updating made easy.** New `pnpm run update` pulls the latest engine from
-  upstream while never touching your `libcard.config.yaml`, `public/`, or themes
-  you wrote. Added a "Updating your card" guide ([docs/UPGRADING.md](./docs/UPGRADING.md))
-  and an opt-in `update-check` workflow.
+_Nothing yet._
 
 ## 0.1.0
 
 - First tagged release: link-in-bio page, tap-to-save vCard, QR business card,
-  built-in themes with an optional live switcher, and one-file
-  (`libcard.config.yaml`) configuration deployed to GitHub Pages.
+  landscape "card mode", a GitHub star button, and built-in themes with an
+  optional live switcher — all from one-file (`libcard.config.yaml`)
+  configuration deployed to GitHub Pages.
+- **Updating made easy.** `pnpm run update` pulls the latest engine from upstream
+  while never touching your `libcard.config.yaml`, `public/`, or themes you
+  wrote. Includes a "Updating your card" guide
+  ([docs/UPGRADING.md](./docs/UPGRADING.md)) and an opt-in `update-check` workflow.
