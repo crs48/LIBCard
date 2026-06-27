@@ -16,6 +16,23 @@ export interface ThemeTokens {
   radius: string;
 }
 
+export interface ThemeBackground {
+  kind: "solid" | "pastel-mesh";
+  stops?: string[];
+  blur?: number;
+  animate?: boolean;
+}
+export interface ThemePattern {
+  kind: string;
+  intensity: number;
+  size?: string;
+  maskFade: boolean;
+}
+export interface ThemeButtons {
+  fill: "solid" | "glass";
+  glassFillOpacity: number;
+}
+
 export interface ThemeMeta {
   slug: string;
   name: string;
@@ -30,6 +47,10 @@ export interface ThemeMeta {
   description: string;
   preview: string;
   tokens: ThemeTokens;
+  /** Expressive layers (exploration 0007) — null/solid means today's flat look. */
+  background: ThemeBackground | null;
+  pattern: ThemePattern | null;
+  buttons: ThemeButtons;
 }
 
 /** Every shipped theme, in display order (default first, then official, A→Z). */
@@ -40,6 +61,21 @@ const bySlug = new Map(themes.map((t) => [t.slug, t]));
 /** Look up one theme's metadata by slug. */
 export function getThemeMeta(slug: string): ThemeMeta | undefined {
   return bySlug.get(slug);
+}
+
+/**
+ * Which effect markup a set of themes needs mounted. The pastel-mesh blob stage
+ * and the pattern layer are page-level elements, so the Layout mounts them when
+ * ANY theme that can become active (the chosen one, or the whole switcher ring)
+ * uses them. Glass needs no extra markup — it restyles the existing buttons.
+ */
+export function effectsForSlugs(slugs: string[]): { bgStage: boolean; pattern: boolean } {
+  const set = new Set(slugs);
+  const used = themes.filter((t) => set.has(t.slug));
+  return {
+    bgStage: used.some((t) => t.background?.kind === "pastel-mesh"),
+    pattern: used.some((t) => !!t.pattern),
+  };
 }
 
 /** The LibCard gallery repo — where themes live and are credited. */

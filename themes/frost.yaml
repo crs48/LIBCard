@@ -1,0 +1,33 @@
+# yaml-language-server: $schema=./theme.schema.json
+name: Frost
+author: LibCard
+authorUrl: https://github.com/crs48/LIBCard
+license: MIT
+official: true
+mode: light
+tags: [light, pastel, gradient, glass, soft]
+description: A dreamy blurred-pastel wash with frosted-glass buttons.
+tokens:
+  bg: "#eef2ff" # pale base the blobs sit on
+  surface: "#ffffff" # the glass tint (and the opaque fallback)
+  fg: "#27213a" # dark ink → readable over pale glass
+  muted: "#6b6588"
+  accent: "#8b2fd6"
+  accentContrast: "#fcfaff"
+  border: "#ffffff" # light hairline that catches the glass edge
+  font: rounded
+  radius: 1.25rem
+# A soft, slowly-drifting pastel mesh (violet / mint / sky / pink), heavily blurred.
+background:
+  kind: pastel-mesh
+  stops: ["#a78bfa", "#6ee7b7", "#7dd3fc", "#f9a8d4"]
+  blur: 45
+  animate: true
+# A whisper-subtle "scales" texture under the card.
+pattern:
+  kind: scales
+  intensity: 0.05
+# Frosted, translucent buttons that blur the gradient behind them.
+buttons:
+  fill: glass
+  glassFillOpacity: 0.18

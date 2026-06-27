@@ -877,27 +877,27 @@ first flagship for the effect library because it stresses every guard at once.
       `themes/README.md` token table.
 
 **Phase 2 — effect library v1 (CSS-only) + tree-shaking**
-- [ ] Author `src/styles/effects.css` with `mesh`/`aurora`/`dots`/`grid`, `glass`,
+- [x] Author `src/styles/effects.css` with `mesh`/`aurora`/`dots`/`grid`, `glass`,
       `grain`, `gradient-text` — each with reduced-motion / `@supports` /
       `forced-colors` guards baked in.
-- [ ] Add `background` (discriminated union) + `effects` (allowlist) + `buttons`
+- [x] Add `background` (discriminated union) + `effects` (allowlist) + `buttons`
       to the schema; emit `data-fx`/`data-fx-intensity` + `--lc-aurora-*` etc.
 - [ ] `gen-themes.mjs`: compute the **active set** from config (single theme vs
       full cycle) and inline only the effect CSS that set uses.
-- [ ] Fail the build/CI on unknown effect/background names.
+- [x] Fail the build/CI on unknown effect/background names.
 
 **Phase 2b — the Frost flagship (blurry pastel + glass + patterns)**
-- [ ] `pastel-mesh` background (layered radials at `blur:0`; blurred `.lc-bg-stage`
+- [x] `pastel-mesh` background (layered radials at `blur:0`; blurred `.lc-bg-stage`
       blobs at `blur>0`), with the slow-drift animation gated by reduced-motion.
-- [ ] `glass` button branch (backdrop-filter + `@supports` opaque fallback +
+- [x] `glass` button branch (backdrop-filter + `@supports` opaque fallback +
       `prefers-reduced-transparency` + `forced-colors`), with the
       `glass-fill-opacity` **floor (≥0.15)** enforced in the schema.
-- [ ] The `pattern` layer + catalog (`scales`/`graph`/`stripes`/`checker`/`dots`/
+- [x] The `pattern` layer + catalog (`scales`/`graph`/`stripes`/`checker`/`dots`/
       `zigzag`/`triangles`/`iso`/`plus`/`rays`/`waves`), scheme-aware ink,
       `intensity` clamp, and the `mask-fade` edge vignette.
-- [ ] Ship `themes/frost.yaml`; add a `.lc-bg-stage` + `.lc-pattern` slot to
+- [x] Ship `themes/frost.yaml`; add a `.lc-bg-stage` + `.lc-pattern` slot to
       `Layout.astro` (rendered only when used).
-- [ ] Contrast gate evaluates the button label over the background's **worst-case
+- [x] Contrast gate evaluates the button label over the background's **worst-case
       point** (not a flat color) when `buttons.fill: glass`.
 
 **Phase 3 — expressive type**
@@ -935,13 +935,13 @@ first flagship for the effect library because it stresses every guard at once.
 - [ ] `prefers-reduced-motion`: aurora/sparkle/caret/confetti stop; the card stays
       legible and on-brand.
 - [ ] `forced-colors: active`: borders/boundaries restored; no information lost.
-- [ ] `@supports` fallback verified for `glass` (no backdrop-filter → opaque).
-- [ ] **Frost:** `glass-fill-opacity < 0.15` is rejected by the build; the button
+- [x] `@supports` fallback verified for `glass` (no backdrop-filter → opaque).
+- [x] **Frost:** `glass-fill-opacity < 0.15` is rejected by the build; the button
       label clears AA over both the lightest and darkest pixels of the
       `pastel-mesh` background; `prefers-reduced-transparency` → opaque buttons.
-- [ ] **Frost:** the `pastel-mesh` `blur>0` blob layer renders behind content,
+- [x] **Frost:** the `pastel-mesh` `blur>0` blob layer renders behind content,
       drifts only when motion is allowed, and doesn't tank scroll FPS (profiled).
-- [ ] **Pattern:** each catalog entry renders, stays subtle at `intensity 0.05`,
+- [x] **Pattern:** each catalog entry renders, stays subtle at `intensity 0.05`,
       flips ink with `prefers-color-scheme`, and vanishes (gracefully) under
       `forced-colors`.
 - [ ] Owner sets one `accent`: derived scale renders, on-colors are AA, build

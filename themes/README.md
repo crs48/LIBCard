@@ -18,6 +18,7 @@ Browse them live on the `/themes` page.
 | Theme | Mode | Author | License | Built-in |
 |---|---|---|---|---|
 | **Default** (`default`) | light | [LibCard](https://github.com/crs48/LIBCard) | MIT | ✅ |
+| **Frost** (`frost`) | light | [LibCard](https://github.com/crs48/LIBCard) | MIT | ✅ |
 | **Midnight** (`midnight`) | dark | [LibCard](https://github.com/crs48/LIBCard) | MIT | ✅ |
 | **Mono** (`mono`) | light | [LibCard](https://github.com/crs48/LIBCard) | MIT | ✅ |
 | **Ocean** (`ocean`) | dark | [LibCard](https://github.com/crs48/LIBCard) | MIT | ✅ |

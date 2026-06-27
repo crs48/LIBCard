@@ -29,7 +29,7 @@ const badgeSrc = repo && link.stars === "badge" ? shieldsStarsUrl(repo) : null;
     href={link.url}
     target={target}
     rel={rel}
-    class="group flex min-w-0 flex-1 items-center gap-3 rounded-card bg-surface border border-border px-4 py-3.5 text-fg font-medium shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+    class="lc-link group flex min-w-0 flex-1 items-center gap-3 rounded-card bg-surface border border-border px-4 py-3.5 text-fg font-medium shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
   >
     {link.icon && <Icon name={link.icon} class="size-5 shrink-0 text-muted group-hover:text-accent transition-colors" />}
     <span class="min-w-0 flex-1 truncate text-center">{link.label}</span>
@@ -45,7 +45,7 @@ const badgeSrc = repo && link.stars === "badge" ? shieldsStarsUrl(repo) : null;
         target="_blank"
         rel="noopener noreferrer"
         aria-label={`Star ${repo.owner}/${repo.repo} on GitHub`}
-        class="group flex shrink-0 items-center gap-1.5 rounded-card border border-border bg-surface px-3 text-sm font-medium text-muted shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        class="lc-link group flex shrink-0 items-center gap-1.5 rounded-card border border-border bg-surface px-3 text-sm font-medium text-muted shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
         <Icon name="star" class="size-4 shrink-0 transition-colors group-hover:text-accent" />
         {count && <span>{count}</span>}

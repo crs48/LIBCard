@@ -6,7 +6,7 @@ import ThemeSwitcher from "../components/ThemeSwitcher.astro";
 import ThemeBoot from "../components/ThemeBoot.astro";
 import BusinessCardMode from "../components/BusinessCardMode.astro";
 import CardWakeLock from "../components/CardWakeLock.astro";
-import { getActiveTheme, getCardMode } from "../lib/config";
+import { getActiveTheme, getCardMode, getThemeEffects } from "../lib/config";
 
 interface Props {
   title?: string;
@@ -26,6 +26,11 @@ const themeJs = theme.switcher || theme.random;
 // wide gallery layout, where flipping to a card overlay makes no sense.
 const card = await getCardMode();
 const showCardMode = card.enabled && !wide;
+// Page-level effect layers to mount for the active theme set (mesh stage,
+// pattern texture). Both are pure CSS; absent unless a theme opts in. The body
+// is deliberately NOT given an opaque `bg-bg`: `html` already paints `--lc-bg`,
+// and a transparent body lets the fixed mesh stage (z-index:-2) show through.
+const fx = await getThemeEffects();
 ---
 <!doctype html>
 <html lang="en" data-theme={theme.name}>
@@ -35,7 +40,9 @@ const showCardMode = card.enabled && !wide;
         switcher/random is on — otherwise the page ships zero JS. */}
     {themeJs && <ThemeBoot pool={theme.randomPool} allowed={theme.cycle} random={theme.random} />}
   </head>
-  <body class="min-h-dvh bg-bg font-sans antialiased">
+  <body class="min-h-dvh font-sans antialiased">
+    {fx.bgStage && <div class="lc-bg-stage" aria-hidden="true" />}
+    {fx.pattern && <div class="lc-pattern" aria-hidden="true" />}
     <div class:list={["mx-auto flex min-h-dvh w-full flex-col items-center px-4 py-12 sm:py-14", maxWidth]}>
       <main class="flex w-full flex-1 flex-col items-center gap-6">
         <slot />

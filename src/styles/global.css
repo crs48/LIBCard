@@ -6,6 +6,10 @@
    `prebuild` hook). Edit themes in themes/*.yaml, never the generated CSS. */
 @import "./themes.gen.css";
 
+/* Opt-in expressive theme effects (pastel-mesh background, glass buttons, pattern
+   layer). Unlayered on purpose so glass overrides Tailwind's bg-surface. */
+@import "./effects.css";
+
 /* Map the semantic --lc-* custom properties into Tailwind's theme so utilities
    like `bg-bg`, `text-fg`, `bg-accent`, `border-border` work AND respond to the
    active `data-theme` at runtime. `inline` keeps the var() reference live. */

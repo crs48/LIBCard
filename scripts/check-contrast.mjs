@@ -31,6 +31,19 @@ function ratio(a, b) {
   return (hi + 0.05) / (lo + 0.05);
 }
 
+function rgb(hex) {
+  const c = hex.replace("#", "");
+  const full = c.length === 3 ? c.split("").map((x) => x + x).join("") : c;
+  return [0, 2, 4].map((i) => parseInt(full.slice(i, i + 2), 16));
+}
+const toHex = (n) => Math.round(n).toString(16).padStart(2, "0");
+/** `fg` painted at opacity `a` over `bg` — the actual color behind glass text. */
+function over(fgHex, bgHex, a) {
+  const f = rgb(fgHex);
+  const b = rgb(bgHex);
+  return "#" + [0, 1, 2].map((i) => toHex(f[i] * a + b[i] * (1 - a))).join("");
+}
+
 const ENFORCED = [
   ["fg", "bg", "text on the page"],
   ["fg", "surface", "text on cards"],
@@ -62,6 +75,25 @@ for (const t of themes) {
     const r = ratio(t.tokens[fg], t.tokens[bg]);
     if (r < AA) lines.push(`    ⚠ ${fg}/${bg} ${r.toFixed(2)}:1  (${what}; advisory)`);
   }
+
+  // Glass buttons have no fixed contrast — the label sits over whatever the
+  // background paints through the translucent fill. Test the WORST-CASE point:
+  // the fg against the fill composited over each mesh stop (and the base bg).
+  if (t.buttons?.fill === "glass" && t.background?.kind === "pastel-mesh") {
+    const a = t.buttons.glassFillOpacity;
+    const behind = [t.tokens.bg, ...t.background.stops];
+    for (const stop of behind) {
+      const composite = over(t.tokens.surface, stop, a); // surface fill over the stop
+      const r = ratio(t.tokens.fg, composite);
+      const ok = r >= AA;
+      if (!ok) {
+        themeFailed = true;
+        failures++;
+      }
+      lines.push(`    ${ok ? "✓" : "✗"} glass label over ${stop} ${r.toFixed(2)}:1  (worst-case)`);
+    }
+  }
+
   console.log(`${themeFailed ? "✗" : "✓"} ${t.slug}`);
   console.log(lines.join("\n"));
 }
