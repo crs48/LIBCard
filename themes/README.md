@@ -18,8 +18,11 @@ Browse them live on the `/themes` page.
 | Theme | Mode | Author | License | Built-in |
 |---|---|---|---|---|
 | **Default** (`default`) | light | [@crs48](https://github.com/crs48) | MIT | ✅ |
+| **Dawn** (`dawn`) | light | [@crs48](https://github.com/crs48) | MIT | ✅ |
+| **Dusk** (`dusk`) | dark | [@crs48](https://github.com/crs48) | MIT | ✅ |
 | **Frost** (`frost`) | light | [@crs48](https://github.com/crs48) | MIT | ✅ |
 | **Midnight** (`midnight`) | dark | [@crs48](https://github.com/crs48) | MIT | ✅ |
+| **Mist** (`mist`) | light | [@crs48](https://github.com/crs48) | MIT | ✅ |
 | **Mono** (`mono`) | light | [@crs48](https://github.com/crs48) | MIT | ✅ |
 | **Ocean** (`ocean`) | dark | [@crs48](https://github.com/crs48) | MIT | ✅ |
 | **Paper** (`paper`) | light | [@crs48](https://github.com/crs48) | MIT | ✅ |

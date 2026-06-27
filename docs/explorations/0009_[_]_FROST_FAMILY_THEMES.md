@@ -457,12 +457,12 @@ shows them off.
 
 ## Implementation Checklist
 
-- [ ] Add **`themes/dusk.yaml`** with the verified dark-aurora palette above.
-- [ ] Add **`themes/dawn.yaml`** with the verified warm palette above.
-- [ ] (Optional) Add **`themes/mist.yaml`** for the neutral minimalist slot.
-- [ ] Run `pnpm run gen:themes` — regenerates `themes.gen.css`, `themes.json`, the
+- [x] Add **`themes/dusk.yaml`** with the verified dark-aurora palette above.
+- [x] Add **`themes/dawn.yaml`** with the verified warm palette above.
+- [x] (Optional) Add **`themes/mist.yaml`** for the neutral minimalist slot.
+- [x] Run `pnpm run gen:themes` — regenerates `themes.gen.css`, `themes.json`, the
       JSON schema, and the `themes/README.md` gallery table.
-- [ ] Run `pnpm run check-contrast` — confirm each new theme passes AA on the
+- [x] Run `pnpm run check-contrast` — confirm each new theme passes AA on the
       enforced pairs **and** the glass-over-mesh worst-case.
 - [ ] Run `pnpm run shoot-themes` (or the per-slug equivalent) to generate
       `themes/.previews/<slug>.png` for the gallery/registry.

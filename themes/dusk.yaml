@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=./theme.schema.json
+name: Dusk
+author: "@crs48"
+authorUrl: https://github.com/crs48
+license: MIT
+official: true
+mode: dark
+tags: [dark, aurora, gradient, glass, calm]
+description: Deep twilight aurora behind smoked-glass panels.
+tokens:
+  bg: "#0c1024" # near-black navy the aurora glows on
+  surface: "#161b33" # the smoked-glass tint (and opaque fallback)
+  fg: "#eef1ff" # near-white ink → reads over the dark glass
+  muted: "#a7b0d0"
+  accent: "#9aa8ff" # soft periwinkle glow
+  accentContrast: "#0c1024"
+  border: "#2a3358" # a cool hairline that catches the glass edge
+  font: sans
+  radius: 1.25rem
+# Deep, saturated orbs (not pale) — the dark-glassmorphism "ambient gradient".
+background:
+  kind: pastel-mesh
+  stops: ["#3b2a6b", "#1f4b6b", "#4a2a5e", "#23485e"] # violet / teal / plum / blue
+  blur: 60
+  animate: true
+buttons:
+  fill: glass
+  glassFillOpacity: 0.4
