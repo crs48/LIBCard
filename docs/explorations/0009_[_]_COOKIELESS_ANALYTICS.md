@@ -492,26 +492,26 @@ const analytics = await getAnalytics();
 
 ## Validation Checklist
 
-- [ ] **Default stays zero**: with no `analytics:` block, the built HTML contains
+- [x] **Default stays zero**: with no `analytics:` block, the built HTML contains
       no analytics script/pixel — diff `dist/` against `main` to prove no new
       bytes (grep the output for `goatcounter|umami|plausible|cloudflareinsights`
       → 0 hits).
-- [ ] **Pixel ships no JS**: with `provider: goatcounter, mode: pixel`, the page
+- [x] **Pixel ships no JS**: with `provider: goatcounter, mode: pixel`, the page
       has the `<img>` and **no** `<script>` from us (View Source / grep).
-- [ ] **Beacon loads**: with each beacon provider, the network panel shows the
+- [x] **Beacon loads**: with each beacon provider, the network panel shows the
       script and a pageview hit to the provider; the provider dashboard records a
       visit.
-- [ ] **Outbound click recorded**: click a pinned repo link; confirm an outbound
+- [x] **Outbound click recorded**: click a pinned repo link; confirm an outbound
       event appears (Plausible/Umami).
-- [ ] **No cookies set**: DevTools → Application → Cookies is empty after a
+- [x] **No cookies set**: DevTools → Application → Cookies is empty after a
       visit + a click (all providers).
-- [ ] **Footer disclosure** appears only when analytics is on, and reads
+- [x] **Footer disclosure** appears only when analytics is on, and reads
       honestly.
-- [ ] **Schema rejects typos**: a bad provider or missing required field fails
+- [x] **Schema rejects typos**: a bad provider or missing required field fails
       `pnpm build` with a readable Zod error; autocomplete works from
       `libcard.schema.json`.
-- [ ] **CI unchanged**: `deploy.yml` builds and deploys without new secrets.
-- [ ] **Lighthouse/perf**: pixel mode keeps the JS weight at 0; beacon mode adds
+- [x] **CI unchanged**: `deploy.yml` builds and deploys without new secrets.
+- [x] **Lighthouse/perf**: pixel mode keeps the JS weight at 0; beacon mode adds
       ≤2 KB and no layout shift.
 
 ## References
