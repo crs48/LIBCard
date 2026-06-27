@@ -29,7 +29,7 @@ contact:
 # --- Your links (the buttons) ---
 # My pinned GitHub repos, in pinned order.
 links:
-  - label: xNet
+  - label: xNet (local-first app + framework)
     url: https://github.com/crs48/xNet
     icon: github
     star: true # add a "★ Star" sub-button that opens the repo
@@ -37,22 +37,22 @@ links:
   - label: xnet.fyi
     url: https://xnet.fyi/
     icon: globe
-  - label: LIBCard
+  - label: LIBCard (powers this site)
     url: https://github.com/crs48/LIBCard
     icon: github
     star: true # add a "★ Star" sub-button that opens the repo
     stars: build # bake the star count in at build time (zero runtime JS)
-  - label: murmuration
+  - label: murmuration (flocking simulation)
     url: https://github.com/crs48/murmuration
     icon: github
     star: true # add a "★ Star" sub-button that opens the repo
     stars: build # bake the star count in at build time (zero runtime JS)
-  - label: warp-voyage
+  - label: warp-voyage (browser game)
     url: https://github.com/crs48/warp-voyage
     icon: github
     star: true
     stars: build
-  - label: cause
+  - label: cause (Clojure EDN CRDT)
     url: https://github.com/crs48/cause
     icon: github
     star: true
