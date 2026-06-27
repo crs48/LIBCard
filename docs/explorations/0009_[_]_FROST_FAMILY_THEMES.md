@@ -464,36 +464,36 @@ shows them off.
       JSON schema, and the `themes/README.md` gallery table.
 - [x] Run `pnpm run check-contrast` — confirm each new theme passes AA on the
       enforced pairs **and** the glass-over-mesh worst-case.
-- [ ] Run `pnpm run shoot-themes` (or the per-slug equivalent) to generate
+- [x] Run `pnpm run shoot-themes` (or the per-slug equivalent) to generate
       `themes/.previews/<slug>.png` for the gallery/registry.
-- [ ] (Optional) Add `dusk`/`dawn` to the `random:` pool in
+- [x] (Optional) Add `dusk`/`dawn` to the `random:` pool in
       [`libcard.config.yaml`](../../libcard.config.yaml#L135) so the demo rotates them.
-- [ ] Eyeball each in `pnpm dev` (set `theme: dusk`, etc.) on the live card —
+- [x] Eyeball each in `pnpm dev` (set `theme: dusk`, etc.) on the live card —
       light *and* dark OS appearance, and with the switcher on.
-- [ ] Confirm **no** code changed outside `themes/`, config, and generated files —
+- [x] Confirm **no** code changed outside `themes/`, config, and generated files —
       proving the "themes are data" guarantee held.
 
 ## Validation Checklist
 
-- [ ] `check-contrast` is green for `dusk`, `dawn`, (`mist`) — enforced pairs and
+- [x] `check-contrast` is green for `dusk`, `dawn`, (`mist`) — enforced pairs and
       every glass worst-case point ≥ 4.5:1.
-- [ ] In the browser, the **Dusk** smoked glass reads clearly over its darkest and
+- [x] In the browser, the **Dusk** smoked glass reads clearly over its darkest and
       lightest aurora orbs; the periwinkle accent CTA is legible.
-- [ ] **Dawn**'s deep-rose accent is readable as frosted-CTA text over the palest
+- [x] **Dawn**'s deep-rose accent is readable as frosted-CTA text over the palest
       peach (the worst case the gate flagged in drafts).
-- [ ] `prefers-reduced-motion: reduce` → all three meshes stop drifting; the card
+- [x] `prefers-reduced-motion: reduce` → all three meshes stop drifting; the card
       stays calm and legible.
-- [ ] `prefers-reduced-transparency` / `@supports not backdrop-filter` /
+- [x] `prefers-reduced-transparency` / `@supports not backdrop-filter` /
       `forced-colors: active` → panels fall back to opaque `surface` (inherited
       from `effects.css`, but verify each theme actually degrades cleanly).
-- [ ] With the switcher on, cycling **into** each new theme paints its mesh
+- [x] With the switcher on, cycling **into** each new theme paints its mesh
       correctly (the shared `.lc-bg-stage` is already mounted because Frost is in
       the ring).
-- [ ] Each new theme is visually **distinct** from Frost and from each other (no
+- [x] Each new theme is visually **distinct** from Frost and from each other (no
       two in the same quadrant cell).
-- [ ] The `themes/README.md` table and the `/themes` gallery list the new themes
+- [x] The `themes/README.md` table and the `/themes` gallery list the new themes
       with previews; the registry `themes.json` has their entries.
-- [ ] Diff review: the only non-generated, non-config changes are the new
+- [x] Diff review: the only non-generated, non-config changes are the new
       `themes/*.yaml` files.
 
 ## References
