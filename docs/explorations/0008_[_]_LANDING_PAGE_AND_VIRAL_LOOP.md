@@ -540,7 +540,7 @@ update the prose to match, e.g. in [`README.md`](../../README.md):
 - [x] Onboarding via README "Use this template", `pnpm run setup`, and the AI-agent path.
 
 **New, small, all reusable:**
-- [ ] **Unify wording** to "Powered by LibCard" in [`README.md`](../../README.md) and [`TRADEMARK.md`](../../TRADEMARK.md) (match `Footer.astro`).
+- [x] **Unify wording** to "Powered by LibCard" in [`README.md`](../../README.md) and [`TRADEMARK.md`](../../TRADEMARK.md) (match `Footer.astro`).
 - [ ] **Document the "make your own" CTA pattern** (a `link` / one-line `text` block) in the README's links/blocks section.
 - [ ] **Add the §C "every affordance is a toggle" principle** to [`AGENTS.md`](../../AGENTS.md) as a design guardrail.
 - [ ] *(Optional)* **Coarse `?ref=card`** on the badge href — no JS, no cookies.

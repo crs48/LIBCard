@@ -285,6 +285,6 @@ resolving a config conflict, rolling back, and what changed in each release
 commercially. Just keep the copyright notice.
 
 **Forking to make your own card? That's the whole point — you can keep the
-"LibCard" name.** Just leave the "Made with LibCard" footer link in place and
+"LibCard" name.** Just leave the "Powered by LibCard" footer link in place and
 don't pass your fork off as the *official* LibCard or as your own creation. The
 MIT License covers the code; the name is covered by [TRADEMARK.md](./TRADEMARK.md).
