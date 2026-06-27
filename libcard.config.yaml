@@ -101,6 +101,8 @@ blocks:
         a: Yes — it runs on GitHub Pages with no server and no subscription.
       - q: Can I use my own domain?
         a: Yes. Add a CNAME and set site.base to "/".
+      - q: Can I embed content?
+        a: Yup. Video, maps, music, forms, and more.
   - type: divider
     label: Contact Me
   - type: contact-buttons
