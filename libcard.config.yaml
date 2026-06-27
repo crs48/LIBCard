@@ -71,7 +71,7 @@ links:
     icon: github
     star: true
     stars: build
-  - label: tunnel broser game
+  - label: tunnel browser game
     url: https://crs48.github.io/warp-voyage
     icon: globe
   - label: cause (Clojure EDN CRDT)
@@ -88,19 +88,21 @@ links:
 # (4) build-time embeds (baked to static HTML, refreshed on rebuild).
 blocks:
   - type: divider
-    label: More
+    label: Like this site?
   - type: heading
-    text: About This Site
+    text: Thanks! Want to build your own?
   - type: text
     markdown: >
-      I made LIBCard a free, fast, **zero-JavaScript** link-in-bio page and virtual business
-      card you host yourself on GitHub Pages. Edit one file, push, done.
+      I made LIBCard as a free, fast, **zero-JavaScript** link-in-bio page and virtual business
+      card you host yourself on GitHub Pages. Edit one file, save, done.
   - type: faq
     items:
       - q: Is it really free?
         a: Yes — it runs on GitHub Pages with no server and no subscription.
       - q: Can I use my own domain?
         a: Yes. Add a CNAME and set site.base to "/".
+  - type: divider
+    label: Contact Me
   - type: contact-buttons
     call: true # uses contact.phone above; or set a number string
     email: true # uses contact.email above
