@@ -27,12 +27,28 @@ contact:
   website: https://crs48.github.io/LIBCard
 
 # --- Your links (the buttons) ---
+# My pinned GitHub repos, in pinned order.
 links:
-  - label: GitHub repo
+  - label: xNet
+    url: https://github.com/crs48/xNet
+    icon: github
+  - label: xnet.fyi
+    url: https://xnet.fyi/
+    icon: globe
+  - label: LIBCard
     url: https://github.com/crs48/LIBCard
     icon: github
     star: true # add a "★ Star" sub-button that opens the repo
     stars: build # bake the star count in at build time (zero runtime JS)
+  - label: murmuration
+    url: https://github.com/crs48/murmuration
+    icon: github
+  - label: warp-voyage
+    url: https://github.com/crs48/warp-voyage
+    icon: github
+  - label: cause
+    url: https://github.com/crs48/cause
+    icon: github
   - label: My website
     url: https://crs48.github.io/LIBCard
     icon: globe
