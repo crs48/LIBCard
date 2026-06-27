@@ -29,6 +29,37 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Honeypot field for zero-JS spam protection: a real input that humans never
+   see (and can't tab to) but naive bots fill in. The form ignores submissions
+   where it's non-empty. Off-screen rather than display:none so it still posts. */
+.lc-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Light typography for `text` blocks (renderMarkdown output) — no plugin. */
+.lc-prose a {
+  color: var(--lc-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.lc-prose strong {
+  font-weight: 700;
+}
+.lc-prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9em;
+  background-color: color-mix(in oklab, var(--lc-fg) 8%, transparent);
+  padding: 0.1em 0.35em;
+  border-radius: 0.25rem;
+}
+.lc-prose p + p {
+  margin-top: 0.75rem;
+}
+
 /* Respect users who prefer reduced motion. */
 @media (prefers-reduced-motion: reduce) {
   *,

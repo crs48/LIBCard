@@ -695,7 +695,7 @@ sequenceDiagram
       Markdown), `Divider`, `Faq` (`<details>`), `Gallery` (CSS scroll-snap),
       `ContactButtons`.
 - [ ] Render `blocks` in order in [`index.astro`](../../src/pages/index.astro).
-- [ ] Sanitize/limit Markdown in `text` blocks (no raw HTML) at build time.
+- [x] Sanitize/limit Markdown in `text` blocks (no raw HTML) at build time.
 
 **Phase 2 — Tier-2 forms (POST)**
 - [ ] `Signup` block (Buttondown/Mailchimp/Kit/Formspree) → plain
@@ -705,7 +705,7 @@ sequenceDiagram
 - [ ] `.sr-only` honeypot utility; document the redirect-thank-you behavior.
 
 **Phase 3 — Tier-3 live iframes**
-- [ ] `src/lib/embeds.ts` provider allowlist + safe iframe builder
+- [x] `src/lib/embeds.ts` provider allowlist + safe iframe builder
       (`loading="lazy"`, `sandbox`, `referrerpolicy`, `nocookie`).
 - [ ] `VideoEmbed.astro` privacy facade (`<details>` + lazy iframe), default on.
 - [ ] `Embed.astro` (figma/maps/twitch/tiktok/bluesky/gforms/…) +
