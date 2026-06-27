@@ -66,7 +66,8 @@ export type ThemeConfig =
   | {
       name: string;
       switcher?: boolean;
-      random?: boolean;
+      /** `true` randomizes over the whole cycle; an array curates the pool. */
+      random?: boolean | string[];
       allow?: string[];
       order?: string[];
       animate?: boolean;
@@ -77,12 +78,16 @@ export interface ResolvedTheme {
   name: string;
   /** Whether to ship the live switcher island (and its tiny script). */
   switcher: boolean;
-  /** Pick a random theme from `cycle` on every page load. */
+  /** Pick a random theme from `randomPool` on every page load. */
   random: boolean;
   /** Animate theme changes with the View Transitions API when supported. */
   animate: boolean;
   /** The ordered ring of theme slugs the switcher cycles through. */
   cycle: string[];
+  /** Themes the random picker draws from — a curated subset, or the full cycle
+   *  when `random: true`. Empty when random mode is off. The switcher ring
+   *  (`cycle`) is independent, so it can rotate past these. */
+  randomPool: string[];
 }
 
 /**
@@ -110,11 +115,28 @@ export function resolveTheme(theme: ThemeConfig): ResolvedTheme {
   // Always keep the owner's default in the ring so cycling can return to it.
   if (!cycle.includes(obj.name)) cycle = [obj.name, ...cycle];
 
+  // The random picker has its own pool, decoupled from the switcher ring: an
+  // explicit curated array (only those land at random), or — when `random: true`
+  // — the full cycle. `random: false`/absent (or an empty array) turns it off.
+  const randomCfg = typeof theme === "string" ? false : (obj.random ?? false);
+  let randomPool: string[];
+  if (Array.isArray(randomCfg)) {
+    for (const slug of randomCfg) {
+      if (!bySlug.has(slug)) {
+        throw new Error(`theme.random lists unknown theme "${slug}". Available: ${available}.`);
+      }
+    }
+    randomPool = randomCfg;
+  } else {
+    randomPool = randomCfg ? cycle : [];
+  }
+
   return {
     name: obj.name,
     switcher: typeof theme === "string" ? false : (obj.switcher ?? false),
-    random: typeof theme === "string" ? false : (obj.random ?? false),
+    random: randomPool.length > 0,
     animate: typeof theme === "string" ? true : (obj.animate ?? true),
     cycle,
+    randomPool,
   };
 }

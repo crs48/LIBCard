@@ -136,10 +136,20 @@ theme: midnight
 ```yaml
 theme:
   name: midnight       # the default everyone sees first (crawlers/no-JS too)
-  switcher: true       # show the "Try a theme" button
+  switcher: true       # show the "Try a theme" button (cycles through all themes)
   random: true         # pick a random theme on every page load (fun demo)
   animate: true        # animate the change with a circular reveal
   # allow: [midnight, sunset, terminal]   # optional subset; omit = all themes
+```
+
+`random` also takes an **array** to curate the pool — only those themes can be
+landed on at random, while the switcher button still cycles through everything:
+
+```yaml
+theme:
+  name: default
+  switcher: true
+  random: [default, paper, mono]   # only these show on a random reload
 ```
 
 Browse them all on the `/themes` gallery page. The footer credits the active theme's author — **"Powered by LibCard · Theme by &lt;author&gt;"**.

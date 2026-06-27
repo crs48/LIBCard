@@ -693,7 +693,18 @@
                   "default": false
                 },
                 "random": {
-                  "type": "boolean",
+                  "anyOf": [
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
                   "default": false
                 },
                 "allow": {

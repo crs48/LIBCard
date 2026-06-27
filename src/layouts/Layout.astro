@@ -33,7 +33,7 @@ const showCardMode = card.enabled && !wide;
     <BaseHead title={title} />
     {/* Pre-paint theme boot (random pick or no-flash restore). Only when the
         switcher/random is on — otherwise the page ships zero JS. */}
-    {themeJs && <ThemeBoot allowed={theme.cycle} random={theme.random} />}
+    {themeJs && <ThemeBoot pool={theme.randomPool} allowed={theme.cycle} random={theme.random} />}
   </head>
   <body class="min-h-dvh bg-bg font-sans antialiased">
     <div class:list={["mx-auto flex min-h-dvh w-full flex-col items-center px-4 py-12 sm:py-14", maxWidth]}>
