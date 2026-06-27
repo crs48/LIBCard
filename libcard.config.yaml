@@ -42,7 +42,7 @@ socials:
 # --- Your links (the buttons) ---
 # My pinned GitHub repos, in pinned order.
 links:
-  - label: xNet (local-first app + framework)
+  - label: xNet
     url: https://github.com/crs48/xNet
     icon: github
     star: true # add a "★ Star" sub-button that opens the repo
