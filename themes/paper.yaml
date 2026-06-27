@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=./theme.schema.json
 name: Paper
-author: LibCard
-authorUrl: https://github.com/crs48/LIBCard
+author: "@crs48"
+authorUrl: https://github.com/crs48
 license: MIT
 official: true
 mode: light
