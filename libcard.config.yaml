@@ -166,6 +166,28 @@ cardMode:
   hint: true # the subtle "⟲ Rotate to show your card" nudge in portrait
   wakeLock: false # opt-in: keep the screen lit while the card shows (ships a tiny script)
 
+# --- Analytics (optional, OFF by default) ---
+# Privacy-first and cookieless — no consent banner, no per-person tracking.
+# OMIT this whole block and the page ships ZERO analytics — and, if nothing else
+# opts into JS, stays zero-JS. Two honesty tiers, just like the `stars` modes:
+#   • GoatCounter `mode: pixel` — a single <img>. ZERO JavaScript. Counts
+#     pageviews + referrers, but cannot see outbound link clicks.
+#   • umami / plausible / cloudflare (or goatcounter `mode: script`) — a small
+#     (~1–2 KB) cookieless beacon that ALSO tracks which links people click.
+# The provider id/domain/token are public (no secrets), so they live right here.
+analytics:
+  provider: goatcounter # cookieless, no consent banner; pixel mode ships zero JS
+  code: libcard # -> libcard.goatcounter.com
+  mode: pixel # zero-JS <img> beacon: pageviews + referrers (no outbound clicks)
+  # --- or a beacon that ALSO tracks outbound link clicks (swap in one) ---
+  # provider: umami
+  # websiteId: 00000000-0000-0000-0000-000000000000
+  # outboundClicks: true        # auto-tag external links as "outbound" events
+  # provider: plausible
+  # domain: crs48.github.io      # the domain registered in Plausible
+  # provider: cloudflare
+  # token: your-web-analytics-token   # note: Cloudflare can't track outbound clicks
+
 # --- Where this site lives (the setup wizard fills these in) ---
 # url:  your GitHub Pages origin, e.g. https://you.github.io
 # base: the sub-path. "/repo-name" for project pages, "/" for a user site or

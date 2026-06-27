@@ -272,6 +272,61 @@ const blockSchema = z.discriminatedUnion("type", [
     .strict(),
 ]);
 
+// --- Privacy-first, cookieless analytics (optional, OFF by default) ----------
+//
+// Omit this whole block and the page ships ZERO analytics — and, if nothing else
+// opts into JS, stays zero-JS, exactly like today. Every supported provider is
+// cookieless and (per the vendor) needs no consent banner. Two honesty tiers,
+// mirroring the `stars` modes:
+//
+//   • goatcounter `mode: pixel` — a single <img>. ZERO JavaScript. Counts
+//     pageviews + referrers; cannot see outbound clicks.
+//   • goatcounter `mode: script`, umami, plausible, cloudflare — a small
+//     (~1–2 KB) cookieless beacon that also tracks outbound link clicks.
+//
+// The provider id/domain/token are PUBLIC identifiers (no secrets), so they live
+// happily in this committed file. Like `embed`/`signup`, this is validated data,
+// never raw HTML — we only ever emit a known provider's official snippet.
+const analyticsSchema = z
+  .discriminatedUnion("provider", [
+    z
+      .object({
+        provider: z.literal("goatcounter"),
+        // Your GoatCounter code: <code>.goatcounter.com
+        code: z.string().min(1),
+        // pixel — a no-JS <img> beacon (pageviews + referrers, no clicks);
+        // script — the ~3 KB count.js beacon (adds richer data).
+        mode: z.enum(["pixel", "script"]).default("pixel"),
+      })
+      .strict(),
+    z
+      .object({
+        provider: z.literal("umami"),
+        websiteId: z.string().min(1),
+        src: z.string().url().default("https://cloud.umami.is/script.js"),
+        // Auto-tag every outbound link so clicks show up as "outbound" events.
+        outboundClicks: z.boolean().default(true),
+      })
+      .strict(),
+    z
+      .object({
+        provider: z.literal("plausible"),
+        // The domain registered in Plausible, e.g. "you.github.io".
+        domain: z.string().min(1),
+        // The script variant. The default already tracks outbound link clicks.
+        src: z.string().url().default("https://plausible.io/js/script.outbound-links.js"),
+      })
+      .strict(),
+    z
+      .object({
+        provider: z.literal("cloudflare"),
+        // Web Analytics beacon token (note: Cloudflare can't track outbound clicks).
+        token: z.string().min(1),
+      })
+      .strict(),
+  ])
+  .optional();
+
 export const libcardSchema = z.object({
   profile: z
     .object({
@@ -324,6 +379,7 @@ export const libcardSchema = z.object({
     .strict()
     .default({}),
   cardMode: cardModeSchema,
+  analytics: analyticsSchema,
   site: z
     .object({
       url: z.string().url(),

@@ -6,7 +6,7 @@ import ThemeSwitcher from "../components/ThemeSwitcher.astro";
 import ThemeBoot from "../components/ThemeBoot.astro";
 import BusinessCardMode from "../components/BusinessCardMode.astro";
 import CardWakeLock from "../components/CardWakeLock.astro";
-import { getActiveTheme, getCardMode, getThemeEffects } from "../lib/config";
+import { getActiveTheme, getCardMode, getThemeEffects, getAnalytics } from "../lib/config";
 
 interface Props {
   title?: string;
@@ -31,6 +31,20 @@ const showCardMode = card.enabled && !wide;
 // is deliberately NOT given an opaque `bg-bg`: `html` already paints `--lc-bg`,
 // and a transparent body lets the fixed mesh stage (z-index:-2) show through.
 const fx = await getThemeEffects();
+// Opt-in cookieless analytics. The GoatCounter `pixel` mode is the zero-JS path:
+// a single <img> beacon rendered at the end of the body (no script at all). The
+// Umami auto-tagger decorates outbound links so their clicks are counted; it
+// runs only when the owner left `outboundClicks` on. Everything else (the head
+// beacons) lives in BaseHead. Null `analytics` → none of this renders.
+const analytics = await getAnalytics();
+const gcPixel = analytics?.provider === "goatcounter" && analytics.mode === "pixel";
+const umamiOutbound = analytics?.provider === "umami" && analytics.outboundClicks;
+// Tag every outbound link so Umami records its click as an "outbound" event.
+// Emitted via set:html so Astro outputs the JS verbatim (a `{…}` child would be
+// parsed as a template expression, not script).
+const umamiTagger =
+  'for (const a of document.querySelectorAll(\'a[target="_blank"][href^="http"]\')) {' +
+  ' a.dataset.umamiEvent = "outbound"; a.dataset.umamiEventUrl = a.href; }';
 ---
 <!doctype html>
 <html lang="en" data-theme={theme.name}>
@@ -52,5 +66,22 @@ const fx = await getThemeEffects();
       {showCardMode && <BusinessCardMode qr={card.qr} hint={card.hint} />}
       {showCardMode && card.wakeLock && <CardWakeLock />}
     </div>
+    {/* GoatCounter pixel: the zero-JS analytics path — a 1×1 <img> beacon that
+        counts the pageview (and referrer) with no script and no cookie. */}
+    {gcPixel && analytics?.provider === "goatcounter" && (
+      <img
+        src={`https://${analytics.code}.goatcounter.com/count?p=${Astro.url.pathname}`}
+        alt=""
+        aria-hidden="true"
+        width="1"
+        height="1"
+        referrerpolicy="no-referrer-when-downgrade"
+        loading="lazy"
+        style="position:absolute;left:-9999px"
+      />
+    )}
+    {/* Umami outbound-click auto-tagger: marks every external link so its click
+        registers as an "outbound" event. Only ships when the owner kept it on. */}
+    {umamiOutbound && <script is:inline type="module" set:html={umamiTagger} />}
   </body>
 </html>
