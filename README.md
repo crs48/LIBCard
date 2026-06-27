@@ -94,6 +94,37 @@ set `wakeLock: true` to keep the screen from dimming mid-scan (and tap the card 
 go fullscreen). Left off, card mode stays **zero-JS** — exactly like the theme
 switcher, which is the only other feature that ships any script.
 
+### Star-on-GitHub button
+
+When a link points at a GitHub repo, you can add a **"★ Star" sub-button** next to it. It opens the repo in a new tab — a logged-in visitor lands right on GitHub's own Star button. (A true one-click star isn't possible from another site; starring is an authenticated action only GitHub can perform.)
+
+```yaml
+links:
+  - label: GitHub repo
+    url: https://github.com/ada/widget
+    icon: github
+    star: true        # show the "★ Star" pill (opens the repo)
+    stars: build      # off | build | badge — how to show the star count
+```
+
+The `stars` modes trade freshness against LibCard's *"nothing to track you"* promise:
+
+| `stars` | What it does | JavaScript | Third-party request |
+|---------|--------------|------------|---------------------|
+| `off` *(default)* | Pill only, no number | none | none |
+| `build` | Count is **baked in at build time** and refreshed on each deploy (a weekly job keeps it current) | none | none at runtime |
+| `badge` | Count via a [shields.io](https://shields.io) `<img>` — fresher, but pings a third party on every visit | none | yes, per visit |
+
+`star`/`stars` are ignored for non-repo URLs (a profile like `github.com/ada`, or a deep path), so they're safe to leave on. The count always **fails soft** — if the GitHub API is unreachable or rate-limited at build time, the pill simply shows no number and the build still succeeds.
+
+> **Want a live, always-fresh count?** Drop in the official [github-buttons](https://buttons.github.io/) widget — but note it ships third-party JavaScript and an iframe (a script from `buttons.github.io` and a request to `ghbtns.com` on every visit), which opts your page out of LibCard's zero-JS, no-tracker default. It isn't built in for that reason; add it yourself only if you're comfortable with the tradeoff:
+>
+> ```html
+> <a class="github-button" href="https://github.com/ada/widget"
+>    data-icon="octicon-star" data-show-count="true">Star</a>
+> <script async defer src="https://buttons.github.io/buttons.js"></script>
+> ```
+
 ### Custom domain (optional)
 
 GitHub Pages supports custom domains for free. Add a `public/CNAME` file containing your domain, point your DNS at GitHub Pages, and set `site.base: "/"` (and `site.url` to your domain) in the config.

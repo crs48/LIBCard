@@ -31,6 +31,8 @@ links:
   - label: GitHub repo
     url: https://github.com/crs48/LIBCard
     icon: github
+    star: true # add a "★ Star" sub-button that opens the repo
+    stars: build # bake the star count in at build time (zero runtime JS)
   - label: My website
     url: https://crs48.github.io/LIBCard
     icon: globe
