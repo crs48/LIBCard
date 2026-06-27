@@ -24,6 +24,12 @@
     radial-gradient(75% 70% at 16% 92%, var(--lc-mesh-3, transparent), transparent 72%),
     radial-gradient(75% 70% at 90% 88%, var(--lc-mesh-4, transparent), transparent 72%);
   filter: blur(var(--lc-bg-blur, 0px));
+  /* Pin the blurred, drifting mesh to its own stable GPU layer so the glass
+     panels in front of it never re-sample a half-rasterized backdrop — that
+     intermittent re-rasterization is the "flicker over time" on glass themes. */
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 @media (prefers-reduced-motion: no-preference) {
   .lc-bg-stage {
@@ -77,6 +83,21 @@
   -webkit-backdrop-filter: var(--lc-glass-filter, none);
   backdrop-filter: var(--lc-glass-filter, none);
 }
+/* Flicker fix: a frosted panel filters its backdrop every frame, and BOTH the
+   hover lift and the drifting mesh behind it make Safari/Chrome tear down and
+   recompute that backdrop-filter layer — which reads as flicker/shimmer (over
+   time, and when the cursor hovers). Pin each frosted panel to its own
+   compositor layer so the layer is reused instead of recreated. Scoped to glass
+   themes via --lc-glass-promote (unset → `auto`, so the flat themes are
+   untouched); `backface-visibility: hidden` is the classic backdrop-filter
+   flicker remedy. Tailwind v4's hover lift uses the `translate` property, so
+   promoting via `will-change: transform` never fights it. */
+.bg-surface:not(.lc-solid),
+.bg-accent:not(.lc-solid) {
+  will-change: var(--lc-glass-promote, auto);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
 /* Guards: drop the translucency where the browser/user can't do it well (the CTA
    falls back to its solid accent fill + light text). */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
@@ -84,6 +105,7 @@
   .bg-accent:not(.lc-solid) {
     --lc-glass-pct: 100%;
     --lc-glass-filter: none;
+    --lc-glass-promote: auto;
     --lc-cta-bg: var(--lc-accent);
     --lc-cta-fg: var(--lc-accent-contrast);
     --lc-cta-border: transparent;
@@ -94,6 +116,7 @@
   .bg-accent:not(.lc-solid) {
     --lc-glass-pct: 100%;
     --lc-glass-filter: none;
+    --lc-glass-promote: auto;
     --lc-cta-bg: var(--lc-accent);
     --lc-cta-fg: var(--lc-accent-contrast);
     --lc-cta-border: transparent;
@@ -104,6 +127,7 @@
   .bg-accent:not(.lc-solid) {
     --lc-glass-pct: 100%;
     --lc-glass-filter: none;
+    --lc-glass-promote: auto;
     --lc-cta-bg: var(--lc-accent);
     --lc-cta-fg: var(--lc-accent-contrast);
     --lc-cta-border: transparent;
