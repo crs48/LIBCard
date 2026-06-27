@@ -9,9 +9,9 @@
 
 # --- Who you are (the card header) ---
 profile:
-  name: Chris Smothers
+  name: Christopher Smothers
   tagline: Building LibCard — your free link-in-bio + virtual business card
-  avatar: /avatar.svg # a file in /public, or a full https:// URL
+  avatar: /avatar.jpg # a file in /public, or a full https:// URL
   location: San Francisco, CA
 
 # --- Contact details ---
