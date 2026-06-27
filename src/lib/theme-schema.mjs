@@ -269,6 +269,10 @@ export function themeToCss(theme) {
     const pct = Math.round(theme.buttons.glassFillOpacity * 100);
     decls.push(`  --lc-glass-pct: ${pct}%;`);
     decls.push(`  --lc-glass-filter: blur(12px) saturate(150%);`);
+    // Promote frosted panels to their own compositor layer (effects.css reads
+    // this) so the hover lift and the drifting mesh don't make backdrop-filter
+    // re-snapshot its backdrop and flicker. Only glass themes set it.
+    decls.push(`  --lc-glass-promote: transform;`);
     // Accent CTAs (Save contact, form submits) become frosted glass with the
     // accent as text + ring, so they match the frosted surfaces instead of
     // reading as a flat block of color. Accent-on-glass keeps AA (gate verifies).

@@ -34,6 +34,7 @@
   --lc-bg-anim: running;
   --lc-glass-pct: 40%;
   --lc-glass-filter: blur(12px) saturate(150%);
+  --lc-glass-promote: transform;
   --lc-cta-bg: color-mix(in oklab, var(--lc-surface) 40%, transparent);
   --lc-cta-fg: var(--lc-accent);
   --lc-cta-border: var(--lc-accent);
@@ -58,6 +59,7 @@
   --lc-bg-anim: running;
   --lc-glass-pct: 40%;
   --lc-glass-filter: blur(12px) saturate(150%);
+  --lc-glass-promote: transform;
   --lc-cta-bg: color-mix(in oklab, var(--lc-surface) 40%, transparent);
   --lc-cta-fg: var(--lc-accent);
   --lc-cta-border: var(--lc-accent);
@@ -82,6 +84,7 @@
   --lc-bg-anim: running;
   --lc-glass-pct: 40%;
   --lc-glass-filter: blur(12px) saturate(150%);
+  --lc-glass-promote: transform;
   --lc-cta-bg: color-mix(in oklab, var(--lc-surface) 40%, transparent);
   --lc-cta-fg: var(--lc-accent);
   --lc-cta-border: var(--lc-accent);
@@ -119,6 +122,7 @@
   --lc-bg-anim: running;
   --lc-glass-pct: 45%;
   --lc-glass-filter: blur(12px) saturate(150%);
+  --lc-glass-promote: transform;
   --lc-cta-bg: color-mix(in oklab, var(--lc-surface) 45%, transparent);
   --lc-cta-fg: var(--lc-accent);
   --lc-cta-border: var(--lc-accent);
