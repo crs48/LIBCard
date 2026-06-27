@@ -1,4 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <rect width="32" height="32" rx="7" fill="#6366f1"/>
-  <text x="50%" y="50%" dy="0.35em" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="15" font-weight="700" fill="#ffffff">LC</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- soft shadow under the cards -->
+  <ellipse cx="31" cy="53" rx="20" ry="3" fill="#111111" opacity="0.12"/>
+  <!-- back card, peeking out top-right -->
+  <rect x="20" y="11" width="37" height="25" rx="6"
+        transform="rotate(11 38 23)"
+        fill="#ffffff" stroke="#111111" stroke-width="3" stroke-linejoin="round"/>
+  <!-- front card + smiley face -->
+  <g transform="rotate(-5 28 33)">
+    <rect x="8" y="20" width="40" height="26" rx="6"
+          fill="#ffffff" stroke="#111111" stroke-width="3.5" stroke-linejoin="round"/>
+    <circle cx="22" cy="29" r="2.6" fill="#111111"/>
+    <circle cx="34" cy="29" r="2.6" fill="#111111"/>
+    <path d="M19 35 Q28 45 37 35 Q28 40 19 35 Z" fill="#111111"/>
+  </g>
 </svg>
