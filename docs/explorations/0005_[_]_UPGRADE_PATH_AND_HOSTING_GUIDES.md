@@ -467,13 +467,13 @@ on:
 ## Implementation Checklist
 
 **Docs (the user's core ask)**
-- [ ] Add a **"Updating your card"** section to [`README.md`](../../README.md)
+- [x] Add a **"Updating your card"** section to [`README.md`](../../README.md)
       (mental model + per-path commands + themes-only + link to the guide).
-- [ ] Write **`docs/UPGRADING.md`** following the outline above (ownership table,
+- [x] Write **`docs/UPGRADING.md`** following the outline above (ownership table,
       both paths, conflict walkthrough, verify/rollback, CHANGELOG pointer).
-- [ ] Add a one-line "how to update later" pointer to the
+- [x] Add a one-line "how to update later" pointer to the
       [`libcard.config.yaml`](../../libcard.config.yaml) header comment.
-- [ ] Extend [`AGENTS.md`](../../AGENTS.md): update flow belongs in the
+- [x] Extend [`AGENTS.md`](../../AGENTS.md): update flow belongs in the
       README-sync note; record the engine-replaceable / config-sacred boundary.
 
 **Tooling**
@@ -484,13 +484,13 @@ on:
 - [x] Preserve owner-authored `themes/*.yaml` (set difference vs. the release).
 - [x] End the script's success output with the exact next commands
       (`pnpm install && pnpm build`, then commit/push).
-- [ ] (Optional) Ship a **disabled** `.github/workflows/update-check.yml` +
+- [x] (Optional) Ship a **disabled** `.github/workflows/update-check.yml` +
       `.templatesyncignore` for owners who want auto-PRs.
 
 **Release hygiene (so there's something to update *to*)**
 - [ ] Cut the **first GitHub Release** + tag; adopt semver-ish tags going
       forward.
-- [ ] Start a **`CHANGELOG.md`** (one line per change; mark "action needed" when
+- [x] Start a **`CHANGELOG.md`** (one line per change; mark "action needed" when
       config changes), and reference it from UPGRADING.md.
 
 ## Validation Checklist
