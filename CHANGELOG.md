@@ -9,7 +9,14 @@ often to `libcard.config.yaml`); everything else is picked up automatically by
 
 ## Unreleased
 
-_Nothing yet._
+- **First-run nudge (opt-in).** A fresh "Use this template" card can show a
+  subtle "edit `libcard.config.yaml`" banner until it's customized — set
+  `meta.default: true` to switch it on, and remove it once the card is yours.
+  Off by default, so a real card never shows it. Zero JavaScript.
+- **"Make your own" made easy.** The README documents a one-line link/`text`
+  pattern for inviting visitors to spin up their own card, and the footer credit
+  is now consistently **"Powered by LibCard"** across the page, README, and
+  trademark note (it still links back to the project and stays removable).
 
 ## 0.1.0
 
