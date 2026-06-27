@@ -496,17 +496,17 @@ for the public-repo read (it is).
 
 ## Implementation Checklist
 
-- [ ] Add `star` (boolean) and `stars` (`"off" | "build" | "badge"`) to
+- [x] Add `star` (boolean) and `stars` (`"off" | "build" | "badge"`) to
       `linkSchema` in [`src/lib/schema.mjs`](../../src/lib/schema.mjs).
-- [ ] Run `pnpm run generate:schema` and commit the updated
+- [x] Run `pnpm run generate:schema` and commit the updated
       [`libcard.schema.json`](../../libcard.schema.json).
-- [ ] Add `src/lib/github.ts` with `parseRepo`, `formatStars`,
+- [x] Add `src/lib/github.ts` with `parseRepo`, `formatStars`,
       `fetchStarCount` (fail-soft).
 - [ ] Add a `star` glyph to [`src/components/Icon.astro`](../../src/components/Icon.astro).
 - [ ] Refactor [`src/components/LinkButton.astro`](../../src/components/LinkButton.astro)
       into a flex container with sibling anchors (no nested `<a>`).
 - [ ] Render the count (`build`) or shields `<img>` (`badge`) inside the pill.
-- [ ] Add an in-process cache so duplicate repo links fetch once per build.
+- [x] Add an in-process cache so duplicate repo links fetch once per build.
 - [ ] Add the weekly `schedule:` cron to
       [`.github/workflows/deploy.yml`](../../.github/workflows/deploy.yml).
 - [ ] Demo it: set `star: true` (+ `stars: "build"`) on the GitHub repo link
