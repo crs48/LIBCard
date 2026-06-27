@@ -22,12 +22,18 @@ const ogImage = cfg.seo?.ogImage
   : absoluteUrl(Astro.site, base, "/og.png");
 
 const favicon = withBase(base, "/favicon.svg");
+const faviconPng = withBase(base, "/favicon-32.png");
+const appleTouchIcon = withBase(base, "/apple-touch-icon.png");
+const manifest = withBase(base, "/manifest.webmanifest");
 ---
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{pageTitle}</title>
 <meta name="description" content={description} />
 <link rel="icon" href={favicon} type="image/svg+xml" />
+<link rel="icon" href={faviconPng} type="image/png" sizes="32x32" />
+<link rel="apple-touch-icon" href={appleTouchIcon} />
+<link rel="manifest" href={manifest} />
 <link rel="canonical" href={canonical} />
 
 <!-- Open Graph / Twitter -->
