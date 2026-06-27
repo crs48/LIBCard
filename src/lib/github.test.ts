@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { parseRepo, formatStars, shieldsStarsUrl } from "./github";
+import { describe, it, expect, vi, afterEach } from "vitest";
+import { parseRepo, formatStars, shieldsStarsUrl, fetchStarCount } from "./github";
 
 describe("parseRepo", () => {
   it("parses a plain owner/repo URL", () => {
@@ -63,5 +63,36 @@ describe("shieldsStarsUrl", () => {
     expect(shieldsStarsUrl({ owner: "crs48", repo: "LIBCard" })).toBe(
       "https://img.shields.io/github/stars/crs48/LIBCard?style=flat&label=%E2%98%85",
     );
+  });
+});
+
+describe("fetchStarCount (fails soft)", () => {
+  afterEach(() => vi.unstubAllGlobals());
+
+  it("returns the count on a 200 response", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => new Response(JSON.stringify({ stargazers_count: 4242 }), { status: 200 })),
+    );
+    // Unique repo per test to dodge the module-level cache.
+    expect(await fetchStarCount({ owner: "ok", repo: "ok" })).toBe(4242);
+  });
+
+  it("returns null on a 404 (renamed/private repo) without throwing", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => new Response("Not Found", { status: 404 })),
+    );
+    expect(await fetchStarCount({ owner: "gone", repo: "gone" })).toBeNull();
+  });
+
+  it("returns null when fetch rejects (offline build)", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => {
+        throw new Error("getaddrinfo ENOTFOUND api.github.com");
+      }),
+    );
+    expect(await fetchStarCount({ owner: "offline", repo: "offline" })).toBeNull();
   });
 });
