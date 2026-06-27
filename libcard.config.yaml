@@ -12,7 +12,7 @@
 # --- Who you are (the card header) ---
 profile:
   name: Christopher Smothers
-  tagline: Building xNet — a local-first platform for apps that work offline, sync peer-to-peer, and keep your data under your control
+  tagline: Building xNet — a local-first platform for apps that works offline, syncs peer-to-peer, and keeps your data under your control
   avatar: /avatar.jpg # a file in /public, or a full https:// URL
   location: San Francisco, CA
 
