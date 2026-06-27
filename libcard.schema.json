@@ -801,6 +801,104 @@
           "additionalProperties": false,
           "default": {}
         },
+        "analytics": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "const": "goatcounter"
+                },
+                "code": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "mode": {
+                  "type": "string",
+                  "enum": [
+                    "pixel",
+                    "script"
+                  ],
+                  "default": "pixel"
+                }
+              },
+              "required": [
+                "provider",
+                "code"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "const": "umami"
+                },
+                "websiteId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "src": {
+                  "type": "string",
+                  "format": "uri",
+                  "default": "https://cloud.umami.is/script.js"
+                },
+                "outboundClicks": {
+                  "type": "boolean",
+                  "default": true
+                }
+              },
+              "required": [
+                "provider",
+                "websiteId"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "const": "plausible"
+                },
+                "domain": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "src": {
+                  "type": "string",
+                  "format": "uri",
+                  "default": "https://plausible.io/js/script.outbound-links.js"
+                }
+              },
+              "required": [
+                "provider",
+                "domain"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "const": "cloudflare"
+                },
+                "token": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "provider",
+                "token"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
         "site": {
           "type": "object",
           "properties": {

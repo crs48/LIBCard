@@ -467,10 +467,10 @@ const analytics = await getAnalytics();
 
 ## Implementation Checklist
 
-- [ ] Add `analyticsSchema` (discriminated union) to
+- [x] Add `analyticsSchema` (discriminated union) to
       [src/lib/schema.mjs](../../src/lib/schema.mjs) and wire `analytics:` into
       `libcardSchema`.
-- [ ] Regenerate `libcard.schema.json` via `pnpm run generate:schema` (and
+- [x] Regenerate `libcard.schema.json` via `pnpm run generate:schema` (and
       confirm the `prebuild` hook keeps it in sync).
 - [ ] Add `getAnalytics()` + `LibcardAnalytics` type to
       [src/lib/config.ts](../../src/lib/config.ts).
