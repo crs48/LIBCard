@@ -1,0 +1,65 @@
+name: Check for LibCard updates
+
+# OPT-IN, and disabled by default: it only runs when you trigger it by hand from
+# the Actions tab. To have it check monthly, uncomment the `schedule:` block
+# below. When it finds engine changes upstream it opens a pull request you can
+# review and merge — it never pushes to main directly, and `pnpm run update`
+# guarantees your libcard.config.yaml, public/, and your own themes are untouched.
+#
+# One-time setup to allow the PR: repo Settings → Actions → General →
+# "Workflow permissions" → enable "Allow GitHub Actions to create and approve
+# pull requests".
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: "0 9 1 * *" # 09:00 UTC on the 1st of each month
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # Pulls the latest engine from upstream; leaves your content alone.
+      - name: Pull upstream engine
+        run: pnpm run update
+
+      # Regenerate derived files and prove the new engine still builds your card.
+      - name: Build
+        run: pnpm build
+
+      - name: Open a PR if anything changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "Already up to date — nothing to PR."
+            exit 0
+          fi
+          branch="libcard-update-$(date +%Y%m%d)"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add -A
+          git commit -m "chore: update LibCard engine"
+          git push -u origin "$branch"
+          gh pr create --fill --title "Update LibCard engine" \
+            --body "Automated by .github/workflows/update-check.yml. Pulls the latest LibCard engine; your config, public/ assets, and custom themes are untouched. Review and merge to deploy." \
+            || echo "Could not open a PR — enable 'Allow GitHub Actions to create and approve pull requests' in repo settings."

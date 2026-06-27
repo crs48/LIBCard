@@ -1,0 +1,44 @@
+- generic [ref=e2]:
+  - main [ref=e3]:
+    - generic [ref=e4]:
+      - img "Chris Smothers's avatar" [ref=e5]
+      - heading "Chris Smothers" [level=1] [ref=e6]
+      - paragraph [ref=e7]: Building LibCard — your free link-in-bio + virtual business card
+      - paragraph [ref=e8]:
+        - img [ref=e9]
+        - generic [ref=e11]: San Francisco, CA
+    - list [ref=e12]:
+      - listitem [ref=e13]:
+        - link "GitHub repo" [ref=e14] [cursor=pointer]:
+          - /url: https://github.com/crs48/LIBCard
+          - img [ref=e15]
+          - generic [ref=e17]: GitHub repo
+          - img [ref=e18]
+      - listitem [ref=e20]:
+        - link "My website" [ref=e21] [cursor=pointer]:
+          - /url: https://crs48.github.io/LIBCard
+          - img [ref=e22]
+          - generic [ref=e24]: My website
+          - img [ref=e25]
+    - navigation "Social profiles" [ref=e27]:
+      - link "github" [ref=e28] [cursor=pointer]:
+        - /url: https://github.com/crs48
+        - img [ref=e29]
+      - link "x" [ref=e31] [cursor=pointer]:
+        - /url: https://x.com/
+        - img [ref=e32]
+    - group [ref=e34]:
+      - generic "Show my digital business card" [ref=e35] [cursor=pointer]:
+        - img [ref=e36]
+        - generic [ref=e38]: Show my digital business card
+  - button "Try the next theme" [ref=e40]:
+    - img [ref=e41]
+    - generic [ref=e47]: Try a theme
+  - contentinfo [ref=e49]:
+    - paragraph [ref=e50]:
+      - link "Powered by LibCard" [ref=e51] [cursor=pointer]:
+        - /url: https://github.com/crs48/LIBCard
+      - generic [ref=e52]:
+        - text: · Theme by
+        - link "LibCard" [ref=e53] [cursor=pointer]:
+          - /url: https://github.com/crs48/LIBCard

@@ -5,13 +5,15 @@
 # │  Change the values below, commit, and push — GitHub Pages rebuilds.  │
 # │  The `$schema` line above gives you autocomplete + validation in     │
 # │  editors like VS Code (and tells AI agents exactly what's allowed).  │
+# │  To pull in new themes/features later: `pnpm run update` — it leaves │
+# │  this file untouched. Full guide: docs/UPGRADING.md                  │
 # └─────────────────────────────────────────────────────────────────────┘
 
 # --- Who you are (the card header) ---
 profile:
-  name: Chris Smothers
+  name: Christopher Smothers
   tagline: Building LibCard — your free link-in-bio + virtual business card
-  avatar: /avatar.svg # a file in /public, or a full https:// URL
+  avatar: /avatar.jpg # a file in /public, or a full https:// URL
   location: San Francisco, CA
 
 # --- Contact details ---
@@ -66,6 +68,18 @@ footer:
 seo:
   description: My links, all in one place — and a tap-to-save digital business card.
   # ogImage: /og.png   # optional custom Open Graph image (a /public path or URL)
+
+# --- Landscape "card mode" (rotate your phone to flash a business card) ---
+# Turn the phone sideways and the page flips into a pretty, physical-looking
+# business card — your name beside a QR code — so you can flash it at someone and
+# rotate back to the full page. The reveal is pure CSS (zero JavaScript); the only
+# script is the optional screen wake lock, shipped solely when `wakeLock: true`.
+# Omit this whole block to accept the defaults below.
+cardMode:
+  enabled: true # show the landscape card overlay (and a portrait "rotate" hint)
+  qr: page # what the QR encodes: page (your link-in-bio) | contact (save offline) | both
+  hint: true # the subtle "⟲ Rotate to show your card" nudge in portrait
+  wakeLock: false # opt-in: keep the screen lit while the card shows (ships a tiny script)
 
 # --- Where this site lives (the setup wizard fills these in) ---
 # url:  your GitHub Pages origin, e.g. https://you.github.io

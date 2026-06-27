@@ -10,6 +10,7 @@ LibCard is a tiny [Astro](https://astro.build) static site you host on **GitHub 
 - **Fast to set up** — edit one config file, push. Your page is live.
 - **Tap to save contact** — a "Save contact" button downloads a vCard, so anyone can add you to their phone's address book in one tap.
 - **QR business card** — built-in QR codes for conferences: one points to your page, another saves your contact offline.
+- **Rotate to flash a card** — turn your phone sideways and the page flips into a pretty, physical-looking business card beside a QR code; rotate back for the full page. Pure CSS, no JavaScript.
 - **Themes you can cycle** — a gallery of built-in themes plus an optional live switcher, so visitors can try your card in each look. Add your own with a pull request.
 - **Yours to own** — no third-party platform between you and your audience; you control the content and the domain.
 - **Fast & private** — zero client-side JavaScript by default; nothing to track you.
@@ -69,6 +70,30 @@ Browse them all on the `/themes` gallery page. The footer credits the active the
 
 **Themes are data, not code.** Each theme is a single validated `themes/*.yaml` token file — no CSS, no JavaScript — so it's safe to accept from anyone. Add your own with `pnpm run new-theme` and open a pull request; see [`themes/README.md`](./themes/README.md) for the contribution guide. Community themes default to **CC-BY-4.0** (your credit stays), while LibCard itself is **MIT**.
 
+### Card mode (rotate your phone)
+
+On a phone, turning the page **sideways into landscape** flips it into **card
+mode**: a physical-looking business card — your name, role, and tagline beside a
+QR code — that you can flash at someone, then rotate back upright for the full
+link-in-bio page. It inherits your active theme (font, colors, radius), so a
+`terminal` card looks like green-on-black and a `paper` card looks like warm
+letterpress. The whole reveal is a CSS media query — **zero JavaScript**.
+
+```yaml
+cardMode:
+  enabled: true     # the landscape card overlay (on by default)
+  qr: page          # what the QR encodes: page | contact | both
+  hint: true        # a subtle "⟲ Rotate to show your card" nudge in portrait
+  wakeLock: false   # opt-in: keep the screen lit while the card shows
+```
+
+Some phones have auto-rotate locked, so rotating does nothing — for that case the
+portrait hint links to the always-available `/card` page (the same business card,
+stacked). **Wake lock is the only JavaScript card mode can ship, and it's opt-in:**
+set `wakeLock: true` to keep the screen from dimming mid-scan (and tap the card to
+go fullscreen). Left off, card mode stays **zero-JS** — exactly like the theme
+switcher, which is the only other feature that ships any script.
+
 ### Star-on-GitHub button
 
 When a link points at a GitHub repo, you can add a **"★ Star" sub-button** next to it. It opens the repo in a new tab — a logged-in visitor lands right on GitHub's own Star button. (A true one-click star isn't possible from another site; starring is an authenticated action only GitHub can perform.)
@@ -124,6 +149,8 @@ pnpm run setup       # interactive config wizard
 pnpm run new-theme   # scaffold a new theme into themes/
 pnpm run gen:themes  # regenerate theme CSS + registry from themes/*.yaml
 pnpm run check-contrast  # WCAG AA check for all themes
+pnpm run update      # pull the latest LibCard engine from upstream (keeps your content)
+pnpm run update-themes   # pull just the latest community themes from upstream
 pnpm test            # run the vCard unit tests
 pnpm typecheck       # astro check
 ```
@@ -134,6 +161,37 @@ pnpm typecheck       # astro check
 - **Tailwind CSS v4** for styling; themes are `themes/*.yaml` token files compiled to CSS-variable `@theme` tokens at build time.
 - One **Zod** schema is the single source of truth: it validates the config at build time *and* generates `libcard.schema.json` for editors/agents.
 - The **vCard** (`/contact.vcf`) and **QR codes** (page-URL QR + offline vCard-QR) are generated at build time — zero client JavaScript.
+
+## Updating your card
+
+Your card keeps working forever with zero upkeep — **updating is optional**, just
+a way to pick up new themes, features, and fixes from upstream. The only files
+that are *yours* are `libcard.config.yaml`, anything in `public/` (your avatar,
+`CNAME`, OG image), and any themes you wrote; everything else is the LibCard
+**engine** and is safe to replace.
+
+**If you used "Use this template":**
+
+```bash
+pnpm run update              # pulls the latest engine, keeps your content
+pnpm install && pnpm build   # reinstalls deps + regenerates derived files;
+                             # fails loudly if anything's off, so nothing broken deploys
+git add -A && git commit -m "chore: update LibCard" && git push
+```
+
+**If you forked:** click **Sync fork** on your repo's page, or from the CLI:
+
+```bash
+git remote add upstream https://github.com/crs48/LIBCard.git   # one time
+git fetch upstream && git merge upstream/main                  # keep your config if it conflicts
+pnpm install && pnpm build && git push
+```
+
+**Just want the new themes?** `pnpm run update-themes && pnpm run gen:themes`
+
+See [docs/UPGRADING.md](./docs/UPGRADING.md) for the file-by-file breakdown,
+resolving a config conflict, rolling back, and what changed in each release
+([CHANGELOG.md](./CHANGELOG.md)).
 
 ## License
 

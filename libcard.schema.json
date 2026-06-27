@@ -205,6 +205,34 @@
           "additionalProperties": false,
           "default": {}
         },
+        "cardMode": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "qr": {
+              "type": "string",
+              "enum": [
+                "page",
+                "contact",
+                "both"
+              ],
+              "default": "page"
+            },
+            "hint": {
+              "type": "boolean",
+              "default": true
+            },
+            "wakeLock": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false,
+          "default": {}
+        },
         "site": {
           "type": "object",
           "properties": {

@@ -1,0 +1,14 @@
+# Files that are YOURS — never overwrite them when syncing from upstream LibCard.
+#
+# This is the single source of truth for "what's mine vs. the engine." The
+# `pnpm run update` script already honours this boundary on its own. This file
+# only matters if you prefer to automate updates with a generic template-sync
+# Action instead (e.g. AndreasAugustin/actions-template-sync), which reads it
+# the same way a .gitignore is read.
+
+libcard.config.yaml
+public/**
+
+# Themes you authored live alongside the built-in ones. List yours here so a
+# template-sync Action won't touch them, e.g.:
+# themes/my-theme.yaml

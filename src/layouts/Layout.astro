@@ -4,7 +4,9 @@ import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
 import ThemeSwitcher from "../components/ThemeSwitcher.astro";
 import ThemeBoot from "../components/ThemeBoot.astro";
-import { getActiveTheme } from "../lib/config";
+import BusinessCardMode from "../components/BusinessCardMode.astro";
+import CardWakeLock from "../components/CardWakeLock.astro";
+import { getActiveTheme, getCardMode } from "../lib/config";
 
 interface Props {
   title?: string;
@@ -20,6 +22,10 @@ const maxWidth = wide ? "max-w-3xl" : "max-w-md";
 const theme = await getActiveTheme();
 // Client theme JS ships only when the switcher and/or random mode is on.
 const themeJs = theme.switcher || theme.random;
+// Landscape "card mode": the rotate-to-reveal business card. Suppressed on the
+// wide gallery layout, where flipping to a card overlay makes no sense.
+const card = await getCardMode();
+const showCardMode = card.enabled && !wide;
 ---
 <!doctype html>
 <html lang="en" data-theme={theme.name}>
@@ -36,6 +42,8 @@ const themeJs = theme.switcher || theme.random;
       </main>
       {themeJs && <ThemeSwitcher />}
       <Footer />
+      {showCardMode && <BusinessCardMode qr={card.qr} hint={card.hint} />}
+      {showCardMode && card.wakeLock && <CardWakeLock />}
     </div>
   </body>
 </html>

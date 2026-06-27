@@ -29,7 +29,18 @@ export async function getActiveTheme(): Promise<ResolvedTheme> {
   return resolveTheme(cfg.theme);
 }
 
+/**
+ * The resolved landscape "card mode" settings. The Zod schema already applies
+ * every default, so this is a thin, typed accessor the Layout uses to decide
+ * whether to mount the overlay (and whether to ship the opt-in wake-lock script).
+ */
+export async function getCardMode(): Promise<LibcardConfig["cardMode"]> {
+  const cfg = await getConfig();
+  return cfg.cardMode;
+}
+
 /** The validated config object's type, inferred from the Zod schema. */
 export type LibcardConfig = Awaited<ReturnType<typeof getConfig>>;
 export type LibcardLink = LibcardConfig["links"][number];
 export type LibcardSocial = LibcardConfig["socials"][number];
+export type LibcardCardMode = LibcardConfig["cardMode"];

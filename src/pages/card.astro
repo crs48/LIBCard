@@ -1,23 +1,21 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Profile from "../components/Profile.astro";
-import QRCode from "../components/QRCode.astro";
+import BusinessCard from "../components/BusinessCard.astro";
 import SaveContact from "../components/SaveContact.astro";
 import Icon from "../components/Icon.astro";
-import { absoluteUrl, withBase } from "../lib/site";
+import { withBase } from "../lib/site";
 
 const base = import.meta.env.BASE_URL;
-// The QR on the business-card page points back to the link-in-bio home.
-const homeUrl = absoluteUrl(Astro.site, base, "/");
+// The manual, always-works business card (the fallback when a phone's auto-rotate
+// is locked and the landscape card-mode media query never fires). It shares the
+// exact same BusinessCard face as the rotate-to-reveal overlay — just stacked.
 const home = withBase(base, "/");
 const vcardQr = withBase(base, "/contact-qr.svg");
 ---
 <Layout title="Digital business card">
-  <Profile />
+  <BusinessCard variant="portrait" qr="page" class="w-full" />
 
-  <section class="flex w-full flex-col items-center gap-4 rounded-card border border-border bg-surface p-6 shadow-sm">
-    <QRCode value={homeUrl} size={240} />
-    <p class="text-center text-sm text-muted">Point a phone camera here to open my card</p>
+  <div class="flex w-full flex-col items-center gap-3">
     <SaveContact class="w-full" />
     <a
       href={vcardQr}
@@ -27,7 +25,7 @@ const vcardQr = withBase(base, "/contact-qr.svg");
       <Icon name="download" class="size-4" />
       <span>Download contact QR (scan to save offline)</span>
     </a>
-  </section>
+  </div>
 
   <a
     href={home}
