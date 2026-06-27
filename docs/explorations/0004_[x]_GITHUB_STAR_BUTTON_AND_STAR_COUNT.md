@@ -518,21 +518,21 @@ for the public-repo read (it is).
 
 ## Validation Checklist
 
-- [ ] `pnpm build` succeeds **offline** (count silently omitted, no error).
-- [ ] `pnpm build` with network bakes the correct `★ Nk` for the demo repo.
-- [ ] With JS disabled in the browser, the pill renders and opens the repo
+- [x] `pnpm build` succeeds **offline** (count silently omitted, no error).
+- [x] `pnpm build` with network bakes the correct `★ Nk` for the demo repo.
+- [x] With JS disabled in the browser, the pill renders and opens the repo
       (proves zero-JS).
-- [ ] DevTools Network shows **no** request to `api.github.com`,
+- [x] DevTools Network shows **no** request to `api.github.com`,
       `ghbtns.com`, or `buttons.github.io` on page load for `stars: "off"`
       and `stars: "build"`.
-- [ ] `stars: "badge"` makes exactly one request to `img.shields.io` and
+- [x] `stars: "badge"` makes exactly one request to `img.shields.io` and
       nothing else.
-- [ ] A non-repo GitHub link (`github.com/<user>`) shows **no** star pill.
-- [ ] A bad/renamed repo URL degrades to pill-without-count, build still green.
-- [ ] Pill is keyboard-focusable, has a sensible `aria-label`, and survives
+- [x] A non-repo GitHub link (`github.com/<user>`) shows **no** star pill.
+- [x] A bad/renamed repo URL degrades to pill-without-count, build still green.
+- [x] Pill is keyboard-focusable, has a sensible `aria-label`, and survives
       theme cycling (colors driven by tokens, not hard-coded).
-- [ ] Responsive: label doesn't overflow on a 320px-wide viewport.
-- [ ] `astro check` and `pnpm test` pass.
+- [x] Responsive: label doesn't overflow on a 320px-wide viewport.
+- [x] `astro check` and `pnpm test` pass.
 
 ## References
 
