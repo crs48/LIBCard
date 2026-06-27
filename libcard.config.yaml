@@ -101,7 +101,13 @@ socials:
   - platform: github
     url: https://github.com/crs48
   - platform: x
-    url: https://x.com/
+    url: https://x.com/becomingbabyman
+  - platform: youtube
+    url: https://www.youtube.com/channel/UC3MAaU1oKalapO7rjZps7hQ
+  - platform: instagram
+    url: https://www.instagram.com/becomingbabyman/
+  - platform: telegram
+    url: https://t.me/becomingbabyman
 
 # --- Look & feel ---
 # Pick ONE theme (zero JavaScript):
