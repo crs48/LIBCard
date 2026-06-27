@@ -87,12 +87,13 @@ html {
 }
 
 /* The card keeps a real business-card proportion (3.5"×2" ≈ 1.75:1), sized to
-   the short landscape viewport. Only the landscape variant carries this class. */
+   the short landscape viewport. Width is derived from height (rather than left to
+   `auto`) so long names/taglines truncate WITHIN the card instead of stretching
+   it wider. Only the landscape variant carries this class. */
 .lc-bizcard {
   aspect-ratio: 1.75 / 1;
   height: min(86vh, 320px);
-  width: auto;
-  max-width: 96vw;
+  width: min(96vw, calc(min(86vh, 320px) * 1.75));
 }
 
 /* A gentle fade-in where motion is welcome (the reduce block above already
