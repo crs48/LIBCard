@@ -714,9 +714,9 @@ const cardModeSchema = z
       reduced-motion-safe fade).
 - [x] Mount `{card.enabled && <BusinessCardMode/>}` in `src/layouts/Layout.astro`;
       decide gallery (`wide`) suppression.
-- [ ] Refactor `src/pages/card.astro` to reuse `<BusinessCard variant="portrait"/>`
+- [x] Refactor `src/pages/card.astro` to reuse `<BusinessCard variant="portrait"/>`
       (DRY; keeps Save-contact + back link).
-- [ ] Choose the QR target per `cardMode.qr` (`page` → `homeUrl`, `contact` →
+- [x] Choose the QR target per `cardMode.qr` (`page` → `homeUrl`, `contact` →
       `/contact-qr.svg` payload, `both`).
 - [ ] Hide page chrome (theme switcher, footer minus credit) inside the card-mode
       media query if it clutters the card.
