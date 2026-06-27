@@ -507,7 +507,7 @@ for the public-repo read (it is).
       into a flex container with sibling anchors (no nested `<a>`).
 - [x] Render the count (`build`) or shields `<img>` (`badge`) inside the pill.
 - [x] Add an in-process cache so duplicate repo links fetch once per build.
-- [ ] Add the weekly `schedule:` cron to
+- [x] Add the weekly `schedule:` cron to
       [`.github/workflows/deploy.yml`](../../.github/workflows/deploy.yml).
 - [x] Demo it: set `star: true` (+ `stars: "build"`) on the GitHub repo link
       in [`libcard.config.yaml`](../../libcard.config.yaml).

@@ -6,6 +6,10 @@ on:
     branches: [main]
   # ...and allow manual runs from the Actions tab.
   workflow_dispatch:
+  # ...and weekly, so any build-time GitHub star counts (links with
+  # `stars: build`) don't go stale between pushes. Mondays 06:00 UTC.
+  schedule:
+    - cron: "0 6 * * 1"
 
 # Grant GITHUB_TOKEN the permissions required to deploy to GitHub Pages.
 permissions:
@@ -29,6 +33,11 @@ jobs:
         # (which runs the `prebuild` schema generation), and uploads the Pages
         # artifact. `site`/`base` come from libcard.config.yaml via astro.config.
         uses: withastro/action@v6
+        env:
+          # Lets `stars: build` links fetch star counts at 5,000 req/hr instead
+          # of the anonymous 60. Read-only (contents: read above); fails soft if
+          # absent, so forks without it still build fine.
+          GITHUB_TOKEN: ${{ github.token }}
 
   deploy:
     needs: build
