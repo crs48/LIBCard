@@ -3,21 +3,54 @@ import { getConfig } from "../lib/config";
 import Icon from "./Icon.astro";
 
 const { socials } = await getConfig();
+
+// Official brand colors, keyed to match the Icon names. Platforms without an
+// entry (e.g. a custom link with the generic glyph) fall back to the theme
+// accent on hover, so nothing ever loses its hover affordance.
+const BRAND_COLORS: Record<string, string> = {
+  github: "#181717",
+  x: "#000000",
+  twitter: "#1da1f2",
+  linkedin: "#0a66c2",
+  instagram: "#e4405f",
+  youtube: "#ff0000",
+  mastodon: "#6364ff",
+  bluesky: "#0285ff",
+  tiktok: "#000000",
+  facebook: "#0866ff",
+  whatsapp: "#25d366",
+  telegram: "#26a5e4",
+  figma: "#f24e1e",
+  signal: "#3a76f0",
+};
 ---
 {
   socials.length > 0 && (
     <nav aria-label="Social profiles" class="flex flex-wrap items-center justify-center gap-2">
-      {socials.map((social) => (
-        <a
-          href={social.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={social.label ?? social.platform}
-          class="flex size-11 items-center justify-center rounded-full border border-border bg-surface text-muted transition hover:text-accent hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-        >
-          <Icon name={social.platform} class="size-5" />
-        </a>
-      ))}
+      {socials.map((social) => {
+        const brand = BRAND_COLORS[social.platform];
+        return (
+          <a
+            href={social.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={social.label ?? social.platform}
+            class="lc-social flex size-11 items-center justify-center rounded-full border border-border bg-surface text-muted transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            style={brand ? `--brand: ${brand}` : undefined}
+          >
+            <Icon name={social.platform} class="size-5" />
+          </a>
+        );
+      })}
     </nav>
   )
 }
+
+<style>
+  /* Hover reveals the platform's brand color (set per-link via --brand);
+     links without a brand color fall back to the theme accent. */
+  .lc-social:hover {
+    color: var(--brand, var(--lc-accent));
+    border-color: var(--brand, var(--lc-accent));
+  }
+</style>
