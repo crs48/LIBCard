@@ -1,0 +1,115 @@
+---
+// A themed, physical-looking business-card face. Pure presentation, zero JS: the
+// avatar/name/role/tagline/location sit beside a build-time QR SVG, all styled
+// from the active theme's tokens so the card matches the live site automatically.
+//
+// Reused by the landscape card-mode overlay (BusinessCardMode.astro) and the
+// stacked /card page. The `qr` prop mirrors libcard.config.yaml's cardMode.qr:
+//   page    → one QR to the link-in-bio home (the "follow me" code)
+//   contact → one QR encoding the vCard itself (scan to save offline)
+//   both    → both codes, side by side
+import { getConfig } from "../lib/config";
+import { withBase, absoluteUrl } from "../lib/site";
+import { buildVCard } from "../lib/vcard";
+import QRCode from "./QRCode.astro";
+import Icon from "./Icon.astro";
+
+interface Props {
+  /** "landscape" = wide card-mode face; "portrait" = stacked (the /card page). */
+  variant?: "landscape" | "portrait";
+  /** What the QR encodes — defaults to the link-in-bio page. */
+  qr?: "page" | "contact" | "both";
+  class?: string;
+}
+
+const { variant = "landscape", qr = "page", class: className } = Astro.props;
+const cfg = await getConfig();
+const base = import.meta.env.BASE_URL;
+const landscape = variant === "landscape";
+
+const p = cfg.profile;
+const c = cfg.contact;
+const avatar = p.avatar
+  ? p.avatar.startsWith("http")
+    ? p.avatar
+    : withBase(base, p.avatar)
+  : withBase(base, "/avatar.svg");
+const role = [c.title, c.organization].filter(Boolean).join(" · ");
+
+// The absolute home URL (what the page QR resolves to) and the offline vCard.
+const home = absoluteUrl(Astro.site, base, "/");
+const vcard = buildVCard({
+  name: p.name,
+  email: c.email || undefined,
+  phone: c.phone || undefined,
+  organization: c.organization,
+  title: c.title,
+  website: c.website || undefined,
+});
+
+const codes =
+  qr === "contact"
+    ? [{ value: vcard, caption: "Scan to save my contact" }]
+    : qr === "both"
+      ? [
+          { value: home, caption: "Open my page" },
+          { value: vcard, caption: "Save my contact" },
+        ]
+      : [{ value: home, caption: "Scan to open my page" }];
+
+// Smaller codes when two share the row, and smaller overall in the tight
+// landscape card; the QR keeps its own white quiet zone for scannability.
+const qrSize = landscape
+  ? codes.length > 1
+    ? 120
+    : 168
+  : codes.length > 1
+    ? 150
+    : 220;
+---
+<article
+  class:list={[
+    "flex border border-border bg-surface text-fg shadow-sm rounded-card font-sans",
+    landscape ? "lc-bizcard items-center gap-6 p-6" : "flex-col items-center gap-5 p-6",
+    className,
+  ]}
+>
+  <div
+    class:list={[
+      "flex min-w-0 flex-col gap-1.5",
+      landscape ? "flex-1 text-left" : "items-center text-center",
+    ]}
+  >
+    <img
+      src={avatar}
+      alt=""
+      width="56"
+      height="56"
+      loading="eager"
+      decoding="async"
+      class="size-14 rounded-full object-cover ring-2 ring-border shadow-sm bg-bg"
+    />
+    <h2 class="truncate text-xl font-bold leading-tight tracking-tight text-fg">{p.name}</h2>
+    {role && <p class="truncate text-sm font-medium text-accent">{role}</p>}
+    {p.tagline && <p class="line-clamp-2 text-sm text-muted text-balance">{p.tagline}</p>}
+    {
+      p.location && (
+        <p class="mt-0.5 flex items-center gap-1 text-xs text-muted">
+          <Icon name="map-pin" class="size-3.5 shrink-0" />
+          <span class="truncate">{p.location}</span>
+        </p>
+      )
+    }
+  </div>
+
+  <div class="flex shrink-0 items-start gap-4">
+    {
+      codes.map((code) => (
+        <div class="flex flex-col items-center gap-1.5">
+          <QRCode value={code.value} size={qrSize} />
+          <p class="max-w-[12rem] text-center text-xs text-muted">{code.caption}</p>
+        </div>
+      ))
+    }
+  </div>
+</article>

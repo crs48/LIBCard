@@ -65,6 +65,18 @@ seo:
   description: My links, all in one place — and a tap-to-save digital business card.
   # ogImage: /og.png   # optional custom Open Graph image (a /public path or URL)
 
+# --- Landscape "card mode" (rotate your phone to flash a business card) ---
+# Turn the phone sideways and the page flips into a pretty, physical-looking
+# business card — your name beside a QR code — so you can flash it at someone and
+# rotate back to the full page. The reveal is pure CSS (zero JavaScript); the only
+# script is the optional screen wake lock, shipped solely when `wakeLock: true`.
+# Omit this whole block to accept the defaults below.
+cardMode:
+  enabled: true # show the landscape card overlay (and a portrait "rotate" hint)
+  qr: page # what the QR encodes: page (your link-in-bio) | contact (save offline) | both
+  hint: true # the subtle "⟲ Rotate to show your card" nudge in portrait
+  wakeLock: false # opt-in: keep the screen lit while the card shows (ships a tiny script)
+
 # --- Where this site lives (the setup wizard fills these in) ---
 # url:  your GitHub Pages origin, e.g. https://you.github.io
 # base: the sub-path. "/repo-name" for project pages, "/" for a user site or

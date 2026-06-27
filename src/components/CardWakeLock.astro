@@ -1,0 +1,62 @@
+---
+// Opt-in (libcard.config.yaml → cardMode.wakeLock). This is the ONLY JavaScript
+// card mode can ship, mounted solely when the owner turns it on — exactly the way
+// the theme switcher gates its island.
+//
+// While the phone is in landscape card mode it holds a screen wake lock so the QR
+// stays lit long enough to be scanned, and releases it the moment you rotate back.
+// Tapping the card toggles fullscreen for a more immersive flash. Both are
+// best-effort: Wake Lock needs a secure context (GitHub Pages is HTTPS) and the
+// Fullscreen API is unevenly supported (notably absent on iOS) — every call is
+// guarded and silently no-ops where unavailable.
+---
+<script is:inline>
+  const mq = matchMedia(
+    "(orientation: landscape) and (max-height: 540px) and (pointer: coarse)",
+  );
+  let sentinel = null;
+
+  async function acquire() {
+    try {
+      if (mq.matches && !sentinel && "wakeLock" in navigator) {
+        sentinel = await navigator.wakeLock.request("screen");
+        // The lock can be dropped by the UA (e.g. tab hidden); clear our handle.
+        sentinel.addEventListener("release", () => {
+          sentinel = null;
+        });
+      }
+    } catch {}
+  }
+
+  async function release() {
+    try {
+      if (sentinel) {
+        await sentinel.release();
+        sentinel = null;
+      }
+    } catch {}
+  }
+
+  function sync() {
+    if (mq.matches) acquire();
+    else release();
+  }
+
+  mq.addEventListener("change", sync);
+  // Wake locks auto-release when the page is hidden — re-acquire on return.
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) sync();
+  });
+
+  // Tap the card to toggle fullscreen (only while in card mode).
+  const overlay = document.querySelector(".lc-card-mode");
+  overlay?.addEventListener("click", () => {
+    if (!mq.matches) return;
+    try {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+      else document.exitFullscreen?.();
+    } catch {}
+  });
+
+  sync();
+</script>
