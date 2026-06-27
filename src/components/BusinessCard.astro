@@ -13,6 +13,7 @@ import { withBase, absoluteUrl } from "../lib/site";
 import { buildVCard } from "../lib/vcard";
 import QRCode from "./QRCode.astro";
 import Icon from "./Icon.astro";
+import SaveContact from "./SaveContact.astro";
 
 interface Props {
   /** "landscape" = wide card-mode face; "portrait" = stacked (the /card page). */
@@ -99,6 +100,11 @@ const qrSize = landscape
           <span class="truncate">{p.location}</span>
         </p>
       )
+    }
+    {
+      /* Front-and-center on the rotate-to-reveal card: one tap saves the vCard.
+         Only on the landscape face — the portrait /card page renders its own. */
+      landscape && <SaveContact compact class="mt-2 self-start" />
     }
   </div>
 

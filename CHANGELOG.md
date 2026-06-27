@@ -9,6 +9,10 @@ often to `libcard.config.yaml`); everything else is picked up automatically by
 
 ## Unreleased
 
+- **Save contact, right on the card.** The landscape "card mode" face (turn a
+  phone sideways) now carries a compact **Save contact** button, front and
+  center beside the QR — one tap saves the vCard without leaving the card.
+  Still zero JavaScript; the portrait `/card` page is unchanged.
 - **First-run nudge (opt-in).** A fresh "Use this template" card can show a
   subtle "edit `libcard.config.yaml`" banner until it's customized — set
   `meta.default: true` to switch it on, and remove it once the card is yours.
