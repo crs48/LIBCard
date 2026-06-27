@@ -484,7 +484,7 @@ const analytics = await getAnalytics();
       `outboundClicks`.
 - [x] Add a commented `analytics:` block to
       [libcard.config.yaml](../../libcard.config.yaml) (off by default).
-- [ ] Document the feature in [README.md](../../README.md) beside the `stars`
+- [x] Document the feature in [README.md](../../README.md) beside the `stars`
       tradeoff table: pixel = zero-JS, beacon = tiny-JS + clicks, cookieless,
       no banner, honest ePrivacy caveat.
 - [ ] Decide the maintainer's own setting (GoatCounter pixel vs. Umami Cloud)

@@ -244,6 +244,29 @@ The `stars` modes trade freshness against LibCard's *"nothing to track you"* pro
 > <script async defer src="https://buttons.github.io/buttons.js"></script>
 > ```
 
+### Analytics (optional)
+
+By default LibCard ships **zero analytics** — nothing counts you, exactly like the rest of the page. If you'd like basic, honest numbers (how many people visit, where they came from, which links they click) you can opt in to a **cookieless, no-consent-banner** provider. Add an `analytics:` block and LibCard injects that provider's official snippet; omit it and nothing changes.
+
+```yaml
+analytics:
+  provider: goatcounter   # goatcounter | umami | plausible | cloudflare
+  code: yourname          # -> yourname.goatcounter.com
+  mode: pixel             # pixel (zero-JS) | script
+```
+
+Like the `stars` modes, the choice trades insight against LibCard's *"nothing to track you"* promise:
+
+| Provider | JavaScript | Outbound link clicks | Notes |
+|----------|------------|----------------------|-------|
+| `goatcounter` · `mode: pixel` | **none** (a 1×1 `<img>`) | no | the zero-JS way to count visits + referrers |
+| `goatcounter` · `mode: script` | ~3 KB | no | richer dashboard, still cookieless |
+| `umami` | ~2 KB | **yes** (`outboundClicks: true`) | generous free cloud tier; MIT, self-hostable |
+| `plausible` | <1 KB | **yes** (built in) | polished; paid cloud or self-host |
+| `cloudflare` | ~1.5 KB | no | free + unlimited; needs a Web Analytics `token` |
+
+All of these are **cookieless** and store only aggregate data, so no consent banner is required for the default setup ([ePrivacy rules vary by country](https://plausible.io/data-policy) — the strictest EU states are the exception; you stay responsible for your own compliance). The provider id/domain/token are public, so they live right in `libcard.config.yaml` — no GitHub secrets, no CI changes. When analytics is on, the footer shows a short, honest "counts anonymous visits — no cookies" note. Full background and the provider comparison: [`docs/explorations/0009_*_COOKIELESS_ANALYTICS.md`](./docs/explorations/).
+
 ### Custom domain (optional)
 
 GitHub Pages supports custom domains for free. Add a `public/CNAME` file containing your domain, point your DNS at GitHub Pages, and set `site.base: "/"` (and `site.url` to your domain) in the config.
