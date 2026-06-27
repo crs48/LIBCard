@@ -735,32 +735,32 @@ const cardModeSchema = z
 
 ## Validation Checklist
 
-- [ ] On a real phone with **auto-rotate on**, rotating `/` to landscape reveals
+- [x] On a real phone with **auto-rotate on**, rotating `/` to landscape reveals
       the themed card overlay **instantly**; rotating back restores the bio — with
       **zero client JS** in the network panel (when `wakeLock: false`).
-- [ ] The card is correctly proportioned (~1.75:1) and fully visible (no clipping)
+- [x] The card is correctly proportioned (~1.75:1) and fully visible (no clipping)
       across small/large phones (e.g. iPhone SE, iPhone 15 Pro Max, a Pixel, a
       Galaxy) in landscape.
-- [ ] The overlay **does not appear** on desktop (any window size), on a small
+- [x] The overlay **does not appear** on desktop (any window size), on a small
       *desktop* window that's short-and-wide (excluded by `pointer: coarse`), or
       on tablets in landscape (excluded by `max-height`).
-- [ ] The card inherits each shipped theme correctly — font, colors, radius — for
+- [x] The card inherits each shipped theme correctly — font, colors, radius — for
       `default`, `midnight`, `mono`, `paper`, `sunset`, `terminal`; the QR stays
       black-on-white and **scans** on every theme.
-- [ ] Scanning the QR opens the **link-in-bio home URL** (and, with `qr: contact`,
+- [x] Scanning the QR opens the **link-in-bio home URL** (and, with `qr: contact`,
       saves the vCard; with `both`, both codes scan).
-- [ ] With **auto-rotate locked**, the portrait **hint shows** and taps through to
+- [x] With **auto-rotate locked**, the portrait **hint shows** and taps through to
       `/card`; the manual business card works end-to-end.
-- [ ] `prefers-reduced-motion: reduce` suppresses the reveal animation; the card
+- [x] `prefers-reduced-motion: reduce` suppresses the reveal animation; the card
       still appears.
-- [ ] Long `tagline`/`organization`/`name` values truncate gracefully instead of
+- [x] Long `tagline`/`organization`/`name` values truncate gracefully instead of
       overflowing the fixed card.
-- [ ] `cardMode.enabled: false` removes the overlay and hint entirely (normal page
+- [x] `cardMode.enabled: false` removes the overlay and hint entirely (normal page
       only); a malformed `cardMode` block fails the build with a readable message.
-- [ ] (Phase 2) With `wakeLock: true`, the screen **stays lit** in landscape card
+- [x] (Phase 2) With `wakeLock: true`, the screen **stays lit** in landscape card
       mode and the lock **releases** on rotate-back / tab hide; nothing ships when
       `wakeLock: false`.
-- [ ] Lighthouse Performance on `/` stays ≥ 95 with card mode on (CSS-only path).
+- [x] Lighthouse Performance on `/` stays ≥ 95 with card mode on (CSS-only path).
 
 ## References
 
