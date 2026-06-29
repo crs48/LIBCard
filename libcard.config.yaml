@@ -53,6 +53,9 @@ links:
   - label: xnet.fyi/why
     url: https://xnet.fyi/why/
     icon: globe
+  - label: xnet.fyi/a-great-pirate-age
+    url: https://xnet.fyi/a-great-pirate-age/
+    icon: globe
   - label: LIBCard
     url: https://github.com/crs48/LIBCard
     icon: github
