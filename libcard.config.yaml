@@ -43,8 +43,8 @@ socials:
 # My pinned GitHub repos, in pinned order.
 links:
   - label: Yinning to Winning (community)
-    url: https://www.skool.com/yinning-to-winning-9124/about
-    icon: globe
+    url: https://crs48.github.io/ytw
+    icon: heart
   - label: xNet
     url: https://github.com/crs48/xNet
     icon: github
