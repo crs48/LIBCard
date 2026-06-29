@@ -115,7 +115,7 @@ blocks:
   - type: divider
     label: Interested in my community?
   - type: heading
-    text: Sweet! Check out my Skool: Yinning to Winning (above).
+    text: "Sweet! Check out my Skool: Yinning to Winning (above)."
   - type: text
     markdown: >
       I made Yinning to Winning as a place for sensitive spiritual people to connect and develop 
