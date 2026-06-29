@@ -42,6 +42,9 @@ socials:
 # --- Your links (the buttons) ---
 # My pinned GitHub repos, in pinned order.
 links:
+  - label: Yinning to Winning (community)
+    url: https://www.skool.com/yinning-to-winning-9124/about
+    icon: globe
   - label: xNet
     url: https://github.com/crs48/xNet
     icon: github
@@ -109,6 +112,23 @@ blocks:
         a: Yes. Add a CNAME and set site.base to "/".
       - q: Can I embed content?
         a: Yup. Video, maps, music, forms, and more.
+  - type: divider
+    label: Interested in my community?
+  - type: heading
+    text: Sweet! Check out my Skool: Yinning to Winning (above).
+  - type: text
+    markdown: >
+      I made Yinning to Winning as a place for sensitive spiritual people to connect and develop 
+      their offerings in the world. Turning their much needed capacity to slow down and witness, 
+      into projects they engage with daily for fun and profit.
+  - type: faq
+    items:
+      - q: Is it really free?
+        a: No — the price is $4/month and goes up as the community grows. You can lock in early, or delay and pay a bit more later, or do other stuff 🤷🏽‍♂️
+      - q: What do I do there?
+        a: Post your growth edges. Post content you're shy to share. Offer new services you're new to offering. Socialize ideas that most people won't have capacity for but these people do. And get used to being seen fully and with a lot less judgement.
+      - q: Can I trust it?
+        a: Do you trust me? I'm working to do what I say and say what I do. I'm not perfect at it but I've been getting feedback lately that when it's hard and messy, I'm actually really consistent and present with the unknown. Hangout with me online and decide for yourself. I'm building a space I actually want to hang out in on a daily basis and I'm doing what I sense it takes to do that.
   - type: divider
     label: Contact Me
   - type: contact-buttons
