@@ -88,6 +88,14 @@ links:
     icon: github
     star: true
     stars: build
+  - label: dome
+    url: https://github.com/crs48/dome
+    icon: github
+    star: true
+    stars: build
+  - label: dome home explorations
+    url: https://crs48.github.io/dome
+    icon: globe
 
 # --- Rich content blocks (optional, ordered) ---
 # An ordered list of typed blocks rendered between your links and the social row.
