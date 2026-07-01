@@ -104,13 +104,13 @@ links:
   - label: food forest explorations
     url: https://crs48.github.io/food-forests
     icon: globe
-- label: floor-sitting
-    url: https://github.com/crs48/floor-sitting
+- label: floor-life
+    url: https://github.com/crs48/floor-life
     icon: github
     star: true
     stars: build
-  - label: floor sitting explorations
-    url: https://crs48.github.io/floor-sitting
+  - label: floor life explorations
+    url: https://crs48.github.io/floor-life
     icon: globe
 # --- Rich content blocks (optional, ordered) ---
 # An ordered list of typed blocks rendered between your links and the social row.
