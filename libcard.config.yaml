@@ -104,7 +104,7 @@ links:
   - label: food forest explorations
     url: https://crs48.github.io/food-forests
     icon: globe
-- label: floor-life
+  - label: floor-life
     url: https://github.com/crs48/floor-life
     icon: github
     star: true
