@@ -50,6 +50,9 @@ socials:
 # with its source: the row shows the site as the main button and a small
 # GitHub pill (mark + star count) to its right.
 links:
+  - label: 75m of Presence aka Coaching
+    url: https://crs.coach/
+    icon: heart
   - label: Nervous System Healing (resources)
     url: https://crs48.github.io/nervous-system-healing
     icon: heart
