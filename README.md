@@ -107,7 +107,7 @@ four tiers:
 
 | Tier | Blocks | How it stays zero-JS / zero-server |
 |---|---|---|
-| **Static** | `heading`, `text` (Markdown), `divider`, `faq`, `gallery`, `contact-buttons` | pure HTML/CSS |
+| **Static** | `heading`, `text` (Markdown), `divider`, `faq`, `gallery`, `contact-buttons`, `tip-buttons` | pure HTML/CSS |
 | **Forms** | `signup` (newsletter), `form` (contact) | a plain `<form method="post">` to a third party |
 | **Live embeds** | `video`, `embed`, `booking`, `map` | a sandboxed `<iframe>` — **we** ship no JS |
 | **Build-time** | `tweet`, `rss`, `github` | fetched during the build, baked to static HTML |

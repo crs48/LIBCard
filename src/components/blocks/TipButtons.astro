@@ -1,0 +1,37 @@
+---
+import type { BlockOf } from "../../lib/config";
+import Icon from "../Icon.astro";
+
+interface Props {
+  block: BlockOf<"tip-buttons">;
+}
+
+const { block } = Astro.props;
+
+// A bare handle expands to the provider's pay-me link; a full URL passes through.
+const href = (value: string, base: string) =>
+  /^https?:\/\//i.test(value) ? value : `${base}${encodeURIComponent(value.replace(/^@/, ""))}`;
+
+type Btn = { href: string; label: string; icon: string };
+const buttons: Btn[] = [];
+if (block.venmo) buttons.push({ href: href(block.venmo, "https://account.venmo.com/u/"), label: "Venmo", icon: "venmo" });
+if (block.paypal) buttons.push({ href: href(block.paypal, "https://paypal.me/"), label: "PayPal", icon: "paypal" });
+if (block.wise) buttons.push({ href: href(block.wise, "https://wise.com/pay/me/"), label: "Wise", icon: "wise" });
+---
+{
+  buttons.length > 0 && (
+    <div class="grid w-full grid-cols-2 gap-2 sm:grid-cols-3">
+      {buttons.map((b) => (
+        <a
+          href={b.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex items-center justify-center gap-2 rounded-card border border-border bg-surface px-3 py-2.5 text-sm font-medium text-fg shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          <Icon name={b.icon} class="size-4 shrink-0 text-muted" />
+          <span>{b.label}</span>
+        </a>
+      ))}
+    </div>
+  )
+}

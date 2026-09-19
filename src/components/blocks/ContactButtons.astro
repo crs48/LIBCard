@@ -12,8 +12,10 @@ const { contact } = await getConfig();
 
 // `call`/`email: true` reuse the contact card's phone/email so they don't have
 // to be repeated; a string overrides. wa.me wants digits only; tel/sms keep the
-// formatting the dialer ignores anyway.
+// formatting the dialer ignores anyway. A non-numeric whatsapp value is a
+// WhatsApp username and passes through as wa.me/<username>.
 const digits = (s: string) => s.replace(/[^\d]/g, "");
+const waPath = (s: string) => (/^[+\d\s().-]+$/.test(s) ? digits(s) : encodeURIComponent(s.replace(/^@/, "")));
 const phone = typeof block.call === "string" ? block.call : block.call ? contact.phone : undefined;
 const email = typeof block.email === "string" ? block.email : block.email ? contact.email : undefined;
 
@@ -21,7 +23,7 @@ type Btn = { href: string; label: string; icon: string };
 const buttons: Btn[] = [];
 if (phone) buttons.push({ href: `tel:${phone}`, label: "Call", icon: "phone" });
 if (block.sms) buttons.push({ href: `sms:${block.sms}`, label: "Text", icon: "message" });
-if (block.whatsapp) buttons.push({ href: `https://wa.me/${digits(block.whatsapp)}`, label: "WhatsApp", icon: "whatsapp" });
+if (block.whatsapp) buttons.push({ href: `https://wa.me/${waPath(block.whatsapp)}`, label: "WhatsApp", icon: "whatsapp" });
 if (block.telegram)
   buttons.push({ href: `https://t.me/${block.telegram.replace(/^@/, "")}`, label: "Telegram", icon: "telegram" });
 if (block.signal) buttons.push({ href: `https://signal.me/#p/${block.signal}`, label: "Signal", icon: "signal" });
