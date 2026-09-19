@@ -189,6 +189,15 @@ const blockSchema = z.discriminatedUnion("type", [
     .strict(),
   z
     .object({
+      type: z.literal("tip-buttons"),
+      // Each value is a handle (→ the provider's pay-me link) or a full https URL.
+      venmo: z.string().optional(),
+      paypal: z.string().optional(),
+      wise: z.string().optional(),
+    })
+    .strict(),
+  z
+    .object({
       type: z.literal("gallery"),
       images: z.array(imageSchema).min(1),
     })

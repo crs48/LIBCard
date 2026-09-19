@@ -213,6 +213,28 @@
                 "properties": {
                   "type": {
                     "type": "string",
+                    "const": "tip-buttons"
+                  },
+                  "venmo": {
+                    "type": "string"
+                  },
+                  "paypal": {
+                    "type": "string"
+                  },
+                  "wise": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
                     "const": "gallery"
                   },
                   "images": {

@@ -40,8 +40,6 @@ socials:
     url: https://www.youtube.com/channel/UC3MAaU1oKalapO7rjZps7hQ
   - platform: instagram
     url: https://www.instagram.com/becomingbabyman/
-  - platform: telegram
-    url: https://t.me/becomingbabyman
   - platform: substack
     url: https://becomingbabyman.substack.com/
 
@@ -147,9 +145,20 @@ blocks:
       - q: Can I embed content?
         a: Yup. Video, maps, music, forms, and more.
   - type: divider
+    label: Support My Work
+  - type: text
+    markdown: >
+      If you want to support my work, you can tip me at any of these places:
+  - type: tip-buttons
+    venmo: christophersmothers
+    paypal: chrissmothers
+    wise: chriss907
+  - type: divider
     label: Contact Me
   - type: contact-buttons
     call: true # uses contact.phone above; or set a number string
+    whatsapp: becomingbabyman # username → wa.me/becomingbabyman
+    telegram: becomingbabyman
     email: true # uses contact.email above
   # --- More block types you can add (uncomment and edit) ---
   # - { type: booking, provider: calcom, url: https://cal.com/you/30min, title: Book a call }

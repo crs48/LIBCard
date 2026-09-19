@@ -6,6 +6,7 @@ import Heading from "./blocks/Heading.astro";
 import TextBlock from "./blocks/TextBlock.astro";
 import Divider from "./blocks/Divider.astro";
 import ContactButtons from "./blocks/ContactButtons.astro";
+import TipButtons from "./blocks/TipButtons.astro";
 import Gallery from "./blocks/Gallery.astro";
 import Faq from "./blocks/Faq.astro";
 import VideoEmbed from "./blocks/VideoEmbed.astro";
@@ -28,6 +29,7 @@ const { block } = Astro.props;
 {block.type === "text" && <TextBlock block={block} />}
 {block.type === "divider" && <Divider block={block} />}
 {block.type === "contact-buttons" && <ContactButtons block={block} />}
+{block.type === "tip-buttons" && <TipButtons block={block} />}
 {block.type === "gallery" && <Gallery block={block} />}
 {block.type === "faq" && <Faq block={block} />}
 {block.type === "video" && <VideoEmbed block={block} />}
