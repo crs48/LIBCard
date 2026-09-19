@@ -56,6 +56,9 @@ links:
   - label: Nervous System Healing (resources)
     url: https://crs48.github.io/nervous-system-healing
     icon: heart
+  - label: Rabbit Holes (what I'm reading)
+    url: https://curius.app/chris-smothers
+    icon: link
   - label: xNet
     url: https://xnet.fyi/
     icon: globe
