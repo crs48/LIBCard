@@ -118,6 +118,9 @@ links:
     icon: globe
     github: https://github.com/crs48/wealthglobe
     stars: build
+  - label: Résumé (PDF)
+    url: https://crs.land/resume.pdf # served from public/resume.pdf
+    icon: file-text
 # --- Rich content blocks (optional, ordered) ---
 # An ordered list of typed blocks rendered between your links and the social row.
 # Every block is validated data — never raw HTML — so it stays safe and simple.
