@@ -57,6 +57,8 @@ links:
   - label: Digital Garden
     url: https://crs.garden
     icon: leaf
+    github: https://github.com/crs48/digitalgarden
+    stars: build
   - label: Rabbit Holes (what I'm reading)
     url: https://curius.app/chris-smothers
     icon: book-open
