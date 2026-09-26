@@ -53,67 +53,67 @@ links:
     icon: heart
   - label: Nervous System Healing (resources)
     url: https://crs48.github.io/nervous-system-healing
-    icon: heart
+    icon: activity
   - label: Digital Garden
     url: https://crs.garden
     icon: leaf
   - label: Rabbit Holes (what I'm reading)
     url: https://curius.app/chris-smothers
-    icon: link
+    icon: book-open
   - label: xNet
     url: https://xnet.fyi/
-    icon: globe
+    icon: network
     github: https://github.com/crs48/xNet # show the repo + star count beside the site
     stars: build # bake the star count in at build time (zero runtime JS)
   - label: xnet.fyi/blog/a-great-pirate-age
     url: https://xnet.fyi/blog/a-great-pirate-age/
-    icon: globe
+    icon: pirate
   - label: xnet.fyi/blog/timeout
     url: https://xnet.fyi/blog/timeout/
-    icon: heart
+    icon: clock
   - label: LIBCard (this site)
     url: https://crs48.github.io/LIBCard
-    icon: globe
+    icon: id-card
     github: https://github.com/crs48/LIBCard
     stars: build
   - label: murmuration (flocking)
     url: https://crs48.github.io/murmuration
-    icon: globe
+    icon: simulation
     github: https://github.com/crs48/murmuration
     stars: build
   - label: warp-voyage (tunnel game)
     url: https://crs48.github.io/warp-voyage
-    icon: globe
+    icon: game
     github: https://github.com/crs48/warp-voyage
     stars: build
   - label: cause (Clojure EDN CRDT)
     url: https://github.com/crs48/cause
-    icon: github
+    icon: git-merge
     star: true # add a "★ Star" sub-button that opens the repo
     stars: build
   - label: dome home explorations
     url: https://crs48.github.io/dome
-    icon: globe
+    icon: home
     github: https://github.com/crs48/dome
     stars: build
   - label: food forest explorations
     url: https://crs48.github.io/food-forests
-    icon: globe
+    icon: tree
     github: https://github.com/crs48/food-forests
     stars: build
   - label: floor life explorations
     url: https://crs48.github.io/floor-life
-    icon: globe
+    icon: bed
     github: https://github.com/crs48/floor-life
     stars: build
   - label: how ai works for ludites
     url: https://crs48.github.io/ai-explained
-    icon: globe
+    icon: cpu
     github: https://github.com/crs48/ai-explained
     stars: build
   - label: EU mixed-use courtyard buildings for the US
     url: https://crs48.github.io/courtyardblock
-    icon: globe
+    icon: building
     github: https://github.com/crs48/courtyardblock
     stars: build
   - label: wealthglobe (net worth as land)
