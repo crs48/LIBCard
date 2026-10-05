@@ -108,10 +108,15 @@ links:
     icon: globe
     github: https://github.com/crs48/ai-explained
     stars: build
-  - label: EU mixed-use courtyard buildings for the US
-    url: https://crs48.github.io/courtyardblock
+  - label: courtyard block explorations
+    url: https://crs48.github.io/courtyard-block-site/
     icon: globe
-    github: https://github.com/crs48/courtyardblock
+    github: https://github.com/crs48/courtyard-block-site
+    stars: build
+  - label: courtyard block game (community sim)
+    url: https://crs48.github.io/courtyard-block/
+    icon: globe
+    github: https://github.com/crs48/courtyard-block
     stars: build
   - label: wealthglobe (net worth as land)
     url: https://crs48.github.io/wealthglobe/
