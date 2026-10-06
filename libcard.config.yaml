@@ -47,85 +47,106 @@ socials:
 # My pinned GitHub repos, in pinned order. A `github:` line pairs a live site
 # with its source: the row shows the site as the main button and a small
 # GitHub pill (mark + star count) to its right.
+# A `status:` line adds a tiny badge on the button's top-right corner saying
+# what state the thing is in: ready | wip | experiment | exploration | writing | reading | dormant
+# (rephrase any label in the `statuses:` map below the links).
 links:
   - label: 75m of Presence aka Coaching
     url: https://crs.coach/
     icon: heart
+    status: ready
   - label: Nervous System Healing (resources)
     url: https://crs48.github.io/nervous-system-healing
     icon: activity
+    status: ready
   - label: Digital Garden
     url: https://crs.garden
     icon: leaf
+    status: wip
     github: https://github.com/crs48/digitalgarden
     stars: build
   - label: Rabbit Holes (what I'm reading)
     url: https://curius.app/chris-smothers
     icon: book-open
+    status: reading
   - label: xNet
     url: https://xnet.fyi/
     icon: network
+    status: wip
     github: https://github.com/crs48/xNet # show the repo + star count beside the site
     stars: build # bake the star count in at build time (zero runtime JS)
   - label: xnet.fyi/blog/a-great-pirate-age
     url: https://xnet.fyi/blog/a-great-pirate-age/
     icon: pirate
+    status: writing
   - label: xnet.fyi/blog/timeout
     url: https://xnet.fyi/blog/timeout/
     icon: clock
+    status: writing
   - label: LIBCard (this site)
     url: https://crs48.github.io/LIBCard
     icon: id-card
+    status: ready
     github: https://github.com/crs48/LIBCard
     stars: build
   - label: murmuration (flocking)
     url: https://crs48.github.io/murmuration
     icon: simulation
+    status: experiment
     github: https://github.com/crs48/murmuration
     stars: build
   - label: warp-voyage (tunnel game)
     url: https://crs48.github.io/warp-voyage
     icon: game
+    status: experiment
     github: https://github.com/crs48/warp-voyage
     stars: build
   - label: cause (Clojure EDN CRDT)
     url: https://github.com/crs48/cause
     icon: git-merge
+    status: dormant
     star: true # add a "★ Star" sub-button that opens the repo
     stars: build
   - label: dome home explorations
     url: https://crs48.github.io/dome
     icon: home
+    status: exploration
     github: https://github.com/crs48/dome
     stars: build
   - label: food forest explorations
     url: https://crs48.github.io/food-forests
     icon: tree
+    status: exploration
     github: https://github.com/crs48/food-forests
     stars: build
   - label: floor life explorations
     url: https://crs48.github.io/floor-life
     icon: bed
+    status: exploration
     github: https://github.com/crs48/floor-life
     stars: build
   - label: how ai works for ludites
     url: https://crs48.github.io/ai-explained
     icon: cpu
+    status: exploration
     github: https://github.com/crs48/ai-explained
     stars: build
   - label: courtyard block explorations
     url: https://crs48.github.io/courtyard-block-site/
     icon: building
+    status: exploration
     github: https://github.com/crs48/courtyard-block-site
     stars: build
   - label: courtyard block game (community sim)
     url: https://crs48.github.io/courtyard-block/
     icon: game
+    status: wip
     github: https://github.com/crs48/courtyard-block
     stars: build
   - label: wealthglobe (net worth as land)
     url: https://crs48.github.io/wealthglobe/
     icon: globe
+    status: experiment
     github: https://github.com/crs48/wealthglobe
     stars: build
   - label: Résumé (PDF)
@@ -134,8 +155,17 @@ links:
   - label: Feed Me Fund (open-source creator tips)
     url: https://feedme.fund/
     icon: coins
+    status: wip
     github: https://github.com/crs48/feedme
     stars: build
+# --- Status chip wording (optional) ---
+# Rephrase any `status:` chip without touching the code. Every key is optional;
+# anything you leave out keeps its default text (Ready, In progress, Experiment,
+# Exploration, Writing, Reading, Dormant).
+# statuses:
+#   wip: Building
+#   exploration: Investigating
+
 # --- Rich content blocks (optional, ordered) ---
 # An ordered list of typed blocks rendered between your links and the social row.
 # Every block is validated data — never raw HTML — so it stays safe and simple.

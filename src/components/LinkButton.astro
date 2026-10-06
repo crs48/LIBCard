@@ -1,7 +1,8 @@
 ---
-import type { LibcardLink } from "../lib/config";
+import { getConfig, type LibcardLink } from "../lib/config";
 import Icon from "./Icon.astro";
 import { parseRepo, formatStars, shieldsStarsUrl, fetchStarCount } from "../lib/github";
+import { resolveStatus } from "../lib/status";
 
 interface Props {
   link: LibcardLink;
@@ -9,6 +10,9 @@ interface Props {
 
 const { link } = Astro.props;
 const external = /^https?:\/\//i.test(link.url);
+// Optional "what state is this in?" chip (zero JS): the link's `status:` slug,
+// with the owner's `statuses:` rephrasing applied. null → no chip, no markup.
+const status = resolveStatus(link.status, (await getConfig()).statuses);
 const rel = external ? "noopener noreferrer" : undefined;
 const target = external ? "_blank" : undefined;
 
@@ -40,10 +44,29 @@ const pillLabel = repo
     href={link.url}
     target={target}
     rel={rel}
-    class="group flex min-w-0 flex-1 items-center gap-3 rounded-card bg-surface border border-border px-4 py-3.5 text-fg font-medium shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+    class="group relative flex min-w-0 flex-1 items-center gap-3 rounded-card bg-surface border border-border px-4 py-3.5 text-fg font-medium shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
   >
     {link.icon && <Icon name={link.icon} class="size-5 shrink-0 text-muted group-hover:text-accent transition-colors" />}
     <span class="min-w-0 flex-1 truncate text-center">{link.label}</span>
+    {/* Status badge: text + dot, perched on the button's top-right corner like
+        a notification badge (absolutely positioned, so the label keeps all its
+        room). `bg-surface` masks the border it straddles; it rides along with
+        the hover lift because it lives inside the translating <a>. */}
+    {
+      status && (
+        <span
+          class="lc-status absolute -top-2 right-3 inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-2 py-0.5 text-[10px] font-semibold uppercase leading-none tracking-wide text-muted shadow-sm"
+          data-status={status.slug}
+          title={`Status: ${status.label}`}
+        >
+          <span class="lc-status-dot" aria-hidden="true" />
+          <span>
+            <span class="sr-only">Status: </span>
+            {status.label}
+          </span>
+        </span>
+      )
+    }
     {/* Only http(s) links open elsewhere; tel:/mailto:/sms: act in-context, so the
         "leaves the page" glyph would be misleading for them. */}
     {external && <Icon name="external-link" class="size-4 shrink-0 text-muted opacity-0 group-hover:opacity-100 transition-opacity" />}
