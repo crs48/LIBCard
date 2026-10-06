@@ -111,6 +111,31 @@
                   "badge"
                 ],
                 "default": "off"
+              },
+              "feedme": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]{0,63}$",
+                    "description": "Stable target id, unique across links and socials. Lowercase slug, 1–64 chars."
+                  },
+                  "blurb": {
+                    "type": "string",
+                    "maxLength": 240,
+                    "description": "Plain-text blurb, at most 240 characters."
+                  },
+                  "aspiration": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 1000000,
+                    "description": "Optional aspiration in whole US dollars (0–1,000,000). 0 or omitted means none."
+                  }
+                },
+                "required": [
+                  "id"
+                ],
+                "additionalProperties": false
               }
             },
             "required": [
@@ -753,6 +778,31 @@
               },
               "label": {
                 "type": "string"
+              },
+              "feedme": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]{0,63}$",
+                    "description": "Stable target id, unique across links and socials. Lowercase slug, 1–64 chars."
+                  },
+                  "blurb": {
+                    "type": "string",
+                    "maxLength": 240,
+                    "description": "Plain-text blurb, at most 240 characters."
+                  },
+                  "aspiration": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 1000000,
+                    "description": "Optional aspiration in whole US dollars (0–1,000,000). 0 or omitted means none."
+                  }
+                },
+                "required": [
+                  "id"
+                ],
+                "additionalProperties": false
               }
             },
             "required": [
@@ -986,6 +1036,20 @@
               "additionalProperties": false
             }
           ]
+        },
+        "feedme": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "origin": {
+              "type": "string",
+              "description": "Your Feedme origin, e.g. https://tips.example.com — required when enabled."
+            }
+          },
+          "additionalProperties": false
         },
         "site": {
           "type": "object",

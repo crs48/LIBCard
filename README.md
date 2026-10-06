@@ -296,6 +296,50 @@ blended toward the theme's text color so it sits well on light and dark themes.
 > <script async defer src="https://buttons.github.io/buttons.js"></script>
 > ```
 
+### Tips with Feedme (optional)
+
+Let visitors tip you from your card — and say *where* they'd like you to spend
+your energy — with [Feedme](https://github.com/crs48/feedme), a self-hosted
+tip jar. Off by default. Turn it on with a `feedme:` block and opt individual
+links/socials in; everything else stays exactly as it is.
+
+```yaml
+feedme:
+  enabled: true
+  origin: https://tips.yourdomain.com    # YOUR deployed Feedme (bare https origin)
+
+links:
+  - label: My open-source project
+    url: https://ada.github.io/widget
+    github: https://github.com/ada/widget
+    feedme:
+      id: widget                         # permanent id — keep it when you rename the link
+      blurb: More time maintaining this.  # optional, ≤ 240 chars
+      aspiration: 3000                   # optional, whole US dollars (Feedme shows it)
+
+socials:
+  - platform: x
+    url: https://x.com/ada
+    feedme: { id: x }
+```
+
+| What appears | Opens |
+|---|---|
+| **Give to \<name\>** under your header | your Feedme checkout, unselected — the visitor chooses there |
+| **♥ More of this** beside each opted-in link | checkout with that link pre-selected |
+| **More of this:** labeled chips under your social icons | checkout with that social pre-selected |
+
+Every gift is an unconditional tip to you; the pick is a suggestion, and the
+card says so (*"They get all of it. Where you placed it is a suggestion."*). At
+build time LibCard fetches Feedme's public aggregate **once** and bakes in each
+target's public pick share and tip count ("75% of public picks · 1 public tip") —
+a daily snapshot, zero JavaScript, no third-party request at visit time. If the
+endpoint is unreachable the card still builds, with tip links and no numbers.
+Links without their own `feedme:` are never tippable, ids must be unique across
+links and socials, and at most 99 items can opt in. Setup, the id lifecycle,
+what the numbers mean, and why there's no funding bar (yet):
+**[docs/FEEDME.md](./docs/FEEDME.md)**.
+
 ### Analytics (optional)
 
 By default LibCard ships **zero analytics** — nothing counts you, exactly like the rest of the page. If you'd like basic, honest numbers (how many people visit, where they came from, which links they click) you can opt in to a **cookieless, no-consent-banner** provider. Add an `analytics:` block and LibCard injects that provider's official snippet; omit it and nothing changes.
@@ -349,6 +393,13 @@ pnpm test            # run the vCard unit tests
 pnpm typecheck       # astro check
 ```
 
+To build a card from a different config file — e.g. a test fixture — without
+touching your own `libcard.config.yaml`:
+
+```bash
+LIBCARD_CONFIG=src/lib/fixtures/feedme/enabled.config.yaml pnpm build
+```
+
 ## How it works
 
 - **Astro** static output → fast, CDN-friendly HTML with no runtime JS.
@@ -382,6 +433,9 @@ pnpm install && pnpm build && git push
 ```
 
 **Just want the new themes?** `pnpm run update-themes && pnpm run gen:themes`
+
+**Adding Feedme tips?** Update first — the `feedme:` fields need the current
+schema — then follow [docs/FEEDME.md](./docs/FEEDME.md).
 
 See [docs/UPGRADING.md](./docs/UPGRADING.md) for the file-by-file breakdown,
 resolving a config conflict, rolling back, and what changed in each release

@@ -1,9 +1,21 @@
 ---
-import { getConfig } from "../lib/config";
+import { getConfig, getFeedme } from "../lib/config";
 import { withBase } from "../lib/site";
 import Icon from "./Icon.astro";
+import { checkoutUrl, creatorTarget, formatSignal } from "../lib/feedme";
 
 const { profile } = await getConfig();
+// Optional Feedme CTA: "Give to <name>" opens the creator's checkout with
+// nothing pre-selected (no query string) so the visitor chooses there. Shown
+// whenever the integration is enabled — even if the public endpoint was down at
+// build time, since Feedme validates everything again at checkout. The name is
+// the LOCAL profile name, so card copy stays consistent whatever Feedme says.
+const feedme = await getFeedme();
+const giveHref = feedme ? checkoutUrl(feedme.origin) : null;
+// If the endpoint answered, show the synthesized creator target's public
+// signal under the CTA (a build-time snapshot). Unavailable → no numbers.
+const creator = creatorTarget(feedme);
+const firstName = profile.name.trim().split(/\s+/)[0];
 const base = import.meta.env.BASE_URL;
 const avatar = profile.avatar
   ? profile.avatar.startsWith("http")
@@ -29,6 +41,27 @@ const avatar = profile.avatar
         <Icon name="map-pin" class="size-4" />
         <span>{profile.location}</span>
       </p>
+    )
+  }
+  {
+    giveHref && (
+      <div class="lc-give mt-1 flex flex-col items-center gap-1.5">
+        <a
+          href={giveHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex min-h-11 items-center gap-2 rounded-full bg-accent px-5 text-sm font-semibold text-accent-contrast shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          <Icon name="heart" class="size-4 shrink-0" />
+          <span>Give to {profile.name}</span>
+        </a>
+        <p class="max-w-xs text-xs text-muted text-balance">They get all of it. Where you placed it is a suggestion.</p>
+        {creator && (
+          <p class="lc-tip-signal text-[11px] text-muted/80">
+            Just {firstName}: {formatSignal(creator)}
+          </p>
+        )}
+      </div>
     )
   }
 </header>

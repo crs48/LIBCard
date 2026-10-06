@@ -58,6 +58,153 @@ const optionalUrl = z.union([z.string().url(), z.literal("")]).optional();
  */
 export const LINK_STATUSES = ["ready", "wip", "experiment", "exploration", "writing", "reading", "dormant"];
 
+
+// --- Feedme tips (optional, OFF by default) ---------------------------------
+//
+// Feedme (https://github.com/crs48/feedme) is a self-hosted tip jar where a
+// supporter picks *where* they'd like the creator to spend their energy. LibCard
+// only ever links out to it: a "More of this" action beside an opted-in link or
+// social opens the creator's Feedme checkout with that target pre-selected, and
+// a "Give to <name>" CTA opens it unselected. Every gift is an unconditional tip
+// to the creator; the pick is a suggestion, not a purchase or a pledge.
+//
+// Two pieces of config, both optional:
+//   • a top-level `feedme:` block (enabled + the creator's own Feedme origin)
+//   • a per-link / per-social `feedme:` object naming the target `id`
+// Omit the top-level block (or set `enabled: false`) and NOTHING changes: no
+// fetch at build time, no markup, no script. A link or social without its own
+// `feedme:` object is never tippable — opt-in is explicit, never inferred from
+// a platform, URL, label, or GitHub repo.
+
+/** Target IDs: lowercase slug, 1–64 chars, must start with a letter or digit. */
+export const FEEDME_ID_RE = /^[a-z0-9][a-z0-9-]{0,63}$/;
+/** `creator` is synthesized by Feedme itself; `amount` is the checkout's price
+ *  query parameter. Neither may name a source item. */
+export const FEEDME_RESERVED_IDS = ["creator", "amount"];
+/** How many links + socials may opt in (Feedme's import limit). Ordinary,
+ *  untippable items don't count. */
+export const FEEDME_MAX_OPT_INS = 99;
+/** `aspiration` is whole US dollars, 0 (= none) through one million. */
+export const FEEDME_MAX_ASPIRATION = 1_000_000;
+
+/**
+ * Validate + normalize a configured Feedme origin. Returns `{ origin }` with the
+ * canonical `https://host[:port]` form (an optional trailing slash is accepted
+ * and dropped), or `{ error }` with an actionable message. Only a bare HTTPS
+ * origin is allowed — no credentials, no path, no query, no fragment — and
+ * never a loopback host: the public card must point at a deployed Feedme, not a
+ * local preview. (Tests mock `fetch` rather than relaxing this.)
+ */
+export function normalizeFeedmeOrigin(raw) {
+  if (typeof raw !== "string" || raw.trim() === "") {
+    return { error: "feedme.origin is required when feedme.enabled is true (e.g. https://tips.example.com)" };
+  }
+  const value = raw.trim();
+  let url;
+  try {
+    url = new URL(value);
+  } catch {
+    return { error: `feedme.origin must be an absolute https:// origin, got "${value}"` };
+  }
+  if (url.protocol !== "https:") return { error: `feedme.origin must use https://, got "${url.protocol}//"` };
+  if (url.username || url.password) return { error: "feedme.origin must not contain a username or password" };
+  if (/[?#]/.test(value) || url.search || url.hash) return { error: "feedme.origin must not contain a query string or fragment" };
+  if (url.pathname !== "/") return { error: `feedme.origin must be a bare origin with no path (remove "${url.pathname}")` };
+  const host = url.hostname.toLowerCase();
+  if (
+    host === "localhost" ||
+    host.endsWith(".localhost") ||
+    host === "0.0.0.0" ||
+    host === "[::1]" ||
+    /^127\.\d+\.\d+\.\d+$/.test(host)
+  ) {
+    return { error: `feedme.origin must be a public host, not ${host} — point it at your deployed Feedme` };
+  }
+  return { origin: url.origin };
+}
+
+// The per-item opt-in. `.strict()` so a typo (`blurb:` vs `blurbs:`) is a build
+// error rather than a silently ignored field.
+const feedmeOptInSchema = z
+  .object({
+    // The permanent target id Feedme keys payments by. Keep it stable when you
+    // rename or re-point the link — changing it archives the old target and
+    // creates a new one.
+    id: z
+      .string()
+      .regex(FEEDME_ID_RE, {
+        message: "feedme.id must be a lowercase slug: a–z, 0–9 and hyphens, 1–64 chars, starting with a letter or digit",
+      })
+      .refine((id) => !FEEDME_RESERVED_IDS.includes(id), {
+        message: `feedme.id cannot be one of the reserved words: ${FEEDME_RESERVED_IDS.join(", ")}`,
+      })
+      .describe("Stable target id, unique across links and socials. Lowercase slug, 1–64 chars."),
+    // One plain-text sentence shown beside the tip action ("More time in the
+    // room with people."). Omitting it is the same as an empty blurb.
+    blurb: z.string().trim().max(240).optional().describe("Plain-text blurb, at most 240 characters."),
+    // Optional funding aspiration in WHOLE US DOLLARS, imported by Feedme (it can
+    // be overridden there). 0 or omitted = none. LibCard records it but does not
+    // draw a progress bar — see docs/FEEDME.md.
+    aspiration: z
+      .number()
+      .int({ message: "feedme.aspiration must be a whole number of US dollars" })
+      .min(0)
+      .max(FEEDME_MAX_ASPIRATION)
+      .optional()
+      .describe("Optional aspiration in whole US dollars (0–1,000,000). 0 or omitted means none."),
+  })
+  .strict();
+
+// The top-level switch. Adding `feedme:` with `enabled: true` turns on the
+// build-time fetch, the "Give to <name>" CTA and the per-item actions.
+const feedmeConfigSchema = z
+  .object({
+    enabled: z.boolean().default(false),
+    // Your own deployed Feedme (a bare https:// origin). Required when enabled.
+    origin: z.string().optional().describe("Your Feedme origin, e.g. https://tips.example.com — required when enabled."),
+  })
+  .strict()
+  .superRefine((value, ctx) => {
+    if (!value.enabled) return;
+    const result = normalizeFeedmeOrigin(value.origin);
+    if (result.error) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["origin"], message: result.error });
+  });
+
+/**
+ * Whole-document Feedme checks that JSON Schema can't express: target ids must
+ * be unique across links AND socials, and at most FEEDME_MAX_OPT_INS items may
+ * opt in. Issues carry the exact field path so the error points at the line.
+ */
+function validateFeedmeOptIns(doc, ctx) {
+  const optIns = [];
+  (doc.links ?? []).forEach((link, i) => {
+    if (link?.feedme) optIns.push({ id: link.feedme.id, path: ["links", i, "feedme", "id"] });
+  });
+  (doc.socials ?? []).forEach((social, i) => {
+    if (social?.feedme) optIns.push({ id: social.feedme.id, path: ["socials", i, "feedme", "id"] });
+  });
+  if (optIns.length > FEEDME_MAX_OPT_INS) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["links"],
+      message: `At most ${FEEDME_MAX_OPT_INS} links and socials can opt into Feedme (found ${optIns.length}). Remove the feedme: block from the rest — ordinary links don't count.`,
+    });
+  }
+  const seen = new Map();
+  for (const { id, path } of optIns) {
+    const first = seen.get(id);
+    if (first) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path,
+        message: `Duplicate feedme.id "${id}" — already used at ${first.join(".")}. Ids must be unique across links and socials.`,
+      });
+    } else {
+      seen.set(id, path);
+    }
+  }
+}
+
 const linkSchema = z
   .object({
     label: z.string().min(1),
@@ -99,6 +246,8 @@ const linkSchema = z
     //             visit, so it opts out of LibCard's "nothing to track you")
     // Any value other than "off" implies the pill, so `star` is optional then.
     stars: z.enum(["off", "build", "badge"]).default("off"),
+    // Opt this link into Feedme tips ("More of this"). Omit = ordinary link.
+    feedme: feedmeOptInSchema.optional(),
   })
   .strict();
 
@@ -107,6 +256,8 @@ const socialSchema = z
     platform: z.string().min(1),
     url: z.string().url(),
     label: z.string().optional(),
+    // Opt this social into Feedme tips. Omit = ordinary social link.
+    feedme: feedmeOptInSchema.optional(),
   })
   .strict();
 
@@ -435,12 +586,17 @@ export const libcardSchema = z.object({
     .default({}),
   cardMode: cardModeSchema,
   analytics: analyticsSchema,
+  // Optional Feedme tip integration. Absent = off: no fetch, no markup.
+  feedme: feedmeConfigSchema.optional(),
   site: z
     .object({
       url: z.string().url(),
       base: z.string().default("/"),
     })
     .strict(),
-});
+})
+  // Cross-field rules (unique feedme ids, opt-in cap). Runs only once every
+  // field above has parsed, so it always sees fully-shaped data.
+  .superRefine(validateFeedmeOptIns);
 // NOTE: the top-level object is intentionally NOT `.strict()` — Astro's content
 // loader injects an `id` field, and nested objects already catch field typos.

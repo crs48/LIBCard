@@ -1,5 +1,6 @@
 import { getEntry } from "astro:content";
 import { resolveTheme, effectsForSlugs, type ResolvedTheme } from "./themes";
+import { loadFeedme, type FeedmeState } from "./feedme";
 
 /**
  * Typed accessor for the validated LibCard config. Call this from any `.astro`
@@ -60,6 +61,19 @@ export async function getCardMode(): Promise<LibcardConfig["cardMode"]> {
 export async function getAnalytics(): Promise<LibcardAnalytics | null> {
   const cfg = await getConfig();
   return cfg.analytics ?? null;
+}
+
+/**
+ * The opt-in Feedme tip integration — or `null` when the owner hasn't enabled
+ * it (the default). Resolved once per build: the first caller triggers the
+ * single public-endpoint fetch (fail-soft, see feedme.ts) and every component
+ * after that shares the same promise, so Profile, each LinkButton and the
+ * SocialRow never issue their own requests.
+ */
+let feedmePromise: Promise<FeedmeState | null> | undefined;
+export function getFeedme(): Promise<FeedmeState | null> {
+  feedmePromise ??= getConfig().then((cfg) => loadFeedme(cfg));
+  return feedmePromise;
 }
 
 /** The validated config object's type, inferred from the Zod schema. */

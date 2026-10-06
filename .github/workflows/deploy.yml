@@ -7,8 +7,9 @@ on:
   # ...allow manual runs from the Actions tab...
   workflow_dispatch:
   # ...and rebuild daily so build-time content stays fresh without a push:
-  # GitHub star counts (links with `stars: build`) and build-time embeds
-  # (tweet/rss/github blocks). Harmless no-op when the config uses neither.
+  # GitHub star counts (links with `stars: build`), build-time embeds
+  # (tweet/rss/github blocks), and the Feedme public pick snapshot (when
+  # `feedme.enabled` is on). Harmless no-op when the config uses none of them.
   schedule:
     - cron: "0 6 * * *"
 
