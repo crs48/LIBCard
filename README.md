@@ -251,6 +251,43 @@ links:
 
 The pill is always shown when `github:` is set (no `star: true` needed), and `stars` controls the count exactly as above. `github` must be a repo URL — the schema rejects profiles and deep paths.
 
+### Link status chips
+
+Not everything you link to is "done". Add `status:` to a link and the button
+gets a tiny badge perched on its top-right corner — a word plus a colored dot —
+that tells visitors what state the thing is in. Pure CSS, zero JavaScript; links without
+a `status` render exactly as before.
+
+```yaml
+links:
+  - label: My app
+    url: https://ada.github.io/app
+    status: ready          # ready | wip | experiment | exploration | writing | reading | dormant
+```
+
+| `status` | Default chip text | Dot | Use it for |
+|----------|-------------------|-----|------------|
+| `ready` | Ready | green | it works; others can use it today |
+| `wip` | In progress | amber | being built; not ready for use yet |
+| `experiment` | Experiment | violet | a playful prototype that may never be "done" |
+| `exploration` | Exploration | sky blue | research, a written deep-dive |
+| `writing` | Writing | rose | an essay or blog post |
+| `reading` | Reading | teal | a curated reading list, what you're consuming |
+| `dormant` | Dormant | muted (theme) | not being worked on right now |
+
+The vocabulary is fixed so chips stay consistent across cards (and each state
+keeps its dot color), but the **wording is yours**. Rephrase any label with a
+top-level `statuses:` map — every key is optional:
+
+```yaml
+statuses:
+  wip: Building
+  exploration: Investigating
+```
+
+The chip's text and border follow the active theme; only the dot carries a hue,
+blended toward the theme's text color so it sits well on light and dark themes.
+
 > **Want a live, always-fresh count?** Drop in the official [github-buttons](https://buttons.github.io/) widget — but note it ships third-party JavaScript and an iframe (a script from `buttons.github.io` and a request to `ghbtns.com` on every visit), which opts your page out of LibCard's zero-JS, no-tracker default. It isn't built in for that reason; add it yourself only if you're comfortable with the tradeoff:
 >
 > ```html

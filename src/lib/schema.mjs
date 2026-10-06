@@ -48,11 +48,31 @@ const themeConfigSchema = z
 const optionalEmail = z.union([z.string().email(), z.literal("")]).optional();
 const optionalUrl = z.union([z.string().url(), z.literal("")]).optional();
 
+/**
+ * The fixed vocabulary for a link's `status:` chip — a small label inside the
+ * button that says what state the thing behind the link is in ("Ready",
+ * "In progress", "Experiment", …). Fixed on purpose: a shared set of slugs keeps
+ * every card's chips consistent (and lets the stylesheet give each one a dot
+ * color), while the top-level `statuses:` map lets an owner rephrase any label.
+ * Default copy lives in src/lib/status.ts.
+ */
+export const LINK_STATUSES = ["ready", "wip", "experiment", "exploration", "writing", "reading", "dormant"];
+
 const linkSchema = z
   .object({
     label: z.string().min(1),
     url: z.string().url(),
     icon: z.string().optional(),
+    // What state the project/page behind this link is in. Renders a tiny badge
+    // (text + colored dot) on the button's top-right corner. Omit for no badge.
+    //   ready       — works; others can use it today
+    //   wip         — being built; not ready for use yet
+    //   experiment  — a playful prototype, may never be "done"
+    //   exploration — research / a written deep-dive
+    //   writing     — an essay or blog post
+    //   reading     — a curated reading list / what you're consuming
+    //   dormant     — not being worked on right now
+    status: z.enum(LINK_STATUSES).optional(),
     // A companion GitHub repo for this link — e.g. the source behind a live
     // site. Shows a small GitHub pill (the mark + the star count, per `stars`)
     // to the right of the main button, so one row says "here's the site, and
@@ -369,6 +389,19 @@ export const libcardSchema = z.object({
     .strict()
     .default({}),
   links: z.array(linkSchema).default([]),
+  // Optional rephrasing of the `status:` chip labels, e.g. `wip: Building`.
+  // Every key is optional; anything you leave out keeps its default copy.
+  statuses: z
+    .object(
+      Object.fromEntries(
+        LINK_STATUSES.map((slug) => [
+          slug,
+          z.string().min(1).max(24).optional().describe(`Chip text for links with status: ${slug}`),
+        ]),
+      ),
+    )
+    .strict()
+    .default({}),
   blocks: z.array(blockSchema).default([]),
   socials: z.array(socialSchema).default([]),
   theme: themeConfigSchema,

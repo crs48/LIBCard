@@ -82,6 +82,18 @@
               "icon": {
                 "type": "string"
               },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "ready",
+                  "wip",
+                  "experiment",
+                  "exploration",
+                  "writing",
+                  "reading",
+                  "dormant"
+                ]
+              },
               "github": {
                 "type": "string",
                 "format": "uri",
@@ -108,6 +120,55 @@
             "additionalProperties": false
           },
           "default": []
+        },
+        "statuses": {
+          "type": "object",
+          "properties": {
+            "ready": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 24,
+              "description": "Chip text for links with status: ready"
+            },
+            "wip": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 24,
+              "description": "Chip text for links with status: wip"
+            },
+            "experiment": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 24,
+              "description": "Chip text for links with status: experiment"
+            },
+            "exploration": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 24,
+              "description": "Chip text for links with status: exploration"
+            },
+            "writing": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 24,
+              "description": "Chip text for links with status: writing"
+            },
+            "reading": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 24,
+              "description": "Chip text for links with status: reading"
+            },
+            "dormant": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 24,
+              "description": "Chip text for links with status: dormant"
+            }
+          },
+          "additionalProperties": false,
+          "default": {}
         },
         "blocks": {
           "type": "array",

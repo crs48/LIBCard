@@ -64,6 +64,40 @@ html {
   margin-top: 0.75rem;
 }
 
+/* Link status chips (`status:` on a link). The chip itself is theme-neutral —
+   muted text + hairline border via Tailwind utilities on the element — and only
+   the dot carries a fixed hue per state so the states scan at a glance. Each hue
+   is mixed 85/15 toward the theme's text color so it sits comfortably on both
+   light and dark themes (same spirit as the GitHub star-pill gold). Dormant
+   deliberately uses the theme's muted token: "nothing happening here". */
+.lc-status-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background-color: var(--lc-dot, var(--lc-muted));
+}
+.lc-status[data-status="ready"] {
+  --lc-dot: color-mix(in oklab, #22c55e 85%, var(--lc-fg));
+}
+.lc-status[data-status="wip"] {
+  --lc-dot: color-mix(in oklab, #f59e0b 85%, var(--lc-fg));
+}
+.lc-status[data-status="experiment"] {
+  --lc-dot: color-mix(in oklab, #8b5cf6 85%, var(--lc-fg));
+}
+.lc-status[data-status="exploration"] {
+  --lc-dot: color-mix(in oklab, #0ea5e9 85%, var(--lc-fg));
+}
+.lc-status[data-status="writing"] {
+  --lc-dot: color-mix(in oklab, #f43f5e 85%, var(--lc-fg));
+}
+.lc-status[data-status="reading"] {
+  --lc-dot: color-mix(in oklab, #14b8a6 85%, var(--lc-fg));
+}
+.lc-status[data-status="dormant"] {
+  --lc-dot: var(--lc-muted);
+}
+
 /* Respect users who prefer reduced motion. */
 @media (prefers-reduced-motion: reduce) {
   *,
