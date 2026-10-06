@@ -1,8 +1,9 @@
 ---
-import { getConfig, type LibcardLink } from "../lib/config";
+import { getConfig, getFeedme, type LibcardLink } from "../lib/config";
 import Icon from "./Icon.astro";
 import { parseRepo, formatStars, shieldsStarsUrl, fetchStarCount } from "../lib/github";
 import { resolveStatus } from "../lib/status";
+import { tipActionFor } from "../lib/feedme";
 
 interface Props {
   link: LibcardLink;
@@ -38,6 +39,13 @@ const pillLabel = repo
     ? `${repo.owner}/${repo.repo} on GitHub${count ? ` (${count} ${count === "1" ? "star" : "stars"})` : ""}`
     : `Star ${repo.owner}/${repo.repo} on GitHub`
   : undefined;
+
+// Optional Feedme "More of this" action (see lib/feedme.ts). null unless the
+// owner enabled the integration AND this link carries its own `feedme:` opt-in
+// (and, when the endpoint answered, the target is live). It's a separate anchor
+// beside the destination — visiting the link never selects a tip.
+const tip = tipActionFor(await getFeedme(), "link", link, link.label);
+const tipTitle = tip ? [tip.blurb, tip.signal].filter(Boolean).join(" · ") || "Tip via Feedme" : undefined;
 ---
 <div class="flex w-full items-stretch gap-2">
   <a
@@ -92,4 +100,34 @@ const pillLabel = repo
       </a>
     )
   }
+
+  {
+    tip && (
+      <a
+        href={tip.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={tip.ariaLabel}
+        title={tipTitle}
+        data-feedme-target={link.feedme?.id}
+        class="lc-tip group flex min-h-11 shrink-0 items-center gap-1.5 rounded-card border border-border bg-surface px-2.5 text-xs font-medium text-muted shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      >
+        <Icon name="heart" class="size-4 shrink-0 transition-colors" />
+        <span class="max-sm:sr-only">More of this</span>
+      </a>
+    )
+  }
 </div>
+{/* Blurb + public-signal caption for an opted-in link. The signal is a BUILD-
+    TIME snapshot of Feedme's public aggregate ("75% of public picks · 1 public
+    tip"); when the endpoint was unavailable there is simply no number here —
+    never a fake zero. Both strings are plain text, escaped by Astro. */}
+{
+  tip && (tip.blurb || tip.signal) && (
+    <p class="lc-tip-caption mt-1 px-1 text-[11px] leading-snug text-muted">
+      {tip.blurb && <span>{tip.blurb}</span>}
+      {tip.blurb && tip.signal && <span aria-hidden="true"> · </span>}
+      {tip.signal && <span class="lc-tip-signal">{tip.signal}</span>}
+    </p>
+  )
+}

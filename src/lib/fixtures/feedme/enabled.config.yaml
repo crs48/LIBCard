@@ -1,0 +1,52 @@
+# TEST FIXTURE — a minimal libcard.config.yaml with the Feedme integration ON.
+# `https://creator-feedme.example` is a placeholder origin; tests mock fetch.
+profile:
+  name: Ada Example
+  tagline: Fixture card for the Feedme integration tests
+
+feedme:
+  enabled: true
+  origin: https://creator-feedme.example/   # trailing slash is accepted + normalized
+
+links:
+  - label: 75m of Presence aka Coaching
+    url: https://crs.coach/
+    icon: heart
+    status: ready
+    feedme:
+      id: presence
+      blurb: More hours in the room with people.
+      aspiration: 3000
+
+  - label: A project with source code
+    url: https://example.com/project
+    github: https://github.com/example/project
+    stars: off
+    feedme:
+      id: open-source
+      blurb: More time maintaining this project.
+
+  - label: Résumé
+    url: https://example.com/resume.pdf
+    # No feedme object: an ordinary link, with no tip action.
+
+  - label: Retired thing
+    url: https://example.com/retired
+    feedme:
+      id: retired   # opted in locally, but hidden on Feedme → no action in the fixture response
+
+socials:
+  - platform: x
+    label: My writing on X
+    url: https://x.com/example
+    feedme:
+      id: x
+      blurb: More of this voice.
+
+  - platform: github
+    url: https://github.com/example
+    # Remains an ordinary social link.
+
+site:
+  url: https://example.github.io
+  base: /card

@@ -1,8 +1,21 @@
 ---
-import { getConfig } from "../lib/config";
+import { getConfig, getFeedme } from "../lib/config";
 import Icon from "./Icon.astro";
+import { tipActionFor, socialDisplayName } from "../lib/feedme";
 
 const { socials } = await getConfig();
+
+// Feedme "More of this" for opted-in socials. The icon row stays exactly as it
+// is; tips render as a separate row of LABELED chips below it (platform icon +
+// name), so on a narrow screen a visitor sees "More of this: [X] [Bluesky]"
+// rather than a cluster of identical tiny hearts. Empty unless the integration
+// is on AND a social carries its own `feedme:` opt-in.
+const feedme = await getFeedme();
+const tips = socials.flatMap((social) => {
+  const name = socialDisplayName(social);
+  const tip = tipActionFor(feedme, "social", social, name);
+  return tip ? [{ social, name, tip }] : [];
+});
 
 // Official brand colors, keyed to match the Icon names. Platforms without an
 // entry (e.g. a custom link with the generic glyph) fall back to the theme
@@ -43,6 +56,34 @@ const BRAND_COLORS: Record<string, string> = {
           </a>
         );
       })}
+    </nav>
+  )
+}
+
+{
+  tips.length > 0 && (
+    <nav aria-label="Support more of this" class="flex flex-wrap items-center justify-center gap-2">
+      <span class="text-xs text-muted">More of this:</span>
+      {tips.map(({ social, name, tip }) => (
+        <a
+          href={tip.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={[tip.blurb, tip.signal].filter(Boolean).join(" · ") || undefined}
+          data-feedme-target={social.feedme?.id}
+          class="lc-tip inline-flex min-h-11 items-center gap-1.5 rounded-full border border-border bg-surface px-3.5 text-sm font-medium text-muted shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          <Icon name={social.platform} class="size-4 shrink-0" />
+          <span class="sr-only">Support more of </span>
+          <span>{name}</span>
+          {tip.share && (
+            <span class="text-xs text-muted/80">
+              <span aria-hidden="true">· {tip.share}</span>
+              <span class="sr-only">. {tip.signal}</span>
+            </span>
+          )}
+        </a>
+      ))}
     </nav>
   )
 }

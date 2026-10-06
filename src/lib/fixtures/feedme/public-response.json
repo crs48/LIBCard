@@ -1,0 +1,49 @@
+{
+  "creatorName": "Ada Example",
+  "origin": "https://creator-feedme.example",
+  "defaultAmountCents": 2200,
+  "importedAt": "2026-10-06T12:00:00Z",
+  "targets": [
+    {
+      "id": "creator",
+      "label": "Just Ada",
+      "url": null,
+      "kind": "creator",
+      "publicCount": 1,
+      "publicShareMillis": 250
+    },
+    {
+      "id": "presence",
+      "label": "75m of Presence aka Coaching",
+      "url": "https://crs.coach/",
+      "kind": "link",
+      "publicCount": 3,
+      "publicShareMillis": 749
+    },
+    {
+      "id": "open-source",
+      "label": "A project with source code",
+      "url": "https://example.com/project",
+      "kind": "link",
+      "publicCount": 0,
+      "publicShareMillis": 0
+    },
+    {
+      "id": "x",
+      "label": "My writing on X",
+      "url": "https://x.com/example",
+      "kind": "social",
+      "publicCount": 1,
+      "publicShareMillis": 1
+    },
+    {
+      "id": "api-only",
+      "label": "A target LibCard never opted into",
+      "url": "https://example.com/elsewhere",
+      "kind": "link",
+      "publicCount": 0,
+      "publicShareMillis": 0,
+      "futureField": true
+    }
+  ]
+}
