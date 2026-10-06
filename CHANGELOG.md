@@ -9,6 +9,18 @@ often to `libcard.config.yaml`); everything else is picked up automatically by
 
 ## Unreleased
 
+- **Tips with Feedme (optional, off by default).** A new `feedme:` block plus
+  per-link / per-social `feedme: { id, blurb, aspiration }` opt-ins add a
+  "Give to <name>" CTA and a ♥ "More of this" action beside the items you
+  choose, each opening your own self-hosted [Feedme](https://github.com/crs48/feedme)
+  checkout with that target pre-selected. At build time LibCard fetches Feedme's
+  public aggregate once (fail-soft, no secrets, no runtime JS) and bakes in each
+  target's public pick share and tip count. Existing configs are untouched:
+  without the block nothing is fetched and nothing renders. Guide:
+  [docs/FEEDME.md](./docs/FEEDME.md).
+- **`LIBCARD_CONFIG` for fixture builds.** `LIBCARD_CONFIG=path.yaml pnpm build`
+  builds another config file (used by the Feedme fixtures) without editing
+  `libcard.config.yaml`.
 - **Substack in the social row.** `platform: substack` now renders the
   Substack mark with its brand-orange hover, alongside the other social icons.
 - **Pair a site with its GitHub repo on one row.** A link can now carry a

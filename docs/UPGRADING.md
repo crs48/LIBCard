@@ -22,6 +22,13 @@ Releases**, and skim [`CHANGELOG.md`](../CHANGELOG.md) when a release lands.
 Entries marked **⚠ Action needed** are the only ones that require anything from
 you; the rest are picked up by a single update + rebuild.
 
+> **Opt-in features need the engine first.** Some features are switched on by
+> *new fields* in `libcard.config.yaml` — e.g. the `feedme:` tip integration
+> ([FEEDME.md](./FEEDME.md)). Because every link/social object is strictly
+> validated, an older engine rejects fields it doesn't know. Update, rebuild,
+> *then* add the new fields. Installations that don't opt in need no migration
+> and no payment configuration.
+
 ## 2. What's yours vs. the engine
 
 This is the one idea the whole page rests on. Your repo is a thin layer of
