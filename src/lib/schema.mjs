@@ -156,12 +156,17 @@ const feedmeOptInSchema = z
   .strict();
 
 // The top-level switch. Adding `feedme:` with `enabled: true` turns on the
-// build-time fetch, the "Give to <name>" CTA and the per-item actions.
+// build-time fetch, the "Give to <name>" CTA (unless `give: false`) and the
+// per-item actions.
 const feedmeConfigSchema = z
   .object({
     enabled: z.boolean().default(false),
     // Your own deployed Feedme (a bare https:// origin). Required when enabled.
     origin: z.string().optional().describe("Your Feedme origin, e.g. https://tips.example.com — required when enabled."),
+    // The "Give to <name>" button under your profile header. Default on. Set
+    // false when your checkout link already lives elsewhere — e.g. a
+    // `tip-buttons` block with `feedme: true` — so it isn't shown twice.
+    give: z.boolean().default(true),
   })
   .strict()
   .superRefine((value, ctx) => {
@@ -203,6 +208,18 @@ function validateFeedmeOptIns(doc, ctx) {
       seen.set(id, path);
     }
   }
+  // A `tip-buttons` block can only point at Feedme when the integration is on;
+  // a silent no-op would hide the owner's intended primary button.
+  (doc.blocks ?? []).forEach((block, i) => {
+    if (block?.type === "tip-buttons" && block.feedme && !doc.feedme?.enabled) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["blocks", i, "feedme"],
+        message:
+          "tip-buttons `feedme: true` needs the top-level `feedme:` block with `enabled: true` and your Feedme origin (see docs/FEEDME.md).",
+      });
+    }
+  });
 }
 
 const linkSchema = z
@@ -365,6 +382,18 @@ const blockSchema = z.discriminatedUnion("type", [
       venmo: z.string().optional(),
       paypal: z.string().optional(),
       wise: z.string().optional(),
+      // Feedme as the PRIMARY way to tip. `feedme: true` renders a full-width
+      // "Tip at <host>" button above the provider grid that opens your Feedme
+      // checkout with nothing pre-selected — the visitor picks what they'd like
+      // more of there. Needs the top-level `feedme:` block with `enabled: true`
+      // (the build says so otherwise). Off by default: the block is unchanged.
+      feedme: z.boolean().default(false),
+      // Button text. Default: "Tip at <your Feedme host>", e.g. "Tip at crs.tips".
+      feedmeLabel: z.string().trim().min(1).max(60).optional(),
+      // The one-line explainer under the button — why tip here rather than via
+      // Venmo/PayPal. Omit for the built-in copy, write your own, or `false`
+      // for none. Plain text, never HTML.
+      feedmeNote: z.union([z.string().trim().max(280), z.literal(false)]).optional(),
     })
     .strict(),
   z
@@ -595,8 +624,9 @@ export const libcardSchema = z.object({
     })
     .strict(),
 })
-  // Cross-field rules (unique feedme ids, opt-in cap). Runs only once every
-  // field above has parsed, so it always sees fully-shaped data.
+  // Cross-field rules (unique feedme ids, opt-in cap, tip-buttons → Feedme
+  // needs the integration on). Runs only once every field above has parsed,
+  // so it always sees fully-shaped data.
   .superRefine(validateFeedmeOptIns);
 // NOTE: the top-level object is intentionally NOT `.strict()` — Astro's content
 // loader injects an `id` field, and nested objects already catch field typos.

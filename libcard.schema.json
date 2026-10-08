@@ -309,6 +309,27 @@
                   },
                   "wise": {
                     "type": "string"
+                  },
+                  "feedme": {
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "feedmeLabel": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 60
+                  },
+                  "feedmeNote": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 280
+                      },
+                      {
+                        "type": "boolean",
+                        "const": false
+                      }
+                    ]
                   }
                 },
                 "required": [
@@ -1047,6 +1068,10 @@
             "origin": {
               "type": "string",
               "description": "Your Feedme origin, e.g. https://tips.example.com — required when enabled."
+            },
+            "give": {
+              "type": "boolean",
+              "default": true
             }
           },
           "additionalProperties": false
