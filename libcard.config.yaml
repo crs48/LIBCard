@@ -163,7 +163,7 @@ links:
   - label: Résumé (PDF)
     url: https://crs.land/resume.pdf # served from public/resume.pdf
     icon: file-text
-    # feedme: { skip: true } # keep it off crs.tips — uncomment once crs.tips runs a Feedme that understands `skip`
+    feedme: { skip: true } # Keep the résumé on LibCard, off Feedme.
   - label: Feed Me Fund (open-source creator tips)
     url: https://feedme.fund/
     icon: coins
