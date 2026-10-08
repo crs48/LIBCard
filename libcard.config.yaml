@@ -206,13 +206,17 @@ blocks:
         a: Yup. Video, maps, music, forms, and more.
   - type: divider
     label: Support My Work
+  - type: text
+    markdown: >
+      Tips keep this work free and open. The best way is **crs.tips**, powered by
+      my open source ATProto tipping tool [Feedme](https://github.com/crs48/feedme).
   - type: tip-buttons
     feedme: true # primary button → my Feedme checkout ("Tip at crs.tips")
     # feedmeLabel: Tip at crs.tips   # the default; override the button text here
     feedmeNote: >-
       crs.tips pulls its project list from this site, so you can put your tip
       behind any of the links above. Pick what you'd like more of; I get all of
-      it either way. Open source, no fee of its own.
+      it either way.
     venmo: christophersmothers
     paypal: chrissmothers
     wise: chriss907
