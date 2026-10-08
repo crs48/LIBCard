@@ -209,7 +209,8 @@ blocks:
   - type: text
     markdown: >
       Tips keep this work free and open. The best way is **crs.tips**, powered by
-      my open source ATProto tipping tool [Feedme](https://github.com/crs48/feedme).
+      my open source and [open social](https://atproto.com) tipping tool
+      [Feedme](https://github.com/crs48/feedme).
   - type: tip-buttons
     feedme: true # primary button → my Feedme checkout ("Tip at crs.tips")
     # feedmeLabel: Tip at crs.tips   # the default; override the button text here

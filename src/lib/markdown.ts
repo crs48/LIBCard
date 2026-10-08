@@ -28,28 +28,43 @@ function safeHref(raw: string): string {
   return SAFE_URL.test(url) ? url : "#";
 }
 
-function renderInline(escaped: string): string {
-  let out = escaped;
-
-  // `code` first, so * and _ inside a code span are left alone. Code spans can't
-  // contain backticks here (kept simple on purpose).
-  out = out.replace(/`([^`]+)`/g, (_m, code) => `<code>${code}</code>`);
-
-  // [label](url)
-  out = out.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_m, label, url) => {
-    const href = safeHref(url);
-    const ext = /^https?:\/\//i.test(href);
-    const attrs = ext ? ' target="_blank" rel="noopener noreferrer"' : "";
-    return `<a href="${href}"${attrs}>${label}</a>`;
-  });
-
-  // **bold** then *italic* (and __bold__ / _italic_)
+/** **bold** then *italic* (and __bold__ / _italic_). */
+function renderEmphasis(text: string): string {
+  let out = text;
   out = out.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
   out = out.replace(/__([^_]+)__/g, "<strong>$1</strong>");
   out = out.replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<em>$2</em>");
   out = out.replace(/(^|[^_])_([^_\n]+)_/g, "$1<em>$2</em>");
-
   return out;
+}
+
+// Placeholders for already-rendered spans. Emphasis must never see the inside
+// of a code span, a URL (`a_b_c`), or the `target="_blank"` attributes we add —
+// two external links in one paragraph would otherwise pair their underscores
+// into a bogus <em> and corrupt the markup. NUL can't occur in escaped input.
+const HOLE = "\u0000";
+const HOLE_RE = /\u0000(\d+)\u0000/g;
+
+function renderInline(escaped: string): string {
+  const stash: string[] = [];
+  const keep = (html: string) => `${HOLE}${stash.push(html) - 1}${HOLE}`;
+  let out = escaped;
+
+  // `code` first, so * and _ inside a code span are left alone. Code spans can't
+  // contain backticks here (kept simple on purpose).
+  out = out.replace(/`([^`]+)`/g, (_m, code) => keep(`<code>${code}</code>`));
+
+  // [label](url) — the label still gets emphasis; the href and attributes don't.
+  out = out.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_m, label, url) => {
+    const href = safeHref(url);
+    const ext = /^https?:\/\//i.test(href);
+    const attrs = ext ? ' target="_blank" rel="noopener noreferrer"' : "";
+    return keep(`<a href="${href}"${attrs}>${renderEmphasis(label)}</a>`);
+  });
+
+  out = renderEmphasis(out);
+
+  return out.replace(HOLE_RE, (_m, i) => stash[Number(i)]!);
 }
 
 /** Render limited Markdown to safe HTML. Blank lines split paragraphs; single
