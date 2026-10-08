@@ -383,7 +383,9 @@ export interface TipAction {
 
 /** A link or social as the config types it (only the fields we read). */
 export interface TippableItem {
-  feedme?: { id: string; blurb?: string | undefined; aspiration?: number | undefined } | undefined;
+  feedme?:
+    | { id?: string | undefined; skip?: boolean | undefined; blurb?: string | undefined; aspiration?: number | undefined }
+    | undefined;
 }
 
 /**
@@ -391,6 +393,7 @@ export interface TippableItem {
  * MATCHING KIND — never by label or destination. The matrix:
  *
  *   integration off / item not opted in      → null (ordinary link)
+ *   item carries `feedme: { skip: true }`     → null (kept off Feedme entirely)
  *   endpoint answered, id live for this kind → action with Feedme's default amount + numbers
  *   endpoint answered, id absent/other kind   → null (hidden; destination untouched)
  *   endpoint unavailable                      → action without `amount`, no numbers
@@ -401,7 +404,7 @@ export function tipActionFor(
   item: TippableItem,
   displayName: string,
 ): TipAction | null {
-  if (!state || !item.feedme) return null;
+  if (!state || !item.feedme || item.feedme.skip || item.feedme.id === undefined) return null;
   const { id } = item.feedme;
   const blurb = item.feedme.blurb?.trim() || undefined;
   const ariaLabel = `Support more of ${displayName}`;

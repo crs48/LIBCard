@@ -29,13 +29,11 @@ describe("libcardSchema — existing configs", () => {
     const r = libcardSchema.safeParse(cfg);
     expect(r.success, JSON.stringify(r.success ? null : r.error.issues, null, 2)).toBe(true);
     if (!r.success) return;
-    // The maintainer's card points at their own Feedme (crs.tips) and opts every
-    // project link in; the résumé stays an ordinary link.
+    // The maintainer's card points at their own Feedme (crs.tips) with the
+    // header CTA off. No per-link opt-ins: Feedme lists every link by default,
+    // and leaving them out keeps the ♥ pills and captions off the card.
     expect(r.data.feedme).toEqual({ enabled: true, origin: "https://crs.tips", give: false });
-    const optedIn = r.data.links.filter((l) => l.feedme);
-    expect(optedIn.length).toBe(r.data.links.length - 1);
-    expect(r.data.links.find((l) => l.feedme === undefined)?.label).toMatch(/Résumé/);
-    expect(new Set(optedIn.map((l) => l.feedme!.id)).size).toBe(optedIn.length);
+    expect(r.data.links.every((l) => l.feedme === undefined)).toBe(true);
     // The Support section leads with the Feedme button and its own explainer.
     const tips = r.data.blocks.find((b) => b.type === "tip-buttons");
     expect(tips).toMatchObject({ feedme: true, venmo: "christophersmothers" });
@@ -190,6 +188,43 @@ describe("libcardSchema — Feedme opt-ins", () => {
   });
 });
 
+describe("libcardSchema — feedme: { skip: true }", () => {
+  const enabled = () => ({ ...minimal(), feedme: { enabled: true, origin: "https://tips.example" } });
+  const link = (feedme: unknown) => ({ label: "Thing", url: "https://example.com/thing", feedme });
+
+  it("accepts skip on links and socials, and the fixture's skipped link parses as such", () => {
+    const r = libcardSchema.safeParse({
+      ...enabled(),
+      links: [link({ skip: true })],
+      socials: [{ platform: "x", url: "https://x.com/ada", feedme: { skip: true } }],
+    });
+    expect(r.success, JSON.stringify(r.success ? null : r.error.issues, null, 2)).toBe(true);
+    expect(r.success && r.data.links[0]!.feedme).toEqual({ skip: true });
+    expect(r.success && r.data.socials[0]!.feedme).toEqual({ skip: true });
+    const f = libcardSchema.safeParse(fixture());
+    expect(f.success && f.data.links.find((l) => l.label === "Privacy policy")?.feedme).toEqual({ skip: true });
+  });
+
+  it("rejects skip combined with id, blurb or aspiration", () => {
+    for (const extra of [{ id: "thing" }, { blurb: "x" }, { aspiration: 1 }]) {
+      const out = issues({ ...enabled(), links: [link({ skip: true, ...extra })] });
+      expect(out[0], JSON.stringify(extra)).toMatch(/^links\.0\.feedme\.skip: feedme: \{ skip: true \} takes no other fields/);
+    }
+  });
+
+  it("still requires an id when skip is absent or false", () => {
+    expect(issues({ ...enabled(), links: [link({})] })[0]).toMatch(/^links\.0\.feedme\.id: feedme\.id is required/);
+    expect(issues({ ...enabled(), links: [link({ skip: false, blurb: "x" })] })[0]).toMatch(/^links\.0\.feedme\.id: feedme\.id is required/);
+    expect(issues({ ...enabled(), links: [link({ skip: false, id: "thing" })] })).toEqual([]);
+  });
+
+  it("does not count skipped items toward the opt-in cap or the duplicate check", () => {
+    const links = Array.from({ length: FEEDME_MAX_OPT_INS }, (_, i) => link({ id: `t${i}` }));
+    links.push(link({ skip: true }), link({ skip: true }));
+    expect(issues({ ...enabled(), links })).toEqual([]);
+  });
+});
+
 describe("libcardSchema — feedme.give (the header CTA toggle)", () => {
   it("defaults to true and accepts false", () => {
     const on = libcardSchema.safeParse({ ...minimal(), feedme: { enabled: true, origin: "https://tips.example" } });
@@ -301,8 +336,11 @@ describe("generated libcard.schema.json", () => {
     for (const where of ["links", "socials"]) {
       const optIn = root.properties[where].items.properties.feedme;
       expect(optIn.additionalProperties).toBe(false);
-      expect(optIn.required).toEqual(["id"]);
+      // `id` is required unless `skip: true` — a cross-field rule JSON Schema
+      // can't express, so neither is listed as required here.
+      expect(optIn.required ?? []).toEqual([]);
       expect(optIn.properties.id).toMatchObject({ type: "string", pattern: "^[a-z0-9][a-z0-9-]{0,63}$" });
+      expect(optIn.properties.skip).toMatchObject({ type: "boolean" });
       expect(optIn.properties.blurb).toMatchObject({ type: "string", maxLength: 240 });
       expect(optIn.properties.aspiration).toMatchObject({ type: "integer", minimum: 0, maximum: 1_000_000 });
     }

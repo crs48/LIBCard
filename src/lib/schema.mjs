@@ -123,13 +123,19 @@ export function normalizeFeedmeOrigin(raw) {
   return { origin: url.origin };
 }
 
-// The per-item opt-in. `.strict()` so a typo (`blurb:` vs `blurbs:`) is a build
-// error rather than a silently ignored field.
+// The per-item nested object. Two shapes share it:
+//   • opt-in  — `{ id, blurb?, aspiration? }`: this item is a Feedme target
+//     with a stable id and a ♥ "More of this" action on the card.
+//   • skip    — `{ skip: true }` and nothing else: keep this item OFF Feedme
+//     entirely (it stays an ordinary link on the card). Feedme's importer must
+//     understand `skip` (older Feedme releases require `id` and reject it).
+// `.strict()` so a typo (`blurb:` vs `blurbs:`) is a build error rather than a
+// silently ignored field.
 const feedmeOptInSchema = z
   .object({
     // The permanent target id Feedme keys payments by. Keep it stable when you
     // rename or re-point the link — changing it archives the old target and
-    // creates a new one.
+    // creates a new one. Required unless `skip: true`.
     id: z
       .string()
       .regex(FEEDME_ID_RE, {
@@ -138,7 +144,11 @@ const feedmeOptInSchema = z
       .refine((id) => !FEEDME_RESERVED_IDS.includes(id), {
         message: `feedme.id cannot be one of the reserved words: ${FEEDME_RESERVED_IDS.join(", ")}`,
       })
-      .describe("Stable target id, unique across links and socials. Lowercase slug, 1–64 chars."),
+      .optional()
+      .describe("Stable target id, unique across links and socials. Lowercase slug, 1–64 chars. Required unless skip is true."),
+    // `skip: true` keeps this item off Feedme altogether (not selectable at
+    // checkout, no tip action here). Takes no other fields.
+    skip: z.boolean().optional().describe("true keeps this item off Feedme entirely. Takes no other fields."),
     // One plain-text sentence shown beside the tip action ("More time in the
     // room with people."). Omitting it is the same as an empty blurb.
     blurb: z.string().trim().max(240).optional().describe("Plain-text blurb, at most 240 characters."),
@@ -153,7 +163,29 @@ const feedmeOptInSchema = z
       .optional()
       .describe("Optional aspiration in whole US dollars (0–1,000,000). 0 or omitted means none."),
   })
-  .strict();
+  .strict()
+  .superRefine((value, ctx) => {
+    if (value.skip) {
+      if (value.id !== undefined || value.blurb !== undefined || value.aspiration !== undefined) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["skip"],
+          message: "feedme: { skip: true } takes no other fields — remove id/blurb/aspiration, or drop skip to opt the item in.",
+        });
+      }
+      return;
+    }
+    if (value.id === undefined) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["id"],
+        message: "feedme.id is required (or set `skip: true` to keep this item off Feedme).",
+      });
+    }
+  });
+
+/** True for `feedme: { id }` entries — the ones that are actual targets. */
+const isFeedmeOptIn = (value) => Boolean(value && !value.skip && value.id !== undefined);
 
 // The top-level switch. Adding `feedme:` with `enabled: true` turns on the
 // build-time fetch, the "Give to <name>" CTA (unless `give: false`) and the
@@ -183,10 +215,10 @@ const feedmeConfigSchema = z
 function validateFeedmeOptIns(doc, ctx) {
   const optIns = [];
   (doc.links ?? []).forEach((link, i) => {
-    if (link?.feedme) optIns.push({ id: link.feedme.id, path: ["links", i, "feedme", "id"] });
+    if (isFeedmeOptIn(link?.feedme)) optIns.push({ id: link.feedme.id, path: ["links", i, "feedme", "id"] });
   });
   (doc.socials ?? []).forEach((social, i) => {
-    if (social?.feedme) optIns.push({ id: social.feedme.id, path: ["socials", i, "feedme", "id"] });
+    if (isFeedmeOptIn(social?.feedme)) optIns.push({ id: social.feedme.id, path: ["socials", i, "feedme", "id"] });
   });
   if (optIns.length > FEEDME_MAX_OPT_INS) {
     ctx.addIssue({

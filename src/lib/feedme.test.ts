@@ -466,6 +466,16 @@ describe("loadFeedme + tipActionFor (joining config to the response)", () => {
   });
 });
 
+describe("tipActionFor with feedme: { skip: true }", () => {
+  it("never renders an action for a skipped item, with or without endpoint data", () => {
+    const data = parsed(fixture());
+    expect(tipActionFor({ origin: ORIGIN, data }, "link", { feedme: { skip: true } }, "Privacy")).toBeNull();
+    expect(tipActionFor({ origin: ORIGIN, data: null }, "link", { feedme: { skip: true } }, "Privacy")).toBeNull();
+    // Belt and braces: an id-less object that isn't a skip (the schema rejects it) is also inert.
+    expect(tipActionFor({ origin: ORIGIN, data: null }, "link", { feedme: {} }, "Odd")).toBeNull();
+  });
+});
+
 describe("tipBlockFor (the tip-buttons block's primary Feedme button)", () => {
   const state = { origin: ORIGIN, data: null };
 
