@@ -9,6 +9,14 @@ often to `libcard.config.yaml`); everything else is picked up automatically by
 
 ## Unreleased
 
+- **Feedme as the primary tip button.** A `tip-buttons` block can now set
+  `feedme: true` to lead with a full-width "Tip at <host>" button that opens
+  your Feedme checkout, plus a one-line explainer of why to tip there rather
+  than via Venmo/PayPal (built-in copy, your own `feedmeNote`, or `false`).
+  The provider row renders below it as before. Requires the `feedme:` block to
+  be enabled; off by default, existing blocks are unchanged. Pair it with
+  `feedme.give: false` to drop the header "Give to <name>" button so the
+  checkout link appears once, with your other tip links.
 - **Tips with Feedme (optional, off by default).** A new `feedme:` block plus
   per-link / per-social `feedme: { id, blurb, aspiration }` opt-ins add a
   "Give to <name>" CTA and a ♥ "More of this" action beside the items you
