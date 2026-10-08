@@ -26,6 +26,17 @@ contact:
   title: Maintainer
   website: https://xnet.fyi
 
+# --- Tips with Feedme (optional) ---
+# crs.tips is my own Feedme (https://github.com/crs48/feedme): it reads THIS
+# file to build its list of projects, so a tip there can be put behind any link
+# below ("more of this"). Every gift is an unconditional tip; the pick is a
+# suggestion. Each link's `feedme: { id }` is its permanent payment reference —
+# keep ids stable when renaming or moving links. Guide: docs/FEEDME.md
+feedme:
+  enabled: true
+  origin: https://crs.tips
+  give: false # no "Give to" button under the header — the Support section below has it
+
 # --- Social icon row (icon-only, shown above the links) ---
 socials:
   - platform: github
@@ -55,100 +66,118 @@ links:
     url: https://crs.coach/
     icon: heart
     status: ready
+    feedme: { id: presence }
   - label: Nervous System Healing (resources)
     url: https://crs48.github.io/nervous-system-healing
     icon: activity
     status: ready
+    feedme: { id: nervous-system-healing }
   - label: Digital Garden
     url: https://crs.garden
     icon: leaf
     status: wip
     github: https://github.com/crs48/digitalgarden
     stars: build
+    feedme: { id: digital-garden }
   - label: Rabbit Holes (what I'm reading)
     url: https://curius.app/chris-smothers
     icon: book-open
     status: reading
+    feedme: { id: rabbit-holes }
   - label: xNet
     url: https://xnet.fyi/
     icon: network
     status: wip
     github: https://github.com/crs48/xNet # show the repo + star count beside the site
     stars: build # bake the star count in at build time (zero runtime JS)
+    feedme: { id: xnet }
   - label: xnet.fyi/blog/a-great-pirate-age
     url: https://xnet.fyi/blog/a-great-pirate-age/
     icon: pirate
     status: writing
+    feedme: { id: a-great-pirate-age }
   - label: xnet.fyi/blog/timeout
     url: https://xnet.fyi/blog/timeout/
     icon: clock
     status: writing
+    feedme: { id: timeout }
   - label: LIBCard (this site)
     url: https://crs48.github.io/LIBCard
     icon: id-card
     status: ready
     github: https://github.com/crs48/LIBCard
     stars: build
+    feedme: { id: libcard }
   - label: murmuration (flocking)
     url: https://crs48.github.io/murmuration
     icon: simulation
     status: experiment
     github: https://github.com/crs48/murmuration
     stars: build
+    feedme: { id: murmuration }
   - label: warp-voyage (tunnel game)
     url: https://crs48.github.io/warp-voyage
     icon: game
     status: experiment
     github: https://github.com/crs48/warp-voyage
     stars: build
+    feedme: { id: warp-voyage }
   - label: cause (Clojure EDN CRDT)
     url: https://github.com/crs48/cause
     icon: git-merge
     status: dormant
     star: true # add a "★ Star" sub-button that opens the repo
     stars: build
+    feedme: { id: cause }
   - label: dome home explorations
     url: https://crs48.github.io/dome
     icon: home
     status: exploration
     github: https://github.com/crs48/dome
     stars: build
+    feedme: { id: dome }
   - label: food forest explorations
     url: https://crs48.github.io/food-forests
     icon: tree
     status: exploration
     github: https://github.com/crs48/food-forests
     stars: build
+    feedme: { id: food-forests }
   - label: floor life explorations
     url: https://crs48.github.io/floor-life
     icon: bed
     status: exploration
     github: https://github.com/crs48/floor-life
     stars: build
+    feedme: { id: floor-life }
   - label: how ai works for ludites
     url: https://crs48.github.io/ai-explained
     icon: cpu
     status: exploration
     github: https://github.com/crs48/ai-explained
     stars: build
+    feedme: { id: ai-explained }
   - label: courtyard block explorations
     url: https://crs48.github.io/courtyard-block-site/
     icon: building
     status: exploration
     github: https://github.com/crs48/courtyard-block-site
     stars: build
+    feedme: { id: courtyard-block-site }
   - label: courtyard block game (community sim)
     url: https://crs48.github.io/courtyard-block/
     icon: game
     status: wip
     github: https://github.com/crs48/courtyard-block
     stars: build
+    feedme: { id: courtyard-block-game }
   - label: wealthglobe (net worth as land)
     url: https://crs48.github.io/wealthglobe/
     icon: globe
     status: experiment
     github: https://github.com/crs48/wealthglobe
     stars: build
+    feedme: { id: wealthglobe }
   - label: Résumé (PDF)
     url: https://crs.land/resume.pdf # served from public/resume.pdf
     icon: file-text
@@ -158,6 +187,7 @@ links:
     status: wip
     github: https://github.com/crs48/feedme
     stars: build
+    feedme: { id: feedme }
 # --- Status chip wording (optional) ---
 # Rephrase any `status:` chip without touching the code. Every key is optional;
 # anything you leave out keeps its default text (Ready, In progress, Experiment,
@@ -196,8 +226,16 @@ blocks:
     label: Support My Work
   - type: text
     markdown: >
-      If you want to support my work, you can tip me at any of these places:
+      Tips keep this work free and open. The best way is **crs.tips** — my own
+      [Feedme](https://github.com/crs48/feedme), fed by this very card — but
+      Venmo, PayPal and Wise are here too.
   - type: tip-buttons
+    feedme: true # primary button → my Feedme checkout ("Tip at crs.tips")
+    # feedmeLabel: Tip at crs.tips   # the default; override the button text here
+    feedmeNote: >-
+      crs.tips reads this card, so every link above is a project you can put your
+      tip behind. Pick what you'd like more of: I get all of it either way, and
+      the public picks show up right here. Open source, no fee of its own.
     venmo: christophersmothers
     paypal: chrissmothers
     wise: chriss907

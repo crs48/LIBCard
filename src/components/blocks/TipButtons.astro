@@ -1,5 +1,7 @@
 ---
 import type { BlockOf } from "../../lib/config";
+import { getFeedme } from "../../lib/config";
+import { tipBlockFor } from "../../lib/feedme";
 import Icon from "../Icon.astro";
 
 interface Props {
@@ -17,21 +19,45 @@ const buttons: Btn[] = [];
 if (block.venmo) buttons.push({ href: href(block.venmo, "https://account.venmo.com/u/"), label: "Venmo", icon: "venmo" });
 if (block.paypal) buttons.push({ href: href(block.paypal, "https://paypal.me/"), label: "PayPal", icon: "paypal" });
 if (block.wise) buttons.push({ href: href(block.wise, "https://wise.com/pay/me/"), label: "Wise", icon: "wise" });
+
+// Optional primary button: the owner's own Feedme checkout (see lib/feedme.ts).
+// null unless `feedme: true` on this block AND the top-level integration is on.
+// It only needs the configured origin, so it renders even when the public
+// numbers were unavailable at build time.
+const primary = tipBlockFor(await getFeedme(), block);
 ---
 {
-  buttons.length > 0 && (
-    <div class="grid w-full grid-cols-2 gap-2 sm:grid-cols-3">
-      {buttons.map((b) => (
-        <a
-          href={b.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="flex items-center justify-center gap-2 rounded-card border border-border bg-surface px-3 py-2.5 text-sm font-medium text-fg shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-        >
-          <Icon name={b.icon} class="size-4 shrink-0 text-muted" />
-          <span>{b.label}</span>
-        </a>
-      ))}
+  (primary || buttons.length > 0) && (
+    <div class="flex w-full flex-col gap-3">
+      {primary && (
+        <div class="lc-tip-primary flex flex-col items-center gap-1.5">
+          <a
+            href={primary.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex min-h-11 w-full items-center justify-center gap-2 rounded-card bg-accent px-4 py-3 text-sm font-semibold text-accent-contrast shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            <Icon name="heart" class="size-4 shrink-0" />
+            <span>{primary.label}</span>
+          </a>
+          {primary.note && <p class="max-w-prose text-center text-xs leading-snug text-muted text-balance">{primary.note}</p>}
+        </div>
+      )}
+      {buttons.length > 0 && (
+        <div class="grid w-full grid-cols-2 gap-2 sm:grid-cols-3">
+          {buttons.map((b) => (
+            <a
+              href={b.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center justify-center gap-2 rounded-card border border-border bg-surface px-3 py-2.5 text-sm font-medium text-fg shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            >
+              <Icon name={b.icon} class="size-4 shrink-0 text-muted" />
+              <span>{b.label}</span>
+            </a>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

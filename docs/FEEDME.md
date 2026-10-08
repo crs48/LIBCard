@@ -20,9 +20,10 @@ changes:
 
 | Affordance | Where | Opens |
 |---|---|---|
-| **Give to \<your name\>** | under your profile header | your Feedme checkout, nothing pre-selected — the visitor chooses there |
+| **Give to \<your name\>** | under your profile header (hide it with `give: false`) | your Feedme checkout, nothing pre-selected — the visitor chooses there |
 | **More of this** (♥ pill) | beside each link you opted in | checkout with that link pre-selected, and Feedme's current default amount suggested |
 | **More of this:** \[icon + name\] chips | a labeled row under your social icons | checkout with that social pre-selected |
+| **Tip at \<host\>** (primary button) | a `tip-buttons` block with `feedme: true` — above its Venmo/PayPal/Wise row | checkout, nothing pre-selected |
 
 Beside an opted-in link you may also see a one-line caption: your optional
 *blurb*, plus — when Feedme answered at build time — the target's public signal,
@@ -133,13 +134,44 @@ socials:
   - platform: github
     url: https://github.com/example
     # remains an ordinary social link
+
+blocks:
+  - type: divider
+    label: Support my work
+  - type: tip-buttons
+    feedme: true                           # the primary button: "Tip at tips.yourdomain.com"
+    # feedmeLabel: Tip me                  # optional button text (default "Tip at <host>")
+    # feedmeNote: Pick what you'd like more of — I get all of it either way.
+    venmo: example                         # the usual pay-me links render below it
+    paypal: example
 ```
+
+### Making Feedme the primary way to tip
+
+A `tip-buttons` block already turns Venmo / PayPal / Wise handles into a row of
+buttons. Add `feedme: true` and the block leads with a full-width accent button
+to your Feedme checkout (nothing pre-selected, so the visitor chooses their picks
+there), followed by a short explainer, then the provider row as a quieter second
+option. The button needs only your configured origin, so it renders even when
+the public endpoint was unavailable at build time.
+
+| Field | Rule |
+|---|---|
+| `feedme` | `true` / `false` (default). `true` requires the top-level `feedme:` block with `enabled: true`; otherwise the build fails with a message pointing at the block, rather than silently hiding your intended primary button. |
+| `feedmeLabel` | optional button text, trimmed, 1–60 characters. Default **"Tip at \<host\>"**, e.g. *Tip at crs.tips*. |
+| `feedmeNote` | optional explainer under the button, trimmed, ≤ 280 characters of plain text. Omit for the built-in copy — *"Pick what you'd like more of, and your tip doubles as a vote. Open source, and Feedme adds no fee of its own."* — write your own, or set `false` for none. |
+
+The built-in note makes only claims that hold for every Feedme: a pick is a
+signal rather than a purchase, the code is MIT-licensed, and Feedme adds no
+application fee of its own (Stripe's and your host's still apply). If you
+personalize it, keep it honest in the same way.
 
 ### The rules (the schema enforces all of them)
 
 | Field | Rule |
 |---|---|
 | `feedme.enabled` | default `false`. Absent or `false` → **no fetch, no markup, no script**. |
+| `feedme.give` | default `true`: the "Give to \<name\>" button under your header. Set `false` to drop it — typically because a `tip-buttons` block with `feedme: true` already carries the checkout link, so it isn't shown twice. |
 | `feedme.origin` | required when enabled. A bare `https://host[:port]` — a trailing slash is fine and dropped. No `http://`, no credentials, no path, no query, no fragment, and never `localhost` / `127.0.0.1` / `[::1]` — the public card must point at a deployed Feedme, not a local preview. |
 | `id` | `^[a-z0-9][a-z0-9-]{0,63}$`. **Unique across links and socials.** Never `creator` or `amount` (reserved). An invalid id is an error, never silently rewritten. |
 | `blurb` | optional plain text, trimmed, ≤ 240 characters. Omitted = empty. Rendered as escaped text, never HTML. |
@@ -214,7 +246,8 @@ What the card shows in each situation:
 | endpoint answered; your id is missing (hidden/archived in Feedme) | that item's action is hidden; its ordinary destination is untouched | none for that item |
 | endpoint unavailable (down, 404/503, timeout, malformed, oversized, redirected elsewhere) | configured tip links stay, without `amount` | **omitted entirely** — failure is never shown as zero |
 
-"Give to \<name\>" is shown whenever the integration is enabled; Feedme validates
+"Give to \<name\>" is shown whenever the integration is enabled (unless
+`give: false`); Feedme validates
 every selection again at checkout, so a link that went stale after the build is
 handled there.
 

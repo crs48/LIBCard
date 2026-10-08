@@ -4,14 +4,17 @@ import { withBase } from "../lib/site";
 import Icon from "./Icon.astro";
 import { checkoutUrl, creatorTarget, formatSignal } from "../lib/feedme";
 
-const { profile } = await getConfig();
+const config = await getConfig();
+const { profile } = config;
 // Optional Feedme CTA: "Give to <name>" opens the creator's checkout with
 // nothing pre-selected (no query string) so the visitor chooses there. Shown
-// whenever the integration is enabled — even if the public endpoint was down at
-// build time, since Feedme validates everything again at checkout. The name is
-// the LOCAL profile name, so card copy stays consistent whatever Feedme says.
+// whenever the integration is enabled and `feedme.give` isn't false — even if
+// the public endpoint was down at build time, since Feedme validates everything
+// again at checkout. (`give: false` is for owners whose checkout link already
+// sits in a `tip-buttons` block.) The name is the LOCAL profile name, so card
+// copy stays consistent whatever Feedme says.
 const feedme = await getFeedme();
-const giveHref = feedme ? checkoutUrl(feedme.origin) : null;
+const giveHref = feedme && config.feedme?.give !== false ? checkoutUrl(feedme.origin) : null;
 // If the endpoint answered, show the synthesized creator target's public
 // signal under the CTA (a build-time snapshot). Unavailable → no numbers.
 const creator = creatorTarget(feedme);

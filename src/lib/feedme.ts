@@ -98,6 +98,11 @@ export function creatorTipUrl(origin: string, defaultAmountCents?: number): stri
   return tipUrl(origin, "creator", defaultAmountCents);
 }
 
+/** The host a (normalized) origin points at, for copy like "Tip at crs.tips". */
+export function feedmeHost(origin: string): string {
+  return new URL(origin).host;
+}
+
 // --- Copy -------------------------------------------------------------------
 
 /** 750 → "75%", 1 → "0.1%", 125 → "12.5%", 1000 → "100%". One decimal at most. */
@@ -413,6 +418,53 @@ export function tipActionFor(
     signal: formatSignal(target),
     share: formatShare(target.publicShareMillis),
     target,
+  };
+}
+
+/**
+ * The built-in explainer under a `tip-buttons` block's Feedme button — the
+ * honest pitch for tipping here rather than through a generic pay-me link.
+ * Every claim holds for any Feedme: picks are a signal, not a purchase; the
+ * code is MIT; Feedme itself adds no application fee (Stripe's still applies).
+ */
+export const FEEDME_TIP_NOTE =
+  "Pick what you'd like more of, and your tip doubles as a vote. Open source, and Feedme adds no fee of its own.";
+
+/** The `tip-buttons` block's primary Feedme button, ready to render. */
+export interface TipBlockAction {
+  /** The unselected checkout — the visitor chooses their picks on Feedme. */
+  href: string;
+  /** Button text: the owner's `feedmeLabel`, else "Tip at <host>". */
+  label: string;
+  /** The Feedme host, e.g. "crs.tips". */
+  host: string;
+  /** Explainer copy, or null when the owner set `feedmeNote: false`. */
+  note: string | null;
+}
+
+/** The subset of a `tip-buttons` block the integration reads. */
+export interface TipBlockLike {
+  feedme?: boolean | undefined;
+  feedmeLabel?: string | undefined;
+  feedmeNote?: string | false | undefined;
+}
+
+/**
+ * Resolve the primary Feedme button for a `tip-buttons` block: `null` unless
+ * the block opted in AND the integration is on. Independent of the public
+ * endpoint — the checkout link needs only the configured origin, so the button
+ * renders even when the build couldn't fetch the numbers.
+ */
+export function tipBlockFor(state: FeedmeState | null, block: TipBlockLike): TipBlockAction | null {
+  if (!state || !block.feedme) return null;
+  const host = feedmeHost(state.origin);
+  const custom = block.feedmeNote;
+  const note = custom === false ? null : custom?.trim() || FEEDME_TIP_NOTE;
+  return {
+    href: checkoutUrl(state.origin),
+    label: block.feedmeLabel?.trim() || `Tip at ${host}`,
+    host,
+    note,
   };
 }
 

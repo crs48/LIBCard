@@ -28,9 +28,18 @@ describe("libcardSchema — existing configs", () => {
     const cfg = load("../../libcard.config.yaml");
     const r = libcardSchema.safeParse(cfg);
     expect(r.success, JSON.stringify(r.success ? null : r.error.issues, null, 2)).toBe(true);
-    // The owner's card has not opted in: no block, so the integration is off.
-    expect(r.success && r.data.feedme).toBeUndefined();
-    expect(r.success && r.data.links.every((l) => l.feedme === undefined)).toBe(true);
+    if (!r.success) return;
+    // The maintainer's card points at their own Feedme (crs.tips) and opts every
+    // project link in; the résumé stays an ordinary link.
+    expect(r.data.feedme).toEqual({ enabled: true, origin: "https://crs.tips", give: false });
+    const optedIn = r.data.links.filter((l) => l.feedme);
+    expect(optedIn.length).toBe(r.data.links.length - 1);
+    expect(r.data.links.find((l) => l.feedme === undefined)?.label).toMatch(/Résumé/);
+    expect(new Set(optedIn.map((l) => l.feedme!.id)).size).toBe(optedIn.length);
+    // The Support section leads with the Feedme button and its own explainer.
+    const tips = r.data.blocks.find((b) => b.type === "tip-buttons");
+    expect(tips).toMatchObject({ feedme: true, venmo: "christophersmothers" });
+    expect(tips && tips.type === "tip-buttons" && tips.feedmeNote).toMatch(/crs\.tips reads this card/);
   });
 
   it("treats an absent feedme block as disabled (no defaults injected)", () => {
@@ -42,7 +51,7 @@ describe("libcardSchema — existing configs", () => {
   it("accepts an explicitly disabled block without an origin", () => {
     const r = libcardSchema.safeParse({ ...minimal(), feedme: { enabled: false } });
     expect(r.success).toBe(true);
-    expect(r.success && r.data.feedme).toEqual({ enabled: false });
+    expect(r.success && r.data.feedme).toEqual({ enabled: false, give: true });
   });
 });
 
@@ -51,7 +60,7 @@ describe("libcardSchema — Feedme opt-ins", () => {
     const r = libcardSchema.safeParse(fixture());
     expect(r.success, JSON.stringify(r.success ? null : r.error.issues, null, 2)).toBe(true);
     if (!r.success) return;
-    expect(r.data.feedme).toEqual({ enabled: true, origin: "https://creator-feedme.example/" });
+    expect(r.data.feedme).toEqual({ enabled: true, origin: "https://creator-feedme.example/", give: true });
     expect(r.data.links[0]!.feedme).toEqual({
       id: "presence",
       blurb: "More hours in the room with people.",
@@ -181,6 +190,83 @@ describe("libcardSchema — Feedme opt-ins", () => {
   });
 });
 
+describe("libcardSchema — feedme.give (the header CTA toggle)", () => {
+  it("defaults to true and accepts false", () => {
+    const on = libcardSchema.safeParse({ ...minimal(), feedme: { enabled: true, origin: "https://tips.example" } });
+    expect(on.success && on.data.feedme?.give).toBe(true);
+    const off = libcardSchema.safeParse({ ...minimal(), feedme: { enabled: true, origin: "https://tips.example", give: false } });
+    expect(off.success && off.data.feedme?.give).toBe(false);
+  });
+
+  it("rejects a non-boolean", () => {
+    expect(issues({ ...minimal(), feedme: { enabled: true, origin: "https://tips.example", give: "no" } })[0]).toMatch(
+      /^feedme\.give/,
+    );
+  });
+});
+
+describe("libcardSchema — tip-buttons → Feedme", () => {
+  const enabled = () => ({ ...minimal(), feedme: { enabled: true, origin: "https://tips.example" } });
+  const tipBlock = (extra: Record<string, unknown> = {}) => ({ type: "tip-buttons", venmo: "ada", ...extra });
+
+  it("defaults feedme to false on an ordinary tip-buttons block", () => {
+    const r = libcardSchema.safeParse({ ...minimal(), blocks: [tipBlock()] });
+    expect(r.success).toBe(true);
+    expect(r.success && r.data.blocks[0]).toEqual({ type: "tip-buttons", venmo: "ada", feedme: false });
+  });
+
+  it("accepts feedme: true with the optional label and note when the integration is on", () => {
+    const r = libcardSchema.safeParse({
+      ...enabled(),
+      blocks: [tipBlock({ feedme: true, feedmeLabel: "  Tip me  ", feedmeNote: "  Why here.  " })],
+    });
+    expect(r.success, JSON.stringify(r.success ? null : r.error.issues, null, 2)).toBe(true);
+    expect(r.success && r.data.blocks[0]).toEqual({
+      type: "tip-buttons",
+      venmo: "ada",
+      feedme: true,
+      feedmeLabel: "Tip me",
+      feedmeNote: "Why here.",
+    });
+  });
+
+  it("accepts feedmeNote: false (no explainer) and a Feedme-only block", () => {
+    const r = libcardSchema.safeParse({ ...enabled(), blocks: [{ type: "tip-buttons", feedme: true, feedmeNote: false }] });
+    expect(r.success).toBe(true);
+    expect(r.success && r.data.blocks[0]).toEqual({ type: "tip-buttons", feedme: true, feedmeNote: false });
+  });
+
+  it("rejects feedme: true when the top-level block is absent, pointing at the block", () => {
+    const out = issues({ ...minimal(), blocks: [{ type: "divider" }, tipBlock({ feedme: true })] });
+    expect(out).toHaveLength(1);
+    expect(out[0]).toMatch(/^blocks\.1\.feedme: tip-buttons `feedme: true` needs the top-level `feedme:` block/);
+  });
+
+  it("rejects feedme: true when the top-level block is disabled", () => {
+    const out = issues({ ...minimal(), feedme: { enabled: false }, blocks: [tipBlock({ feedme: true })] });
+    expect(out.some((m) => m.startsWith("blocks.0.feedme:"))).toBe(true);
+  });
+
+  it("still allows feedme: false on a block while the integration is on", () => {
+    expect(issues({ ...enabled(), blocks: [tipBlock({ feedme: false })] })).toEqual([]);
+  });
+
+  it("bounds the label and note and rejects unknown fields", () => {
+    expect(issues({ ...enabled(), blocks: [tipBlock({ feedme: true, feedmeLabel: "x".repeat(61) })] })[0]).toMatch(
+      /^blocks\.0\.feedmeLabel/,
+    );
+    expect(issues({ ...enabled(), blocks: [tipBlock({ feedme: true, feedmeLabel: "   " })] })[0]).toMatch(
+      /^blocks\.0\.feedmeLabel/,
+    );
+    expect(issues({ ...enabled(), blocks: [tipBlock({ feedme: true, feedmeNote: "x".repeat(281) })] })[0]).toMatch(
+      /^blocks\.0\.feedmeNote/,
+    );
+    expect(issues({ ...enabled(), blocks: [tipBlock({ feedme: true, feedmeNotes: "typo" })] })[0]).toMatch(
+      /^blocks\.0: Unrecognized key/,
+    );
+  });
+});
+
 describe("normalizeFeedmeOrigin", () => {
   it("canonicalizes to a bare origin", () => {
     expect(normalizeFeedmeOrigin("https://Tips.Example.com/")).toEqual({ origin: "https://tips.example.com" });
@@ -202,7 +288,11 @@ describe("generated libcard.schema.json", () => {
     expect(root.properties.feedme).toMatchObject({
       type: "object",
       additionalProperties: false,
-      properties: { enabled: { type: "boolean", default: false }, origin: { type: "string" } },
+      properties: {
+        enabled: { type: "boolean", default: false },
+        origin: { type: "string" },
+        give: { type: "boolean", default: true },
+      },
     });
     expect(root.required ?? []).not.toContain("feedme");
   });
@@ -216,5 +306,15 @@ describe("generated libcard.schema.json", () => {
       expect(optIn.properties.blurb).toMatchObject({ type: "string", maxLength: 240 });
       expect(optIn.properties.aspiration).toMatchObject({ type: "integer", minimum: 0, maximum: 1_000_000 });
     }
+  });
+
+  it("exposes the tip-buttons Feedme toggle, label and note", () => {
+    const variants = root.properties.blocks.items.anyOf as Array<{ properties: Record<string, any> }>;
+    const tips = variants.find((v) => v.properties.type?.const === "tip-buttons");
+    expect(tips).toBeDefined();
+    expect(tips!.properties.feedme).toMatchObject({ type: "boolean", default: false });
+    expect(tips!.properties.feedmeLabel).toMatchObject({ type: "string", minLength: 1, maxLength: 60 });
+    expect(JSON.stringify(tips!.properties.feedmeNote)).toMatch(/"maxLength":280/);
+    expect(JSON.stringify(tips!.properties.feedmeNote)).toMatch(/"const":false|"enum":\[false\]/);
   });
 });

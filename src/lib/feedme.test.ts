@@ -13,8 +13,11 @@ import {
   clearFeedmeCache,
   loadFeedme,
   tipActionFor,
+  tipBlockFor,
+  feedmeHost,
   creatorTarget,
   FEEDME_MAX_BODY_BYTES,
+  FEEDME_TIP_NOTE,
   type FeedmePublic,
 } from "./feedme";
 import { withBase } from "./site";
@@ -460,5 +463,45 @@ describe("loadFeedme + tipActionFor (joining config to the response)", () => {
     const state = await loadFeedme({ feedme: { enabled: true, origin: ORIGIN } }, { fetch: vi.fn(async () => okResponse()), warn });
     expect(creatorTarget(state)).toMatchObject({ id: "creator", kind: "creator", publicShareMillis: 250 });
     expect(formatSignal(creatorTarget(state)!)).toBe("25% of public picks · 1 public tip");
+  });
+});
+
+describe("tipBlockFor (the tip-buttons block's primary Feedme button)", () => {
+  const state = { origin: ORIGIN, data: null };
+
+  it("reads the host off the origin for the default label", () => {
+    expect(feedmeHost("https://crs.tips")).toBe("crs.tips");
+    expect(feedmeHost("https://tips.example:8443")).toBe("tips.example:8443");
+  });
+
+  it("is null when the integration is off or the block didn't opt in", () => {
+    expect(tipBlockFor(null, { feedme: true })).toBeNull();
+    expect(tipBlockFor(state, { feedme: false })).toBeNull();
+    expect(tipBlockFor(state, {})).toBeNull();
+  });
+
+  it("builds the unselected checkout with 'Tip at <host>' and the built-in note", () => {
+    expect(tipBlockFor(state, { feedme: true })).toEqual({
+      href: `${ORIGIN}/checkout`,
+      label: "Tip at creator-feedme.example",
+      host: "creator-feedme.example",
+      note: FEEDME_TIP_NOTE,
+    });
+    expect(FEEDME_TIP_NOTE).toMatch(/more of/);
+  });
+
+  it("honors a custom label and note, and feedmeNote: false hides the note", () => {
+    const custom = tipBlockFor(state, { feedme: true, feedmeLabel: " Tip me ", feedmeNote: " Why here. " });
+    expect(custom).toMatchObject({ label: "Tip me", note: "Why here." });
+    expect(tipBlockFor(state, { feedme: true, feedmeNote: false })?.note).toBeNull();
+    // A blank custom note falls back to the built-in copy rather than an empty line.
+    expect(tipBlockFor(state, { feedme: true, feedmeNote: "   " })?.note).toBe(FEEDME_TIP_NOTE);
+  });
+
+  it("does not depend on the public endpoint having answered", () => {
+    const data = parsed(fixture());
+    const withData = tipBlockFor({ origin: ORIGIN, data }, { feedme: true });
+    expect(withData?.href).toBe(`${ORIGIN}/checkout`); // no amount, nothing pre-selected
+    expect(withData).toEqual(tipBlockFor(state, { feedme: true }));
   });
 });

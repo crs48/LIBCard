@@ -307,6 +307,7 @@ links/socials in; everything else stays exactly as it is.
 feedme:
   enabled: true
   origin: https://tips.yourdomain.com    # YOUR deployed Feedme (bare https origin)
+  # give: false                          # hide the header "Give to <name>" button if a tip-buttons block has it
 
 links:
   - label: My open-source project
@@ -321,13 +322,20 @@ socials:
   - platform: x
     url: https://x.com/ada
     feedme: { id: x }
+
+blocks:
+  - type: tip-buttons
+    feedme: true                         # primary "Tip at tips.yourdomain.com" button
+    feedmeNote: Pick what you'd like more of — I get all of it either way.   # optional; omit for the built-in copy, false for none
+    venmo: ada                           # the usual pay-me links stay as a second row
 ```
 
 | What appears | Opens |
 |---|---|
-| **Give to \<name\>** under your header | your Feedme checkout, unselected — the visitor chooses there |
+| **Give to \<name\>** under your header (`give: false` hides it) | your Feedme checkout, unselected — the visitor chooses there |
 | **♥ More of this** beside each opted-in link | checkout with that link pre-selected |
 | **More of this:** labeled chips under your social icons | checkout with that social pre-selected |
+| **Tip at \<host\>** as the primary button of a `tip-buttons` block (`feedme: true`), with a one-line explainer of why to tip here rather than via Venmo/PayPal | checkout, unselected |
 
 Every gift is an unconditional tip to you; the pick is a suggestion, and the
 card says so (*"They get all of it. Where you placed it is a suggestion."*). At
