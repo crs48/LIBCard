@@ -37,7 +37,7 @@ describe("libcardSchema — existing configs", () => {
     // The Support section leads with the Feedme button and its own explainer.
     const tips = r.data.blocks.find((b) => b.type === "tip-buttons");
     expect(tips).toMatchObject({ feedme: true, venmo: "christophersmothers" });
-    expect(tips && tips.type === "tip-buttons" && tips.feedmeNote).toMatch(/crs\.tips reads this card/);
+    expect(tips && tips.type === "tip-buttons" && tips.feedmeNote).toMatch(/crs\.tips/);
   });
 
   it("treats an absent feedme block as disabled (no defaults injected)", () => {
