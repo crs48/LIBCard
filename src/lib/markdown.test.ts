@@ -30,6 +30,22 @@ describe("renderMarkdown", () => {
     expect(renderMarkdown("[mail](mailto:a@b.com)")).not.toContain("target=");
   });
 
+  it("keeps two external links in one paragraph intact (no emphasis across their _blank attributes)", () => {
+    const html = renderMarkdown("See [one](https://a.example) and [two](https://b.example) today.");
+    expect(html).toBe(
+      '<p>See <a href="https://a.example" target="_blank" rel="noopener noreferrer">one</a> and ' +
+        '<a href="https://b.example" target="_blank" rel="noopener noreferrer">two</a> today.</p>',
+    );
+    expect(html).not.toContain("<em>");
+  });
+
+  it("leaves underscores inside URLs and code alone, but still emphasizes link labels", () => {
+    expect(renderMarkdown("[a](https://x.example/p_q_r) and `a_b_c` and _it_")).toBe(
+      '<p><a href="https://x.example/p_q_r" target="_blank" rel="noopener noreferrer">a</a> and <code>a_b_c</code> and <em>it</em></p>',
+    );
+    expect(renderMarkdown("[**bold** label](/here)")).toBe('<p><a href="/here"><strong>bold</strong> label</a></p>');
+  });
+
   it("splits paragraphs and keeps single newlines as breaks", () => {
     const out = renderMarkdown("a\nb\n\nc");
     expect(out).toContain("a<br />b");
