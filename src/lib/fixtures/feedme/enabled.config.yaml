@@ -30,6 +30,10 @@ links:
     url: https://example.com/resume.pdf
     # No feedme object: an ordinary link, with no tip action.
 
+  - label: Privacy policy
+    url: https://example.com/privacy
+    feedme: { skip: true } # kept off Feedme entirely: not a target, no tip action
+
   - label: Retired thing
     url: https://example.com/retired
     feedme:
