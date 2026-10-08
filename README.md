@@ -318,6 +318,10 @@ links:
       blurb: More time maintaining this.  # optional, ≤ 240 chars
       aspiration: 3000                   # optional, whole US dollars (Feedme shows it)
 
+  - label: Résumé
+    url: https://ada.github.io/resume.pdf
+    feedme: { skip: true }               # keep this one off Feedme entirely
+
 socials:
   - platform: x
     url: https://x.com/ada
@@ -343,8 +347,9 @@ build time LibCard fetches Feedme's public aggregate **once** and bakes in each
 target's public pick share and tip count ("75% of public picks · 1 public tip") —
 a daily snapshot, zero JavaScript, no third-party request at visit time. If the
 endpoint is unreachable the card still builds, with tip links and no numbers.
-Links without their own `feedme:` are never tippable, ids must be unique across
-links and socials, and at most 99 items can opt in. Setup, the id lifecycle,
+Links without their own `feedme:` get no tip action on the card (Feedme lists
+them anyway; `feedme: { skip: true }` keeps one off Feedme too), ids must be
+unique across links and socials, and at most 99 items can opt in. Setup, the id lifecycle,
 what the numbers mean, and why there's no funding bar (yet):
 **[docs/FEEDME.md](./docs/FEEDME.md)**.
 

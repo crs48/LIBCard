@@ -32,8 +32,11 @@ snapshot** (see [§6](#6-what-the-public-numbers-mean)), not a live counter.
 
 Every link, social, icon, status chip, GitHub pill, block and theme you already
 have keeps working exactly as before. Links without their own `feedme:` opt-in
-are never tippable — opt-in is explicit, never inferred from a platform, URL,
-label, or GitHub repo.
+never get a tip action on the card — opt-in is explicit, never inferred from a
+platform, URL, label, or GitHub repo. (Feedme itself lists every link by
+default; `feedme: { skip: true }` keeps one off Feedme as well.) If you'd rather
+have no per-link actions at all — just the checkout button in a `tip-buttons`
+block — simply don't opt any links in.
 
 ```mermaid
 flowchart LR
@@ -121,7 +124,9 @@ links:
 
   - label: Résumé
     url: https://example.com/resume.pdf
-    # no feedme: object → an ordinary link, no tip action
+    # no feedme: object → an ordinary link on the card. Feedme still lists it
+    # (every link is selectable there by default) — to keep it OFF Feedme too:
+    feedme: { skip: true }
 
 socials:
   - platform: x
@@ -173,7 +178,8 @@ personalize it, keep it honest in the same way.
 | `feedme.enabled` | default `false`. Absent or `false` → **no fetch, no markup, no script**. |
 | `feedme.give` | default `true`: the "Give to \<name\>" button under your header. Set `false` to drop it — typically because a `tip-buttons` block with `feedme: true` already carries the checkout link, so it isn't shown twice. |
 | `feedme.origin` | required when enabled. A bare `https://host[:port]` — a trailing slash is fine and dropped. No `http://`, no credentials, no path, no query, no fragment, and never `localhost` / `127.0.0.1` / `[::1]` — the public card must point at a deployed Feedme, not a local preview. |
-| `id` | `^[a-z0-9][a-z0-9-]{0,63}$`. **Unique across links and socials.** Never `creator` or `amount` (reserved). An invalid id is an error, never silently rewritten. |
+| `id` | `^[a-z0-9][a-z0-9-]{0,63}$`. **Unique across links and socials.** Never `creator` or `amount` (reserved). An invalid id is an error, never silently rewritten. Required unless `skip: true`. |
+| `skip` | `feedme: { skip: true }` keeps the item **off Feedme entirely**: not a target, not selectable at checkout, no tip action on the card. Takes no other fields. Skipped items don't count toward the opt-in cap. Needs a Feedme release whose importer understands `skip`; older importers require `id` and will reject the file (they keep their last good import). |
 | `blurb` | optional plain text, trimmed, ≤ 240 characters. Omitted = empty. Rendered as escaped text, never HTML. |
 | `aspiration` | optional **integer, whole US dollars**, 0–1,000,000. `0` or omitted = none. Negative, fractional or quoted values are rejected. |
 | opt-in count | at most **99** opted-in links + socials. Ordinary items don't count. Feedme adds the `creator` target itself — never list it. |

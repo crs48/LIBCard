@@ -17,6 +17,9 @@ often to `libcard.config.yaml`); everything else is picked up automatically by
   be enabled; off by default, existing blocks are unchanged. Pair it with
   `feedme.give: false` to drop the header "Give to <name>" button so the
   checkout link appears once, with your other tip links.
+- **`feedme: { skip: true }` on a link or social** keeps that item off Feedme
+  entirely (not a target, no tip action). Requires a Feedme whose importer
+  understands `skip`.
 - **Tips with Feedme (optional, off by default).** A new `feedme:` block plus
   per-link / per-social `feedme: { id, blurb, aspiration }` opt-ins add a
   "Give to <name>" CTA and a ♥ "More of this" action beside the items you
