@@ -28,16 +28,8 @@ describe("libcardSchema — existing configs", () => {
     const cfg = load("../../libcard.config.yaml");
     const r = libcardSchema.safeParse(cfg);
     expect(r.success, JSON.stringify(r.success ? null : r.error.issues, null, 2)).toBe(true);
-    if (!r.success) return;
-    // The maintainer's card points at their own Feedme (crs.tips) with the
-    // header CTA off. No per-link opt-ins: Feedme lists every link by default,
-    // and leaving them out keeps the ♥ pills and captions off the card.
-    expect(r.data.feedme).toEqual({ enabled: true, origin: "https://crs.tips", give: false });
-    expect(r.data.links.every((l) => l.feedme === undefined)).toBe(true);
-    // The Support section leads with the Feedme button and its own explainer.
-    const tips = r.data.blocks.find((b) => b.type === "tip-buttons");
-    expect(tips).toMatchObject({ feedme: true, venmo: "christophersmothers" });
-    expect(tips && tips.type === "tip-buttons" && tips.feedmeNote).toMatch(/crs\.tips/);
+    // Personal copy and Feedme choices can change independently of the schema.
+    // The fixture tests below cover opt-ins, exclusions, and tip-button behavior.
   });
 
   it("treats an absent feedme block as disabled (no defaults injected)", () => {
