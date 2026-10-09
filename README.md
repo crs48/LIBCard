@@ -28,6 +28,14 @@ LibCard is a tiny [Astro](https://astro.build) static site you host on **GitHub 
 
 ## Quick start
 
+**With a coding agent:** [Copy the setup prompt](./src/lib/setup-prompt.txt)
+into Claude Code, Codex, or your preferred agent in a workspace connected to
+GitHub. It will ask for your content and style, build a preview, and help publish
+your page. The complete workflow is in [the agent setup guide](./docs/AGENT_SETUP.md).
+You can also use the copy button on [crs.land](https://crs.land).
+
+**By hand:**
+
 1. **Use this template.** Click **“Use this template” → Create a new repository**. Name it `your-links` (a project site) or `your-username.github.io` (a user site).
 2. **Make it yours.** Edit [`libcard.config.yaml`](./libcard.config.yaml) — your name, tagline, links, socials, contact details, and theme. That's the only file you need to touch.
    - Prefer prompts? Clone the repo and run `pnpm install && pnpm run setup` for an interactive wizard that fills the config in for you (including the tricky `site.url` / `site.base`).
@@ -97,13 +105,40 @@ The footer's **"Powered by LibCard"** credit already links home, so this is
 optional — but it makes the invitation explicit, and it's the same loop that lets
 LibCard spread from card to card.
 
+For an invitation visitors can paste into their coding agent, add:
+
+```yaml
+blocks:
+  - type: text
+    markdown: "Want your own site? Copy this prompt into your coding agent and make it yours."
+  - type: copy-prompt
+```
+
+This displays a **Copy setup prompt** button and a “Read or copy the prompt”
+disclosure. The default prompt follows [the agent setup guide](./docs/AGENT_SETUP.md).
+The same text is available at `/setup-prompt.txt` (under `site.base` on project
+sites). To share a different prompt, set `text` and optionally `label`:
+
+```yaml
+blocks:
+  - type: copy-prompt
+    label: Copy writing prompt
+    text: Help me write a short introduction for my personal website. Ask about my interests first.
+```
+
+`text` is plain text, limited to 12,000 characters; `label` is limited to 80.
+The button adds a small inline clipboard script **only when the block is used**.
+It copies on a click, shows confirmation, and opens/selects the text for manual
+copying if clipboard access fails. With JavaScript disabled, the readable text
+remains available and the button is hidden.
+
 ### Content blocks
 
 For anything richer than a button, add a `blocks:` list — an ordered set of typed
 content blocks rendered between your links and the social row. Blocks are
 **validated data, never raw HTML**, so a config stays safe to share, and they
-keep LibCard's promise: **zero of our JavaScript and no server.** They come in
-four tiers:
+need no server. Most blocks ship **zero of our JavaScript** and come in four
+tiers; `copy-prompt` is an optional clipboard enhancement with a no-JS fallback:
 
 | Tier | Blocks | How it stays zero-JS / zero-server |
 |---|---|---|
@@ -111,6 +146,7 @@ four tiers:
 | **Forms** | `signup` (newsletter), `form` (contact) | a plain `<form method="post">` to a third party |
 | **Live embeds** | `video`, `embed`, `booking`, `map` | a sandboxed `<iframe>` — **we** ship no JS |
 | **Build-time** | `tweet`, `rss`, `github` | fetched during the build, baked to static HTML |
+| **Optional enhancement** | `copy-prompt` | small clipboard script; readable/selectable text without JS |
 
 ```yaml
 blocks:
@@ -164,7 +200,7 @@ Pick one of the built-in themes (`default`, `midnight`, `sunset`, `mono`, `paper
 theme: midnight
 ```
 
-…or turn on the **live theme switcher** and/or **random mode** so visitors can see the themes right on your card (these are the only features that ship a tiny bit of JavaScript — when they're off, your page stays zero-JS):
+…or turn on the **live theme switcher** and/or **random mode** so visitors can see the themes right on your card. These add a little JavaScript; pages stay zero-JS when no script-bearing features are enabled:
 
 ```yaml
 theme:
@@ -210,8 +246,8 @@ Some phones have auto-rotate locked, so rotating does nothing — for that case 
 portrait hint links to the always-available `/card` page (the same business card,
 stacked). **Wake lock is the only JavaScript card mode can ship, and it's opt-in:**
 set `wakeLock: true` to keep the screen from dimming mid-scan (and tap the card to
-go fullscreen). Left off, card mode stays **zero-JS** — exactly like the theme
-switcher, which is the only other feature that ships any script.
+go fullscreen). Left off, card mode stays **zero-JS**. Theme switching, copying
+prompts, and script-based analytics are separate opt-ins.
 
 ### Star-on-GitHub button
 
@@ -449,6 +485,13 @@ pnpm install && pnpm build && git push
 
 **Adding Feedme tips?** Update first — the `feedme:` fields need the current
 schema — then follow [docs/FEEDME.md](./docs/FEEDME.md).
+
+**Adding the setup prompt button?** Update the engine first, then add
+`{ type: copy-prompt }` to `blocks`. Older engines do not recognize this block.
+If the feature is still unreleased, use `pnpm run update --ref=main` explicitly.
+For ordinary content edits, ask your agent to edit your existing config; do not
+repeat the fresh-install workflow. The [current agent guide](https://github.com/crs48/LIBCard/blob/main/docs/AGENT_SETUP.md)
+is available upstream because engine updates leave your local docs untouched.
 
 See [docs/UPGRADING.md](./docs/UPGRADING.md) for the file-by-file breakdown,
 resolving a config conflict, rolling back, and what changed in each release

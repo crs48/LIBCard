@@ -9,6 +9,13 @@ often to `libcard.config.yaml`); everything else is picked up automatically by
 
 ## Unreleased
 
+- **Set up a personal site with a coding agent.** A new optional `copy-prompt`
+  block lets visitors copy a guided LibCard setup prompt into Claude Code,
+  Codex, or another coding agent. The prompt and agent guide cover connected
+  repos, customization, previews, and GitHub Pages publishing. The block also
+  supports custom text and labels, with manual-copy and no-JavaScript fallbacks.
+  It adds a small clipboard script only when used. Update the engine before
+  adding this new block; existing cards are unchanged.
 - **Feedme as the primary tip button.** A `tip-buttons` block can now set
   `feedme: true` to lead with a full-width "Tip at <host>" button that opens
   your Feedme checkout, plus a one-line explainer of why to tip there rather

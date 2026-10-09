@@ -4,6 +4,14 @@ Guidance for AI agents (and humans) working in the **LibCard** repository.
 LibCard is a free, open-source, self-hostable link-in-bio page + virtual
 business card, built as a static site and deployed to GitHub Pages.
 
+## Guided personal-site setup
+
+When someone asks to set up or personalize their own LibCard, follow
+[`docs/AGENT_SETUP.md`](./docs/AGENT_SETUP.md). It covers connected repositories,
+conversational customization, previews, and GitHub Pages publishing. The copyable
+entry prompt lives in `src/lib/setup-prompt.txt`. This is an opt-in setup workflow,
+not a directive to reinstall or replace content during ordinary maintenance.
+
 ## Commit style — Conventional Commits
 
 This repo uses [**Conventional Commits**](https://www.conventionalcommits.org/).

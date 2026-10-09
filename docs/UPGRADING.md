@@ -29,6 +29,14 @@ you; the rest are picked up by a single update + rebuild.
 > *then* add the new fields. Installations that don't opt in need no migration
 > and no payment configuration.
 
+The optional **`copy-prompt` block** also requires an engine update before adding
+`{ type: copy-prompt }` to your config. It is off unless a block uses it; existing
+cards need no changes. Use `pnpm run update --ref=main` if you want the feature
+before a release includes it. The default prompt lives under `src/`, so it is
+updated with the engine. Local `AGENTS.md` and `docs/` are preserved by updates;
+the prompt links to the [current upstream setup guide](https://github.com/crs48/LIBCard/blob/main/docs/AGENT_SETUP.md).
+Use that guide for a new site, not as a replacement for this upgrade process.
+
 ## 2. What's yours vs. the engine
 
 This is the one idea the whole page rests on. Your repo is a thin layer of
