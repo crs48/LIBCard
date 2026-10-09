@@ -10,11 +10,9 @@
 /* A dense, soft mesh: four large radial-gradient washes covering a fixed layer
    behind everything. The dreamy softness is BAKED into eased 3-stop gradient
    falloff — no live `filter: blur()`. Blurring an already-soft radial wash is
-   visually just a slightly-softer wash, and the live 60px blur of this
-   ~128%-viewport layer was the biggest GPU cost feeding the memory-pressure
-   layer thrash that made the frosted panels in front flicker (exploration
-   0010). Colors come from the active theme's --lc-mesh-* vars (unset →
-   transparent → just the page color, so it's safe to mount for any theme set).
+   visually just a slightly-softer wash, without a large filtered render target
+   (explorations 0010/0011). Colors come from the active theme's --lc-mesh-* vars
+   (unset → transparent → just the page color, so it's safe to mount for any theme set).
    The stage is oversized (inset: -16%) so the slow drift never reveals a hard
    edge. */
 .lc-bg-stage {
@@ -48,20 +46,14 @@
       color-mix(in oklab, var(--lc-mesh-4, transparent) 55%, transparent) 45%,
       transparent 82%
     );
-  /* No filter: the layer rasters once, then only composites. Pinning it keeps
-     the glass panels' backdrop-filter sampling a stable, always-valid texture. */
-  will-change: transform;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
 }
 @media (prefers-reduced-motion: no-preference) {
   .lc-bg-stage {
-    animation: lc-drift 30s ease-in-out infinite alternate;
-    animation-play-state: var(--lc-bg-anim, paused);
+    /* Only animated mesh themes need an animation/composited background.
+       Let the browser manage its layer; don't pin one for every theme. */
+    animation: var(--lc-bg-animation, none) 30s ease-in-out infinite alternate;
   }
-  /* Translate-only: never triggers raster-scale management, so the layer's
-     texture is never re-rasterized mid-drift. (The old scale(1.08) rotate(2deg)
-     was the periodic re-raster trigger the panels flickered against.) */
+  /* Translate-only drift avoids changing the background's raster scale. */
   @keyframes lc-drift {
     to {
       transform: translate3d(-3.5%, -2.5%, 0);
@@ -83,8 +75,12 @@
 }
 
 /* === Frosted-glass surfaces ============================================ */
-/* Driven entirely by the active theme's --lc-glass-* vars: unset → opaque
-   surface + no blur (identical to a non-glass theme). We target the `bg-surface`
+/* The mesh is already soft, so glass uses a translucent fill and the theme's
+   border/shadow, without live backdrop blur. Filtering every button and nested
+   status chip created dozens of composited layers and scrolling still blanked
+   content after the earlier background optimizations (exploration 0011).
+   Avoid backdrop filters and blanket layer-promotion hints on these surfaces.
+   An unset --lc-glass-pct means an opaque surface. We target the `bg-surface`
    utility itself, so EVERY panel frosts together — link buttons, the social row,
    the business-card reveal, FAQ, contact buttons, embeds, forms, the switcher.
    The translucent fill IS the readability scrim (its opacity floor is enforced in
@@ -94,8 +90,6 @@
    and primary tip button). */
 .bg-surface:not(.lc-solid) {
   background-color: color-mix(in oklab, var(--lc-surface) var(--lc-glass-pct, 100%), transparent);
-  -webkit-backdrop-filter: var(--lc-glass-filter, none);
-  backdrop-filter: var(--lc-glass-filter, none);
 }
 /* Accent CTAs (Save contact, form submits) frost too: in a glass theme they
    become a frosted glass pill with the accent as text + ring (via --lc-cta-*),
@@ -107,38 +101,12 @@
   background-color: var(--lc-cta-bg, var(--lc-accent));
   color: var(--lc-cta-fg, var(--lc-accent-contrast));
   border-color: var(--lc-cta-border, transparent);
-  -webkit-backdrop-filter: var(--lc-glass-filter, none);
-  backdrop-filter: var(--lc-glass-filter, none);
 }
-/* Flicker guard: `backface-visibility: hidden` is the mild, documented
-   backdrop-filter flicker remedy for the hover-lift case. The earlier blanket
-   `will-change: transform` promotion (one pinned render surface per frosted
-   panel) fed the GPU-memory pressure that caused layer purge/recreate thrash —
-   with the mesh stage now cheap and translate-only (see above), the panels'
-   backdrop is stable and speculative promotion is net harmful (exploration
-   0010). */
-.bg-surface:not(.lc-solid),
-.bg-accent:not(.lc-solid) {
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
-/* Guards: drop the translucency where the browser/user can't do it well (the CTA
-   falls back to its solid accent fill + light text). */
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .bg-surface:not(.lc-solid),
-  .bg-accent:not(.lc-solid) {
-    --lc-glass-pct: 100%;
-    --lc-glass-filter: none;
-    --lc-cta-bg: var(--lc-accent);
-    --lc-cta-fg: var(--lc-accent-contrast);
-    --lc-cta-border: transparent;
-  }
-}
+/* Respect transparency preferences without depending on backdrop-filter support. */
 @media (prefers-reduced-transparency: reduce) {
   .bg-surface:not(.lc-solid),
   .bg-accent:not(.lc-solid) {
     --lc-glass-pct: 100%;
-    --lc-glass-filter: none;
     --lc-cta-bg: var(--lc-accent);
     --lc-cta-fg: var(--lc-accent-contrast);
     --lc-cta-border: transparent;
@@ -148,7 +116,6 @@
   .bg-surface:not(.lc-solid),
   .bg-accent:not(.lc-solid) {
     --lc-glass-pct: 100%;
-    --lc-glass-filter: none;
     --lc-cta-bg: var(--lc-accent);
     --lc-cta-fg: var(--lc-accent-contrast);
     --lc-cta-border: transparent;

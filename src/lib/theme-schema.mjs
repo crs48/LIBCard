@@ -265,24 +265,22 @@ export function themeToCss(theme) {
   decls.unshift(`  color-scheme: ${theme.mode};`);
 
   // --- Expressive layers (all opt-in; absent → today's flat look) ---
-  // Pastel-mesh background → blob color vars + blur + drift toggle (the shared
+  // Pastel-mesh background → blob color vars + drift toggle (the shared
   // .lc-bg-stage CSS reads these; unset means transparent → invisible).
   const bg = theme.background;
   if (bg?.kind === "pastel-mesh") {
     for (let i = 0; i < 4; i++) decls.push(`  --lc-mesh-${i + 1}: ${bg.stops[i % bg.stops.length]};`);
     // `blur` is still accepted (mesh softness) but no longer emitted as a live
     // `filter: blur()` — the softness is baked into the eased gradient falloff
-    // in effects.css. A live 60px blur on the animated stage was the GPU cost
-    // that made the frosted panels flicker (exploration 0010).
-    decls.push(`  --lc-bg-anim: ${bg.animate ? "running" : "paused"};`);
+    // in effects.css, avoiding a large filtered render target (exploration 0010).
+    decls.push(`  --lc-bg-animation: ${bg.animate ? "lc-drift" : "none"};`);
   }
 
-  // Glass surfaces → translucent fill + backdrop blur (the frosted edge comes
-  // from the theme's own light border token; see effects.css).
+  // Glass surfaces → translucent fill over the already-soft mesh. No live
+  // backdrop filter or per-panel promotion; see effects.css and exploration 0011.
   if (theme.buttons?.fill === "glass") {
     const pct = Math.round(theme.buttons.glassFillOpacity * 100);
     decls.push(`  --lc-glass-pct: ${pct}%;`);
-    decls.push(`  --lc-glass-filter: blur(12px) saturate(150%);`);
     // Accent CTAs (Save contact, form submits) become frosted glass with the
     // accent as text + ring, so they match the frosted surfaces instead of
     // reading as a flat block of color. Accent-on-glass keeps AA (gate verifies).
