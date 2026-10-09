@@ -70,6 +70,12 @@ links:
     url: https://crs48.github.io/nervous-system-healing
     icon: activity
     status: ready
+  - label: LIBCard (this site)
+    url: https://crs48.github.io/LIBCard
+    icon: id-card
+    status: ready
+    github: https://github.com/crs48/LIBCard
+    stars: build
   - label: Feed Me Fund (open-source creator tips)
     url: https://feedme.fund/
     icon: coins
@@ -100,12 +106,6 @@ links:
     url: https://xnet.fyi/blog/timeout/
     icon: clock
     status: writing
-  - label: LIBCard (this site)
-    url: https://crs48.github.io/LIBCard
-    icon: id-card
-    status: ready
-    github: https://github.com/crs48/LIBCard
-    stars: build
   - label: murmuration (flocking)
     url: https://crs48.github.io/murmuration
     icon: simulation
