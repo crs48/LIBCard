@@ -76,12 +76,6 @@ links:
     status: ready
     github: https://github.com/crs48/feedme
     stars: build
-  - label: Free the Pores (simpler skin care)
-    url: https://freethepores.com/
-    icon: leaf
-    status: exploration
-    github: https://github.com/crs48/freethepores
-    stars: build
   - label: Digital Garden
     url: https://crs.garden
     icon: leaf
@@ -130,31 +124,37 @@ links:
     status: dormant
     star: true # add a "★ Star" sub-button that opens the repo
     stars: build
-  - label: dome home explorations
+  - label: Free the Pores (simpler skin care)
+    url: https://freethepores.com/
+    icon: leaf
+    status: exploration
+    github: https://github.com/crs48/freethepores
+    stars: build
+  - label: Dome Homes
     url: https://crs48.github.io/dome
     icon: home
     status: exploration
     github: https://github.com/crs48/dome
     stars: build
-  - label: food forest explorations
+  - label: Food Forests
     url: https://crs48.github.io/food-forests
     icon: tree
     status: exploration
     github: https://github.com/crs48/food-forests
     stars: build
-  - label: floor life explorations
+  - label: Floor Life
     url: https://crs48.github.io/floor-life
     icon: bed
     status: exploration
     github: https://github.com/crs48/floor-life
     stars: build
-  - label: how ai works for ludites
+  - label: How AI Works (for Luddites)
     url: https://crs48.github.io/ai-explained
     icon: cpu
     status: exploration
     github: https://github.com/crs48/ai-explained
     stars: build
-  - label: courtyard block explorations
+  - label: Courtyard Blocks
     url: https://crs48.github.io/courtyard-block-site/
     icon: building
     status: exploration
