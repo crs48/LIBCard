@@ -62,11 +62,11 @@ socials:
 # what state the thing is in: ready | wip | experiment | exploration | writing | reading | dormant
 # (rephrase any label in the `statuses:` map below the links).
 links:
-  - label: 75m of Presence aka Coaching
+  - label: 75m of presence aka coaching
     url: https://crs.coach/
     icon: heart
     status: ready
-  - label: Nervous System Healing (resources)
+  - label: Nervous system healing (resources)
     url: https://crs48.github.io/nervous-system-healing
     icon: activity
     status: ready
@@ -82,13 +82,13 @@ links:
     status: ready
     github: https://github.com/crs48/feedme
     stars: build
-  - label: Digital Garden
+  - label: Digital garden
     url: https://crs.garden
     icon: leaf
     status: wip
     github: https://github.com/crs48/digitalgarden
     stars: build
-  - label: Rabbit Holes (what I'm reading)
+  - label: Rabbit holes (what I'm reading)
     url: https://curius.app/chris-smothers
     icon: book-open
     status: reading
@@ -98,27 +98,27 @@ links:
     status: wip
     github: https://github.com/crs48/xNet # show the repo + star count beside the site
     stars: build # bake the star count in at build time (zero runtime JS)
-  - label: xnet.fyi/blog/a-great-pirate-age
+  - label: A great pirate age
     url: https://xnet.fyi/blog/a-great-pirate-age/
     icon: pirate
     status: writing
-  - label: xnet.fyi/blog/timeout
+  - label: Timeout
     url: https://xnet.fyi/blog/timeout/
     icon: clock
     status: writing
-  - label: murmuration (flocking)
+  - label: Murmuration (flocking)
     url: https://crs48.github.io/murmuration
     icon: simulation
     status: experiment
     github: https://github.com/crs48/murmuration
     stars: build
-  - label: warp-voyage (tunnel game)
+  - label: Warp-voyage (tunnel game)
     url: https://crs48.github.io/warp-voyage
     icon: game
     status: experiment
     github: https://github.com/crs48/warp-voyage
     stars: build
-  - label: cause (Clojure EDN CRDT)
+  - label: Cause (Clojure EDN CRDT)
     url: https://github.com/crs48/cause
     icon: git-merge
     status: dormant
@@ -130,43 +130,43 @@ links:
     status: exploration
     github: https://github.com/crs48/freethepores
     stars: build
-  - label: Dome Homes
+  - label: Dome homes
     url: https://crs48.github.io/dome
     icon: home
     status: exploration
     github: https://github.com/crs48/dome
     stars: build
-  - label: Food Forests
+  - label: Food forests
     url: https://crs48.github.io/food-forests
     icon: tree
     status: exploration
     github: https://github.com/crs48/food-forests
     stars: build
-  - label: Floor Life
+  - label: Floor life
     url: https://crs48.github.io/floor-life
     icon: bed
     status: exploration
     github: https://github.com/crs48/floor-life
     stars: build
-  - label: How AI Works (for Luddites)
+  - label: How AI works (for luddites)
     url: https://crs48.github.io/ai-explained
     icon: cpu
     status: exploration
     github: https://github.com/crs48/ai-explained
     stars: build
-  - label: Courtyard Blocks
+  - label: Courtyard blocks
     url: https://crs48.github.io/courtyard-block-site/
     icon: building
     status: exploration
     github: https://github.com/crs48/courtyard-block-site
     stars: build
-  - label: courtyard block game (community sim)
+  - label: Courtyard block game (community sim)
     url: https://crs48.github.io/courtyard-block/
     icon: game
     status: wip
     github: https://github.com/crs48/courtyard-block
     stars: build
-  - label: wealthglobe (net worth as land)
+  - label: Wealthglobe (net worth as land)
     url: https://crs48.github.io/wealthglobe/
     icon: globe
     status: experiment
@@ -213,7 +213,7 @@ blocks:
   - type: divider
     label: Feedme
   - type: heading
-    text: like how i operate?
+    text: Like how I operate?
   - type: text
     markdown: >
       Help keep these experiments going at [crs.tips](https://crs.tips), my own
@@ -232,7 +232,7 @@ blocks:
   - type: divider
     label: xNet
   - type: heading
-    text: what's your dream internet?
+    text: What's your dream internet?
   - type: text
     markdown: >
       Building xNet — a local-first platform for apps that work offline, sync
@@ -240,7 +240,7 @@ blocks:
       Explore what I'm building at [xnet.fyi](https://xnet.fyi/),
       or dig into the [source code](https://github.com/crs48/xNet).
   - type: divider
-    label: Contact Me
+    label: Contact me
   - type: contact-buttons
     call: true # uses contact.phone above; or set a number string
     whatsapp: becomingbabyman # username → wa.me/becomingbabyman

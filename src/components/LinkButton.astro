@@ -63,7 +63,7 @@ const tipTitle = tip ? [tip.blurb, tip.signal].filter(Boolean).join(" · ") || "
     {
       status && (
         <span
-          class="lc-status absolute -top-2 right-3 inline-flex items-center gap-1 rounded-full border border-border bg-surface px-1.5 py-0.5 text-[9px] font-medium uppercase leading-none tracking-wider text-muted/80"
+          class="lc-status absolute -top-2 right-3 inline-flex items-center gap-1 rounded-full border border-border bg-surface px-1.5 py-0.5 text-[9px] font-medium leading-none tracking-wider text-muted/80"
           data-status={status.slug}
           title={`Status: ${status.label}`}
         >
