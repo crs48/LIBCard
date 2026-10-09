@@ -340,7 +340,8 @@ const cardModeSchema = z
 // Blocks fall into four tiers by how they render under the zero-JS / zero-server
 // promise: (1) pure static HTML/CSS, (2) third-party <form> POST, (3) live
 // provider iframes (privacy-safe defaults), and (4) build-time fetched embeds
-// (zero runtime JS). See
+// (zero runtime JS). The optional copy-prompt block adds a clipboard script,
+// with readable text as its no-JS fallback. See
 // docs/explorations/0006_*_RICH_CONTENT_BLOCKS_AND_ZERO_JS_EMBEDS.md.
 
 const imageSchema = z
@@ -384,6 +385,15 @@ export const EMBED_PROVIDERS = [
 ];
 
 const blockSchema = z.discriminatedUnion("type", [
+  // Opt-in clipboard enhancement; no script is rendered without this block.
+  z
+    .object({
+      type: z.literal("copy-prompt"),
+      text: z.string().trim().min(1).max(12000).optional()
+        .describe("Plain-text prompt. Omit for LibCard's guided setup prompt."),
+      label: z.string().trim().min(1).max(80).default("Copy setup prompt"),
+    })
+    .strict(),
   // Tier 1 — pure static HTML/CSS
   z
     .object({

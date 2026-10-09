@@ -187,9 +187,10 @@ links:
 # --- Rich content blocks (optional, ordered) ---
 # An ordered list of typed blocks rendered between your links and the social row.
 # Every block is validated data — never raw HTML — so it stays safe and simple.
-# Four tiers, all with ZERO of our JavaScript: (1) static HTML/CSS, (2) third-
+# Four zero-JS tiers: (1) static HTML/CSS, (2) third-
 # party form POST, (3) live provider iframes (privacy-safe defaults), and
 # (4) build-time embeds (baked to static HTML, refreshed on rebuild).
+# The optional copy-prompt block adds a small clipboard script.
 blocks:
   - type: tweet # baked to static HTML at build time (no runtime JS)
     url: https://x.com/becomingbabyman/status/1566619477508333568
@@ -199,9 +200,16 @@ blocks:
     text: Thanks! Want to build your own?
   - type: text
     markdown: >
-      I made LIBCard as a free, fast, **zero-JavaScript** link-in-bio page and virtual business
-      card you host yourself on GitHub Pages. Edit one file, save, done.
-      Grab the code at [github.com/crs48/LIBCard](https://github.com/crs48/LIBCard).
+      I made LIBCard so you can have a little home on the internet that's yours.
+      It's free, open source, and you can host it on GitHub Pages.
+      Copy the prompt below into Claude Code, Codex, or your favorite coding agent.
+      It'll ask a few questions, help make the page feel like you, and walk you
+      through getting it online.
+  - type: copy-prompt
+  - type: text
+    markdown: >-
+      Want to see how it works? [Read the setup guide](https://github.com/crs48/LIBCard/blob/main/docs/AGENT_SETUP.md)
+      or [grab the code](https://github.com/crs48/LIBCard).
   - type: faq
     items:
       - q: Is it really free?
@@ -266,7 +274,7 @@ blocks:
 #   theme: midnight        # default | midnight | sunset | mono | paper | terminal
 #
 # ...or turn on the live theme switcher / random mode so visitors can see the
-# themes on the page (these are the only features that ship a little JavaScript):
+# themes on the page (an optional feature that ships a little JavaScript):
 theme:
   name: frost # fallback for crawlers and visitors without JavaScript
   switcher: true # show the "Try a theme" button (Frost ↔ Dawn)

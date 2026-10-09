@@ -1,0 +1,71 @@
+---
+import type { BlockOf } from "../../lib/config";
+import setupPrompt from "../../lib/setup-prompt.txt?raw";
+
+interface Props {
+  block: BlockOf<"copy-prompt">;
+}
+
+const { block } = Astro.props;
+const prompt = block.text ?? setupPrompt.trim();
+---
+<div data-copy-prompt class="w-full space-y-3 text-center">
+  <button
+    data-copy-button
+    type="button"
+    hidden
+    class="lc-solid flex min-h-11 w-full items-center justify-center gap-2 rounded-card border border-transparent bg-accent px-5 py-3 font-semibold text-accent-contrast shadow-sm transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+  >
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-5" aria-hidden="true">
+      <rect x="8" y="8" width="12" height="13" rx="2" />
+      <path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3" />
+    </svg>
+    <span data-copy-label>{block.label}</span>
+  </button>
+  <details class="text-sm text-muted">
+    <summary class="cursor-pointer rounded-sm underline-offset-4 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">Read or copy the prompt</summary>
+    <textarea
+      readonly
+      aria-label="Prompt to copy"
+      rows="9"
+      spellcheck="false"
+      class="mt-3 block w-full resize-y rounded-card border border-border bg-surface p-4 text-left text-sm leading-relaxed text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+    >{prompt}</textarea>
+  </details>
+  <p data-copy-status role="status" aria-live="polite" class="text-sm text-muted empty:hidden"></p>
+  <script is:inline>
+    (() => {
+      const container = document.currentScript.closest('[data-copy-prompt]');
+      const button = container.querySelector('[data-copy-button]');
+      const label = container.querySelector('[data-copy-label]');
+      const input = container.querySelector('textarea');
+      const status = container.querySelector('[data-copy-status]');
+      const originalLabel = label.textContent;
+      let reset;
+      button.hidden = false;
+      button.addEventListener('click', async () => {
+        clearTimeout(reset);
+        button.disabled = true;
+        try {
+          await navigator.clipboard.writeText(input.value);
+          label.textContent = 'Copied!';
+          status.textContent = 'Paste the prompt into your coding agent to get started.';
+        } catch {
+          label.textContent = originalLabel;
+          container.querySelector('details').open = true;
+          input.focus();
+          input.select();
+          status.textContent = 'Copy the selected prompt, then paste it into your coding agent.';
+        } finally {
+          button.disabled = false;
+          reset = setTimeout(() => { label.textContent = originalLabel; }, 2500);
+        }
+      });
+    })();
+  </script>
+</div>
+
+<style>
+  /* Keep the manual-copy path usable when JavaScript is disabled. */
+  [data-copy-button][hidden] { display: none; }
+</style>

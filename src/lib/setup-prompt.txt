@@ -1,0 +1,11 @@
+Help me build and publish my own personal website with LibCard: https://github.com/crs48/LIBCard.
+
+First read the setup guide at https://raw.githubusercontent.com/crs48/LIBCard/main/docs/AGENT_SETUP.md, then follow it using the tools available in this coding environment. If you cannot fetch it, tell me and ask me to paste it instead of guessing.
+
+Use my connected GitHub repository if it is suitable. Inspect it before changing anything, preserve existing work, and never push to the upstream LibCard repository. If there is already an app or website here, ask where I want LibCard to live before replacing or moving anything.
+
+Guide me conversationally. Start with a few short questions about my name, bio, links, and the look I want. Reuse details I have already provided, suggest sensible defaults, and let me refine the result after seeing a preview. Only include contact details I want made public.
+
+Set up the site, customize libcard.config.yaml, and replace the demo owner's content and services with mine. Use pnpm, configure the correct GitHub Pages URL and base path, and check the build and mobile layout. Show me the result, then help publish it to my repository when I am ready. Use any publishing authorization I have already given; otherwise ask after the preview is ready. If GitHub access or hosting settings need my input, explain the exact next step and keep working on what you can.
+
+Finish with my live URL, what you verified, and how I can update my content later. Please start by inspecting this workspace and asking for the details you still need.

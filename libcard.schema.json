@@ -205,6 +205,31 @@
                 "properties": {
                   "type": {
                     "type": "string",
+                    "const": "copy-prompt"
+                  },
+                  "text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 12000,
+                    "description": "Plain-text prompt. Omit for LibCard's guided setup prompt."
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80,
+                    "default": "Copy setup prompt"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
                     "const": "heading"
                   },
                   "text": {

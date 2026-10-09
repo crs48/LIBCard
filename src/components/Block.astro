@@ -4,6 +4,7 @@
 import type { LibcardBlock } from "../lib/config";
 import Heading from "./blocks/Heading.astro";
 import TextBlock from "./blocks/TextBlock.astro";
+import CopyPrompt from "./blocks/CopyPrompt.astro";
 import Divider from "./blocks/Divider.astro";
 import ContactButtons from "./blocks/ContactButtons.astro";
 import TipButtons from "./blocks/TipButtons.astro";
@@ -27,6 +28,7 @@ const { block } = Astro.props;
 ---
 {block.type === "heading" && <Heading block={block} />}
 {block.type === "text" && <TextBlock block={block} />}
+{block.type === "copy-prompt" && <CopyPrompt block={block} />}
 {block.type === "divider" && <Divider block={block} />}
 {block.type === "contact-buttons" && <ContactButtons block={block} />}
 {block.type === "tip-buttons" && <TipButtons block={block} />}
