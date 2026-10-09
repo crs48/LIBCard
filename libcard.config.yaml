@@ -211,9 +211,11 @@ blocks:
       - q: Can I embed content?
         a: Yup. Video, maps, music, forms, and more.
   - type: divider
-    label: Feedme
+    label: Like how I operate?
   - type: heading
-    text: Like how I operate?
+    text: >-
+      Yay! Support my work, try a project, share feedback, or contribute to
+      whatever energizes you.
   - type: text
     markdown: >
       Help keep these experiments going at [crs.tips](https://crs.tips), my own
@@ -230,9 +232,9 @@ blocks:
     paypal: chrissmothers
     wise: chriss907
   - type: divider
-    label: xNet
+    label: What's your dream internet?
   - type: heading
-    text: What's your dream internet?
+    text: Shall we prototype it together?
   - type: text
     markdown: |-
       xNet is my prototype of the internet tools I wish existed. I'm building a way to make local-first apps that feel like personal software: yours to tinker with, pull apart, and fit together like Lego.
