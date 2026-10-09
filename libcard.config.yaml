@@ -234,11 +234,12 @@ blocks:
   - type: heading
     text: What's your dream internet?
   - type: text
-    markdown: >
-      Building xNet — a local-first platform for apps that work offline, sync
-      peer-to-peer, and keep your data under your control.
-      Explore what I'm building at [xnet.fyi](https://xnet.fyi/),
-      or dig into the [source code](https://github.com/crs48/xNet).
+    markdown: |-
+      xNet is my prototype of the internet tools I wish existed. I'm building a way to make local-first apps that feel like personal software: yours to tinker with, pull apart, and fit together like Lego.
+
+      Your data lives on your device. The apps work offline, you choose what to share, and you can change tools without leaving your stuff behind. I want to see what people make when software can grow around their lives and the little communities they care about.
+
+      [Come explore xNet](https://xnet.fyi/), [read the stories behind it](https://xnet.fyi/blog/), or [tinker with the code](https://github.com/crs48/xNet).
   - type: divider
     label: Contact me
   - type: contact-buttons
