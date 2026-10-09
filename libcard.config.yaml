@@ -12,7 +12,7 @@
 # --- Who you are (the card header) ---
 profile:
   name: Christopher Smothers
-  tagline: Building xNet — a local-first platform for apps that work offline, sync peer-to-peer, and keep your data under your control
+  tagline: hi 👋 i'm chris and i'm running experiments to illuminate a world that lights us all up to live in
   avatar: /avatar.jpg # a file in /public, or a full https:// URL
   location: San Francisco, CA
 
@@ -35,7 +35,7 @@ contact:
 feedme:
   enabled: true
   origin: https://crs.tips
-  give: false # no "Give to" button under the header — the Support section below has it
+  give: false # no "Give to" button under the header — the Feedme section below has it
 
 # --- Social icon row (icon-only, shown above the links) ---
 socials:
@@ -211,22 +211,34 @@ blocks:
       - q: Can I embed content?
         a: Yup. Video, maps, music, forms, and more.
   - type: divider
-    label: Support My Work
+    label: Feedme
+  - type: heading
+    text: like how i operate?
   - type: text
     markdown: >
-      Tips keep this work free and open. The best way is **crs.tips**, powered by
-      my open source and [open social](https://atproto.com) tipping tool
-      [Feedme](https://github.com/crs48/feedme).
+      Help keep these experiments going at [crs.tips](https://crs.tips), my own
+      instance of [Feedme](https://feedme.fund/) — the open-source tipping tool
+      I'm building. It reads the project list directly from this site's LibCard
+      config, so you can tip me and pick the experiments you'd like to see more of.
   - type: tip-buttons
     feedme: true # primary button → my Feedme checkout ("Tip at crs.tips")
     # feedmeLabel: Tip at crs.tips   # the default; override the button text here
     feedmeNote: >-
-      crs.tips pulls its project list from this site, so you can put your tip
-      behind any of the links above. Pick what you'd like more of; I get all of
-      it either way.
+      Your pick is a suggestion about where to put my energy. Every tip supports
+      me either way.
     venmo: christophersmothers
     paypal: chrissmothers
     wise: chriss907
+  - type: divider
+    label: xNet
+  - type: heading
+    text: what's your dream internet?
+  - type: text
+    markdown: >
+      Building xNet — a local-first platform for apps that work offline, sync
+      peer-to-peer, and keep your data under your control.
+      Explore what I'm building at [xnet.fyi](https://xnet.fyi/),
+      or dig into the [source code](https://github.com/crs48/xNet).
   - type: divider
     label: Contact Me
   - type: contact-buttons
@@ -277,7 +289,7 @@ footer:
 
 # --- SEO / link previews (optional) ---
 seo:
-  description: Building xNet — a local-first platform for apps that work offline, sync peer-to-peer, and keep your data under your control
+  description: hi 👋 i'm chris and i'm running experiments to illuminate a world that lights us all up to live in
   # ogImage: /og.png   # optional custom Open Graph image (a /public path or URL)
 
 # --- Landscape "card mode" (rotate your phone to flash a business card) ---
