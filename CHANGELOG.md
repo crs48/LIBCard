@@ -39,12 +39,14 @@ often to `libcard.config.yaml`); everything else is picked up automatically by
   GitHub pill (the mark + star count, per the existing `stars` modes) to its
   right — so "here's the app, here's the code" takes one line instead of two.
   Existing `star: true` repo links are unchanged.
-- **Glass themes no longer flicker.** The frosted panels on Frost, Dusk, Dawn,
-  and Mist could shimmer or flash intermittently — the drifting mesh background
-  ran a live 60px blur and a scale/rotate animation that periodically forced the
-  GPU to redraw the layer the glass sits on. The mesh's softness is now baked
-  into the gradients themselves and the drift is translate-only, so the glass
-  effect looks the same but the flicker is gone. No config changes needed.
+- **Simpler glass rendering while scrolling.** Frost, Dusk, Dawn, and Mist now
+  use translucent fills over the soft mesh instead of live backdrop blur on
+  every button and status chip. This removes dozens of filtered rendering
+  layers implicated in intermittent blanking during scrolling. The palettes,
+  borders, shadows, and gentle background drift remain; blanket layer hints
+  are removed, and solid themes no longer keep a paused background animation.
+  Reduced-motion and reduced-transparency preferences still apply. No config
+  changes needed.
 
 ## 0.2.0
 

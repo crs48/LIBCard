@@ -92,6 +92,15 @@ A theme provides seven colors (required, hex) plus a font and a corner radius.
 meet **WCAG AA** (4.5:1). `pnpm run check-contrast` enforces this and the PR will
 fail if a theme falls short — pick slightly stronger colors.
 
+### Glass surfaces
+
+`buttons.fill: glass` uses translucent surface fills, controlled by
+`buttons.glassFillOpacity`, with the theme's borders and shadows. The mesh
+background supplies the softness; surfaces do not apply live backdrop blur.
+This keeps scrolling simpler, especially on cards with many buttons and nested
+status chips. Patterns or detailed backgrounds remain visible through the fill.
+Reduced-transparency and forced-colors settings use opaque surfaces instead.
+
 ## Metadata & attribution
 
 | Field | Required | Notes |

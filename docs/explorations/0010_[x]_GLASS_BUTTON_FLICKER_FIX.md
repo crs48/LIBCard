@@ -1,5 +1,13 @@
 # Eliminating Glass-Button Flicker In The Atmosphere Themes
 
+> **Follow-up, 2026-10-09:** The changes below shipped, but the user still
+> observed blank content while scrolling in Dia. The diagnosis and successful
+> validation claims in this historical document do not establish that the
+> problem was eliminated. In particular, `shoot-themes.mjs` renders synthetic
+> SVG previews rather than the browser's actual CSS/compositor. See
+> [exploration 0011](./0011_[x]_SCROLL_RENDERING.md) for browser measurements,
+> the subsequent removal of per-surface backdrop filters, and validation limits.
+
 > **Status:** Exploration #10. A bug-focused follow-on to
 > [`0007_[_]_EXPRESSIVE_THEMES_AND_FLOURISHES.md`](./0007_[_]_EXPRESSIVE_THEMES_AND_FLOURISHES.md)
 > (which built the effect library) and
