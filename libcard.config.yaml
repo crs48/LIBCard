@@ -70,6 +70,12 @@ links:
     url: https://crs48.github.io/nervous-system-healing
     icon: activity
     status: ready
+  - label: Feed Me Fund (open-source creator tips)
+    url: https://feedme.fund/
+    icon: coins
+    status: ready
+    github: https://github.com/crs48/feedme
+    stars: build
   - label: Free the Pores (simpler skin care)
     url: https://freethepores.com/
     icon: leaf
@@ -170,12 +176,6 @@ links:
     url: https://crs.land/resume.pdf # served from public/resume.pdf
     icon: file-text
     feedme: { skip: true } # Keep the résumé on LibCard, off Feedme.
-  - label: Feed Me Fund (open-source creator tips)
-    url: https://feedme.fund/
-    icon: coins
-    status: wip
-    github: https://github.com/crs48/feedme
-    stars: build
 # --- Status chip wording (optional) ---
 # Rephrase any `status:` chip without touching the code. Every key is optional;
 # anything you leave out keeps its default text (Ready, In progress, Experiment,
