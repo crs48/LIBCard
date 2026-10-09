@@ -70,6 +70,12 @@ links:
     url: https://crs48.github.io/nervous-system-healing
     icon: activity
     status: ready
+  - label: Free the Pores (simpler skin care)
+    url: https://freethepores.com/
+    icon: leaf
+    status: exploration
+    github: https://github.com/crs48/freethepores
+    stars: build
   - label: Digital Garden
     url: https://crs.garden
     icon: leaf
