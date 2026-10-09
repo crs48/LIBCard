@@ -24,6 +24,8 @@ if (block.wise) buttons.push({ href: href(block.wise, "https://wise.com/pay/me/"
 // null unless `feedme: true` on this block AND the top-level integration is on.
 // It only needs the configured origin, so it renders even when the public
 // numbers were unavailable at build time.
+// Keep the primary action solid in glass themes so it stands out from the
+// secondary provider buttons, using each theme's accent and contrast colors.
 const primary = tipBlockFor(await getFeedme(), block);
 ---
 {
@@ -35,7 +37,7 @@ const primary = tipBlockFor(await getFeedme(), block);
             href={primary.href}
             target="_blank"
             rel="noopener noreferrer"
-            class="flex min-h-11 w-full items-center justify-center gap-2 rounded-card bg-accent px-4 py-3 text-sm font-semibold text-accent-contrast shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            class="lc-solid flex min-h-11 w-full items-center justify-center gap-2 rounded-card bg-accent px-4 py-3 text-sm font-semibold text-accent-contrast shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             <Icon name="heart" class="size-4 shrink-0" />
             <span>{primary.label}</span>

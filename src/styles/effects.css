@@ -90,7 +90,8 @@
    The translucent fill IS the readability scrim (its opacity floor is enforced in
    the schema); the frosted edge comes from the theme's own light border token, so
    we don't touch border-color and never fight a `hover:border-*` utility.
-   `.lc-solid` opts an element out (the avatar fill + the physical business card). */
+   `.lc-solid` opts an element out (the avatar fill, physical business card,
+   and primary tip button). */
 .bg-surface:not(.lc-solid) {
   background-color: color-mix(in oklab, var(--lc-surface) var(--lc-glass-pct, 100%), transparent);
   -webkit-backdrop-filter: var(--lc-glass-filter, none);
