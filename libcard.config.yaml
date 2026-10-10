@@ -148,6 +148,12 @@ links:
     status: exploration
     github: https://github.com/crs48/floor-life
     stars: build
+  - label: Dead butt (gluteal amnesia)
+    url: https://deadbutt.fyi/
+    icon: activity
+    status: exploration
+    github: https://github.com/crs48/deadbutt
+    stars: build
   - label: How AI works (for luddites)
     url: https://crs48.github.io/ai-explained
     icon: cpu
