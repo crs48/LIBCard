@@ -82,13 +82,12 @@
    Avoid backdrop filters and blanket layer-promotion hints on these surfaces.
    An unset --lc-glass-pct means an opaque surface. We target the `bg-surface`
    utility itself, so EVERY panel frosts together — link buttons, the social row,
-   the business-card reveal, FAQ, contact buttons, embeds, forms, the switcher,
-   and the persistent corner button.
+   the business-card reveal, FAQ, contact buttons, embeds, forms, the switcher.
    The translucent fill IS the readability scrim (its opacity floor is enforced in
    the schema); the frosted edge comes from the theme's own light border token, so
    we don't touch border-color and never fight a `hover:border-*` utility.
    `.lc-solid` opts an element out (the avatar fill, physical business card,
-   and primary tip button). */
+   primary tip button, and opaque theme-tinted corner button). */
 .bg-surface:not(.lc-solid) {
   background-color: color-mix(in oklab, var(--lc-surface) var(--lc-glass-pct, 100%), transparent);
 }

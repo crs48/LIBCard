@@ -294,7 +294,7 @@ cornerButton:
   label: Support my work
   url: https://crs.tips
   icon: heart
-  position: bottom-right # bottom-left | top-right | top-left
+  position: top-right # bottom-right (default) | bottom-left | top-left
 
 # --- Footer credit ---
 # "Powered by LibCard · Theme by <author>". Both default on.

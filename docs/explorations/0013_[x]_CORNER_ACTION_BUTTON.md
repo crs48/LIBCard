@@ -5,7 +5,8 @@
 Visitors should be able to support Chris's work without finding the tip section
 at the end of a long page. Add one optional, persistent corner link to LibCard.
 The personal configuration uses **♡ Support my work → https://crs.tips** in the
-bottom-right corner. Every owner can choose their own purpose and corner.
+top-right corner. Every owner can choose their own purpose and corner; the
+reusable feature defaults to bottom-right.
 
 ## Current state
 
@@ -56,7 +57,11 @@ device dimensions.
 
 ## Recommendation
 
-Use a compact, opaque, theme-colored pill with a light border and soft shadow.
+Use a compact pill with the same theme palette, border, text, and icon colors as
+the other link buttons. For glass themes, blend the surface over the theme's
+background color to make an opaque tint. Unlike in-flow glass buttons, a fixed
+action overlaps scrolling content; transparency lets unrelated text show through.
+Keep a light border and soft shadow, with no backdrop filter.
 Keep the label visible on phones. Use a heart for this site; do not build a
 payment-provider dependency into the component. Avoid backdrop blur, pulsing,
 popovers, scroll listeners, and icon-only mobile states.
@@ -74,7 +79,7 @@ cornerButton:
   label: Support my work
   url: https://crs.tips
   icon: heart
-  position: bottom-right # bottom-left | top-right | top-left also work
+  position: top-right # default: bottom-right; all four corners work
 ```
 
 Mount once in the shared layout, reserve breathing room at the chosen edge, and
@@ -108,20 +113,43 @@ remain responsible for their token contrast, as with the existing buttons.
 ## Implementation checklist
 
 - [x] Inspect shared layout, schema, themes, setup, and upgrade boundaries.
-- [ ] Add optional config with safe destinations and four-corner positioning.
-- [ ] Add a zero-JavaScript component using existing icon and theme tokens.
-- [ ] Integrate spacing, focus, print, and enabled-only card-mode behavior.
-- [ ] Enable the personal support link and update owner-facing documentation.
-- [ ] Regenerate the JSON schema through the existing build tooling.
+- [x] Add optional config with safe destinations and four-corner positioning.
+- [x] Add a zero-JavaScript component using existing icon and theme tokens.
+- [x] Integrate spacing, focus, print, and enabled-only card-mode behavior.
+- [x] Enable the personal support link and update owner-facing documentation.
+- [x] Regenerate the JSON schema through the existing build tooling.
 
 ## Validation checklist
 
-- [ ] Verify omitted/disabled configs, defaults, supported URLs, and rejections.
-- [ ] Run tests, Astro typecheck, and production build.
-- [ ] Browser-check Frost and Dawn, desktop and mobile, and scrolling.
-- [ ] Check all four corners, long labels, keyboard focus, and no-JS navigation.
-- [ ] Check print, card-mode landscape, disabled card mode, and the theme gallery.
-- [ ] Build a project-base fixture and a disabled fixture without changing owner content.
+- [x] Verify omitted/disabled configs, defaults, supported URLs, and rejections.
+- [x] Run tests, Astro typecheck, and production build.
+- [x] Browser-check Frost and Dawn, desktop and mobile, and scrolling.
+- [x] Check all four corners, long labels, keyboard focus, and no-JS navigation.
+- [x] Check print, card-mode landscape, disabled card mode, and the theme gallery.
+- [x] Build a project-base fixture and a disabled fixture without changing owner content.
 
-Once implementation and validation pass, check these items, record the observed
-results, and rename this exploration to `[x]`.
+## Validation results
+
+`pnpm test`, `pnpm typecheck`, and `pnpm build` pass. Astro reports no errors,
+warnings, or hints. Schema checks cover opt-out behavior, defaults, four corners,
+valid destinations, and invalid fields or URL schemes.
+
+Chrome checks cover 320px, 390px, and 1100px layouts, Frost and Dawn, fixed
+position while scrolling, print suppression, no-JavaScript navigation, and all
+four corners. Project-base and disabled fixtures build successfully without
+modifying the owner's config. A 45-character label wraps at 320px and remains
+usable with 200% text sizing. New-tab navigation preserves the base path, query,
+and fragment. Keyboard passes traverse 71 controls with no fully obscured focus
+in the tested bottom-right and top-left configurations. Landscape checks cover
+the enabled card overlay, disabled card mode, the theme gallery, and manual card.
+
+The final personal configuration uses **top-right**. Final browser checks confirm
+an opaque theme tint, no backdrop filter, clearance above the profile, and stable
+position while scrolling at all three widths. Border, text, and icon colors use
+the same tokens as ordinary links. Built-in glass themes retain their palette
+without allowing underlying links to show through the floating action.
+
+Browser scripts and captures are local artifacts under `output/playwright/`
+with `check-corner-*` and `corner-final-*` names. Mobile checks use desktop Chrome
+emulation; physical iOS/Android and nonzero device safe-area insets were not tested.
+The feature is committed locally; publication is separate.

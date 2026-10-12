@@ -15,7 +15,7 @@ const href = button.url.startsWith("/")
 const newTab = button.newTab && !/^(mailto:|tel:|sms:)/i.test(href);
 ---
 <a
-  class="lc-corner-button group bg-surface shadow-sm hover:shadow-md"
+  class="lc-corner-button lc-solid group bg-surface shadow-sm hover:shadow-md"
   data-position={button.position}
   href={href}
   target={newTab ? "_blank" : undefined}
@@ -39,6 +39,9 @@ const newTab = button.newTab && !/^(mailto:|tel:|sms:)/i.test(href);
     padding: 0.75rem 1rem;
     border: 1px solid var(--lc-border);
     border-radius: 999px;
+    /* Keep the theme's surface tint, but mix over its background color instead
+       of transparency: scrolling links must never bleed through this action. */
+    background: color-mix(in oklab, var(--lc-surface) var(--lc-glass-pct, 100%), var(--lc-bg));
     color: var(--lc-fg);
     font-size: 0.875rem;
     font-weight: 600;
