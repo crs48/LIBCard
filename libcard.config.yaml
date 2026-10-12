@@ -288,6 +288,14 @@ theme:
   random: true # choose between the allowed themes on each page load
   animate: true # animate the change with a circular reveal
 
+# --- Persistent corner button (optional; omit or set false to hide) ---
+# Any link works here: support, booking, contact, or something else.
+cornerButton:
+  label: Support my work
+  url: https://crs.tips
+  icon: heart
+  position: bottom-right # bottom-left | top-right | top-left
+
 # --- Footer credit ---
 # "Powered by LibCard · Theme by <author>". Both default on.
 footer:

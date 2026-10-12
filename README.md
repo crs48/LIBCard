@@ -39,6 +39,7 @@ You can also use the copy button on [crs.land](https://crs.land).
 1. **Use this template.** Click **“Use this template” → Create a new repository**. Name it `your-links` (a project site) or `your-username.github.io` (a user site).
 2. **Make it yours.** Edit [`libcard.config.yaml`](./libcard.config.yaml) — your name, tagline, links, socials, contact details, and theme. That's the only file you need to touch.
    - Prefer prompts? Clone the repo and run `pnpm install && pnpm run setup` for an interactive wizard that fills the config in for you (including the tricky `site.url` / `site.base`).
+   - Replace or remove the demo `cornerButton` support link along with the other demo content so it points to your own destination.
 3. **Turn on Pages.** In your repo, go to **Settings → Pages → Build and deployment** and set **Source: GitHub Actions**.
 4. **Push.** Every push to `main` rebuilds and deploys automatically (via [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml)). Your card goes live at `https://<username>.github.io/<repo>/`.
 
@@ -131,6 +132,31 @@ The button adds a small inline clipboard script **only when the block is used**.
 It copies on a click, shows confirmation, and opens/selects the text for manual
 copying if clipboard access fails. With JavaScript disabled, the readable text
 remains available and the button is hidden.
+
+### Persistent corner button (optional)
+
+Keep one action visible while visitors scroll: support your work, book a call,
+send an email, or open any other destination. The small pill follows the active
+theme and works without JavaScript.
+
+```yaml
+cornerButton:
+  label: Support my work
+  url: https://your-tip-page.example
+  icon: heart            # optional; uses the same icons as links
+  position: bottom-right # default; also bottom-left, top-left, top-right
+  newTab: false          # default; true opens web links in a new tab
+```
+
+Omit `cornerButton` or set `cornerButton: false` to hide it. The label is required
+(1–48 characters) and stays visible on mobile. `url` accepts HTTP(S), `mailto:`,
+`tel:`, `sms:`, a `#fragment`, or a `/site-path` such as `/card` (automatically
+prefixed with `site.base`). Native app links always use their handler. Feedme
+is not required; this is a normal link to your chosen destination.
+
+The action appears on every page, with screen-edge spacing, a keyboard focus
+ring, and room to scroll content clear of it. It hides when printing or showing
+the landscape business-card overlay, and returns with the normal page.
 
 ### Content blocks
 
@@ -485,6 +511,11 @@ pnpm install && pnpm build && git push
 
 **Adding Feedme tips?** Update first — the `feedme:` fields need the current
 schema — then follow [docs/FEEDME.md](./docs/FEEDME.md).
+
+**Adding a persistent corner button?** Update the engine first, then add
+[`cornerButton`](#persistent-corner-button-optional) with your own label and URL.
+Use `pnpm run update --ref=main` while the feature is unreleased. Existing cards
+remain unchanged until they opt in; the updater preserves your config.
 
 **Adding the setup prompt button?** Update the engine first, then add
 `{ type: copy-prompt }` to `blocks`. Older engines do not recognize this block.

@@ -1,0 +1,108 @@
+---
+import Icon from "./Icon.astro";
+import type { LibcardConfig } from "../lib/config";
+import { withBase } from "../lib/site";
+
+interface Props {
+  button: Exclude<LibcardConfig["cornerButton"], false | undefined>;
+}
+
+const { button } = Astro.props;
+const href = button.url.startsWith("/")
+  ? withBase(import.meta.env.BASE_URL, button.url)
+  : button.url;
+// Native app schemes should open their handler even when newTab is requested.
+const newTab = button.newTab && !/^(mailto:|tel:|sms:)/i.test(href);
+---
+<a
+  class="lc-corner-button group bg-surface shadow-sm hover:shadow-md"
+  data-position={button.position}
+  href={href}
+  target={newTab ? "_blank" : undefined}
+  rel={newTab ? "noopener noreferrer" : undefined}
+>
+  {button.icon && <Icon name={button.icon} class="size-4 shrink-0 text-muted group-hover:text-accent" />}
+  <span class="lc-corner-label">{button.label}</span>
+  {newTab && <span class="sr-only"> (opens in a new tab)</span>}
+</a>
+
+<style>
+  .lc-corner-button {
+    position: fixed;
+    z-index: 40;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    max-width: min(20rem, calc(100% - 2rem - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)));
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--lc-border);
+    border-radius: 999px;
+    color: var(--lc-fg);
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-decoration: none;
+  }
+
+  .lc-corner-label {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  [data-position^="bottom-"] {
+    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  }
+  [data-position^="top-"] {
+    top: calc(1rem + env(safe-area-inset-top, 0px));
+  }
+  [data-position$="-right"] {
+    right: calc(1rem + env(safe-area-inset-right, 0px));
+  }
+  [data-position$="-left"] {
+    left: calc(1rem + env(safe-area-inset-left, 0px));
+  }
+
+  @media (hover: hover) {
+    .lc-corner-button:hover {
+      border-color: var(--lc-accent);
+    }
+  }
+
+  .lc-corner-button:focus-visible {
+    outline: 2px solid var(--lc-accent);
+    outline-offset: 4px;
+  }
+
+  /* Leave room to scroll endpoint content and keyboard focus above/below the
+     fixed action. Relative units also reserve more space with enlarged text. */
+  :global(html[data-corner-button^="bottom-"]) {
+    scroll-padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px));
+  }
+  :global(html[data-corner-button^="bottom-"] body) {
+    padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px));
+  }
+  :global(html[data-corner-button^="top-"]) {
+    scroll-padding-top: calc(6rem + env(safe-area-inset-top, 0px));
+  }
+  :global(html[data-corner-button^="top-"] body) {
+    padding-top: calc(6rem + env(safe-area-inset-top, 0px));
+  }
+
+  @media (orientation: landscape) and (max-height: 540px) and (pointer: coarse) {
+    :global(body[data-card-mode]) .lc-corner-button {
+      display: none;
+    }
+  }
+
+  @media print {
+    .lc-corner-button {
+      display: none;
+    }
+    :global(html[data-corner-button] body) {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+</style>

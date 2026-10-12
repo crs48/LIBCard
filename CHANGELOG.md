@@ -9,6 +9,14 @@ often to `libcard.config.yaml`); everything else is picked up automatically by
 
 ## Unreleased
 
+- **Persistent corner button (optional).** Add `cornerButton` with your label,
+  destination, optional icon, and any of four corners (bottom-right by default).
+  The theme-aware pill stays visible while scrolling, works without JavaScript,
+  and supports web, email, phone, SMS, and site-relative links. Omit it or set
+  it to `false` to hide it. Screen-edge spacing and keyboard focus are included;
+  printing and the active landscape card overlay hide it. Disabled card mode
+  and the theme gallery now keep their regular content visible in landscape.
+  Update the engine before opting in; existing cards need no changes.
 - **Set up a personal site with a coding agent.** A new optional `copy-prompt`
   block lets visitors copy a guided LibCard setup prompt into Claude Code,
   Codex, or another coding agent. The prompt and agent guide cover connected

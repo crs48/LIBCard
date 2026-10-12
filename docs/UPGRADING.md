@@ -37,6 +37,13 @@ updated with the engine. Local `AGENTS.md` and `docs/` are preserved by updates;
 the prompt links to the [current upstream setup guide](https://github.com/crs48/LIBCard/blob/main/docs/AGENT_SETUP.md).
 Use that guide for a new site, not as a replacement for this upgrade process.
 
+The optional **`cornerButton`** also needs the current engine. Update first,
+then add your own label and destination using the
+[README example](../README.md#persistent-corner-button-optional). Use
+`pnpm run update --ref=main` while it is unreleased. Older engines ignore this
+top-level field, so adding it alone will not display a button. Omitted or
+`false` keeps it off; upgrading never adds the demo support URL to your config.
+
 ## 2. What's yours vs. the engine
 
 This is the one idea the whole page rests on. Your repo is a thin layer of

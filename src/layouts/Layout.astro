@@ -6,7 +6,8 @@ import ThemeSwitcher from "../components/ThemeSwitcher.astro";
 import ThemeBoot from "../components/ThemeBoot.astro";
 import BusinessCardMode from "../components/BusinessCardMode.astro";
 import CardWakeLock from "../components/CardWakeLock.astro";
-import { getActiveTheme, getCardMode, getThemeEffects, getAnalytics } from "../lib/config";
+import CornerButton from "../components/CornerButton.astro";
+import { getConfig, getActiveTheme, getCardMode, getThemeEffects, getAnalytics } from "../lib/config";
 
 interface Props {
   title?: string;
@@ -15,6 +16,7 @@ interface Props {
 }
 
 const { title, wide } = Astro.props;
+const { cornerButton } = await getConfig();
 const maxWidth = wide ? "max-w-3xl" : "max-w-md";
 // The owner's chosen theme is server-rendered into <html data-theme> so first
 // paint, crawlers, and no-JS visitors all see it. The switcher/random mode (if
@@ -47,14 +49,14 @@ const umamiTagger =
   ' a.dataset.umamiEvent = "outbound"; a.dataset.umamiEventUrl = a.href; }';
 ---
 <!doctype html>
-<html lang="en" data-theme={theme.name}>
+<html lang="en" data-theme={theme.name} data-corner-button={cornerButton ? cornerButton.position : undefined}>
   <head>
     <BaseHead title={title} />
     {/* Pre-paint theme boot (random pick or no-flash restore). Only when the
         switcher/random is on — otherwise the page ships zero JS. */}
     {themeJs && <ThemeBoot pool={theme.randomPool} allowed={theme.cycle} random={theme.random} />}
   </head>
-  <body class="min-h-dvh font-sans antialiased">
+  <body class="min-h-dvh font-sans antialiased" data-card-mode={showCardMode ? "true" : undefined}>
     {fx.bgStage && <div class="lc-bg-stage" aria-hidden="true" />}
     {fx.pattern && <div class="lc-pattern" aria-hidden="true" />}
     <div class:list={["mx-auto flex min-h-dvh w-full flex-col items-center px-4 py-12 sm:py-14", maxWidth]}>
@@ -66,6 +68,7 @@ const umamiTagger =
       {showCardMode && <BusinessCardMode qr={card.qr} hint={card.hint} />}
       {showCardMode && card.wakeLock && <CardWakeLock />}
     </div>
+    {cornerButton && <CornerButton button={cornerButton} />}
     {/* GoatCounter pixel: the zero-JS analytics path — a 1×1 <img> beacon that
         counts the pageview (and referrer) with no script and no cookie. */}
     {gcPixel && analytics?.provider === "goatcounter" && (

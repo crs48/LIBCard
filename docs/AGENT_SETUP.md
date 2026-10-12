@@ -90,7 +90,7 @@ dependencies and commands; the pinned package-manager version is in
 
 For a **fresh copy**, replace the demo profile, contact fields, socials, links,
 rich-content blocks, SEO text, avatar, and résumé with the owner's choices.
-Remove the demo `feedme` and `analytics` settings and payment handles unless the
+Remove the demo `cornerButton`, `feedme`, and `analytics` settings and payment handles unless the
 owner supplies their own. Do not leave links sending their visitors to Chris's
 tip accounts or analytics. Remove a copied demo `public/CNAME`, if present, and
 inspect for other personal assets or fixed URLs. Preserve these settings on an

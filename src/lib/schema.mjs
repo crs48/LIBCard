@@ -310,6 +310,22 @@ const socialSchema = z
   })
   .strict();
 
+// A single optional persistent action, independent of Feedme or any provider.
+// Restrict destinations to navigable links, never executable URL schemes.
+const cornerButtonSchema = z.union([
+  z.literal(false),
+  z.object({
+    label: z.string().trim().min(1).max(48),
+    url: z.string().trim().pipe(z.union([
+      z.string().url().regex(/^(https?:\/\/|mailto:|tel:|sms:)/i).regex(/^\S+$/),
+      z.string().regex(/^(?:\/(?!\/)[^\s\\]*|#[^\s\\]*)$/),
+    ])).describe("HTTP(S), mailto, tel, sms, /site-path, or #anchor destination"),
+    icon: z.string().trim().min(1).optional(),
+    position: z.enum(["bottom-right", "bottom-left", "top-right", "top-left"]).default("bottom-right"),
+    newTab: z.boolean().default(false),
+  }).strict(),
+]).optional();
+
 // `cardMode:` — the landscape "rotate your phone to flash a business card" view.
 // Pure CSS by default (zero client JS): the overlay and the portrait hint are
 // revealed by an orientation media query. The only JavaScript is the optional
@@ -627,6 +643,7 @@ export const libcardSchema = z.object({
   blocks: z.array(blockSchema).default([]),
   socials: z.array(socialSchema).default([]),
   theme: themeConfigSchema,
+  cornerButton: cornerButtonSchema,
   footer: z
     .object({
       // "Powered by LibCard" — on by default, but yours to turn off (MIT).
