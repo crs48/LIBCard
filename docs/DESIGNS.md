@@ -22,12 +22,14 @@ flowchart LR
 design: personal-home
 ```
 
-`classic` preserves the original centered card with compact, label-only link
-buttons. It omits link images, favicons, and editorial copy, and shows the profile
+`classic` preserves the original centered card with compact link buttons and
+configured outline icons. It omits link images, favicons, and editorial copy, and shows the profile
 bio without a second intro when both are configured. The profile photo, social icons,
-status badges, source links, and optional tip actions remain available. Link
-titles stay centered, with source and tip controls sharing the row's outline;
-social and contact actions form one group below the profile.
+status badges, source links, and optional tip actions remain available. Source
+and tip controls are separate buttons beside each link. Expanded link sections
+form a continuous list in owner order, with their titles available to screen
+readers; collapsed sections keep visible summaries. Social icons sit below the
+profile, and contact shortcuts sit below the content.
 `personal-home` selects Editorial,
 Monochrome, compact spacing, and grayscale media. `studio` selects a profile
 sidebar, image-led project gallery, coaching feature, and compact writing rows,
@@ -261,7 +263,7 @@ Exports: `Profile`, `ProfileActions`, `HeaderAction`, `SocialRow`, `Section`, `B
 `EditorialLink`, `Icon`, `CardReveal`, `Classic`, `Editorial`, `Studio`, `renderMarkdown`,
 `withBase`, `absoluteUrl`, and model types. `Section` accepts optional
 `layout="editorial"`, `"studio"`, or `"classic"`; Classic sections use compact
-buttons. `<Link compact />` renders label-only links with metadata actions and no
+buttons. `<Link compact />` renders simple labels and outline icons with metadata actions and no
 images; `<Profile compact />` prefers the bio over a duplicate intro. `Block` is the standard fallback for every
 existing block type and owns the integration handling those blocks need.
 This includes `disclosure` groups (`title`, `open`, and a non-nested `blocks`

@@ -18,14 +18,14 @@ const blocks = page.sections.filter((section) => section.type !== "links");
     {page.firstRun && <div class="lc-classic-nudge w-full"><FirstRunNudge /></div>}
     <div class="lc-classic-tools"><HeaderControls action={page.headerAction} /></div>
     <div class="lc-classic-profile"><Profile profile={page.profile} compact /></div>
-    {(page.socials.length > 0 || page.actions.length > 0) && <div class="lc-classic-connect">
+    {page.socials.length > 0 && <div class="lc-classic-connect">
       <SocialRow socials={page.socials} />
-      <ProfileActions actions={page.actions} />
     </div>}
     {page.legacy ? <>
       {page.sections.filter((section) => section.type === "links").map((section) => <Section section={section} layout="classic" index={0} />)}
       {blocks.length > 0 && <div class="lc-classic-blocks flex w-full flex-col gap-4">{blocks.map((block) => <Block block={block} />)}</div>}
     </> : page.sections.map((section, index) => <Section section={section} layout="classic" index={index} />)}
+    {page.actions.length > 0 && <div class="lc-classic-contact w-full"><ProfileActions actions={page.actions} /></div>}
     <CardReveal url={page.card.url} />
   </main>
   <slot name="utilities" />

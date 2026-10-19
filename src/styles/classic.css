@@ -1,39 +1,39 @@
-/* Classic stays a small, centered card, with one consistent rhythm. */
-.lc-classic { position: relative; padding-top: 4.5rem; padding-bottom: 3rem; }
+/* The original small card: profile, social icons, then a continuous link list. */
+.lc-classic { padding-block: 3rem; }
+.lc-classic:has(.lc-header-action, .lc-color-mode:not([hidden])) { padding-top: 9rem; }
 .lc-classic main { gap: 0; }
-.lc-classic-tools { position: absolute; inset: 1rem 1rem auto; font-size: .75rem; }
-.lc-classic-nudge { margin-bottom: 1.75rem; }
+.lc-classic-tools { position: fixed; inset: calc(1rem + env(safe-area-inset-top, 0px)) calc(1rem + env(safe-area-inset-right, 0px)) auto auto; z-index: 30; font-size: .875rem; }
+.lc-classic-tools a.lc-header-action { min-height: 44px; padding: .625rem 1rem; border: 1px solid var(--lc-border); border-radius: 999px; background: var(--lc-surface); color: var(--lc-fg); font-weight: 600; box-shadow: 0 1px 3px #0000001a, 0 1px 2px -1px #0000001a; }
+.lc-classic-tools a.lc-header-action svg { width: 16px; height: 16px; }
+.lc-classic-tools button.lc-color-mode { flex-basis: 44px; width: 44px; height: 44px; background: var(--lc-surface); }
+.lc-classic-nudge { margin-bottom: 1.5rem; }
 .lc-classic-profile { width: 100%; }
-.lc-classic-profile header { gap: .875rem; }
-.lc-classic-profile header > img { margin-bottom: .375rem; }
 .lc-classic-profile .lc-profile-identity { gap: .5rem; }
-.lc-classic-profile h1 { font-size: 1.625rem; font-weight: 600; line-height: 1.2; letter-spacing: -.045em; }
-.lc-classic-profile .lc-profile-identity > p { font-size: .8125rem; }
-.lc-classic-profile header > p { line-height: 1.6; }
-.lc-classic-profile header > p.text-balance { max-width: 23rem; font-size: .9375rem; }
-.lc-classic-profile header > p:has(svg) { font-size: .75rem; }
 .lc-classic-connect { display: flex; flex-direction: column; align-items: center; gap: .5rem; width: 100%; margin-top: 1.5rem; }
-.lc-classic-connect .lc-profile-actions { justify-content: center; column-gap: 1.25rem; }
-.lc-classic-connect .lc-profile-actions a { font-size: .75rem; color: var(--lc-muted); text-decoration: none; }
-.lc-classic-connect .lc-profile-actions a:hover { color: var(--lc-fg); text-decoration: underline; text-underline-offset: 4px; }
-.lc-classic-connect .lc-social { transition: color .18s, border-color .18s, background-color .18s; }
 .lc-classic-connect nav .lc-social:hover { color: var(--lc-accent); border-color: var(--lc-accent); }
-.lc-classic main > .lc-content-section { margin-top: 1.75rem; }
-.lc-classic .lc-section-heading { margin: 0 0 .75rem; padding-inline: .25rem; }
-.lc-classic .lc-section-heading h2 { font-size: .625rem; line-height: 1.5; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--lc-muted); }
-.lc-classic .lc-link-group { gap: .75rem; }
+.lc-classic main > .lc-content-section { margin-top: 1.5rem; }
+.lc-classic main > .lc-content-section + .lc-content-section { margin-top: .75rem; }
+/* Keep the owner's group names available to assistive navigation without
+   dividing the simple list into an editorial page. Collapsed groups retain
+   their visible summaries and native disclosure controls. */
+.lc-classic .lc-section-heading { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 .lc-classic .lc-section-disclosure > summary { padding-inline: .25rem; color: var(--lc-muted); }
-.lc-classic .lc-section-disclosure > summary h2 { font-size: .75rem; font-weight: 500; }
-.lc-classic main > .lc-standard-block { margin-top: 1.25rem; }
-.lc-classic-blocks { margin-top: 1.75rem; }
-.lc-classic main > .lc-card-reveal { margin-top: 1.75rem; }
-.lc-classic .lc-card-reveal > summary { min-height: 52px; font-size: .8125rem; font-weight: 500; }
-.lc-classic > footer { width: 100%; margin-top: 1.75rem; font-size: .6875rem; line-height: 1.7; }
+.lc-classic main > .lc-standard-block { margin-top: 1rem; }
+.lc-classic main > .lc-content-section + .lc-standard-block,
+.lc-classic-blocks,
+.lc-classic-contact,
+.lc-classic main > .lc-card-reveal { margin-top: 1.5rem; }
+.lc-classic-contact .lc-profile-actions { justify-content: center; }
+.lc-classic > footer { width: 100%; margin-top: 2rem; font-size: .75rem; line-height: 1.7; }
 .lc-classic > footer > p + p { margin-top: .5rem; }
 .lc-classic .lc-design-controls { margin-top: .75rem; }
-@media (max-width: 360px) {
-  .lc-classic-profile h1 { font-size: 1.5rem; }
-  .lc-classic-profile header > p.text-balance { font-size: .875rem; }
-  .lc-classic-connect nav[aria-label="Social profiles"] { max-width: 13rem; }
-  .lc-classic .lc-classic-connect .lc-profile-actions { column-gap: .875rem; }
+@media (min-width: 640px) {
+  .lc-classic { padding-block: 3.5rem; }
+  .lc-classic:has(.lc-header-action, .lc-color-mode:not([hidden])) { padding-top: 9.5rem; }
 }
+@media (max-width: 360px) {
+  .lc-classic-connect nav[aria-label="Social profiles"] { max-width: 13rem; }
+  .lc-classic .lc-classic-contact .lc-profile-actions { column-gap: .875rem; }
+  .lc-classic .lc-classic-contact .lc-profile-actions a { font-size: .75rem; }
+}
+@media print { .lc-classic-tools { display: none; } }
