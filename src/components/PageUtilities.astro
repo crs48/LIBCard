@@ -1,6 +1,7 @@
 ---
 import Footer from "./Footer.astro";
 import ThemeSwitcher from "./ThemeSwitcher.astro";
+import ColorModeSwitcher from "./ColorModeSwitcher.astro";
 import BusinessCardMode from "./BusinessCardMode.astro";
 import CardWakeLock from "./CardWakeLock.astro";
 import { getActiveTheme, getCardMode } from "../lib/config";
@@ -11,5 +12,6 @@ const theme = await getActiveTheme();
 ---
 {(theme.switcher || theme.random) && <ThemeSwitcher />}
 <Footer />
+{theme.modeSwitcher && <ColorModeSwitcher />}
 {card.enabled && !wide && <BusinessCardMode qr={card.qr} hint={card.hint} />}
 {card.enabled && !wide && card.wakeLock && <CardWakeLock />}

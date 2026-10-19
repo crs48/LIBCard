@@ -404,6 +404,10 @@ blocks:
 # --- Design and contact shortcuts ---
 # A complete look; explicit layout/theme settings can override it.
 design: personal-home
+theme:
+  name: monochrome
+  mode: system
+  modeSwitcher: true
 layoutOptions:
   editorial:
     mediaTone: original

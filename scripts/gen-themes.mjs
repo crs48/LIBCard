@@ -12,7 +12,7 @@
 import { writeFileSync, readFileSync, existsSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { loadThemes, themeArtifacts, themeSchema, TOKEN_CONTRACT } from "../src/lib/theme-schema.mjs";
+import { loadThemes, themeArtifacts, themeSchema, themeVariants, TOKEN_CONTRACT } from "../src/lib/theme-schema.mjs";
 
 const root = new URL("../", import.meta.url);
 const themesDir = fileURLToPath(new URL("themes", root));
@@ -51,7 +51,7 @@ if (existsSync(readmeUrl)) {
       .map((t) => {
         const by = t.authorUrl ? `[${t.author}](${t.authorUrl})` : t.author;
         const badge = t.official ? "✅" : "";
-        return `| **${t.name}** (\`${t.slug}\`) | ${t.mode} | ${by} | ${t.license} | ${badge} |`;
+        return `| **${t.name}** (\`${t.slug}\`) | ${themeVariants(t).map((v) => v.mode).join(" / ")} | ${by} | ${t.license} | ${badge} |`;
       })
       .join("\n");
     const table =

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 vi.mock("../../.libcard/themes.json", () => ({ default: [{ slug: "design-test-key", designId: "artist/ink", name: "Ink", author: "Artist", authorUrl: "https://example.com/artist", sourceUrl: "https://example.com/ink", file: "appearance.yaml", license: "CC-BY-4.0" }] }));
-import { resolveTheme, getThemeMeta, themeSourceUrl } from "./themes";
+import { resolveTheme, getThemeMeta, getThemeAppearance, themeSourceUrl } from "./themes";
 
 describe("independently authored appearances", () => {
   it("uses human package IDs in config and safe CSS keys in the page", () => {
@@ -14,5 +14,17 @@ describe("independently authored appearances", () => {
     expect(theme.author).toBe("Artist");
     expect(themeSourceUrl(theme)).toBe("https://example.com/ink");
     expect(themeSourceUrl(getThemeMeta("monochrome")!)).toContain("/themes/monochrome.yaml");
+  });
+});
+
+describe("color-mode preferences", () => {
+  it("follows the system without shipping controls unless requested", () => {
+    expect(resolveTheme("monochrome")).toMatchObject({ mode: "system", modeSwitcher: false });
+    expect(resolveTheme({ name: "monochrome", mode: "dark", modeSwitcher: true })).toMatchObject({ mode: "dark", modeSwitcher: true });
+  });
+  it("uses the configured palette for static images and the installation manifest", () => {
+    expect(getThemeAppearance({ name: "monochrome", mode: "dark" })?.tokens.bg).toBe("#171717");
+    expect(getThemeAppearance({ name: "monochrome", mode: "system" })?.tokens.bg).toBe("#ffffff");
+    expect(getThemeAppearance({ name: "midnight", mode: "light" })?.mode).toBe("dark");
   });
 });

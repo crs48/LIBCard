@@ -19,3 +19,13 @@ tokens:
   font: sans
   displayFont: serif
   radius: 0.5rem
+schemes:
+  dark:
+    tokens:
+      bg: "#171717"
+      surface: "#222222"
+      fg: "#eeeeee"
+      muted: "#aaaaaa"
+      accent: "#eeeeee"
+      accentContrast: "#171717"
+      border: "#393939"

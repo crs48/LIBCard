@@ -28,7 +28,7 @@ Browse them live on the `/themes` page.
 | **Midnight** (`midnight`) | dark | [@crs48](https://github.com/crs48) | MIT | ✅ |
 | **Mist** (`mist`) | light | [@crs48](https://github.com/crs48) | MIT | ✅ |
 | **Mono** (`mono`) | light | [@crs48](https://github.com/crs48) | MIT | ✅ |
-| **Monochrome** (`monochrome`) | light | [@crs48](https://github.com/crs48) | MIT | ✅ |
+| **Monochrome** (`monochrome`) | light / dark | [@crs48](https://github.com/crs48) | MIT | ✅ |
 | **Ocean** (`ocean`) | dark | [@crs48](https://github.com/crs48) | MIT | ✅ |
 | **Paper** (`paper`) | light | [@crs48](https://github.com/crs48) | MIT | ✅ |
 | **Sunset** (`sunset`) | dark | [@crs48](https://github.com/crs48) | MIT | ✅ |
@@ -96,6 +96,40 @@ A theme provides seven colors (required, hex) plus a font and a corner radius.
 **Accessibility:** `fg`/`bg`, `fg`/`surface`, and `accentContrast`/`accent` must
 meet **WCAG AA** (4.5:1). `pnpm run check-contrast` enforces this and the PR will
 fail if a theme falls short — pick slightly stronger colors.
+
+### Light and dark appearances
+
+Keep `mode` and `tokens` as your base appearance. Add optional `schemes.light`
+and/or `schemes.dark` overrides in the same theme file:
+
+```yaml
+mode: light
+# tokens: ...your existing complete palette...
+schemes:
+  dark:
+    tokens:
+      bg: "#171717"
+      surface: "#222222"
+      fg: "#eeeeee"
+      muted: "#aaaaaa"
+      accent: "#eeeeee"
+      accentContrast: "#171717"
+      border: "#393939"
+```
+
+Unspecified tokens inherit from the base, including fonts and radius. A scheme
+can also replace `background`, `pattern`, or `buttons` using the existing
+validated shapes. For example, `background: { kind: solid }` and
+`buttons: { fill: solid }` remove the base's mesh and glass treatment for that
+mode. All values remain validated data; raw CSS is not accepted.
+
+The page follows `prefers-color-scheme` by default. Owners can set
+`theme: { name: monochrome, mode: dark }` to choose a fixed mode or add
+`modeSwitcher: true` to let visitors override it. A theme without the requested
+scheme uses its original palette. The `/themes` gallery renders both appearances;
+contrast checks and `shoot-themes` cover each one. Static OG images and install
+manifests use a configured fixed mode, or the base appearance in System mode.
+Packaged design appearances support the same fields.
 
 ### Glass surfaces
 

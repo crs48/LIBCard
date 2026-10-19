@@ -40,7 +40,7 @@ export async function getActiveTheme(): Promise<ResolvedTheme> {
  */
 export async function getThemeEffects(): Promise<{ bgStage: boolean; pattern: boolean }> {
   const t = await getActiveTheme();
-  const active = t.switcher || t.random ? t.cycle : [t.name];
+  const active = t.switcher || t.random ? [...t.cycle, ...t.randomPool] : [t.name];
   return effectsForSlugs(active);
 }
 

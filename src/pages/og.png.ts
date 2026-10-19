@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import sharp from "sharp";
 import { getConfig, getActiveTheme } from "../lib/config";
-import { getThemeMeta } from "../lib/themes";
+import { getThemeAppearance } from "../lib/themes";
 
 // Build-time Open Graph image (1200×630 PNG) so shared links render a rich
 // preview. We compose an SVG from the config and rasterize it with sharp (PNG,
@@ -37,7 +37,7 @@ function truncate(value: string, max: number): string {
 export const GET: APIRoute = async () => {
   const cfg = await getConfig();
   const active = await getActiveTheme();
-  const t = getThemeMeta(active.name)?.tokens;
+  const t = getThemeAppearance(active)?.tokens;
   const c = t
     ? { bg: t.bg, bg2: t.surface, fg: t.fg, accent: t.accent, muted: t.muted }
     : { bg: FALLBACK.bg, bg2: FALLBACK.surface, fg: FALLBACK.fg, accent: FALLBACK.accent, muted: FALLBACK.muted };

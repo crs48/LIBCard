@@ -9,7 +9,7 @@
 // Advisory (warn only):    muted/bg, muted/surface — muted text is intentionally
 //                          lower-contrast, so we surface it without blocking.
 import { fileURLToPath } from "node:url";
-import { loadThemes } from "../src/lib/theme-schema.mjs";
+import { loadThemes, themeVariants } from "../src/lib/theme-schema.mjs";
 
 const AA = 4.5;
 const themesDir = fileURLToPath(new URL("../themes", import.meta.url));
@@ -56,7 +56,7 @@ const ADVISORY = [
 
 // Optionally limit to specific slugs (CI may pass only the changed themes).
 const only = process.argv.slice(2).filter((a) => !a.startsWith("-"));
-const themes = loadThemes(themesDir).filter((t) => !t.isExample && (only.length === 0 || only.includes(t.slug)));
+const themes = loadThemes(themesDir).filter((t) => !t.isExample && (only.length === 0 || only.includes(t.slug))).flatMap(themeVariants);
 
 let failures = 0;
 for (const t of themes) {
@@ -106,7 +106,7 @@ for (const t of themes) {
     lines.push(`    ${cok ? "✓" : "✗"} frosted CTA accent text ${cr.toFixed(2)}:1  (worst-case)`);
   }
 
-  console.log(`${themeFailed ? "✗" : "✓"} ${t.slug}`);
+  console.log(`${themeFailed ? "✗" : "✓"} ${t.slug} (${t.mode})`);
   console.log(lines.join("\n"));
 }
 

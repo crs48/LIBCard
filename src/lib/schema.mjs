@@ -31,6 +31,8 @@ const themeConfigSchema = z
     z
       .object({
         name: z.string().min(1),
+        mode: z.enum(["system", "light", "dark"]).default("system"),
+        modeSwitcher: z.boolean().default(false),
         switcher: z.boolean().default(false),
         // Pick a random theme on every page load (a fun demo of the gallery).
         // `true` randomizes over the whole cycle; an array curates the pool —

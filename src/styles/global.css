@@ -155,6 +155,7 @@ html {
      and focus order so only the card remains. */
   body[data-card-mode] main,
   body[data-card-mode] footer,
+  body[data-card-mode] #lc-color-mode-control,
   body[data-card-mode] #lc-theme-next {
     display: none;
   }

@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { getConfig, getActiveTheme } from "../lib/config";
-import { getThemeMeta } from "../lib/themes";
+import { getThemeAppearance } from "../lib/themes";
 
 // Web App Manifest: lets visitors install the card as a PWA ("Add to Home
 // Screen") with the right name and icon. Icon `src` values are relative so they
@@ -12,7 +12,7 @@ export const prerender = true;
 export const GET: APIRoute = async () => {
   const cfg = await getConfig();
   const active = await getActiveTheme();
-  const tokens = getThemeMeta(active.name)?.tokens;
+  const tokens = getThemeAppearance(active)?.tokens;
 
   const name = cfg.profile.name;
   const shortName = name.length <= 12 ? name : "LibCard";

@@ -19,8 +19,8 @@ const { cornerButton } = await getConfig();
 // paint, crawlers, and no-JS visitors all see it. The switcher/random mode (if
 // enabled) only re-themes on the client.
 const theme = await getActiveTheme();
-// Client theme JS ships only when the switcher and/or random mode is on.
-const themeJs = theme.switcher || theme.random;
+// Client theme JS ships only for opt-in theme or color-mode controls.
+const themeJs = theme.switcher || theme.random || theme.modeSwitcher;
 // Landscape "card mode": the rotate-to-reveal business card. Suppressed on the
 // wide gallery layout, where flipping to a card overlay makes no sense.
 const card = await getCardMode();
@@ -46,12 +46,11 @@ const umamiTagger =
   ' a.dataset.umamiEvent = "outbound"; a.dataset.umamiEventUrl = a.href; }';
 ---
 <!doctype html>
-<html lang="en" data-theme={theme.name} data-corner-button={cornerButton ? cornerButton.position : undefined}>
+<html lang="en" data-theme={theme.name} data-color-mode={theme.mode} data-corner-button={cornerButton ? cornerButton.position : undefined}>
   <head>
     <BaseHead title={title} />
-    {/* Pre-paint theme boot (random pick or no-flash restore). Only when the
-        switcher/random is on — otherwise the page ships zero JS. */}
-    {themeJs && <ThemeBoot pool={theme.randomPool} allowed={theme.cycle} random={theme.random} />}
+    {/* Restore opted-in visitor choices before paint. System mode itself is CSS-only. */}
+    {themeJs && <ThemeBoot pool={theme.randomPool} allowed={theme.cycle} random={theme.random} restoreTheme={theme.switcher || theme.random} restoreMode={theme.modeSwitcher} />}
   </head>
   <body data-layout={layout} class="min-h-dvh font-sans antialiased" data-card-mode={showCardMode ? "true" : undefined}>
     {fx.bgStage && <div class="lc-bg-stage" aria-hidden="true" />}

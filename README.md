@@ -361,6 +361,30 @@ See [the design authoring and publishing guide](./docs/DESIGNS.md) for the stabl
 
 ### Themes
 
+Themes can include both light and dark appearances. **Monochrome** follows the
+visitor's device setting automatically, including without JavaScript:
+
+```yaml
+theme: monochrome
+```
+
+To let visitors choose a mode themselves, enable the compact appearance selector:
+
+```yaml
+theme:
+  name: monochrome
+  mode: system        # system (default) | light | dark
+  modeSwitcher: true  # optional System / Light / Dark control
+```
+
+`mode` selects an appearance within the same theme. `switcher` below changes the
+whole theme. The mode selector remembers a visitor's choice and restores it
+before paint; choosing System resumes automatic device changes. It adds a small
+script only when enabled and hides for themes with just one palette. With
+JavaScript disabled, the configured mode still works and the selector is hidden.
+Older themes keep their existing palette if they do not provide the requested
+mode. Photos and screenshots retain their configured colors.
+
 Pick one of the built-in themes (`default`, `midnight`, `sunset`, `mono`, `paper`, `terminal`):
 
 ```yaml

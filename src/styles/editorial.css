@@ -153,6 +153,7 @@
 .lc-editorial-footer { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 0 1.5rem; margin-top: 1.25rem; padding-top: .5rem; border-top: 1px solid var(--lc-border); }
 .lc-editorial-footer > * { grid-column: 1 / -1; min-width: 0; }
 .lc-editorial-footer > footer { grid-column: 1; grid-row: 1; }
+.lc-editorial-footer > .lc-color-mode { justify-self: end; }
 .lc-editorial-footer > .lc-card-reveal { grid-column: 2; grid-row: 1; width: fit-content; max-width: 24rem; }
 .lc-editorial footer { margin: 0; text-align:left; font-size: .6875rem; line-height: 1.8; }
 .lc-editorial-footer > footer > p:first-child { min-height: 44px; padding-block: calc((44px - 1.8em) / 2); }

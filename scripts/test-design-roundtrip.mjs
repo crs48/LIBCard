@@ -61,6 +61,9 @@ try {
   checkRendered(html, libcardSchema.parse({ ...content, design: "author/notebook" }));
   assert(html.includes("Separate artist")); assert(html.includes("https://example.com/artist")); assert(html.includes("https://example.com/notebook")); assert(html.includes("https://example.com/ink-source"));
   assert(html.includes("data-theme=\"design-")); assert(!allText(join(site, "dist")).includes("inactive-sentinel"));
+  const packagedTheme = JSON.parse(readFileSync(join(site, ".libcard/themes.json"), "utf8"))[0];
+  assert.equal(packagedTheme.schemes.dark.tokens.bg, "#171717");
+  assert(readFileSync(join(site, ".libcard/themes.css"), "utf8").includes("prefers-color-scheme: dark"));
   console.log("✓ Export → pinned Git install → build, bundled appearance/assets/credits, and inactive layout isolation");
   // Update, fork edited source, refuse overwrites, and recover offline.
   manifest.version = "1.1.0"; writeFileSync(join(published, "design.yaml"), stringify(manifest));

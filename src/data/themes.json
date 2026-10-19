@@ -26,6 +26,7 @@
       "font": "sans",
       "radius": "1rem"
     },
+    "schemes": {},
     "background": null,
     "pattern": null,
     "buttons": {
@@ -62,6 +63,7 @@
       "font": "rounded",
       "radius": "1.25rem"
     },
+    "schemes": {},
     "background": {
       "kind": "pastel-mesh",
       "stops": [
@@ -108,6 +110,7 @@
       "font": "sans",
       "radius": "1.25rem"
     },
+    "schemes": {},
     "background": {
       "kind": "pastel-mesh",
       "stops": [
@@ -154,6 +157,7 @@
       "font": "rounded",
       "radius": "1.25rem"
     },
+    "schemes": {},
     "background": {
       "kind": "pastel-mesh",
       "stops": [
@@ -198,6 +202,7 @@
       "font": "sans",
       "radius": "1rem"
     },
+    "schemes": {},
     "background": null,
     "pattern": null,
     "buttons": {
@@ -234,6 +239,7 @@
       "font": "sans",
       "radius": "1rem"
     },
+    "schemes": {},
     "background": {
       "kind": "pastel-mesh",
       "stops": [
@@ -278,6 +284,7 @@
       "font": "mono",
       "radius": "0.25rem"
     },
+    "schemes": {},
     "background": null,
     "pattern": null,
     "buttons": {
@@ -296,10 +303,11 @@
     "mode": "light",
     "tags": [
       "light",
+      "dark",
       "minimal",
       "editorial"
     ],
-    "description": "Black ink, quiet rules, and a serif introduction.",
+    "description": "Black ink or soft white on charcoal, quiet rules, and a serif introduction.",
     "preview": "themes/.previews/monochrome.png",
     "tokens": {
       "bg": "#ffffff",
@@ -312,6 +320,19 @@
       "font": "sans",
       "displayFont": "serif",
       "radius": "0.5rem"
+    },
+    "schemes": {
+      "dark": {
+        "tokens": {
+          "bg": "#171717",
+          "surface": "#222222",
+          "fg": "#eeeeee",
+          "muted": "#aaaaaa",
+          "accent": "#eeeeee",
+          "accentContrast": "#171717",
+          "border": "#393939"
+        }
+      }
     },
     "background": null,
     "pattern": null,
@@ -347,6 +368,7 @@
       "font": "sans",
       "radius": "1rem"
     },
+    "schemes": {},
     "background": null,
     "pattern": null,
     "buttons": {
@@ -381,6 +403,7 @@
       "font": "serif",
       "radius": "0.5rem"
     },
+    "schemes": {},
     "background": null,
     "pattern": null,
     "buttons": {
@@ -415,6 +438,7 @@
       "font": "sans",
       "radius": "1.25rem"
     },
+    "schemes": {},
     "background": null,
     "pattern": null,
     "buttons": {
@@ -450,6 +474,7 @@
       "font": "mono",
       "radius": "0.125rem"
     },
+    "schemes": {},
     "background": null,
     "pattern": null,
     "buttons": {

@@ -5,8 +5,8 @@ authorUrl: https://github.com/crs48
 license: MIT
 official: true
 mode: light
-tags: [light, minimal, editorial]
-description: Black ink, quiet rules, and a serif introduction.
+tags: [light, dark, minimal, editorial]
+description: Black ink or soft white on charcoal, quiet rules, and a serif introduction.
 tokens:
   bg: "#ffffff"
   surface: "#f5f5f5"
@@ -18,3 +18,13 @@ tokens:
   font: sans
   displayFont: serif
   radius: 0.5rem
+schemes:
+  dark:
+    tokens:
+      bg: "#171717"
+      surface: "#222222"
+      fg: "#eeeeee"
+      muted: "#aaaaaa"
+      accent: "#eeeeee"
+      accentContrast: "#171717"
+      border: "#393939"

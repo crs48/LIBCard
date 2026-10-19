@@ -4,6 +4,7 @@
 // Zod schema + CSS generator) instead — this file is the Astro-facing half.
 import themesData from "../data/themes.json";
 import packageThemes from "../../.libcard/themes.json";
+import { themeVariants, resolveThemeScheme } from "./theme-schema.mjs";
 
 export interface ThemeTokens {
   bg: string;
@@ -51,6 +52,12 @@ export interface ThemeMeta {
   description: string;
   preview: string;
   tokens: ThemeTokens;
+  schemes?: Partial<Record<"light" | "dark", {
+    tokens: Partial<ThemeTokens>;
+    background?: ThemeBackground;
+    pattern?: ThemePattern;
+    buttons?: ThemeButtons;
+  }>>;
   /** Expressive layers (exploration 0007) — null/solid means today's flat look. */
   background: ThemeBackground | null;
   pattern: ThemePattern | null;
@@ -75,7 +82,7 @@ export function getThemeMeta(slug: string): ThemeMeta | undefined {
  */
 export function effectsForSlugs(slugs: string[]): { bgStage: boolean; pattern: boolean } {
   const set = new Set(slugs);
-  const used = themes.filter((t) => set.has(t.slug));
+  const used = themes.filter((t) => set.has(t.slug)).flatMap(themeVariants);
   return {
     bgStage: used.some((t) => t.background?.kind === "pastel-mesh"),
     pattern: used.some((t) => !!t.pattern),
@@ -105,6 +112,8 @@ export type ThemeConfig =
   | string
   | {
       name: string;
+      mode?: "system" | "light" | "dark";
+      modeSwitcher?: boolean;
       switcher?: boolean;
       /** `true` randomizes over the whole cycle; an array curates the pool. */
       random?: boolean | string[];
@@ -116,6 +125,8 @@ export type ThemeConfig =
 export interface ResolvedTheme {
   /** Owner's default theme slug — server-rendered into <html data-theme>. */
   name: string;
+  mode: "system" | "light" | "dark";
+  modeSwitcher: boolean;
   /** Whether to ship the live switcher island (and its tiny script). */
   switcher: boolean;
   /** Pick a random theme from `randomPool` on every page load. */
@@ -175,10 +186,18 @@ export function resolveTheme(theme: ThemeConfig): ResolvedTheme {
 
   return {
     name: obj.name,
+    mode: obj.mode ?? "system",
+    modeSwitcher: obj.modeSwitcher ?? false,
     switcher: typeof theme === "string" ? false : (obj.switcher ?? false),
     random: randomPool.length > 0,
     animate: typeof theme === "string" ? true : (obj.animate ?? true),
     cycle,
     randomPool,
   };
+}
+
+/** Deterministic colors for static artifacts; system mode uses the base palette. */
+export function getThemeAppearance(active: Pick<ResolvedTheme, "name" | "mode">): ThemeMeta | undefined {
+  const theme = getThemeMeta(active.name);
+  return theme ? resolveThemeScheme(theme, active.mode === "system" ? theme.mode : active.mode) : undefined;
 }

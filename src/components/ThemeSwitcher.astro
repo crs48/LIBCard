@@ -13,9 +13,9 @@ const cfg = await getConfig();
 const active = await getActiveTheme();
 const switcher = active.switcher;
 
-// Metadata for just the themes in the cycle ring — embedded for the client so it
+// Metadata for the cycle ring and random pool — embedded for the client so it
 // can update the credit badge ("<Name> theme by <author>") without a request.
-const items = active.cycle.map((slug) => {
+const items = [...new Set([...active.cycle, ...active.randomPool])].map((slug) => {
   const m = getThemeMeta(slug);
   return {
     slug,
@@ -30,6 +30,7 @@ const items = active.cycle.map((slug) => {
 const sep = cfg.footer.poweredBy ? " · " : "";
 const themeCredit = cfg.footer.themeCredit;
 const animate = active.animate;
+const cycle = active.cycle;
 ---
 {
   switcher && (
@@ -54,7 +55,7 @@ const animate = active.animate;
   )
 }
 
-<script is:inline define:vars={{ items, sep, themeCredit, animate }}>
+<script is:inline define:vars={{ items, sep, themeCredit, animate, cycle }}>
   const root = document.documentElement;
   const btn = document.getElementById("lc-theme-next");
   const slugs = items.map((i) => i.slug);
@@ -86,6 +87,7 @@ const animate = active.animate;
     const it = items[slugs.indexOf(slug)];
     const swap = () => {
       root.dataset.theme = slug;
+      root.dispatchEvent(new CustomEvent("libcard:theme-change"));
       try {
         localStorage.setItem("libcard-theme", slug);
       } catch {}
@@ -105,9 +107,9 @@ const animate = active.animate;
     // Anchor the circular reveal at the button for a polished wipe.
     root.style.setProperty("--lc-vt-x", `${e.clientX}px`);
     root.style.setProperty("--lc-vt-y", `${e.clientY}px`);
-    const current = root.dataset.theme || slugs[0];
-    const idx = slugs.indexOf(current);
-    apply(slugs[(idx + 1) % slugs.length]);
+    const current = root.dataset.theme || cycle[0];
+    const idx = cycle.indexOf(current);
+    apply(cycle[(idx + 1) % cycle.length]);
   });
 
   // On load, make the footer credit match whatever theme is active (ThemeBoot may

@@ -11,7 +11,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
-import { loadThemes } from "../src/lib/theme-schema.mjs";
+import { loadThemes, themeVariants } from "../src/lib/theme-schema.mjs";
 
 const root = new URL("../", import.meta.url);
 const themesDir = fileURLToPath(new URL("themes", root));
@@ -95,8 +95,11 @@ const themes = loadThemes(themesDir).filter((t) => !t.isExample && (only.length 
 
 mkdirSync(outDir, { recursive: true });
 for (const theme of themes) {
-  const png = await sharp(Buffer.from(svgFor(theme))).png().toBuffer();
-  writeFileSync(`${outDir}/${theme.slug}.png`, png);
-  console.log(`✓ themes/.previews/${theme.slug}.png`);
+  for (const variant of themeVariants(theme)) {
+    const filename = variant.mode === theme.mode ? theme.slug : `${theme.slug}.${variant.mode}`;
+    const png = await sharp(Buffer.from(svgFor(variant))).png().toBuffer();
+    writeFileSync(`${outDir}/${filename}.png`, png);
+    console.log(`✓ themes/.previews/${filename}.png`);
+  }
 }
-console.log(`\nRendered ${themes.length} preview(s).`);
+console.log(`\nRendered ${themes.flatMap(themeVariants).length} preview(s).`);

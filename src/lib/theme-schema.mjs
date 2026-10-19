@@ -159,6 +159,14 @@ export const tokensSchema = z
   })
   .strict();
 
+/** Optional color schemes inherit the base appearance, overriding only supplied values. */
+const schemeSchema = z.object({
+  tokens: tokensSchema.partial(),
+  background: backgroundSchema,
+  pattern: patternSchema,
+  buttons: buttonsSchema.optional(),
+}).strict();
+
 /** A full theme manifest: metadata (incl. attribution) + the token map. */
 export const themeSchema = z
   .object({
@@ -178,6 +186,10 @@ export const themeSchema = z
     tags: z.array(z.string()).default([]),
     description: z.string().optional(),
     tokens: tokensSchema,
+    schemes: z.object({
+      light: schemeSchema.optional(),
+      dark: schemeSchema.optional(),
+    }).strict().optional(),
     // Optional expressive layers (exploration 0007). All default to today's flat
     // look, so existing themes are unchanged.
     background: backgroundSchema,
@@ -246,6 +258,7 @@ export function toRegistryEntry(theme) {
     // Raw token values, so non-CSS consumers (the OG image, contrast checks) can
     // read a theme's colors without re-parsing the YAML.
     tokens: theme.tokens,
+    schemes: theme.schemes ?? {},
     // Expressive layers — the Layout reads these to decide which effect markup
     // (mesh blob stage, pattern layer) to mount for the active theme set.
     background: theme.background ?? null,
@@ -264,12 +277,19 @@ export function themeArtifacts(themes) {
   };
 }
 
-/**
- * Render one validated theme to a scoped CSS block. This is the ONLY producer of
- * theme CSS in the project — every declaration is a whitelisted `--lc-*` token
- * set to a value the schema already validated.
- */
-export function themeToCss(theme) {
+/** Resolve a supported scheme while retaining the base theme as a fallback. */
+export function resolveThemeScheme(theme, mode) {
+  const scheme = theme.schemes?.[mode];
+  return scheme ? { ...theme, ...scheme, mode, tokens: { ...theme.tokens, ...scheme.tokens } } : theme;
+}
+
+/** Every supported appearance, including the original single-palette fallback. */
+export function themeVariants(theme) {
+  return [...new Set([theme.mode, ...Object.keys(theme.schemes ?? {})])]
+    .map((mode) => resolveThemeScheme(theme, mode));
+}
+
+function appearanceCss(theme, selector) {
   const decls = TOKEN_CONTRACT.map(({ key, cssVar, kind }) => {
     const value = key === "displayFont" ? theme.tokens.displayFont ?? theme.tokens.font : theme.tokens[key];
     const css = kind === "font" ? FONT_STACKS[value] : value;
@@ -277,6 +297,14 @@ export function themeToCss(theme) {
   });
   // `color-scheme` makes native form controls & scrollbars match the theme.
   decls.unshift(`  color-scheme: ${theme.mode};`);
+  // A scheme can replace glass/mesh with a solid surface. Reset inherited
+  // effect values before applying its resolved appearance.
+  decls.push(
+    ...[1, 2, 3, 4].map((n) => `  --lc-mesh-${n}: transparent;`),
+    "  --lc-bg-animation: none;", "  --lc-glass-pct: 100%;",
+    "  --lc-cta-bg: var(--lc-accent);", "  --lc-cta-fg: var(--lc-accent-contrast);",
+    "  --lc-cta-border: transparent;", "  --lc-ink: transparent;", "  --lc-pat-size: 44px;",
+  );
 
   // --- Expressive layers (all opt-in; absent → today's flat look) ---
   // Pastel-mesh background → blob color vars + drift toggle (the shared
@@ -311,12 +339,28 @@ export function themeToCss(theme) {
     if (theme.pattern.size) decls.push(`  --lc-pat-size: ${theme.pattern.size};`);
   }
 
-  const selector =
-    theme.slug === "default" ? `:root,\n[data-theme="default"]` : `[data-theme="${theme.slug}"]`;
   let css = `${selector} {\n${decls.join("\n")}\n}`;
 
-  if (theme.pattern && PATTERN_RECIPES[theme.pattern.kind]) {
-    css += `\n\n[data-theme="${theme.slug}"] .lc-pattern {\n  ${PATTERN_RECIPES[theme.pattern.kind]}\n}`;
+  const patternSelectors = selector.split(",\n").map((part) => `${part} .lc-pattern`).join(",\n");
+  css += `\n\n${patternSelectors} {\n  background: none;`;
+  if (theme.pattern) css += `\n  ${PATTERN_RECIPES[theme.pattern.kind]}`;
+  const mask = theme.pattern?.maskFade === false ? "none" : "radial-gradient(ellipse at center, #000 38%, transparent 100%)";
+  css += `\n  -webkit-mask-image: ${mask};\n  mask-image: ${mask};\n}`;
+  return css;
+}
+
+/** Render validated appearances to scoped CSS using the shared token contract. */
+export function themeToCss(theme) {
+  const scope = `[data-theme="${theme.slug}"]`;
+  const selector = theme.slug === "default" ? `:root:not([data-theme]),\n${scope}` : scope;
+  const base = resolveThemeScheme(theme, theme.mode);
+  let css = appearanceCss(base, selector);
+  if (Object.keys(theme.schemes ?? {}).length) {
+    for (const variant of themeVariants(theme)) {
+      css += `\n\n${appearanceCss(variant, `${scope}[data-color-mode="${variant.mode}"]`)}`;
+      const automatic = appearanceCss(variant, `${scope}:not([data-color-mode="light"]):not([data-color-mode="dark"])`);
+      css += `\n\n@media (prefers-color-scheme: ${variant.mode}) {\n${automatic}\n}`;
+    }
   }
   return css;
 }

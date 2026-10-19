@@ -46,6 +46,17 @@ top-level field, so adding it alone will not display a button. Omitted or
 
 ## 2. What's yours vs. the engine
 
+### Light and dark theme appearances
+
+Update the engine before adding `theme.mode`, `theme.modeSwitcher`, or a theme
+file's `schemes` overrides. Older schemas reject these fields. Existing themes
+and string selections remain valid; Monochrome now follows the device's light
+or dark preference. Use `theme: { name: monochrome, mode: light }` to keep its
+previous light appearance, or add `modeSwitcher: true` for a visitor control.
+Engine updates preserve your config and authored themes; changing modes does
+not rewrite media. See [theme configuration](../README.md#themes) and the
+[theme authoring guide](../themes/README.md#light-and-dark-appearances).
+
 ### Opting into the personal-home layout
 
 Update the engine first, then set `design: personal-home`. An explicit `theme:`

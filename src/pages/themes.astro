@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { themes, themeSourceUrl } from "../lib/themes";
+import { themeVariants } from "../lib/theme-schema.mjs";
 import { withBase } from "../lib/site";
 
 // The theme gallery. Each card is wrapped in its own `data-theme`, so the mini
@@ -31,9 +32,10 @@ const contribute = "https://github.com/crs48/LIBCard/tree/main/themes";
 
   <ul class="grid w-full gap-4 sm:grid-cols-2">
     {
-      themes.map((t) => (
+      themes.flatMap(themeVariants).map((t) => (
         <li
           data-theme={t.slug}
+          data-color-mode={t.mode}
           class="overflow-hidden rounded-card border border-border bg-bg"
         >
           {/* Live mini preview, rendered in this theme's own tokens. */}

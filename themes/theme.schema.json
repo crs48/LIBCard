@@ -127,6 +127,364 @@
           ],
           "additionalProperties": false
         },
+        "schemes": {
+          "type": "object",
+          "properties": {
+            "light": {
+              "type": "object",
+              "properties": {
+                "tokens": {
+                  "type": "object",
+                  "properties": {
+                    "bg": {
+                      "type": "string",
+                      "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+                    },
+                    "surface": {
+                      "type": "string",
+                      "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+                    },
+                    "fg": {
+                      "type": "string",
+                      "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+                    },
+                    "muted": {
+                      "type": "string",
+                      "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+                    },
+                    "accent": {
+                      "type": "string",
+                      "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+                    },
+                    "accentContrast": {
+                      "type": "string",
+                      "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+                    },
+                    "border": {
+                      "type": "string",
+                      "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+                    },
+                    "font": {
+                      "type": "string",
+                      "enum": [
+                        "sans",
+                        "serif",
+                        "mono",
+                        "rounded"
+                      ],
+                      "default": "sans"
+                    },
+                    "displayFont": {
+                      "type": "string",
+                      "enum": [
+                        "sans",
+                        "serif",
+                        "mono",
+                        "rounded"
+                      ]
+                    },
+                    "radius": {
+                      "type": "string",
+                      "pattern": "^\\d*\\.?\\d+(px|rem|em)$",
+                      "default": "1rem"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "background": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "solid"
+                        }
+                      },
+                      "required": [
+                        "kind"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "pastel-mesh"
+                        },
+                        "stops": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+                          },
+                          "minItems": 2,
+                          "maxItems": 4
+                        },
+                        "blur": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 120,
+                          "default": 0,
+                          "description": "Mesh softness (px). Baked into the gradient falloff at render time — not a live CSS filter."
+                        },
+                        "animate": {
+                          "type": "boolean",
+                          "default": false
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "stops"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                },
+                "pattern": {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "enum": [
+                        "scales",
+                        "dots",
+                        "grid",
+                        "stripes",
+                        "checker",
+                        "zigzag"
+                      ]
+                    },
+                    "intensity": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 0.15,
+                      "default": 0.05
+                    },
+                    "size": {
+                      "type": "string",
+                      "pattern": "^\\d*\\.?\\d+(px|rem|em)$"
+                    },
+                    "maskFade": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  },
+                  "required": [
+                    "kind"
+                  ],
+                  "additionalProperties": false
+                },
+                "buttons": {
+                  "type": "object",
+                  "properties": {
+                    "fill": {
+                      "type": "string",
+                      "enum": [
+                        "solid",
+                        "glass"
+                      ],
+                      "default": "solid"
+                    },
+                    "glassFillOpacity": {
+                      "type": "number",
+                      "minimum": 0.15,
+                      "maximum": 0.6,
+                      "default": 0.18
+                    }
+                  },
+                  "additionalProperties": false,
+                  "default": {
+                    "fill": "solid",
+                    "glassFillOpacity": 0.18
+                  }
+                }
+              },
+              "required": [
+                "tokens"
+              ],
+              "additionalProperties": false
+            },
+            "dark": {
+              "type": "object",
+              "properties": {
+                "tokens": {
+                  "type": "object",
+                  "properties": {
+                    "bg": {
+                      "type": "string",
+                      "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+                    },
+                    "surface": {
+                      "type": "string",
+                      "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+                    },
+                    "fg": {
+                      "type": "string",
+                      "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+                    },
+                    "muted": {
+                      "type": "string",
+                      "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+                    },
+                    "accent": {
+                      "type": "string",
+                      "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+                    },
+                    "accentContrast": {
+                      "type": "string",
+                      "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+                    },
+                    "border": {
+                      "type": "string",
+                      "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+                    },
+                    "font": {
+                      "type": "string",
+                      "enum": [
+                        "sans",
+                        "serif",
+                        "mono",
+                        "rounded"
+                      ],
+                      "default": "sans"
+                    },
+                    "displayFont": {
+                      "type": "string",
+                      "enum": [
+                        "sans",
+                        "serif",
+                        "mono",
+                        "rounded"
+                      ]
+                    },
+                    "radius": {
+                      "type": "string",
+                      "pattern": "^\\d*\\.?\\d+(px|rem|em)$",
+                      "default": "1rem"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "background": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "solid"
+                        }
+                      },
+                      "required": [
+                        "kind"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "pastel-mesh"
+                        },
+                        "stops": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+                          },
+                          "minItems": 2,
+                          "maxItems": 4
+                        },
+                        "blur": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 120,
+                          "default": 0,
+                          "description": "Mesh softness (px). Baked into the gradient falloff at render time — not a live CSS filter."
+                        },
+                        "animate": {
+                          "type": "boolean",
+                          "default": false
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "stops"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                },
+                "pattern": {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "enum": [
+                        "scales",
+                        "dots",
+                        "grid",
+                        "stripes",
+                        "checker",
+                        "zigzag"
+                      ]
+                    },
+                    "intensity": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 0.15,
+                      "default": 0.05
+                    },
+                    "size": {
+                      "type": "string",
+                      "pattern": "^\\d*\\.?\\d+(px|rem|em)$"
+                    },
+                    "maskFade": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  },
+                  "required": [
+                    "kind"
+                  ],
+                  "additionalProperties": false
+                },
+                "buttons": {
+                  "type": "object",
+                  "properties": {
+                    "fill": {
+                      "type": "string",
+                      "enum": [
+                        "solid",
+                        "glass"
+                      ],
+                      "default": "solid"
+                    },
+                    "glassFillOpacity": {
+                      "type": "number",
+                      "minimum": 0.15,
+                      "maximum": 0.6,
+                      "default": 0.18
+                    }
+                  },
+                  "additionalProperties": false,
+                  "default": {
+                    "fill": "solid",
+                    "glassFillOpacity": 0.18
+                  }
+                }
+              },
+              "required": [
+                "tokens"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
         "background": {
           "anyOf": [
             {

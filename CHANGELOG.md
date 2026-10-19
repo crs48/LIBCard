@@ -9,6 +9,13 @@ often to `libcard.config.yaml`); everything else is picked up automatically by
 
 ## Unreleased
 
+- **Light and dark appearances within one theme.** Themes can define optional
+  `schemes` with inherited tokens and appearance overrides. Monochrome includes
+  a charcoal dark palette and follows the device setting by default, even
+  without JavaScript. `theme.mode` fixes a mode; optional `modeSwitcher` adds a
+  persistent System / Light / Dark control. The gallery, contrast checks,
+  previews, packaged appearances, and static artifacts support the new modes.
+
 - **Personal home header.** The masthead supports an optional inline
   `headerAction`, while `profile.role` joins the location beneath the name.
   The portrait and identity share one aligned row with the reference's type

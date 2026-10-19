@@ -2965,6 +2965,19 @@
                   "type": "string",
                   "minLength": 1
                 },
+                "mode": {
+                  "type": "string",
+                  "enum": [
+                    "system",
+                    "light",
+                    "dark"
+                  ],
+                  "default": "system"
+                },
+                "modeSwitcher": {
+                  "type": "boolean",
+                  "default": false
+                },
                 "switcher": {
                   "type": "boolean",
                   "default": false
