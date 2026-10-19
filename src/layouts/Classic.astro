@@ -16,7 +16,7 @@ const blocks = page.sections.filter((section) => section.type !== "links");
   <main id="main-content" class="flex w-full flex-1 flex-col items-center gap-6">
     <FirstRunNudge />
     <HeaderControls action={page.headerAction} />
-    <Profile profile={page.profile} />
+    <Profile profile={page.profile} compact />
     <ProfileActions actions={page.actions} />
     <SocialRow socials={page.socials} />
     {page.legacy ? <>

@@ -6,5 +6,5 @@ interface Props { section: LinkSection; layout: "classic" | "editorial" | "studi
 const { section, layout } = Astro.props;
 ---
 <ul class:list={["lc-link-group", layout === "classic" && "flex w-full flex-col gap-3"]}>
-  {section.links.map((link) => <li>{layout !== "classic" ? <EditorialLink link={link} purpose={section.purpose} headingLevel={section.title ? 3 : 2} /> : <LinkButton link={link} />}</li>)}
+  {section.links.map((link) => <li>{layout !== "classic" ? <EditorialLink link={link} purpose={section.purpose} headingLevel={section.title ? 3 : 2} /> : <LinkButton link={link} compact />}</li>)}
 </ul>

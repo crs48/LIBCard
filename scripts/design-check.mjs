@@ -39,8 +39,17 @@ export function checkRendered(html, config) {
   }
   const text = nodes.filter((n) => n.nodeName === "#text").map((n) => n.value).join(" ").replace(/\s+/g, " ");
   if (config.profile.role) assert(text.includes(config.profile.role.replace(/\s+/g, " ")), "missing profile role");
-  for (const link of config.links) for (const field of ["description", "headline", "note", "actionLabel"]) {
-    if (link[field]) assert(text.includes(link[field].replace(/\s+/g, " ")), `missing ${field} for ${link.label}`);
+  for (const link of config.links) {
+    const rendered = elements.find((node) => link.id && attributes(node)["data-link-id"] === link.id)
+      ?? elements.find((node) => node.tagName === "a" && attributes(node).href === link.url)?.parentNode;
+    if (rendered && attributes(rendered)["data-link-presentation"] === "compact") {
+      const children = flatten(rendered);
+      const label = children.filter((node) => node.nodeName === "#text").map((node) => node.value).join(" ").replace(/\s+/g, " ");
+      assert(label.includes(link.label.replace(/\s+/g, " ")), `missing compact label: ${link.label}`);
+      assert(!children.some((node) => node.tagName === "img"), `compact link must not render images: ${link.label}`);
+    } else for (const field of ["description", "headline", "note", "actionLabel"]) {
+      if (link[field]) assert(text.includes(link[field].replace(/\s+/g, " ")), `missing ${field} for ${link.label}`);
+    }
   }
   for (const image of elements.filter((n) => n.tagName === "img")) assert("alt" in attributes(image), "every image needs alt text (empty for decoration)");
   for (const attr of attrs) for (const path of [attr.href, attr.src].filter(Boolean)) {

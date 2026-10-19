@@ -59,6 +59,11 @@ not rewrite media. See [theme configuration](../README.md#themes) and the
 
 ### Opting into Personal home or Studio
 
+Classic now returns to compact, label-only link buttons, without link images,
+favicons, descriptions, or extra headlines. A profile with both a bio and an
+intro shows just the bio. This only changes presentation; existing config and
+media remain available to the richer layouts. No config changes are needed.
+
 Update the engine first, then set `design: personal-home`. An explicit `theme:`
 or `layout:` remains an override; remove it if you want the complete preset.
 Omitting the new fields keeps Classic. Rich link descriptions, icons, preview

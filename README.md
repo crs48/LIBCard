@@ -266,6 +266,11 @@ Omitting both `design` and `layout` retains Classic. Explicit `layout:` and
 `theme:` override a design's defaults; remove an existing `theme:` setting to use
 the design's appearance. The visitor theme switcher changes appearance only.
 
+Classic keeps links as simple text buttons: no project screenshots, favicons,
+descriptions, or extra headlines. Its profile uses your bio, falling back to the
+intro if no bio is set. The same rich content remains available in Personal home
+and Studio; changing designs does not edit your config or media.
+
 ```yaml
 design: personal-home
 profile:

@@ -2,8 +2,8 @@
 import { getPageModel, type PageModelV1 } from "../layout-api/model";
 import Icon from "./Icon.astro";
 import { renderMarkdown } from "../lib/markdown";
-interface Props { editorial?: boolean; studio?: boolean; profile?: PageModelV1["profile"]; }
-const { editorial = false, studio = false } = Astro.props;
+interface Props { editorial?: boolean; studio?: boolean; compact?: boolean; profile?: PageModelV1["profile"]; }
+const { editorial = false, studio = false, compact = false } = Astro.props;
 const combinedIdentity = editorial || studio;
 
 const profile = Astro.props.profile ?? (await getPageModel()).profile;
@@ -50,7 +50,7 @@ const avatar = profile.avatar;
       </p>
     )
   }
-  {profile.intro && <div class="lc-intro lc-prose" set:html={renderMarkdown(profile.intro)} />}
+  {profile.intro && (!compact || !profile.tagline) && <div class="lc-intro lc-prose" set:html={renderMarkdown(profile.intro)} />}
   {combinedIdentity && profile.tagline && <p class="lc-profile-tagline text-muted">{profile.tagline}</p>}
   {
     giveHref && (

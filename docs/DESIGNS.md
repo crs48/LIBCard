@@ -22,7 +22,11 @@ flowchart LR
 design: personal-home
 ```
 
-`classic` preserves the original centered card. `personal-home` selects Editorial,
+`classic` preserves the original centered card with compact, label-only link
+buttons. It omits link images, favicons, and editorial copy, and shows the profile
+bio without a second intro when both are configured. The profile photo, social icons,
+status badges, source links, and optional tip actions remain available.
+`personal-home` selects Editorial,
 Monochrome, compact spacing, and grayscale media. `studio` selects a profile
 sidebar, image-led project gallery, coaching feature, and compact writing rows,
 with a warm Studio theme supporting light and dark mode. Without new settings,
@@ -246,13 +250,17 @@ copy and above a source footer.
 
 Link `presentation` includes external-link attributes, status, GitHub companion
 and counts, and Feedme tip metadata. Layouts must retain required destinations,
-descriptions, metadata actions, ordering, and collapsed content. Use the core
+metadata actions, ordering, and collapsed content. Rich presentations retain
+descriptions and other editorial copy; compact presentations can show only the
+canonical label and omit link media. Use the core
 primitives to get those details without reimplementing integrations.
 
 Exports: `Profile`, `ProfileActions`, `HeaderAction`, `SocialRow`, `Section`, `Block`, `Link`,
 `EditorialLink`, `Icon`, `CardReveal`, `Classic`, `Editorial`, `Studio`, `renderMarkdown`,
 `withBase`, `absoluteUrl`, and model types. `Section` accepts optional
-`layout="editorial"` or `"classic"`; `Block` is the standard fallback for every
+`layout="editorial"`, `"studio"`, or `"classic"`; Classic sections use compact
+buttons. `<Link compact />` renders label-only links with metadata actions and no
+images; `<Profile compact />` prefers the bio over a duplicate intro. `Block` is the standard fallback for every
 existing block type and owns the integration handling those blocks need.
 This includes `disclosure` groups (`title`, `open`, and a non-nested `blocks`
 list). Delegate these to `Block` or `Section` to retain their native disclosure,
