@@ -37,6 +37,8 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+      - run: pnpm run test:designs
       - run: pnpm exec playwright install --with-deps chromium
       - name: Install requested release without running package code
         if: github.event_name == 'workflow_dispatch'

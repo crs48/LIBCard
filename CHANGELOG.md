@@ -18,7 +18,14 @@ often to `libcard.config.yaml`); everything else is picked up automatically by
   `type: blocks` places the canonical block list without disrupting importers.
   Theme files may optionally set `displayFont`; old themes retain their font.
   The setup wizard now preserves existing content and validates before saving.
-  Custom layout packages and distribution tooling are not part of this release.
+  Custom Astro layouts and data-only design presets now share the versioned
+  `@libcard/layout` API. Author, validate, preview, export, install pinned Git
+  releases, update, fork, and roll back with the `design:*` commands. Manifests
+  validate options, compatibility, assets, credits, and declared files. Integrity
+  locks protect edited source; engine updates preserve all owner design files.
+  The `/designs` gallery supports installed designs and a metadata-only community
+  catalog. Executable preview CI runs separately from privileged theme previews.
+  Bundled appearances have independent credits and namespaced config IDs.
 
 - **Persistent corner button (optional).** Add `cornerButton` with your label,
   destination, optional icon, and any of four corners (bottom-right by default).

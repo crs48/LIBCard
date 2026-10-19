@@ -2,9 +2,10 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "yaml";
-import { builtinDesigns, resolveDesign } from "../src/lib/design-manifest.mjs";
+import { builtinDesigns, resolveDesign, designCatalogSchema } from "../src/lib/design-manifest.mjs";
 import { discoverPackages, packageCatalog, appearanceKey } from "../src/lib/design-packages.mjs";
-import { loadThemes, toRegistryEntry, themeToCss } from "../src/lib/theme-schema.mjs";
+import { loadThemes, toRegistryEntry, themeToCss, themeArtifacts } from "../src/lib/theme-schema.mjs";
+import { assertLayoutShell } from "../src/lib/layout-conformance.mjs";
 
 export const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const writeChanged = (path, value) => {
@@ -19,9 +20,12 @@ export function prepareDesigns(root = projectRoot) {
   const catalog = [...builtinDesigns, ...packageCatalog(packages)];
   const selected = resolveDesign(config, catalog);
   const themes = loadThemes(join(root, "themes")).filter((t) => !t.isExample);
+  const artifacts = themeArtifacts(themes);
+  writeChanged(join(root, "src/styles/themes.gen.css"), artifacts.css);
+  writeChanged(join(root, "src/data/themes.json"), JSON.stringify(artifacts.registry, null, 2) + "\n");
   const appearances = packages.filter((p) => p.appearance).map((p) => ({
     ...p.appearance, slug: appearanceKey(p.manifest.id), file: p.manifest.appearance.file, official: false,
-    sourceUrl: p.manifest.source ?? p.appearance.authorUrl ?? "",
+    sourceUrl: p.appearance.sourceUrl ?? p.manifest.source ?? p.appearance.authorUrl ?? "",
     designId: p.manifest.id,
   }));
   for (const pkg of catalog) if (!themes.some((t) => t.slug === pkg.theme) && !appearances.some((t) => t.slug === pkg.theme)) throw new Error(`${pkg.id}: unknown appearance ${pkg.theme}`);
@@ -29,6 +33,12 @@ export function prepareDesigns(root = projectRoot) {
     ? join(root, `src/layouts/${selected.layout === "classic" ? "Classic" : "Editorial"}.astro`)
     : (() => { const pkg = packages.find((p) => p.manifest.id === selected.layout); return resolve(pkg.dir, pkg.manifest.layout.entry); })();
   const output = join(root, ".libcard");
+  const indexPath = join(root, "designs/catalog.json");
+  const community = existsSync(indexPath) ? designCatalogSchema.parse(JSON.parse(readFileSync(indexPath, "utf8"))).designs : [];
+  writeChanged(join(output, "catalog.json"), JSON.stringify(community, null, 2) + "\n");
+  // Gallery thumbnails are data assets, never an import of inactive layout code.
+  const previews = packages.filter((p) => p.manifest.previews).map((p, i) => ({ id: p.manifest.id, i, path: relative(output, resolve(p.dir, p.manifest.previews.desktop)).split("\\").join("/") }));
+  writeChanged(join(output, "previews.ts"), previews.map((p) => `import preview${p.i} from ${JSON.stringify(`${p.path}?url`)};`).join("\n") + `\nexport default {${previews.map((p) => `${JSON.stringify(p.id)}: preview${p.i}`).join(",")}} as Record<string, string>;\n`);
   // One literal import. Inactive Astro/JS/CSS never enters Vite's module graph.
   const importPath = relative(output, entry).split("\\").join("/");
   writeChanged(join(output, "Selected.astro"), `---\nimport Home from ${JSON.stringify(importPath.startsWith(".") ? importPath : `./${importPath}`)};\nimport type { LayoutProps } from "@libcard/layout";\ntype Props = LayoutProps;\nconst { page, options } = Astro.props;\n---\n<Home page={page} options={options}><slot name="utilities" slot="utilities" /></Home>\n`);
@@ -43,6 +53,7 @@ export function designIntegration(root = projectRoot) {
   return {
     name: "libcard-designs",
     hooks: {
+      "astro:build:done": ({ dir }) => assertLayoutShell(readFileSync(new URL("index.html", dir), "utf8")),
       "astro:server:setup": ({ server }) => {
         const watched = [resolve(root, process.env.LIBCARD_CONFIG || "libcard.config.yaml"), join(root, "designs"), join(root, "designs.lock.yaml"), join(root, "themes")];
         server.watcher.add(watched);

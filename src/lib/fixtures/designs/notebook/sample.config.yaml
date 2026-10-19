@@ -1,0 +1,70 @@
+profile:
+  name: Ada Example
+  intro: Useful tools, thoughtful work, and things worth exploring.
+contact:
+  email: ada@example.com
+profileActions:
+  - email
+  - save-contact
+  - show-card
+design: example/notebook
+links:
+  - id: project
+    label: A project with a deliberately long name that should wrap on small screens
+    url: https://example.com/project
+    description: A longer description that remains readable in every layout, without
+      pushing actions off the page.
+    iconImage: /favicon.svg
+    image:
+      src: /avatar.svg
+      alt: An example profile illustration
+      width: 96
+      height: 96
+    github: https://github.com/example/project
+  - id: coaching
+    label: Coaching
+    url: https://example.com/coaching
+    description: A plain link with no icon or preview image.
+  - id: archive
+    label: An archived experiment
+    url: https://example.com/archive
+    status: dormant
+sections:
+  - type: links
+    id: work
+    title: Selected work
+    purpose: work
+    items:
+      - project
+  - type: links
+    id: services
+    title: Work together
+    purpose: services
+    items:
+      - coaching
+  - type: links
+    id: archive
+    title: More experiments
+    collapsed: true
+    items:
+      - archive
+  - type: blocks
+  - type: video
+    provider: vimeo
+    id: "123456789"
+    title: A sample video
+blocks:
+  - type: text
+    markdown: A **portable** paragraph that remains available to importers.
+  - type: faq
+    items:
+      - q: Does this need JavaScript?
+        a: The content and disclosures work without it.
+socials:
+  - platform: github
+    url: https://github.com/example
+cardMode:
+  enabled: false
+site:
+  url: https://example.com
+  base: /fixture

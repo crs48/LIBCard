@@ -278,9 +278,23 @@ layoutOptions:
     mediaTone: grayscale # grayscale | original
 ```
 
-The same rich config works with `layout: classic`. These two built-ins establish
-the portable content model; custom renderer packages and their installer remain
-future work. Themes continue to be shareable data-only YAML files.
+The same rich config works with `layout: classic` or an installed custom layout.
+Browse `/designs` for complete designs and `/themes` for appearances.
+
+```sh
+pnpm run design:new -- your-name/notebook
+pnpm run design:check -- your-name/notebook
+# Select design: your-name/notebook in your config.
+```
+
+Share a self-contained Astro layout or a data-only preset. Install a published
+release with `pnpm run design:add -- HTTPS_REPOSITORY_URL --ref=v1.0.0`, then select
+its `author/name` ID. `design:update`, `design:fork`, and `design:rollback` manage
+versions without replacing your content. Packages and their lockfiles are preserved
+by engine updates. Themes remain shareable data-only YAML files.
+
+See [the design authoring and publishing guide](./docs/DESIGNS.md) for the stable
+`@libcard/layout` API, options, assets, previews, licensing, and release workflow.
 
 ### Themes
 

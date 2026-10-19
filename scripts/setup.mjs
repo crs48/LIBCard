@@ -56,6 +56,8 @@ async function main() {
   const seo = existing.seo ?? {};
   const site = existing.site ?? {};
 
+  const availableThemes = [...THEMES, ...catalog.filter((d) => d.theme.startsWith("design-")).map((d) => d.id)];
+
   const name = await ask("Your name", profile.name ?? "");
   const tagline = await ask("Tagline", profile.tagline ?? "");
   const avatar = await ask("Avatar (a /public path or https URL)", profile.avatar ?? "/avatar.svg");
@@ -71,7 +73,7 @@ async function main() {
   const currentTheme = typeof existing.theme === "string" ? existing.theme : (existing.theme?.name ?? "default");
   const design = await ask(`Design (${catalog.map((d) => d.id).join(" | ")})`, existing.design ?? "classic");
   const layout = await ask(`Layout override (preset | classic | editorial | ${catalog.filter((d) => d.layout === d.id && !d.builtin).map((d) => d.id).join(" | ")})`, existing.layout ?? "preset");
-  const theme = await ask(`Theme override (preset | ${THEMES.join(" | ")})`, existing.theme ? currentTheme : "preset");
+  const theme = await ask(`Theme override (preset | ${availableThemes.join(" | ")})`, existing.theme ? currentTheme : "preset");
   const description = await ask("SEO description", seo.description ?? tagline);
 
   const siteUrl = await ask("GitHub Pages URL", site.url ?? guessed.url);
@@ -121,7 +123,7 @@ async function main() {
       validation.error.issues.map((issue) => `  ${issue.path.join(".")}: ${issue.message}`).join("\n"));
   }
   resolveDesign(validation.data, catalog);
-  if (theme !== "preset" && !THEMES.includes(theme)) throw new Error(`Unknown theme "${theme}". Config was not changed.`);
+  if (theme !== "preset" && !availableThemes.includes(theme)) throw new Error(`Unknown theme "${theme}". Config was not changed.`);
 
   const header =
     "# yaml-language-server: $schema=./libcard.schema.json\n" +

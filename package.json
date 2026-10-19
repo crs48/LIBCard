@@ -12,7 +12,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "prebuild": "node scripts/gen-themes.mjs && node scripts/generate-schema.mjs",
+    "prebuild": "node scripts/gen-themes.mjs && node scripts/generate-schema.mjs && node scripts/design.mjs schema",
     "build": "astro build",
     "preview": "astro preview",
     "setup": "node scripts/setup.mjs",
@@ -37,7 +37,8 @@
     "design:check": "node scripts/design.mjs check",
     "design:preview": "node scripts/design.mjs preview",
     "design:catalog": "node scripts/design.mjs catalog",
-    "design:schema": "node scripts/design.mjs schema"
+    "design:schema": "node scripts/design.mjs schema",
+    "test:designs": "node scripts/test-design-roundtrip.mjs"
   },
   "dependencies": {
     "ajv": "^8.20.0",

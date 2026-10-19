@@ -36,6 +36,19 @@ export const designManifestSchema = z.object({
   previews: z.object({ desktop: packagePath, mobile: packagePath }).strict().optional(),
 }).strict();
 
+export const designCatalogSchema = z.object({
+  schemaVersion: z.literal(1),
+  designs: z.array(z.object({
+    id: designId, name: z.string().min(1), description: z.string(), author: z.string().min(1), license: z.string().min(1),
+    version: z.string().refine((s) => !!semver.valid(s)), source: httpUrl,
+    ref: z.string().regex(/^(?:v?\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?|[a-f0-9]{40})$/),
+    integrity: z.string().regex(/^[a-f0-9]{64}$/),
+    compatibility: designManifestSchema.shape.compatibility,
+    capabilities: designManifestSchema.shape.capabilities,
+    previews: designManifestSchema.shape.previews.unwrap(),
+  }).strict()),
+}).strict().refine((c) => new Set(c.designs.map((d) => d.id)).size === c.designs.length, "duplicate catalog IDs");
+
 export const emptyOptions = { type: "object", properties: {}, additionalProperties: false };
 export const editorialOptions = {
   type: "object", additionalProperties: false,
@@ -61,10 +74,15 @@ export function assertCompatibility(manifest, versions) {
 }
 
 /** JSON Schema draft-07; no fetching, defaults injection, coercion, or custom code. */
+const optionValidators = new WeakMap();
 export function validateOptions(schema, value, label) {
   if (schema?.type !== "object" || schema?.additionalProperties !== false) throw new Error(`${label}: options schema must be an object with additionalProperties: false`);
-  const ajv = new Ajv({ strict: true, allErrors: true, ownProperties: true });
-  const validate = ajv.compile(schema);
+  let compiled = optionValidators.get(schema);
+  if (!compiled) {
+    const ajv = new Ajv({ strict: true, allErrors: true, ownProperties: true });
+    compiled = { ajv, validate: ajv.compile(schema) }; optionValidators.set(schema, compiled);
+  }
+  const { ajv, validate } = compiled;
   if (!validate(value)) throw new Error(`${label}: ${ajv.errorsText(validate.errors, { separator: "; " })}`);
   return value;
 }

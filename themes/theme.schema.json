@@ -29,6 +29,11 @@
             }
           ]
         },
+        "sourceUrl": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?:\\/\\/"
+        },
         "license": {
           "type": "string",
           "default": "CC-BY-4.0"

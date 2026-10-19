@@ -4,8 +4,9 @@ import { resolveLink } from "../lib/link-model";
 import { withBase } from "../lib/site";
 import Icon from "./Icon.astro";
 import type { ResolvedLink } from "../layout-api/model";
-interface Props { link: LibcardLink | ResolvedLink; }
-const { link } = Astro.props;
+interface Props { link: LibcardLink | ResolvedLink; headingLevel?: 2 | 3; }
+const { link, headingLevel = 3 } = Astro.props;
+const Heading = headingLevel === 2 ? "h2" : "h3";
 const model = "presentation" in link ? link.presentation : await resolveLink(link, (await getConfig()).statuses, await getFeedme());
 const asset = (src: string) => "presentation" in link || /^https?:\/\//i.test(src) ? src : withBase(import.meta.env.BASE_URL, src);
 ---
@@ -17,7 +18,7 @@ const asset = (src: string) => "presentation" in link || /^https?:\/\//i.test(sr
         <span class="lc-mark" aria-hidden="true">
           {link.iconImage ? <img src={asset(link.iconImage)} alt="" width="24" height="24" loading="lazy" /> : <Icon name={link.icon ?? "arrow-up-right"} class="size-5" />}
         </span>
-        <h3>{link.label}</h3>
+        <Heading>{link.label}</Heading>
         {model.external && <span class="lc-outbound" aria-hidden="true">↗</span>}
       </div>
       {link.description && <p class="lc-link-description">{link.description}</p>}

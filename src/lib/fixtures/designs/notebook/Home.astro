@@ -1,0 +1,21 @@
+---
+import { Profile, ProfileActions, Section, SocialRow, CardReveal, type LayoutProps } from "@libcard/layout";
+import mark from "./mark.svg?url";
+type Props = LayoutProps;
+const { page, options } = Astro.props;
+---
+<div class="notebook" data-width={options.width}>
+  <main id="main-content">
+    <aside><img src={mark} width="32" height="32" alt="" /><Profile profile={page.profile} /><ProfileActions actions={page.actions} /><SocialRow socials={page.socials} /></aside>
+    <div class="entries">{page.sections.map((section, index) => <Section section={section} index={index} />)}<CardReveal url={page.card.url} /></div>
+  </main>
+  <slot name="utilities" />
+</div>
+<style>
+  .notebook { max-width:68rem; margin:auto; padding:clamp(1rem,4vw,3rem); }
+  .notebook[data-width="narrow"] { max-width:52rem; }
+  main { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr); gap:clamp(2rem,5vw,5rem); align-items:start; }
+  aside, .entries { display:flex; min-width:0; flex-direction:column; gap:2rem; }
+  aside { position:sticky; top:2rem; }
+  @media(max-width:44rem) { main { grid-template-columns:minmax(0,1fr); } aside { position:static; } }
+</style>

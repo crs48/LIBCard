@@ -1,0 +1,39 @@
+---
+import Layout from "../layouts/Layout.astro";
+import catalog from "../../.libcard/designs.json";
+import community from "../../.libcard/catalog.json";
+import previews from "../../.libcard/previews";
+import { withBase } from "../lib/site";
+const base = import.meta.env.BASE_URL;
+const available = catalog as Array<{ id: string; name: string; layout: string; theme: string; version?: string; builtin: boolean; credit?: { author: string; source?: string } }>;
+const entries = community as Array<{ id: string; name: string; description: string; author: string; source: string; version: string; ref: string; integrity: string; compatibility: { layoutApi: number; astro: string; libcard: string }; capabilities: { clientJavaScript: boolean; remoteAssets: boolean } }>;
+---
+<Layout title="Design gallery" wide>
+  <header class="flex max-w-prose flex-col gap-3 text-center">
+    <p class="text-xs uppercase tracking-widest text-muted">One card. Your own composition.</p>
+    <h1 class="text-3xl font-semibold tracking-tight">Design gallery</h1>
+    <p class="text-muted">Choose a complete design, or combine a layout with any appearance. Your profile, links, writing, and contact details stay in the same config.</p>
+    <nav class="flex justify-center gap-6 text-sm"><a href={withBase(base, "/themes")} class="underline underline-offset-4">Browse appearances</a><a href="https://github.com/crs48/LIBCard/blob/main/docs/DESIGNS.md" class="underline underline-offset-4">Make and share a design ↗</a></nav>
+  </header>
+  <ul class="grid w-full gap-5 sm:grid-cols-2">
+    {available.map((design) => <li class="overflow-hidden rounded-card border border-border bg-surface">
+      {previews[design.id] && <img src={previews[design.id]} alt={`${design.name} design preview`} class="aspect-[4/3] w-full border-b border-border object-cover object-top" width="640" height="480" loading="lazy" />}
+      <div class="flex flex-col gap-3 p-6">
+        <div class="flex items-baseline justify-between gap-3"><h2 class="text-xl font-semibold">{design.name}</h2><span class="text-xs text-muted">{design.builtin ? "Built in" : `v${design.version}`}</span></div>
+        <p class="text-sm text-muted">{design.id === "classic" ? "A compact, centered card. Familiar link buttons and all your content in one column." : design.id === "personal-home" ? "An editorial personal home. Rich project previews, numbered sections, and a monochrome appearance." : `By ${design.credit?.author ?? design.id.split("/")[0]}. Layout API 1.`}</p>
+        <code class="overflow-x-auto rounded bg-bg p-3 text-sm">design: {design.id}</code>
+        {design.credit?.source && <a href={design.credit.source} target="_blank" rel="noopener noreferrer" class="text-sm underline underline-offset-4">Design source ↗</a>}
+      </div>
+    </li>)}
+  </ul>
+  {entries.length > 0 && <section class="w-full"><h2 class="mb-4 text-xl font-semibold">From the community</h2><ul class="grid gap-5 sm:grid-cols-2">{entries.map((entry) => <li class="flex min-w-0 flex-col gap-3 rounded-card border border-border p-6">
+    <h3 class="text-lg font-semibold">{entry.name} <span class="text-xs text-muted">v{entry.version}</span></h3>
+    <p class="text-sm text-muted">{entry.description}</p>
+    <p class="text-xs text-muted">By {entry.author} · {entry.compatibility.layoutApi === 1 ? "Layout API 1" : `API ${entry.compatibility.layoutApi}`} · Astro {entry.compatibility.astro}</p>
+    <p class="text-xs text-muted">{entry.capabilities.clientJavaScript ? "Adds client JavaScript" : "No added client JavaScript"} · {entry.capabilities.remoteAssets ? "Uses remote assets" : "Bundled assets"}</p>
+    <a href={entry.source} target="_blank" rel="noopener noreferrer" class="text-sm underline underline-offset-4">Source and previews ↗</a>
+    <pre class="overflow-x-auto rounded bg-surface p-3 text-xs"><code>pnpm run design:add -- {entry.source} --ref={entry.ref} --integrity={entry.integrity}</code></pre>
+    <code class="text-sm">design: {entry.id}</code>
+  </li>)}</ul></section>}
+  <a href={withBase(base, "/")} class="text-sm underline underline-offset-4">← Back to card</a>
+</Layout>

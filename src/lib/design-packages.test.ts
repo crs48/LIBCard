@@ -3,10 +3,12 @@ import { mkdtempSync, readFileSync, writeFileSync, rmSync, symlinkSync, realpath
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import { stringify } from "yaml";
 import { inspectPackage, installPackage, fetchPackage, readDesignLock, rollbackPackage, discoverPackages, appearanceKey, copyPackage } from "./design-packages.mjs";
 import { resolveDesign, builtinDesigns } from "./design-manifest.mjs";
 import { isEnginePath } from "./engine-ownership.mjs";
+import { assertLayoutShell } from "./layout-conformance.mjs";
 
 const temporary: string[] = [];
 const temp = () => { const dir = mkdtempSync(join(realpathSync(tmpdir()), "libcard-test-")); temporary.push(dir); return dir; };
@@ -29,6 +31,16 @@ const fetched = (dir: string) => ({ pkg: inspectPackage(dir, versions), source: 
 afterEach(() => temporary.splice(0).forEach((dir) => rmSync(dir, { recursive: true, force: true })));
 
 describe("design manifests and ownership", () => {
+  it("ships a self-contained reference package with portable assets and previews", () => {
+    const pkg = inspectPackage(fileURLToPath(new URL("./fixtures/designs/notebook", import.meta.url)), versions);
+    expect(pkg.manifest.id).toBe("example/notebook");
+    expect(pkg.manifest.previews).toBeDefined();
+    expect(pkg.appearance?.author).toBe("Example artist");
+  });
+  it("requires the core utilities exactly once outside the main content", () => {
+    expect(() => assertLayoutShell('<main id="main-content"></main><footer data-libcard-utilities></footer>')).not.toThrow();
+    for (const html of ['<main id="main-content"></main>', '<main id="main-content"><footer data-libcard-utilities></footer></main>', '<main id="main-content"></main><footer data-libcard-utilities></footer><footer data-libcard-utilities></footer>']) expect(() => assertLayoutShell(html)).toThrow(/utilities/);
+  });
   it("inspects executable packages without running their code", () => expect(inspectPackage(fixture(), versions).manifest.id).toBe("alex/notebook"));
   it.each([
     { id: "classic" }, { id: "../escape" }, { compatibility: { layoutApi: 2, astro: "^5" } },

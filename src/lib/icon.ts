@@ -10,7 +10,7 @@ import sharp from "sharp";
  * the project root at build time — cwd is the repo root under both `astro dev`
  * and `astro build`.
  */
-const SVG = readFileSync(resolve("public/favicon.svg"));
+const SVG = readFileSync(resolve(process.env.LIBCARD_FIXTURE_PUBLIC || "public", "favicon.svg"));
 
 const TRANSPARENT = { r: 0, g: 0, b: 0, alpha: 0 } as const;
 

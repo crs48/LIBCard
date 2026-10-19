@@ -10,4 +10,6 @@ Offer the compact Classic card or the richer Personal home design. Use the share
 
 Set up the site, customize libcard.config.yaml, and replace the demo owner's content and services with mine. Use pnpm, configure the correct GitHub Pages URL and base path, and check the build and mobile layout. Show me the result, then help publish it to my repository when I am ready. Use any publishing authorization I have already given; otherwise ask after the preview is ready. If GitHub access or hosting settings need my input, explain the exact next step and keep working on what you can.
 
+Support installed designs and custom layouts through the documented @libcard/layout API and design:* commands when useful. Keep authored designs in designs/local/ and preserve design lockfiles during engine updates.
+
 Finish with my live URL, what you verified, and how I can update my content later. Please start by inspecting this workspace and asking for the details you still need.

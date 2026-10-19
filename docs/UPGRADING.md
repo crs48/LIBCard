@@ -57,8 +57,15 @@ images, and sections work in both layouts. See the
 Sections must place every canonical link ID exactly once. Keep existing root
 blocks using a `type: blocks` section, or move the blocks into the section list.
 The explicit placement preserves Feedme's existing root-block about import.
-Custom layout packages are not yet supported; do not put owner-authored layouts
-in `src/`, which the updater replaces.
+Custom layouts live in `designs/local/` or `designs/installed/`, with pins in
+`designs.lock.yaml`. The updater preserves these and `designs/history/`, and checks
+package compatibility with the target engine before writing. Do not put
+owner-authored layouts in `src/`, which the updater replaces. Use
+`pnpm run design:update -- author/name --ref=v1.1.0` for a separate package update,
+and `pnpm run design:rollback -- author/name` to restore the previous source and
+lock offline. Edited installed files are protected; fork them with
+`design:fork` and restore the installed version from Git before rebuilding.
+See [designs and releases](./DESIGNS.md) for the full workflow.
 
 The setup wizard preserves existing sections, blocks, integrations, and profile
 extensions. It validates the result before writing; adding links to a sectioned
@@ -93,7 +100,9 @@ flowchart LR
 | **Yours** | `libcard.config.yaml` | **never touched** |
 | **Yours** | `public/**` — avatar, `CNAME` (custom domain), `og.png`, a custom favicon | **never touched** |
 | **Yours** | a theme *you* wrote, e.g. `themes/my-theme.yaml` | **preserved** |
+| **Design source and pins** | `designs/local/**`, `designs/installed/**`, `designs/history/**`, `designs.lock.yaml` | **preserved** |
 | **Engine** | `src/**`, `scripts/**`, `astro.config.mjs`, `package.json`, `pnpm-lock.yaml`, `tsconfig.json`, `.github/workflows/**` | **replaced** |
+| **Design source and pins** | `designs/local/**`, `designs/installed/**`, `designs/history/**`, `designs.lock.yaml` | **preserved** |
 | **Engine** | the built-in `themes/*.yaml` (`default`, `midnight`, `ocean`, …) | **replaced** |
 | **Generated** | `libcard.schema.json`, `src/data/themes.json`, `src/styles/themes.gen.css`, `themes/theme.schema.json` | **rebuilt** by `pnpm build` — never edit by hand |
 

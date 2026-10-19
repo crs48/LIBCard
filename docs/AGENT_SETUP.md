@@ -211,3 +211,17 @@ person to paste this guide.
 Official references: [GitHub CLI repo creation](https://cli.github.com/manual/gh_repo_create),
 [GitHub Pages setup](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site),
 and [Pages API](https://docs.github.com/en/rest/pages/pages).
+
+## Shared designs and custom layouts
+
+Use `pnpm run design:list` to discover installed choices and `/designs` for their
+gallery. A complete `design:` selects layout, appearance, and defaults; explicit
+owner `layout:`, `theme:`, and `layoutOptions:` override them. Keep all content in
+the same config. See [DESIGNS.md](./DESIGNS.md) for the stable API and publishing.
+
+When asked to install a community design, use its pinned release/commit with
+`pnpm run design:add -- URL --ref=REF`, select its `author/name`, and verify it
+against the owner's content. Installation validates data; builds execute the
+selected Astro code, so inspect its source and declared capabilities. Do not run
+all catalog packages or add custom package dependencies. Commit vendored files and
+`designs.lock.yaml`; keep authored layouts under `designs/local/`.

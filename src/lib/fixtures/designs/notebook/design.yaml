@@ -1,0 +1,36 @@
+schemaVersion: 1
+id: example/notebook
+name: notebook
+version: 1.0.0
+description: A personal layout for portable LibCard content.
+author: example
+license: MIT
+compatibility:
+  layoutApi: 1
+  astro: ">=5.13.0 <6"
+  libcard: ">=0.2.0 <1"
+layout:
+  entry: ./Home.astro
+  optionsSchema: ./options.schema.json
+appearance:
+  file: appearance.yaml
+defaults:
+  width: wide
+capabilities:
+  blockFallback: core
+  clientJavaScript: false
+  remoteAssets: false
+files:
+  - LICENSE
+  - README.md
+  - sample.config.yaml
+  - Home.astro
+  - options.schema.json
+  - previews/desktop.png
+  - previews/mobile.png
+  - mark.svg
+  - appearance.yaml
+source: https://example.com/notebook
+previews:
+  desktop: previews/desktop.png
+  mobile: previews/mobile.png

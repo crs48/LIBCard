@@ -27,6 +27,7 @@ const contribute = "https://github.com/crs48/LIBCard/tree/main/themes";
       Add your own theme →
     </a>
   </header>
+  <a href={withBase(base, "/designs")} class="text-sm underline underline-offset-4">Explore complete designs and layouts →</a>
 
   <ul class="grid w-full gap-4 sm:grid-cols-2">
     {
@@ -84,7 +85,7 @@ const contribute = "https://github.com/crs48/LIBCard/tree/main/themes";
               )}{" "}
               · {t.license}
             </p>
-            <code class="mt-2 block rounded bg-bg px-2 py-1 text-xs text-fg">theme: {t.slug}</code>
+            <code class="mt-2 block rounded bg-bg px-2 py-1 text-xs text-fg">theme: {t.designId ?? t.slug}</code>
           </div>
         </li>
       ))

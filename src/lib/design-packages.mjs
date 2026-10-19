@@ -149,6 +149,7 @@ export function fetchPackage(source, ref, versions) {
   if (!/^(?:v?\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?|[a-f0-9]{40})$/.test(ref)) throw new Error("Use a version tag or an exact 40-character commit, not a branch");
   const url = /^https:\/\//.test(source) ? source : resolve(source);
   if (/^[a-z]+:/i.test(source) && !/^https:\/\//.test(source)) throw new Error("Only HTTPS Git URLs or local Git repositories are supported");
+  if (/^https:\/\//.test(source) && (new URL(source).username || new URL(source).password)) throw new Error("Do not put credentials in package source URLs");
   const scratch = mkdtempSync(join(realpathSync(tmpdir()), "libcard-design-"));
   try {
     git(scratch, ["clone", "--quiet", "--no-checkout", "--no-local", "--", url, "repo"]);
@@ -161,13 +162,18 @@ export function fetchPackage(source, ref, versions) {
     const output = join(scratch, "package");
     mkdirSync(output);
     const names = execFileSync("git", ["-C", repo, "ls-tree", "-rz", "--name-only", commit], { encoding: "utf8" }).split("\0").filter(Boolean);
+    if (names.length > 501) throw new Error("Package exceeds 501 files");
+    const sizes = git(repo, ["ls-tree", "-rl", commit]).split("\n").map((line) => Number(line.split(/\s+/)[3]));
+    if (sizes.reduce((a, b) => a + b, 0) > 25 * 1024 * 1024) throw new Error("Package exceeds 25 MiB");
     for (const name of names) {
       const file = cleanPath(name);
       const target = safePath(output, file);
       mkdirSync(dirname(target), { recursive: true });
       writeFileSync(target, execFileSync("git", ["-C", repo, "show", `${commit}:${name}`], { maxBuffer: 26 * 1024 * 1024 }));
     }
-    return { pkg: inspectPackage(output, versions), source: { kind: "git", url, ref, commit }, cleanup: () => rmSync(scratch, { recursive: true, force: true }) };
+    const pkg = inspectPackage(output, versions);
+    if (!/^[a-f0-9]{40}$/.test(ref) && ref.replace(/^v/, "") !== pkg.manifest.version) throw new Error(`Tag ${ref} does not match manifest version ${pkg.manifest.version}`);
+    return { pkg, source: { kind: "git", url, ref, commit }, cleanup: () => rmSync(scratch, { recursive: true, force: true }) };
   } catch (error) { rmSync(scratch, { recursive: true, force: true }); throw error; }
 }
 
@@ -189,6 +195,7 @@ export function installPackage(root, fetched, { update = false, integrity } = {}
     const current = inspectPackage(target, engineVersions(root));
     if (current.integrity !== previous.integrity) throw new Error(`${id}: local edits detected; use design:fork before updating`);
     if (previous.source.kind === "git" && source.kind === "git" && previous.source.url === source.url && previous.source.ref === source.ref && previous.source.commit !== source.commit) throw new Error(`${id}: tag ${source.ref} moved; choose a new version or an exact commit`);
+    if (previous.integrity === pkg.integrity && (previous.source.kind === "directory" && source.kind === "directory" && previous.source.path === source.path || previous.source.kind === "git" && source.kind === "git" && previous.source.url === source.url && previous.source.commit === source.commit)) return previous;
   }
   const history = previous ? [{ id: previous.id, version: previous.version, integrity: previous.integrity, source: previous.source }, ...previous.history] : [];
   const record = { id, version: pkg.manifest.version, integrity: pkg.integrity, source, history };

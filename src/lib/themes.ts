@@ -60,7 +60,7 @@ export interface ThemeMeta {
 /** Every shipped theme, in display order (default first, then official, A→Z). */
 export const themes = [...themesData, ...packageThemes] as ThemeMeta[];
 
-const bySlug = new Map(themes.map((t) => [t.slug, t]));
+const bySlug = new Map(themes.flatMap((t) => [[t.slug, t] as const, ...(t.designId ? [[t.designId, t] as const] : [])]));
 
 /** Look up one theme's metadata by slug. */
 export function getThemeMeta(slug: string): ThemeMeta | undefined {
@@ -87,7 +87,7 @@ export const LIBCARD_REPO = "https://github.com/crs48/LIBCard";
 
 /** Link to a theme's source file in the gallery, e.g. for the footer credit. */
 export function themeSourceUrl(theme: ThemeMeta): string {
-  return theme.designId ? theme.sourceUrl || theme.authorUrl || "" : `${LIBCARD_REPO}/blob/main/themes/${theme.file}`;
+  return theme.sourceUrl || (theme.designId ? theme.authorUrl || "" : `${LIBCARD_REPO}/blob/main/themes/${theme.file}`);
 }
 
 // Permissive licenses where keeping the "Theme by" credit is goodwill, not a
@@ -137,7 +137,9 @@ export interface ResolvedTheme {
  * enum, so the registry is the source of truth).
  */
 export function resolveTheme(theme: ThemeConfig): ResolvedTheme {
-  const obj = typeof theme === "string" ? { name: theme } : theme;
+  const input = typeof theme === "string" ? { name: theme } : theme;
+  const cssKey = (name: string) => bySlug.get(name)?.slug ?? name;
+  const obj = { ...input, name: cssKey(input.name), allow: input.allow?.map(cssKey), order: input.order?.map(cssKey) };
   const available = themes.map((t) => t.slug).join(", ");
 
   if (!bySlug.has(obj.name)) {
@@ -166,7 +168,7 @@ export function resolveTheme(theme: ThemeConfig): ResolvedTheme {
         throw new Error(`theme.random lists unknown theme "${slug}". Available: ${available}.`);
       }
     }
-    randomPool = randomCfg;
+    randomPool = randomCfg.map(cssKey);
   } else {
     randomPool = randomCfg ? cycle : [];
   }

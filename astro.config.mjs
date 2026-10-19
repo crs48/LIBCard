@@ -24,6 +24,8 @@ export default defineConfig({
   site,
   base,
   output: "static",
+  // The conformance tool generates neutral assets instead of copying owner public/.
+  ...(process.env.LIBCARD_FIXTURE_PUBLIC ? { publicDir: resolve(process.env.LIBCARD_FIXTURE_PUBLIC) } : {}),
   trailingSlash: "ignore",
   integrations: [designIntegration()],
   vite: {

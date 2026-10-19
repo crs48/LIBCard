@@ -8,10 +8,12 @@ An owner should be able to switch between them without rewriting their content.
 Other people should be able to create, publish, and adopt entirely different
 compositions using that same config contract.
 
-This architecture was researched on 2026-10-19. **Phase 1 is implemented:** Classic,
-Editorial, design/theme precedence, rich links, and ordered sections. The custom
-package format, public authoring API, and distribution commands below remain
-**proposals, not implemented features**.
+This architecture was researched and implemented on 2026-10-19. All three phases
+are complete: portable built-in layouts, the versioned authoring API, and shareable
+packages with installation, updates, previews, and a discovery catalog. The
+maintained contract and commands are in [DESIGNS.md](../DESIGNS.md). Historical
+illustrations below describe the design rationale; the guide documents the final
+manifest, including its explicit file inventory and required utilities slot.
 It extends 0014's visual direction and supersedes its illustrative section API
 where the examples differ. The implementation opts the owner config into Personal
 home and adds local artwork; it has not been published to the live site.
@@ -601,22 +603,22 @@ in this repo, not an additional approval step for the present exploration.
 
 ### Phase 2 — supported local authorship
 
-- [ ] Stabilize PageModelV1 and a small documented layout/component API.
-- [ ] Add manifest and option-schema validation, local design storage, and clear
+- [x] Stabilize PageModelV1 and a small documented layout/component API.
+- [x] Add manifest and option-schema validation, local design storage, and clear
   compatibility diagnostics.
-- [ ] Generate the selected import consistently in dev/build and verify CSS/script
+- [x] Generate the selected import consistently in dev/build and verify CSS/script
   isolation with an inactive-layout fixture.
-- [ ] Provide a scaffold, sanitized sample content, and a conformance command.
-- [ ] Explicitly protect custom designs and lockfiles in updater ownership rules.
+- [x] Provide a scaffold, sanitized sample content, and a conformance command.
+- [x] Explicitly protect custom designs and lockfiles in updater ownership rules.
 
 ### Phase 3 — distribution
 
-- [ ] Implement pinned installation/update, integrity checks, path containment,
+- [x] Implement pinned installation/update, integrity checks, path containment,
   local-edit detection, and rollback by restoring source plus lock.
-- [ ] Add package previews and a lightweight catalog index with compatibility data.
-- [ ] Separate executable-layout preview builds from the privileged theme workflow.
-- [ ] Verify credits and source links for independently authored layout/appearance assets.
-- [ ] Document a release-and-adopt round trip using an independently authored design.
+- [x] Add package previews and a lightweight catalog index with compatibility data.
+- [x] Separate executable-layout preview builds from the privileged theme workflow.
+- [x] Verify credits and source links for independently authored layout/appearance assets.
+- [x] Document a release-and-adopt round trip using an independently authored design.
 
 Defer nested layout inheritance, general custom block plugins, arbitrary package
 dependencies, multi-page routing, an online editor, and live visitor layout
@@ -626,33 +628,33 @@ built-ins establish what it needs.
 
 ## Validation checklist
 
-- [ ] Omitted design/layout settings preserve existing Classic output and theme
+- [x] Omitted design/layout settings preserve existing Classic output and theme
   string/object behavior, including random pools, switcher, effects, and credits.
-- [ ] Test resolution with absent and explicit theme/layout settings; schema defaults
+- [x] Test resolution with absent and explicit theme/layout settings; schema defaults
   cannot override a preset accidentally. Presets cannot alter owner content or opt-ins.
-- [ ] Render one rich fixture in Classic and Editorial. Assert the same required
+- [x] Render one rich fixture in Classic and Editorial. Assert the same required
   destinations, descriptions, section order, social links, contact actions, GitHub
   links, and Feedme targets remain available, including collapsed content.
-- [ ] Exercise missing optional media/intro, empty content, long names, long titles,
+- [x] Exercise missing optional media/intro, empty content, long names, long titles,
   broken remote assets, and a layout's standard fallback for each existing block.
-- [ ] Reject unknown, duplicated, and missing references; conflicting root blocks;
+- [x] Reject unknown, duplicated, and missing references; conflicting root blocks;
   unsupported API versions; invalid selected options; and incompatible appearances.
-- [ ] Traverse sectioned embeds/tip blocks for existing validation and disclosures.
+- [x] Traverse sectioned embeds/tip blocks for existing validation and disclosures.
   Verify external media are accounted for without new automatic fetch services.
-- [ ] Verify `/card`, contact.vcf, contact QR, page QR, landscape overlay, and
+- [x] Verify `/card`, contact.vcf, contact QR, page QR, landscape overlay, and
   persistent corner action with both home layouts and a non-root `site.base`.
-- [ ] Browser-check 320px, 390px, tablet, desktop, 200% zoom, keyboard navigation,
+- [x] Browser-check 320px, 390px, tablet, desktop, 200% zoom, keyboard navigation,
   heading order, alt text, focus indicators, reduced motion, and no-JS rendering.
-- [ ] Check real rendered contrast, image loading/layout shift, and shipped assets.
+- [x] Check real rendered contrast, image loading/layout shift, and shipped assets.
   Core layout selection should not add a mandatory client framework/runtime.
-- [ ] Confirm an inactive package does not execute or contribute layout assets;
+- [x] Confirm an inactive package does not execute or contribute layout assets;
   dev selection changes must agree with clean production builds.
-- [ ] Test engine/package updates with custom source and edited vendored files;
+- [x] Test engine/package updates with custom source and edited vendored files;
   content, locks, and local designs must survive. Offline builds work once ordinary
   dependencies and package files are present, apart from opted-in content fetches.
-- [ ] Test installation against conflicting IDs, changed tags, invalid hashes,
+- [x] Test installation against conflicting IDs, changed tags, invalid hashes,
   traversal entries, unsafe symlinks, binary assets, and incompatible engine/API versions.
-- [ ] For implementation changes, run `pnpm test`, `pnpm typecheck`, and `pnpm build`,
+- [x] For implementation changes, run `pnpm test`, `pnpm typecheck`, and `pnpm build`,
   plus the targeted compatibility/browser fixtures introduced above.
 
 ### Phase 1 verification performed
@@ -667,8 +669,31 @@ built-ins establish what it needs.
   legacy presentation.
 - Running the original and enriched YAML through Feedme's actual importer yields
   identical profile, about text, destination, and tip metadata results.
-- Remaining validation items above include acceptance criteria for later package
-  support; no third-party layout installer or stable public SDK is claimed here.
+
+### Package/API verification performed
+
+- 234 unit tests pass, including manifest compatibility, options, hashes, moved Git
+  tags, binary files, ownership protection, edited-file refusal, and rollback.
+- Classic, Editorial, and a separately packaged two-column notebook each pass rich,
+  sparse, legacy, and all-17-block fixtures. Checks cover link/action/description
+  preservation, exact ordering, headings, alt attributes, base paths, and utilities.
+- Browser previews cover 320, 390, 768, 1280px and a 200%-equivalent viewport with
+  JavaScript disabled, reduced motion, keyboard focus, broken remote images,
+  collapsed content, both QR modes, vCard downloads, and manual/landscape cards.
+- An isolated author repository and owner site verify export → tagged Git install
+  → static build → explicit update → edited-source fork → offline rollback. The
+  release includes a binary asset, a bundled appearance with separate credits,
+  and imported media under a non-root site base.
+- A valid inactive package throws if evaluated and carries a CSS sentinel; it
+  neither executes nor contributes layout CSS. Dev switches from the installed
+  layout to Classic and Editorial using the same preparation as clean builds.
+- The installed/local/history paths and lockfile are excluded from engine writes;
+  engine preflight validates the target API/versions and downloads before writing.
+- The release export and catalog-entry commands were exercised on the separate
+  example package. No external repository or public release was created.
+- Theme contrast checks pass on enforced pairs; the existing muted-text advisories
+  for Default and Mist are unchanged. Manual screenshot inspection complements
+  automated checks; these checks are not a complete accessibility certification.
 
 ## References and next action
 
@@ -680,7 +705,5 @@ Repository anchors are linked alongside their findings above. Related design wor
 - [0008: shared config and the demo-site constraint](./0008_[x]_LANDING_PAGE_AND_VIRAL_LOOP.md)
 - [Upgrading LibCard](../UPGRADING.md) and [Feedme contract](../FEEDME.md)
 
-Start by extracting Classic and rendering a second layout from the same normalized
-content. That provides a concrete test of the proposed boundary before stabilizing
-the public package format. The first useful outcome is one config, two polished
-layouts, and a one-line design selection; publishing builds on that foundation.
+The implementation is complete. Use the maintained design guide for authoring and
+publishing; the intentionally deferred features remain outside API 1.
