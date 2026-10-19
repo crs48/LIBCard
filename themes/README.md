@@ -1,7 +1,8 @@
 # LibCard themes
 
-
-Themes remain data-only appearances. Layouts are selected separately in the card config. The optional `tokens.displayFont` chooses the display typeface (for example, Editorial’s introduction); when omitted it uses `tokens.font`.
+Themes remain data-only appearances. Layouts are selected separately in the card
+config. The optional `tokens.displayFont` chooses the display typeface (for example,
+Editorial’s introduction); when omitted it uses `tokens.font`.
 
 This folder **is** the theme gallery. Every theme is a single, validated
 `*.yaml` file describing a set of design tokens — **no CSS, no JavaScript**. The

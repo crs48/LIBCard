@@ -8,10 +8,13 @@ An owner should be able to switch between them without rewriting their content.
 Other people should be able to create, publish, and adopt entirely different
 compositions using that same config contract.
 
-This is an architecture proposal, researched on 2026-10-19. The configuration,
-package format, authoring API, and commands below are **proposed, not implemented**.
+This architecture was researched on 2026-10-19. **Phase 1 is implemented:** Classic,
+Editorial, design/theme precedence, rich links, and ordered sections. The custom
+package format, public authoring API, and distribution commands below remain
+**proposals, not implemented features**.
 It extends 0014's visual direction and supersedes its illustrative section API
-where the examples differ. It does not change the owner's config or live site.
+where the examples differ. The implementation opts the owner config into Personal
+home and adds local artwork; it has not been published to the live site.
 
 ## Executive summary
 
@@ -292,9 +295,11 @@ make cropping a layout decision. Grayscale changes presentation, not source file
 1. **No `sections`:** synthesize the existing links-then-blocks body, preserving
    order. IDs remain optional for legacy links; internal generated keys are not
    written back and are not public reference IDs.
-2. **With `sections`:** use the explicit sequence. Require root `blocks` to be
-   absent or empty and explain how to move them into the sequence. Do not silently
-   discard them or concatenate them in an unexpected place.
+2. **With `sections`:** use the explicit sequence. Root `blocks` may remain in
+   their canonical location when placed exactly once by a `{ type: blocks }`
+   section, or move those blocks inline. This implementation refinement preserves
+   Feedme's root-block about import. Unplaced or multiply placed blocks fail
+   validation; they are never silently discarded or appended.
 3. **References:** require unique IDs for all links in sectioned mode, unique
    group IDs, and exactly one group reference per inventory link. Report unknown,
    duplicate, and unplaced IDs together with their YAML paths. A collapsed archive
@@ -583,15 +588,15 @@ in this repo, not an additional approval step for the present exploration.
 
 ### Phase 1 — two built-in layouts and portable content
 
-- [ ] Extract Classic and the core document shell with legacy behavior preserved.
-- [ ] Introduce pure normalization/resolution and a shared block traversal helper.
-- [ ] Add stable IDs, descriptions, media, intro/actions, and semantic sections.
-- [ ] Test Feedme importer compatibility before shipping new public content fields.
-- [ ] Add Editorial and the new monochrome appearance using shared metadata/actions.
-- [ ] Implement `layout:`, `design:`, explicit precedence, and presentation-only defaults.
-- [ ] Add scoped styles and the smallest needed additive typography tokens.
-- [ ] Prove both layouts against the same rich config and sparse legacy fixtures.
-- [ ] Regenerate schemas through scripts; update README, setup guide/wizard/prompt,
+- [x] Extract Classic and the core document shell with legacy behavior preserved.
+- [x] Introduce pure normalization/resolution and a shared block traversal helper.
+- [x] Add stable IDs, descriptions, media, intro/actions, and semantic sections.
+- [x] Test Feedme importer compatibility before shipping new public content fields.
+- [x] Add Editorial and the new monochrome appearance using shared metadata/actions.
+- [x] Implement `layout:`, `design:`, explicit precedence, and presentation-only defaults.
+- [x] Add scoped styles and the smallest needed additive typography tokens.
+- [x] Prove both layouts against the same rich config and sparse legacy fixtures.
+- [x] Regenerate schemas through scripts; update README, setup guide/wizard/prompt,
   upgrade documentation, and changelog with the implementation.
 
 ### Phase 2 — supported local authorship
@@ -650,8 +655,20 @@ built-ins establish what it needs.
 - [ ] For implementation changes, run `pnpm test`, `pnpm typecheck`, and `pnpm build`,
   plus the targeted compatibility/browser fixtures introduced above.
 
-This exploration itself changes documentation only. Runtime checks above are
-acceptance criteria for implementation, not claims that the proposed API exists.
+### Phase 1 verification performed
+
+- 205 unit tests pass; Astro typecheck reports zero errors, warnings, or hints.
+- Production builds pass for the owner config, a rich fixture under both layouts,
+  and the pre-change legacy config. All 12 themes pass enforced contrast checks.
+- Playwright checks pass at 320, 390, 768, and 1280px with JavaScript disabled;
+  archives, section embed disclosures, prefixed assets, vCard, and contact QR work.
+- The owner page renders all 22 canonical links. Manual card navigation and the
+  touch-device landscape overlay work; screenshots cover the new layout and the
+  legacy presentation.
+- Running the original and enriched YAML through Feedme's actual importer yields
+  identical profile, about text, destination, and tip metadata results.
+- Remaining validation items above include acceptance criteria for later package
+  support; no third-party layout installer or stable public SDK is claimed here.
 
 ## References and next action
 
