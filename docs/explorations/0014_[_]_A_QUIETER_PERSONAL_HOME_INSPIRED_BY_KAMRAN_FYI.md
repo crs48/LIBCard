@@ -19,6 +19,48 @@ This is a research and design proposal dated **2026-10-19**, not an implemented
 redesign. The accompanying conversational sketches use proposed copy and a
 selection of existing destinations. They do not modify the owner's site.
 
+### Second design pass: monochrome with richer content
+
+The owner selected **Personal home**, accepted the information architecture, and
+requested a more interesting black-and-white treatment with favicons, screenshots,
+embedded imagery, more experiments, and a visible place for coaching and
+nervous-system resources. This refines the earlier pastel-compatible proposal;
+the revised concept is deliberately monochrome.
+
+The new concept keeps the compact identity and direct contact actions, then uses:
+
+1. **Selected work:** a larger xNet preview with its actual workspace screenshot,
+   followed by LibCard and Feedme with project icons and existing preview artwork.
+2. **Work together:** a portrait beside coaching copy, followed by a distinct
+   Gently resource link. The existing nervous-system URL now redirects to
+   [gently.fyi](https://gently.fyi/). Copy was grounded in the public
+   [coaching site](https://crs.coach/) and resource landing page.
+3. **Writing & exploring:** the existing illustrations for the two linked essays.
+4. **The experiment shelf:** six visible entries, using real favicons where
+   available and ordinary icons as fallbacks. Nine remaining destinations remain
+   available in a native disclosure. All 22 current main-link destinations are
+   represented, with Gently using the resolved destination.
+
+Typography, hairline rules, image proportions, and alternating visual density
+create interest. All images are displayed in grayscale; the original assets are
+unchanged. Generic fallback icons are not presented as official project logos.
+
+The prototype uses public repository images served through a permitted CDN.
+Before implementation, add optional owner-supplied icon/image/alt-text fields
+and use locally hosted, appropriately sized assets under `public/` where possible.
+Keep images optional, reserve their dimensions, and retain a clear text fallback.
+Do not add a runtime favicon service or turn every link into a screenshot card.
+The CDN sourcing is a prototype convenience, not a production loading contract.
+
+This pass still changes only the concept and planning document; layout/schema
+implementation and owner-config migration remain pending.
+
+Prototype verification: all 14 images/icons loaded, the nine-link archive
+expanded correctly, and a 320px browser viewport produced a 288px content frame
+with no measured horizontal overflow. A destination check accounted for all 22
+main links, with the Gently redirect treated as the same resource. These are
+concept checks, not validation of an implemented LibCard release.
+
 ## Current state in the repository
 
 Read the latest exploration,
@@ -293,7 +335,9 @@ separate from preserving the source link.
 
 ### First implementation slice
 
-- [ ] Confirm the intended primary visitor action and preferred layout direction.
+- [x] Choose the preferred layout direction: Personal home, now in monochrome.
+- [ ] Confirm the intended primary visitor action.
+- [ ] Support optional project icons and preview imagery without requiring them.
 - [ ] Add a backward-compatible editorial preset and optional descriptions.
 - [ ] Add ordered sections, stable references, and clear validation errors.
 - [ ] Verify Feedme importer compatibility before introducing new link fields.
