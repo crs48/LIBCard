@@ -9,6 +9,17 @@ often to `libcard.config.yaml`); everything else is picked up automatically by
 
 ## Unreleased
 
+- **Designs and portable layouts.** `design: personal-home` selects the new
+  Editorial layout and Monochrome appearance; Classic remains the default for
+  existing configs. Explicit `layout:` and `theme:` override preset defaults.
+  Add introductions, contact actions, link descriptions, icons, preview images,
+  and ordered sections with validated link IDs and native collapsed groups.
+  Both layouts preserve existing blocks, source links, tips, and card utilities.
+  `type: blocks` places the canonical block list without disrupting importers.
+  Theme files may optionally set `displayFont`; old themes retain their font.
+  The setup wizard now preserves existing content and validates before saving.
+  Custom layout packages and distribution tooling are not part of this release.
+
 - **Persistent corner button (optional).** Add `cornerButton` with your label,
   destination, optional icon, and any of four corners (bottom-right by default).
   The theme-aware pill stays visible while scrolling, works without JavaScript,

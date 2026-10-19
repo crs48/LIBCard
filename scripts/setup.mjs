@@ -11,7 +11,7 @@ import { createInterface } from "node:readline/promises";
 import { execSync } from "node:child_process";
 import { stdin, stdout } from "node:process";
 import { parse, stringify } from "yaml";
-import { THEMES } from "../src/lib/schema.mjs";
+import { THEMES, libcardSchema } from "../src/lib/schema.mjs";
 
 const CONFIG_PATH = new URL("../libcard.config.yaml", import.meta.url);
 
@@ -65,7 +65,9 @@ async function main() {
 
   // `theme` may be a bare slug or the object (switcher) form — read the name.
   const currentTheme = typeof existing.theme === "string" ? existing.theme : (existing.theme?.name ?? "default");
-  const theme = await ask(`Theme (${THEMES.join(" | ")})`, currentTheme);
+  const design = await ask("Design (classic | personal-home)", existing.design ?? "classic");
+  const layout = await ask("Layout override (preset | classic | editorial)", existing.layout ?? "preset");
+  const theme = await ask(`Theme override (preset | ${THEMES.join(" | ")})`, existing.theme ? currentTheme : "preset");
   const description = await ask("SEO description", seo.description ?? tagline);
 
   const siteUrl = await ask("GitHub Pages URL", site.url ?? guessed.url);
@@ -92,19 +94,29 @@ async function main() {
   const socials = Array.isArray(existing.socials) ? existing.socials : [];
 
   // Keep the switcher settings if the user already had the object form.
-  const chosen = THEMES.includes(theme) ? theme : "default";
+  const chosen = theme;
   const themeOut =
     existing.theme && typeof existing.theme === "object" ? { ...existing.theme, name: chosen } : chosen;
 
   const config = {
-    profile: clean({ name, tagline, avatar, location }),
+    ...existing,
+    design,
+    layout: layout === "preset" ? undefined : layout,
+    profile: clean({ ...existing.profile, name, tagline, avatar, location }),
     contact: clean({ email, phone, organization, title, website }),
     links,
     socials,
-    theme: themeOut,
-    seo: clean({ description }),
+    theme: theme === "preset" ? undefined : themeOut,
+    seo: clean({ ...existing.seo, description }),
     site: { url: siteUrl, base: siteBase || "/" },
   };
+
+  const validation = libcardSchema.safeParse(config);
+  if (!validation.success) {
+    throw new Error("Config was not changed. Resolve these issues (including section placements for new links):\n" +
+      validation.error.issues.map((issue) => `  ${issue.path.join(".")}: ${issue.message}`).join("\n"));
+  }
+  if (theme !== "preset" && !THEMES.includes(theme)) throw new Error(`Unknown theme "${theme}". Config was not changed.`);
 
   const header =
     "# yaml-language-server: $schema=./libcard.schema.json\n" +

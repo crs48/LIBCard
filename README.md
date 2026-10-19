@@ -23,6 +23,7 @@ LibCard is a tiny [Astro](https://astro.build) static site you host on **GitHub 
 - **QR business card** — built-in QR codes for conferences: one points to your page, another saves your contact offline.
 - **Rotate to flash a card** — turn your phone sideways and the page flips into a pretty, physical-looking business card beside a QR code; rotate back for the full page. Pure CSS, no JavaScript.
 - **Themes you can cycle** — a gallery of built-in themes plus an optional live switcher, so visitors can try your card in each look. Add your own with a pull request.
+- **Two layouts, one config** — keep the compact Classic card or choose an Editorial personal home with project previews, writing, and grouped links.
 - **Yours to own** — no third-party platform between you and your audience; you control the content and the domain.
 - **Fast & private** — zero client-side JavaScript by default; nothing to track you.
 
@@ -217,6 +218,69 @@ The full field list for every block type lives in
 [`libcard.schema.json`](./libcard.schema.json) (so your editor autocompletes
 them), and there's a worked example in
 [`docs/explorations/0006_*_RICH_CONTENT_BLOCKS_AND_ZERO_JS_EMBEDS.md`](./docs/explorations/).
+
+### Designs, layouts, and rich links
+
+Choose a complete built-in design with `design: personal-home` (Editorial with
+Monochrome) or `design: classic` (the original card with the default appearance).
+Omitting both `design` and `layout` retains Classic. Explicit `layout:` and
+`theme:` override a design's defaults; remove an existing `theme:` setting to use
+the design's appearance. The visitor theme switcher changes appearance only.
+
+```yaml
+design: personal-home
+profile:
+  name: Your name
+  intro: I make useful things and follow my curiosity.
+profileActions: [email, save-contact, show-card]
+links:
+  - id: my-project
+    label: My project
+    url: https://example.com
+    description: A short explanation of what it does.
+    iconImage: /project-icon.svg
+    image:
+      src: /project-preview.webp
+      alt: My project's workspace
+      width: 1200
+      height: 750
+sections:
+  - type: links
+    id: work
+    title: Selected work
+    purpose: work
+    items: [my-project]
+  - type: blocks # Place your existing root blocks here, if any.
+```
+
+Add these fields to your config; keep its existing contact and site settings.
+Images are optional. Local paths refer to files in `public/` and respect
+`site.base`; remote HTTP(S) media is explicit and disclosed. `iconImage` takes
+precedence over the existing `icon`. Image dimensions reserve space while loading.
+Email actions require `contact.email`; the other actions use LibCard's existing
+download and card routes.
+
+Sections reference canonical link IDs. Each link must appear exactly once, and
+IDs must be unique. A group can have `collapsed: true` to create a native archive
+disclosure. The optional purpose is `work`, `services`, `writing`, `experiments`,
+or `general`; titles and destinations remain yours. Existing block types can also
+appear directly in sections. If root `blocks` contains content, place it exactly
+once with `type: blocks`—this preserves compatibility with Feedme's about importer.
+Without sections, links and blocks retain their original order.
+
+Mix a layout with any installed appearance using `layout: editorial` and
+`theme: frost`. Optional controls are:
+
+```yaml
+layoutOptions:
+  editorial:
+    density: compact # compact | comfortable
+    mediaTone: grayscale # grayscale | original
+```
+
+The same rich config works with `layout: classic`. These two built-ins establish
+the portable content model; custom renderer packages and their installer remain
+future work. Themes continue to be shareable data-only YAML files.
 
 ### Themes
 
@@ -483,6 +547,10 @@ LIBCARD_CONFIG=src/lib/fixtures/feedme/enabled.config.yaml pnpm build
 - The **vCard** (`/contact.vcf`) and **QR codes** (page-URL QR + offline vCard-QR) are generated at build time — zero client JavaScript.
 
 ## Updating your card
+
+For designs, layouts, rich link metadata, or sections, update the engine before
+adding the new fields. Existing configs keep Classic unless they explicitly opt
+in. Updates preserve your chosen design and content in `libcard.config.yaml`.
 
 Your card keeps working forever with zero upkeep — **updating is optional**, just
 a way to pick up new themes, features, and fixes from upstream. The only files

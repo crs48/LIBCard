@@ -1,61 +1,29 @@
 ---
 import { getConfig, getFeedme, type LibcardLink } from "../lib/config";
 import Icon from "./Icon.astro";
-import { parseRepo, formatStars, shieldsStarsUrl, fetchStarCount } from "../lib/github";
-import { resolveStatus } from "../lib/status";
-import { tipActionFor } from "../lib/feedme";
-
-interface Props {
-  link: LibcardLink;
-}
-
+import { resolveLink } from "../lib/link-model";
+import { withBase } from "../lib/site";
+interface Props { link: LibcardLink; }
 const { link } = Astro.props;
-const external = /^https?:\/\//i.test(link.url);
-// Optional "what state is this in?" chip (zero JS): the link's `status:` slug,
-// with the owner's `statuses:` rephrasing applied. null → no chip, no markup.
-const status = resolveStatus(link.status, (await getConfig()).statuses);
-const rel = external ? "noopener noreferrer" : undefined;
-const target = external ? "_blank" : undefined;
+const { external, status, rel, target, companion, repo, count, pillHref, badgeSrc, pillLabel, tip, tipTitle } =
+  await resolveLink(link, (await getConfig()).statuses, await getFeedme());
+const asset = (src: string) => /^https?:\/\//i.test(src) ? src : withBase(import.meta.env.BASE_URL, src);
 
-// Two flavours of sub-pill, rendered to the right of the main button:
-//   • companion — `github:` names a repo that backs this link (a live site and
-//     its source). Shows the GitHub mark + the star count (no ★ glyph — the
-//     mark already says where the number comes from); always on when set.
-//   • star      — the link's own `url` IS the repo and the owner opted in via
-//     `star: true` / a `stars` mode. Shows "★ <count>" and opens the repo.
-const companion = link.github ? parseRepo(link.github) : null;
-const repo = companion ?? (link.star || link.stars !== "off" ? parseRepo(link.url) : null);
-const pillHref = companion ? link.github! : link.url;
-
-// Bake the live count into the page at build time (fails soft to no count).
-let count: string | null = null;
-if (repo && link.stars === "build") {
-  const n = await fetchStarCount(repo);
-  if (n !== null) count = formatStars(n);
-}
-const badgeSrc = repo && link.stars === "badge" ? shieldsStarsUrl(repo) : null;
-const pillLabel = repo
-  ? companion
-    ? `${repo.owner}/${repo.repo} on GitHub${count ? ` (${count} ${count === "1" ? "star" : "stars"})` : ""}`
-    : `Star ${repo.owner}/${repo.repo} on GitHub`
-  : undefined;
-
-// Optional Feedme "More of this" action (see lib/feedme.ts). null unless the
-// owner enabled the integration AND this link carries its own `feedme:` opt-in
-// (and, when the endpoint answered, the target is live). It's a separate anchor
-// beside the destination — visiting the link never selects a tip.
-const tip = tipActionFor(await getFeedme(), "link", link, link.label);
-const tipTitle = tip ? [tip.blurb, tip.signal].filter(Boolean).join(" · ") || "Tip via Feedme" : undefined;
 ---
-<div class="flex w-full items-stretch gap-2">
+<div class="flex w-full items-stretch gap-2" data-link-id={link.id}>
   <a
     href={link.url}
     target={target}
     rel={rel}
     class="group relative flex min-w-0 flex-1 items-center gap-3 rounded-card bg-surface border border-border px-4 py-3.5 text-fg font-medium shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
   >
-    {link.icon && <Icon name={link.icon} class="size-5 shrink-0 text-muted group-hover:text-accent transition-colors" />}
-    <span class="min-w-0 flex-1 truncate text-center">{link.label}</span>
+    {link.iconImage && <img src={asset(link.iconImage)} alt="" width="24" height="24" class="size-6 shrink-0 object-contain" loading="lazy" />}
+    {!link.iconImage && link.icon && <Icon name={link.icon} class="size-5 shrink-0 text-muted group-hover:text-accent transition-colors" />}
+    <span class:list={["min-w-0 flex-1 text-center", !link.description && !link.image && "truncate"]}>
+      <span>{link.label}</span>
+      {link.description && <span class="mt-1 block text-sm font-normal leading-relaxed text-muted">{link.description}</span>}
+      {link.image && <img src={asset(link.image.src)} alt={link.image.alt} width={link.image.width} height={link.image.height} loading="lazy" decoding="async" class="mt-3 max-h-48 w-full rounded-card object-cover" />}
+    </span>
     {/* Status badge: text + dot, perched on the button's top-right corner like
         a notification badge (absolutely positioned, so the label keeps all its
         room). `bg-surface` masks the border it straddles; it rides along with

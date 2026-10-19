@@ -1,5 +1,8 @@
 # LibCard themes
 
+
+Themes remain data-only appearances. Layouts are selected separately in the card config. The optional `tokens.displayFont` chooses the display typeface (for example, Editorial’s introduction); when omitted it uses `tokens.font`.
+
 This folder **is** the theme gallery. Every theme is a single, validated
 `*.yaml` file describing a set of design tokens — **no CSS, no JavaScript**. The
 build turns each file into a scoped `[data-theme]` CSS block and a registry entry
@@ -24,6 +27,7 @@ Browse them live on the `/themes` page.
 | **Midnight** (`midnight`) | dark | [@crs48](https://github.com/crs48) | MIT | ✅ |
 | **Mist** (`mist`) | light | [@crs48](https://github.com/crs48) | MIT | ✅ |
 | **Mono** (`mono`) | light | [@crs48](https://github.com/crs48) | MIT | ✅ |
+| **Monochrome** (`monochrome`) | light | [@crs48](https://github.com/crs48) | MIT | ✅ |
 | **Ocean** (`ocean`) | dark | [@crs48](https://github.com/crs48) | MIT | ✅ |
 | **Paper** (`paper`) | light | [@crs48](https://github.com/crs48) | MIT | ✅ |
 | **Sunset** (`sunset`) | dark | [@crs48](https://github.com/crs48) | MIT | ✅ |

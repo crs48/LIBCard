@@ -46,6 +46,26 @@ top-level field, so adding it alone will not display a button. Omitted or
 
 ## 2. What's yours vs. the engine
 
+### Opting into the personal-home layout
+
+Update the engine first, then set `design: personal-home`. An explicit `theme:`
+or `layout:` remains an override; remove it if you want the complete preset.
+Omitting the new fields keeps Classic. Rich link descriptions, icons, preview
+images, and sections work in both layouts. See the
+[configuration examples](../README.md#designs-layouts-and-rich-links).
+
+Sections must place every canonical link ID exactly once. Keep existing root
+blocks using a `type: blocks` section, or move the blocks into the section list.
+The explicit placement preserves Feedme's existing root-block about import.
+Custom layout packages are not yet supported; do not put owner-authored layouts
+in `src/`, which the updater replaces.
+
+The setup wizard preserves existing sections, blocks, integrations, and profile
+extensions. It validates the result before writing; adding links to a sectioned
+card requires adding their section placements in YAML.
+
+### Ownership
+
 This is the one idea the whole page rests on. Your repo is a thin layer of
 **your content** sitting on top of an interchangeable **engine**. Updating means
 *replace the engine, keep your content*.

@@ -88,7 +88,7 @@
    we don't touch border-color and never fight a `hover:border-*` utility.
    `.lc-solid` opts an element out (the avatar fill, physical business card,
    primary tip button, and opaque theme-tinted corner button). */
-.bg-surface:not(.lc-solid) {
+:where([data-layout="classic"], .lc-standard-block) .bg-surface:not(.lc-solid) {
   background-color: color-mix(in oklab, var(--lc-surface) var(--lc-glass-pct, 100%), transparent);
 }
 /* Accent CTAs (Save contact, form submits) frost too: in a glass theme they
@@ -97,15 +97,15 @@
    vars default to the solid accent fill + accent-contrast text, so a non-glass
    theme is byte-identical. (SaveContact carries a transparent border so the ring
    has somewhere to land without shifting layout — border-box, no size change.) */
-.bg-accent:not(.lc-solid) {
+:where([data-layout="classic"], .lc-standard-block) .bg-accent:not(.lc-solid) {
   background-color: var(--lc-cta-bg, var(--lc-accent));
   color: var(--lc-cta-fg, var(--lc-accent-contrast));
   border-color: var(--lc-cta-border, transparent);
 }
 /* Respect transparency preferences without depending on backdrop-filter support. */
 @media (prefers-reduced-transparency: reduce) {
-  .bg-surface:not(.lc-solid),
-  .bg-accent:not(.lc-solid) {
+  :where([data-layout="classic"], .lc-standard-block) .bg-surface:not(.lc-solid),
+  :where([data-layout="classic"], .lc-standard-block) .bg-accent:not(.lc-solid) {
     --lc-glass-pct: 100%;
     --lc-cta-bg: var(--lc-accent);
     --lc-cta-fg: var(--lc-accent-contrast);
@@ -113,8 +113,8 @@
   }
 }
 @media (forced-colors: active) {
-  .bg-surface:not(.lc-solid),
-  .bg-accent:not(.lc-solid) {
+  :where([data-layout="classic"], .lc-standard-block) .bg-surface:not(.lc-solid),
+  :where([data-layout="classic"], .lc-standard-block) .bg-accent:not(.lc-solid) {
     --lc-glass-pct: 100%;
     --lc-cta-bg: var(--lc-accent);
     --lc-cta-fg: var(--lc-accent-contrast);

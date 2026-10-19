@@ -12,6 +12,7 @@
   --lc-accent-contrast: #ffffff;
   --lc-border: #e2e8f0;
   --lc-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --lc-display-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --lc-radius: 1rem;
 }
 
@@ -25,6 +26,7 @@
   --lc-accent-contrast: #ffffff;
   --lc-border: #ffffff;
   --lc-font: ui-rounded, "SF Pro Rounded", "Hiragino Maru Gothic ProN", system-ui, sans-serif;
+  --lc-display-font: ui-rounded, "SF Pro Rounded", "Hiragino Maru Gothic ProN", system-ui, sans-serif;
   --lc-radius: 1.25rem;
   --lc-mesh-1: #ffe1d0;
   --lc-mesh-2: #ffe9c9;
@@ -47,6 +49,7 @@
   --lc-accent-contrast: #0c1024;
   --lc-border: #2a3358;
   --lc-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --lc-display-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --lc-radius: 1.25rem;
   --lc-mesh-1: #3b2a6b;
   --lc-mesh-2: #1f4b6b;
@@ -69,6 +72,7 @@
   --lc-accent-contrast: #ffffff;
   --lc-border: #ffffff;
   --lc-font: ui-rounded, "SF Pro Rounded", "Hiragino Maru Gothic ProN", system-ui, sans-serif;
+  --lc-display-font: ui-rounded, "SF Pro Rounded", "Hiragino Maru Gothic ProN", system-ui, sans-serif;
   --lc-radius: 1.25rem;
   --lc-mesh-1: #e3ddf7;
   --lc-mesh-2: #dcf2e8;
@@ -91,6 +95,7 @@
   --lc-accent-contrast: #ffffff;
   --lc-border: #24304a;
   --lc-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --lc-display-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --lc-radius: 1rem;
 }
 
@@ -104,6 +109,7 @@
   --lc-accent-contrast: #ffffff;
   --lc-border: #ffffff;
   --lc-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --lc-display-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --lc-radius: 1rem;
   --lc-mesh-1: #e6ebf2;
   --lc-mesh-2: #e9eef0;
@@ -126,7 +132,22 @@
   --lc-accent-contrast: #ffffff;
   --lc-border: #111111;
   --lc-font: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+  --lc-display-font: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
   --lc-radius: 0.25rem;
+}
+
+[data-theme="monochrome"] {
+  color-scheme: light;
+  --lc-bg: #ffffff;
+  --lc-surface: #f5f5f5;
+  --lc-fg: #191919;
+  --lc-muted: #686868;
+  --lc-accent: #191919;
+  --lc-accent-contrast: #ffffff;
+  --lc-border: #dedede;
+  --lc-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --lc-display-font: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+  --lc-radius: 0.5rem;
 }
 
 [data-theme="ocean"] {
@@ -139,6 +160,7 @@
   --lc-accent-contrast: #04181f;
   --lc-border: #163243;
   --lc-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --lc-display-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --lc-radius: 1rem;
 }
 
@@ -152,6 +174,7 @@
   --lc-accent-contrast: #fffdf8;
   --lc-border: #e7ddcb;
   --lc-font: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+  --lc-display-font: ui-serif, Georgia, Cambria, "Times New Roman", serif;
   --lc-radius: 0.5rem;
 }
 
@@ -165,6 +188,7 @@
   --lc-accent-contrast: #2a1015;
   --lc-border: #43242f;
   --lc-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --lc-display-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --lc-radius: 1.25rem;
 }
 
@@ -178,5 +202,6 @@
   --lc-accent-contrast: #03130a;
   --lc-border: #1c2b1c;
   --lc-font: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+  --lc-display-font: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
   --lc-radius: 0.125rem;
 }

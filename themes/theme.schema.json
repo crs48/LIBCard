@@ -95,6 +95,15 @@
               ],
               "default": "sans"
             },
+            "displayFont": {
+              "type": "string",
+              "enum": [
+                "sans",
+                "serif",
+                "mono",
+                "rounded"
+              ]
+            },
             "radius": {
               "type": "string",
               "pattern": "^\\d*\\.?\\d+(px|rem|em)$",

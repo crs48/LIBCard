@@ -1,0 +1,35 @@
+---
+import { getConfig, getFeedme, type LibcardLink } from "../lib/config";
+import { resolveLink } from "../lib/link-model";
+import { withBase } from "../lib/site";
+import Icon from "./Icon.astro";
+interface Props { link: LibcardLink; }
+const { link } = Astro.props;
+const model = await resolveLink(link, (await getConfig()).statuses, await getFeedme());
+const asset = (src: string) => /^https?:\/\//i.test(src) ? src : withBase(import.meta.env.BASE_URL, src);
+---
+<article class:list={["lc-editorial-link", !!link.image && "has-image"]} data-link-id={link.id}>
+  <a class="lc-destination" href={link.url} target={model.target} rel={model.rel}>
+    {link.image && <div class="lc-image-frame"><img class="lc-link-image" src={asset(link.image.src)} alt={link.image.alt} width={link.image.width} height={link.image.height} loading="lazy" decoding="async" /></div>}
+    <div class="lc-link-copy">
+      <div class="lc-link-heading">
+        <span class="lc-mark" aria-hidden="true">
+          {link.iconImage ? <img src={asset(link.iconImage)} alt="" width="24" height="24" loading="lazy" /> : <Icon name={link.icon ?? "arrow-up-right"} class="size-5" />}
+        </span>
+        <h3>{link.label}</h3>
+        {model.external && <span class="lc-outbound" aria-hidden="true">↗</span>}
+      </div>
+      {link.description && <p class="lc-link-description">{link.description}</p>}
+    </div>
+  </a>
+  {(model.status || model.repo || model.tip) && <div class="lc-link-meta">
+    {model.status && <span class="lc-editorial-status"><span class="sr-only">Status: </span>{model.status.label}</span>}
+    {model.repo && <a href={model.pillHref} target="_blank" rel="noopener noreferrer" aria-label={model.pillLabel}>
+      <Icon name={model.companion ? "github" : "star"} class="size-3.5" />
+      {model.companion ? "Source" : "Star"}{model.count && <span> · {model.count}</span>}
+      {model.badgeSrc && <img src={model.badgeSrc} alt="GitHub stars" height="18" loading="lazy" />}
+    </a>}
+    {model.tip && <a href={model.tip.href} target="_blank" rel="noopener noreferrer" aria-label={model.tip.ariaLabel} title={model.tipTitle} data-feedme-target={link.feedme?.id}><Icon name="heart" class="size-3.5" />More of this</a>}
+  </div>}
+  {model.tip && (model.tip.blurb || model.tip.signal) && <p class="lc-tip-caption text-xs text-muted">{[model.tip.blurb, model.tip.signal].filter(Boolean).join(" · ")}</p>}
+</article>

@@ -3,6 +3,9 @@ import { getConfig, getFeedme } from "../lib/config";
 import { withBase } from "../lib/site";
 import Icon from "./Icon.astro";
 import { checkoutUrl, creatorTarget, formatSignal } from "../lib/feedme";
+import { renderMarkdown } from "../lib/markdown";
+interface Props { editorial?: boolean; }
+const { editorial = false } = Astro.props;
 
 const config = await getConfig();
 const { profile } = config;
@@ -26,7 +29,7 @@ const avatar = profile.avatar
     : withBase(base, profile.avatar)
   : withBase(base, "/avatar.svg");
 ---
-<header class="flex flex-col items-center text-center gap-3">
+<header class:list={["flex flex-col items-center text-center gap-3", editorial && "lc-editorial-profile"]}>
   <img
     src={avatar}
     alt={`${profile.name}'s avatar`}
@@ -46,6 +49,7 @@ const avatar = profile.avatar
       </p>
     )
   }
+  {profile.intro && <div class="lc-intro lc-prose" set:html={renderMarkdown(profile.intro)} />}
   {
     giveHref && (
       <div class="lc-give mt-1 flex flex-col items-center gap-1.5">

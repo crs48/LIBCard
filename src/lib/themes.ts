@@ -13,6 +13,7 @@ export interface ThemeTokens {
   accentContrast: string;
   border: string;
   font: "sans" | "serif" | "mono" | "rounded";
+  displayFont?: "sans" | "serif" | "mono" | "rounded";
   radius: string;
 }
 

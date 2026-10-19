@@ -1,0 +1,30 @@
+---
+import type { PageSection } from "../lib/page";
+import Block from "./Block.astro";
+import LinkGroup from "./LinkGroup.astro";
+interface Props { section: PageSection; layout: "classic" | "editorial"; index: number; }
+const { section, layout, index } = Astro.props;
+---
+{section.type === "links" ? <section class="lc-content-section w-full" id={`lc-section-${section.id}`} data-purpose={section.purpose} aria-labelledby={section.title ? `lc-title-${section.id}` : undefined}>
+  {section.collapsed ? <details class="lc-section-disclosure">
+    <summary><h2 id={`lc-title-${section.id}`}>{section.title}</h2><span class="lc-section-count">{section.links.length}</span><span class="lc-disclosure-arrow" aria-hidden="true">↓</span></summary>
+    <LinkGroup section={section} layout={layout} />
+  </details> : <>
+    {section.title && <div class="lc-section-heading">
+      {layout === "editorial" && <span class="lc-section-index" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>}
+      <h2 id={`lc-title-${section.id}`}>{section.title}</h2>
+    </div>}
+    <LinkGroup section={section} layout={layout} />
+  </>}
+</section> : <div class="lc-standard-block w-full"><Block block={section} /></div>}
+<style>
+  .lc-section-heading { display:flex; align-items:baseline; gap:.75rem; margin-bottom:1rem; }
+  h2 { font-size:.875rem; font-weight:600; }
+  .lc-section-index, .lc-section-count { color:var(--lc-muted); font-size:.6875rem; font-variant-numeric:tabular-nums; }
+  summary { display:flex; align-items:center; gap:.75rem; min-height:44px; cursor:pointer; list-style:none; }
+  summary::-webkit-details-marker { display:none; }
+  summary:focus-visible { outline:2px solid var(--lc-accent); outline-offset:4px; }
+  .lc-disclosure-arrow { margin-left:auto; }
+  details[open] .lc-disclosure-arrow { transform:rotate(180deg); }
+  details[open] summary { margin-bottom:1rem; }
+</style>

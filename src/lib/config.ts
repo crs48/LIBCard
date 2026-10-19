@@ -1,6 +1,8 @@
 import { getEntry } from "astro:content";
 import { resolveTheme, effectsForSlugs, type ResolvedTheme } from "./themes";
 import { loadFeedme, type FeedmeState } from "./feedme";
+import { resolvePresentation } from "./presentation";
+import { blockEntries } from "./content.mjs";
 
 /**
  * Typed accessor for the validated LibCard config. Call this from any `.astro`
@@ -16,7 +18,7 @@ export async function getConfig() {
       "Could not load libcard.config.yaml. Make sure the file exists at the repo root.",
     );
   }
-  return entry.data;
+  return { ...entry.data, ...resolvePresentation(entry.data) };
 }
 
 /**
@@ -94,5 +96,9 @@ export type BlockOf<T extends LibcardBlock["type"]> = Extract<LibcardBlock, { ty
  *  no third-party request at runtime. */
 const LIVE_EMBED_TYPES = new Set(["video", "embed", "booking", "map"]);
 export function hasLiveEmbeds(cfg: LibcardConfig): boolean {
-  return cfg.blocks.some((b) => LIVE_EMBED_TYPES.has(b.type));
+  return blockEntries(cfg).some(({ block }) => LIVE_EMBED_TYPES.has(block.type));
+}
+
+export function hasRemoteMedia(cfg: LibcardConfig): boolean {
+  return cfg.links.some((link) => [link.iconImage, link.image?.src].some((src) => src && /^https?:\/\//i.test(src)));
 }

@@ -72,6 +72,15 @@ branch workflow instead of assuming every repo deploys from `main`.
 
 ### 2. Make it personal
 
+Offer the compact Classic card or the Editorial personal home. Use
+`design: personal-home` for the monochrome editorial preset; `layout:` and
+`theme:` are optional explicit overrides. Omitted settings keep Classic.
+For a richer page, add optional link descriptions, local icons/screenshots,
+`profile.intro`, and `profileActions`. Group canonical link IDs into ordered
+sections; preserve every destination, and place existing blocks with an explicit
+`type: blocks` section. Do not invent project images, offers, or personal claims.
+Follow the [current config examples](../README.md#designs-layouts-and-rich-links).
+
 Start with a small group of questions, skipping anything already answered:
 
 - What name, short bio, and links should visitors see? Which link comes first?

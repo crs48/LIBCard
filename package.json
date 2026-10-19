@@ -24,7 +24,7 @@
     "update": "node scripts/update.mjs",
     "update-themes": "node scripts/update-themes.mjs",
     "typecheck": "astro check",
-    "test": "vitest run"
+    "test": "vitest run --dir src"
   },
   "dependencies": {
     "astro": "^5.13.0",

@@ -32,6 +32,7 @@ export const TOKEN_CONTRACT = [
   { key: "accentContrast", cssVar: "--lc-accent-contrast", kind: "color", doc: "Text/icon on top of accent" },
   { key: "border", cssVar: "--lc-border", kind: "color", doc: "Hairlines, card borders, dividers" },
   { key: "font", cssVar: "--lc-font", kind: "font", doc: "Font family (one of the allowlisted stacks)" },
+  { key: "displayFont", cssVar: "--lc-display-font", kind: "font", doc: "Display typeface (defaults to font)" },
   { key: "radius", cssVar: "--lc-radius", kind: "radius", doc: "Corner radius for cards & buttons" },
 ];
 
@@ -153,6 +154,7 @@ export const tokensSchema = z
     accentContrast: color,
     border: color,
     font: z.enum(["sans", "serif", "mono", "rounded"]).default("sans"),
+    displayFont: z.enum(["sans", "serif", "mono", "rounded"]).optional(),
     radius: z.string().regex(LENGTH, 'must be a CSS length like "1rem" or "8px"').default("1rem"),
   })
   .strict();
@@ -257,7 +259,7 @@ export function toRegistryEntry(theme) {
  */
 export function themeToCss(theme) {
   const decls = TOKEN_CONTRACT.map(({ key, cssVar, kind }) => {
-    const value = theme.tokens[key];
+    const value = key === "displayFont" ? theme.tokens.displayFont ?? theme.tokens.font : theme.tokens[key];
     const css = kind === "font" ? FONT_STACKS[value] : value;
     return `  ${cssVar}: ${css};`;
   });

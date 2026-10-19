@@ -6,6 +6,8 @@ Use my connected GitHub repository if it is suitable. Inspect it before changing
 
 Guide me conversationally. Start with a few short questions about my name, bio, links, and the look I want. Reuse details I have already provided, suggest sensible defaults, and let me refine the result after seeing a preview. Only include contact details I want made public.
 
+Offer the compact Classic card or the richer Personal home design. Use the shared config for descriptions, project icons and screenshots, writing, services, and experiment sections. Preserve my destinations and integration choices when changing layouts; use actual assets and copy I provide or approve.
+
 Set up the site, customize libcard.config.yaml, and replace the demo owner's content and services with mine. Use pnpm, configure the correct GitHub Pages URL and base path, and check the build and mobile layout. Show me the result, then help publish it to my repository when I am ready. Use any publishing authorization I have already given; otherwise ask after the preview is ready. If GitHub access or hosting settings need my input, explain the exact next step and keep working on what you can.
 
 Finish with my live URL, what you verified, and how I can update my content later. Please start by inspecting this workspace and asking for the details you still need.

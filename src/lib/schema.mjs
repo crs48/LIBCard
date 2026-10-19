@@ -6,6 +6,7 @@
 // that powers editor autocomplete). One schema, two consumers, zero drift.
 import { readFileSync } from "node:fs";
 import { z } from "zod";
+import { blockEntries, validateSections } from "./content.mjs";
 
 /**
  * Available theme slugs, read from the generated registry (src/data/themes.json,
@@ -42,7 +43,7 @@ const themeConfigSchema = z
       })
       .strict(),
   ])
-  .default("default");
+  .optional();
 
 /** Allow a valid value, or an empty string (so users can leave fields blank). */
 const optionalEmail = z.union([z.string().email(), z.literal("")]).optional();
@@ -242,11 +243,11 @@ function validateFeedmeOptIns(doc, ctx) {
   }
   // A `tip-buttons` block can only point at Feedme when the integration is on;
   // a silent no-op would hide the owner's intended primary button.
-  (doc.blocks ?? []).forEach((block, i) => {
+  blockEntries(doc).forEach(({ block, path }) => {
     if (block?.type === "tip-buttons" && block.feedme && !doc.feedme?.enabled) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        path: ["blocks", i, "feedme"],
+        path: [...path, "feedme"],
         message:
           "tip-buttons `feedme: true` needs the top-level `feedme:` block with `enabled: true` and your Feedme origin (see docs/FEEDME.md).",
       });
@@ -254,9 +255,25 @@ function validateFeedmeOptIns(doc, ctx) {
   });
 }
 
+const contentId = z.string().regex(/^[a-z0-9][a-z0-9-]{0,63}$/, "Use a lowercase slug (up to 64 characters).");
+const mediaSource = z.string().min(1).refine(
+  (value) => /^https?:\/\//i.test(value) ? (() => { try { return !!new URL(value).hostname; } catch { return false; } })()
+    : /^\/(?!\/)/.test(value) && !/[\\\\\s]/.test(value) && !value.split("/").includes(".."),
+  "Use a /public-file path or an absolute http(s) URL.",
+);
+
 const linkSchema = z
   .object({
     label: z.string().min(1),
+    id: contentId.optional(),
+    description: z.string().min(1).optional(),
+    iconImage: mediaSource.optional(),
+    image: z.object({
+      src: mediaSource,
+      alt: z.string().min(1),
+      width: z.number().int().positive(),
+      height: z.number().int().positive(),
+    }).strict().optional(),
     url: z.string().url(),
     icon: z.string().optional(),
     // What state the project/page behind this link is in. Renders a tiny badge
@@ -614,6 +631,7 @@ export const libcardSchema = z.object({
       tagline: z.string().optional(),
       avatar: z.string().optional(),
       location: z.string().optional(),
+      intro: z.string().min(1).optional(),
     })
     .strict(),
   contact: z
@@ -641,7 +659,28 @@ export const libcardSchema = z.object({
     .strict()
     .default({}),
   blocks: z.array(blockSchema).default([]),
+  sections: z.array(z.union([
+    z.object({ type: z.literal("blocks") }).strict(),
+    z.object({
+      type: z.literal("links"),
+      id: contentId,
+      title: z.string().min(1),
+      purpose: z.enum(["work", "services", "writing", "experiments", "general"]).default("general"),
+      items: z.array(contentId).min(1),
+      collapsed: z.boolean().default(false),
+    }).strict(),
+    blockSchema,
+  ])).optional(),
+  profileActions: z.array(z.enum(["email", "save-contact", "show-card"])).default([]),
   socials: z.array(socialSchema).default([]),
+  design: z.enum(["classic", "personal-home"]).optional(),
+  layout: z.enum(["classic", "editorial"]).optional(),
+  layoutOptions: z.object({
+    editorial: z.object({
+      density: z.enum(["compact", "comfortable"]).optional(),
+      mediaTone: z.enum(["original", "grayscale"]).optional(),
+    }).strict().optional(),
+  }).strict().optional(),
   theme: themeConfigSchema,
   cornerButton: cornerButtonSchema,
   footer: z
@@ -686,6 +725,7 @@ export const libcardSchema = z.object({
   // Cross-field rules (unique feedme ids, opt-in cap, tip-buttons → Feedme
   // needs the integration on). Runs only once every field above has parsed,
   // so it always sees fully-shaped data.
-  .superRefine(validateFeedmeOptIns);
+  .superRefine(validateFeedmeOptIns)
+  .superRefine(validateSections);
 // NOTE: the top-level object is intentionally NOT `.strict()` — Astro's content
 // loader injects an `id` field, and nested objects already catch field typos.

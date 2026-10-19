@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=./theme.schema.json
+name: Monochrome
+author: "@crs48"
+authorUrl: https://github.com/crs48
+license: MIT
+official: true
+mode: light
+tags: [light, minimal, editorial]
+description: Black ink, quiet rules, and a serif introduction.
+tokens:
+  bg: "#ffffff"
+  surface: "#f5f5f5"
+  fg: "#191919"
+  muted: "#686868"
+  accent: "#191919"
+  accentContrast: "#ffffff"
+  border: "#dedede"
+  font: sans
+  displayFont: serif
+  radius: 0.5rem
