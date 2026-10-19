@@ -9,6 +9,9 @@ often to `libcard.config.yaml`); everything else is picked up automatically by
 
 ## Unreleased
 
+- **Optional design gallery link.** Set `footer.designGallery: true` to show
+  “Try different designs” at the bottom of your card.
+
 - **Personal home on phones.** Larger touch targets and more readable text,
   stacked writing cards, full-width coaching copy below the square portrait,
   and contact actions that reflow on narrow screens. Safe-area spacing keeps

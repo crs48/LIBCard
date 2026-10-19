@@ -343,6 +343,8 @@ layoutOptions:
 
 The same rich config works with `layout: classic` or an installed custom layout.
 Browse `/designs` for complete designs and `/themes` for appearances.
+Set `footer.designGallery: true` to add a “Try different designs” link at the
+bottom of your card. It is hidden by default.
 
 ```sh
 pnpm run design:new -- your-name/notebook

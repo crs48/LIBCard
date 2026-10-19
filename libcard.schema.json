@@ -3162,6 +3162,10 @@
               "type": "boolean",
               "default": true
             },
+            "designGallery": {
+              "type": "boolean",
+              "default": false
+            },
             "designCredit": {
               "type": "boolean",
               "default": true
