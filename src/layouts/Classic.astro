@@ -1,4 +1,5 @@
 ---
+import "../styles/classic.css";
 import Profile from "../components/Profile.astro";
 import ProfileActions from "../components/ProfileActions.astro";
 import HeaderControls from "../components/HeaderControls.astro";
@@ -12,16 +13,18 @@ type Props = LayoutProps;
 const { page } = Astro.props;
 const blocks = page.sections.filter((section) => section.type !== "links");
 ---
-<div class="mx-auto flex min-h-dvh w-full max-w-md flex-col items-center px-4 py-12 sm:py-14">
-  <main id="main-content" class="flex w-full flex-1 flex-col items-center gap-6">
-    <FirstRunNudge />
-    <HeaderControls action={page.headerAction} />
-    <Profile profile={page.profile} compact />
-    <ProfileActions actions={page.actions} />
-    <SocialRow socials={page.socials} />
+<div class="lc-classic mx-auto flex min-h-dvh w-full max-w-md flex-col items-center px-4">
+  <main id="main-content" class="flex w-full flex-1 flex-col items-center">
+    {page.firstRun && <div class="lc-classic-nudge w-full"><FirstRunNudge /></div>}
+    <div class="lc-classic-tools"><HeaderControls action={page.headerAction} /></div>
+    <div class="lc-classic-profile"><Profile profile={page.profile} compact /></div>
+    {(page.socials.length > 0 || page.actions.length > 0) && <div class="lc-classic-connect">
+      <SocialRow socials={page.socials} />
+      <ProfileActions actions={page.actions} />
+    </div>}
     {page.legacy ? <>
       {page.sections.filter((section) => section.type === "links").map((section) => <Section section={section} layout="classic" index={0} />)}
-      {blocks.length > 0 && <div class="flex w-full flex-col gap-4">{blocks.map((block) => <Block block={block} />)}</div>}
+      {blocks.length > 0 && <div class="lc-classic-blocks flex w-full flex-col gap-4">{blocks.map((block) => <Block block={block} />)}</div>}
     </> : page.sections.map((section, index) => <Section section={section} layout="classic" index={index} />)}
     <CardReveal url={page.card.url} />
   </main>

@@ -25,7 +25,9 @@ design: personal-home
 `classic` preserves the original centered card with compact, label-only link
 buttons. It omits link images, favicons, and editorial copy, and shows the profile
 bio without a second intro when both are configured. The profile photo, social icons,
-status badges, source links, and optional tip actions remain available.
+status badges, source links, and optional tip actions remain available. Link
+titles stay centered, with source and tip controls sharing the row's outline;
+social and contact actions form one group below the profile.
 `personal-home` selects Editorial,
 Monochrome, compact spacing, and grayscale media. `studio` selects a profile
 sidebar, image-led project gallery, coaching feature, and compact writing rows,
