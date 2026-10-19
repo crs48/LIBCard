@@ -1,0 +1,17 @@
+---
+import HeaderAction from "./HeaderAction.astro";
+import ColorModeSwitcher from "./ColorModeSwitcher.astro";
+import { getActiveTheme } from "../lib/config";
+import type { PageModelV1 } from "../layout-api/model";
+interface Props { action?: PageModelV1["headerAction"]; }
+const { action } = Astro.props;
+const theme = await getActiveTheme();
+---
+{(action || theme.modeSwitcher) && <div class="lc-header-controls">
+  <HeaderAction action={action} />
+  {theme.modeSwitcher && <ColorModeSwitcher />}
+</div>}
+<style>
+  .lc-header-controls { display: flex; align-items: center; justify-content: flex-end; gap: .5rem; margin-inline-start: auto; color: var(--lc-muted); }
+  .lc-header-controls:not(:has(a, button:not([hidden]))) { display: none; }
+</style>

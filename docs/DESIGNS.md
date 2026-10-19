@@ -157,8 +157,9 @@ export boundary reviewable. Packages are limited to 501 total files and 25 MiB.
 
 Bundled appearance files use the same theme schema as built-ins, including
 optional light/dark `schemes`. Their colors work with `theme.mode` and
-`theme.modeSwitcher`; layout authors receive the selector through the existing
-utilities slot. See [theme color schemes](../themes/README.md#light-and-dark-appearances).
+`theme.modeSwitcher`. Built-in layouts place the light/dark icon toggle in the
+header; custom layout authors receive it through the existing utilities slot.
+See [theme color schemes](../themes/README.md#light-and-dark-appearances).
 
 For a data-only preset, use `layout: { use: editorial }` or `classic` and omit the
 Astro entry. Presets cannot override content. Arbitrary dependencies, nested

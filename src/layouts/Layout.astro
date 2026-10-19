@@ -2,12 +2,13 @@
 // Utility pages keep their compact layout independently of the chosen home.
 import Document from "./Document.astro";
 import PageUtilities from "../components/PageUtilities.astro";
+import HeaderControls from "../components/HeaderControls.astro";
 interface Props { title?: string; wide?: boolean; }
 const { title, wide } = Astro.props;
 ---
 <Document title={title} wide={wide}>
   <div class:list={["mx-auto flex min-h-dvh w-full flex-col items-center px-4 py-12 sm:py-14", wide ? "max-w-3xl" : "max-w-md"]}>
-    <main id="main-content" class="flex w-full flex-1 flex-col items-center gap-6"><slot /></main>
-    <PageUtilities wide={wide} />
+    <main id="main-content" class="flex w-full flex-1 flex-col items-center gap-6"><HeaderControls /><slot /></main>
+    <PageUtilities wide={wide} colorMode={false} />
   </div>
 </Document>

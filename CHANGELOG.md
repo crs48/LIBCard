@@ -13,7 +13,7 @@ often to `libcard.config.yaml`); everything else is picked up automatically by
   `schemes` with inherited tokens and appearance overrides. Monochrome includes
   a charcoal dark palette and follows the device setting by default, even
   without JavaScript. `theme.mode` fixes a mode; optional `modeSwitcher` adds a
-  persistent System / Light / Dark control. The gallery, contrast checks,
+  persistent light/dark icon toggle beside the header action. The gallery, contrast checks,
   previews, packaged appearances, and static artifacts support the new modes.
 
 - **Personal home header.** The masthead supports an optional inline

@@ -5,13 +5,13 @@ import ColorModeSwitcher from "./ColorModeSwitcher.astro";
 import BusinessCardMode from "./BusinessCardMode.astro";
 import CardWakeLock from "./CardWakeLock.astro";
 import { getActiveTheme, getCardMode } from "../lib/config";
-interface Props { wide?: boolean; }
-const { wide = false } = Astro.props;
+interface Props { wide?: boolean; colorMode?: boolean; }
+const { wide = false, colorMode = true } = Astro.props;
 const card = await getCardMode();
 const theme = await getActiveTheme();
 ---
 {(theme.switcher || theme.random) && <ThemeSwitcher />}
 <Footer />
-{theme.modeSwitcher && <ColorModeSwitcher />}
+{theme.modeSwitcher && colorMode && <ColorModeSwitcher />}
 {card.enabled && !wide && <BusinessCardMode qr={card.qr} hint={card.hint} />}
 {card.enabled && !wide && card.wakeLock && <CardWakeLock />}

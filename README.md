@@ -368,20 +368,21 @@ visitor's device setting automatically, including without JavaScript:
 theme: monochrome
 ```
 
-To let visitors choose a mode themselves, enable the compact appearance selector:
+To let visitors choose a mode themselves, enable the light/dark icon toggle:
 
 ```yaml
 theme:
   name: monochrome
   mode: system        # system (default) | light | dark
-  modeSwitcher: true  # optional System / Light / Dark control
+  modeSwitcher: true  # optional light/dark icon toggle
 ```
 
 `mode` selects an appearance within the same theme. `switcher` below changes the
-whole theme. The mode selector remembers a visitor's choice and restores it
-before paint; choosing System resumes automatic device changes. It adds a small
-script only when enabled and hides for themes with just one palette. With
-JavaScript disabled, the configured mode still works and the selector is hidden.
+whole theme. The icon toggle sits beside the header action in built-in layouts.
+It follows the configured mode until clicked, then remembers the visitor's light
+or dark choice and restores it before paint. It adds a small script only when
+enabled and hides for themes with just one palette. With JavaScript disabled,
+the configured mode still works and the toggle is hidden.
 Older themes keep their existing palette if they do not provide the requested
 mode. Photos and screenshots retain their configured colors.
 

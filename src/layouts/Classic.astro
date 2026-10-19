@@ -1,7 +1,7 @@
 ---
 import Profile from "../components/Profile.astro";
 import ProfileActions from "../components/ProfileActions.astro";
-import HeaderAction from "../components/HeaderAction.astro";
+import HeaderControls from "../components/HeaderControls.astro";
 import SocialRow from "../components/SocialRow.astro";
 import Section from "../components/Section.astro";
 import Block from "../components/Block.astro";
@@ -15,7 +15,7 @@ const blocks = page.sections.filter((section) => section.type !== "links");
 <div class="mx-auto flex min-h-dvh w-full max-w-md flex-col items-center px-4 py-12 sm:py-14">
   <main id="main-content" class="flex w-full flex-1 flex-col items-center gap-6">
     <FirstRunNudge />
-    {page.headerAction && <div class="flex w-full justify-end text-sm text-muted"><HeaderAction action={page.headerAction} /></div>}
+    <HeaderControls action={page.headerAction} />
     <Profile profile={page.profile} />
     <ProfileActions actions={page.actions} />
     <SocialRow socials={page.socials} />
