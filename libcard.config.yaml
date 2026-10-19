@@ -12,9 +12,11 @@
 # --- Who you are (the card header) ---
 profile:
   name: Christopher Smothers
-  tagline: hi 👋 i'm chris and i'm running experiments to illuminate a world that lights us all up to live in
+  tagline: hi 👋 i'm chris and i'm running experiments to illuminate a world that lights us all up to
+    live in
   avatar: /avatar.jpg # a file in /public, or a full https:// URL
   location: San Francisco, CA
+  intro: I build software, practice presence, and follow my curiosity.
 
 # --- Contact details ---
 # These power the "Save contact" button (a downloadable vCard) and the QR
@@ -66,122 +68,253 @@ links:
     url: https://crs.coach/
     icon: heart
     status: ready
+    id: coaching
+    description: Space to slow down, practice presence, and find your own way.
+    image:
+      src: /avatar.jpg
+      alt: Portrait of Chris
+      width: 695
+      height: 696
   - label: Nervous system healing (resources)
     url: https://crs48.github.io/nervous-system-healing
     icon: activity
     status: ready
+    id: nervous-system
+    description: Resources and practices for understanding your nervous system.
+    iconImage: /projects/gently.svg
   - label: LIBCard (this site)
     url: https://crs48.github.io/LIBCard
     icon: id-card
     status: ready
     github: https://github.com/crs48/LIBCard
     stars: build
+    id: libcard
+    description: A personal home on the web that you own.
+    iconImage: /favicon.svg
+    image:
+      src: /projects/libcard-preview.webp
+      alt: LibCard’s digital business card with a QR code
+      width: 1200
+      height: 555
   - label: Feed Me Fund (open-source creator tips)
     url: https://feedme.fund/
     icon: coins
     status: ready
     github: https://github.com/crs48/feedme
     stars: build
+    id: feedme
+    description: A little support for the things you want to see more of.
+    iconImage: /projects/feedme.svg
+    image:
+      src: /projects/feedme-preview.webp
+      alt: Feedme, an open-source way to support creators
+      width: 1200
+      height: 630
   - label: Digital garden
     url: https://crs.garden
     icon: leaf
     status: wip
     github: https://github.com/crs48/digitalgarden
     stars: build
+    id: digital-garden
+    description: Notes, connections, and ideas growing in public.
   - label: Rabbit holes (what I'm reading)
     url: https://curius.app/chris-smothers
     icon: book-open
     status: reading
+    id: reading
+    description: Rabbit holes worth following.
   - label: xNet
     url: https://xnet.fyi/
     icon: network
     status: wip
     github: https://github.com/crs48/xNet # show the repo + star count beside the site
     stars: build # bake the star count in at build time (zero runtime JS)
+    id: xnet
+    description: Local-first tools for a more human internet. Your data, your devices, your rules.
+    iconImage: /projects/xnet.svg
+    image:
+      src: /projects/xnet-preview.webp
+      alt: The xNet workspace with a navigation sidebar and document editor
+      width: 1200
+      height: 750
   - label: A great pirate age
     url: https://xnet.fyi/blog/a-great-pirate-age/
     icon: pirate
     status: writing
+    id: pirate-age
+    description: On the open internet and what becomes possible when the gates come down.
+    image:
+      src: /projects/pirate-age.webp
+      alt: Cover illustration for A great pirate age
+      width: 1200
+      height: 600
   - label: Timeout
     url: https://xnet.fyi/blog/timeout/
     icon: clock
     status: writing
+    id: timeout
+    description: On disconnection, coming back, and the systems we build for ourselves.
+    image:
+      src: /projects/timeout.webp
+      alt: Cover illustration for Timeout
+      width: 800
+      height: 400
   - label: Murmuration (flocking)
     url: https://crs48.github.io/murmuration
     icon: simulation
     status: experiment
     github: https://github.com/crs48/murmuration
     stars: build
+    id: murmuration
+    description: Flocking, emergence, and a little wonder.
   - label: Warp-voyage (tunnel game)
     url: https://crs48.github.io/warp-voyage
     icon: game
     status: experiment
     github: https://github.com/crs48/warp-voyage
     stars: build
+    id: warp-voyage
+    description: A little game through a very long tunnel.
+    iconImage: /projects/warp-voyage.svg
   - label: Cause (Clojure EDN CRDT)
     url: https://github.com/crs48/cause
     icon: git-merge
     status: dormant
     star: true # add a "★ Star" sub-button that opens the repo
     stars: build
+    id: cause
+    description: An experiment in Clojure, shared data, and CRDTs.
   - label: Free the Pores (simpler skin care)
     url: https://freethepores.com/
     icon: leaf
     status: exploration
     github: https://github.com/crs48/freethepores
     stars: build
+    id: free-the-pores
+    description: Exploring a simpler approach to skin care.
   - label: Dome homes
     url: https://crs48.github.io/dome
     icon: home
     status: exploration
     github: https://github.com/crs48/dome
     stars: build
+    id: dome
+    description: Exploring a different shape of home.
+    iconImage: /projects/dome.svg
   - label: Food forests
     url: https://crs48.github.io/food-forests
     icon: tree
     status: exploration
     github: https://github.com/crs48/food-forests
     stars: build
+    id: food-forests
+    description: Growing places that feed us.
+    iconImage: /projects/food-forests.svg
   - label: Floor life
     url: https://crs48.github.io/floor-life
     icon: bed
     status: exploration
     github: https://github.com/crs48/floor-life
     stars: build
+    id: floor-life
+    description: An exploration of living closer to the ground.
   - label: Dead butt (gluteal amnesia)
     url: https://deadbutt.fyi/
     icon: activity
     status: exploration
     github: https://github.com/crs48/deadbutt
     stars: build
+    id: dead-butt
+    description: An exploration of movement and gluteal amnesia.
   - label: How AI works (for luddites)
     url: https://crs48.github.io/ai-explained
     icon: cpu
     status: exploration
     github: https://github.com/crs48/ai-explained
     stars: build
+    id: ai-explained
+    description: A plain-language guide to how AI works.
   - label: Courtyard blocks
     url: https://crs48.github.io/courtyard-block-site/
     icon: building
     status: exploration
     github: https://github.com/crs48/courtyard-block-site
     stars: build
+    id: courtyard-blocks
+    description: Housing shaped around shared space.
   - label: Courtyard block game (community sim)
     url: https://crs48.github.io/courtyard-block/
     icon: game
     status: wip
     github: https://github.com/crs48/courtyard-block
     stars: build
+    id: courtyard-game
+    description: A community simulation to play with.
   - label: Wealthglobe (net worth as land)
     url: https://crs48.github.io/wealthglobe/
     icon: globe
     status: experiment
     github: https://github.com/crs48/wealthglobe
     stars: build
+    id: wealthglobe
+    description: What if net worth were measured in land?
   - label: Résumé (PDF)
     url: https://crs.land/resume.pdf # served from public/resume.pdf
     icon: file-text
     feedme: { skip: true } # Keep the résumé on LibCard, off Feedme.
+    id: resume
+    description: Experience, projects, and a little more background.
+
+# --- Reading order (references the canonical links above) ---
+sections:
+  - type: links
+    id: work
+    title: Selected work
+    purpose: work
+    items: [ xnet, libcard, feedme ]
+  - type: links
+    id: together
+    title: Work together
+    purpose: services
+    items: [ coaching, nervous-system ]
+  - type: links
+    id: writing
+    title: Writing & exploring
+    purpose: writing
+    items: [ pirate-age, timeout ]
+  - type: links
+    id: experiments
+    title: The experiment shelf
+    purpose: experiments
+    items:
+      [
+        murmuration,
+        warp-voyage,
+        wealthglobe,
+        dome,
+        food-forests,
+        courtyard-game
+      ]
+  - type: links
+    id: archive
+    title: More from the notebook
+    purpose: general
+    items:
+      [
+        digital-garden,
+        reading,
+        cause,
+        free-the-pores,
+        floor-life,
+        dead-butt,
+        ai-explained,
+        courtyard-blocks,
+        resume
+      ]
+    collapsed: true
+  - type: blocks
+
 # --- Status chip wording (optional) ---
 # Rephrase any `status:` chip without touching the code. Every key is optional;
 # anything you leave out keeps its default text (Ready, In progress, Experiment,
@@ -274,19 +407,10 @@ blocks:
   # - { type: rss, url: https://yourblog.com/feed.xml, title: Latest posts }
   # - { type: github, user: you, repo: yourrepo }
 
-# --- Look & feel ---
-# Pick ONE theme (zero JavaScript):
-#
-#   theme: midnight        # default | midnight | sunset | mono | paper | terminal
-#
-# ...or turn on the live theme switcher / random mode so visitors can see the
-# themes on the page (an optional feature that ships a little JavaScript):
-theme:
-  name: frost # fallback for crawlers and visitors without JavaScript
-  switcher: true # show the "Try a theme" button (Frost ↔ Dawn)
-  allow: [frost, dawn] # my personal site's theme rotation
-  random: true # choose between the allowed themes on each page load
-  animate: true # animate the change with a circular reveal
+# --- Design and contact shortcuts ---
+# A complete look; explicit layout/theme settings can override it.
+design: personal-home
+profileActions: [email, save-contact, show-card]
 
 # --- Persistent corner button (optional; omit or set false to hide) ---
 # Any link works here: support, booking, contact, or something else.
