@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import { themes, themeSourceUrl } from "../lib/themes";
 import { themeVariants } from "../lib/theme-schema.mjs";
 import { withBase } from "../lib/site";
+import { galleryId } from "../lib/footer";
 
 // The theme gallery. Each card is wrapped in its own `data-theme`, so the mini
 // preview renders in that theme's *actual* colors and corner radius — a live
@@ -32,11 +33,12 @@ const contribute = "https://github.com/crs48/LIBCard/tree/main/themes";
 
   <ul class="grid w-full gap-4 sm:grid-cols-2">
     {
-      themes.flatMap(themeVariants).map((t) => (
+      themes.flatMap((theme) => themeVariants(theme).map((t, index) => (
         <li
+          id={galleryId("theme", t.slug) + (index === 0 ? "" : `:${t.mode}`)}
           data-theme={t.slug}
           data-color-mode={t.mode}
-          class="overflow-hidden rounded-card border border-border bg-bg"
+          class="scroll-mt-6 overflow-hidden rounded-card border border-border bg-bg target:ring-2 target:ring-accent"
         >
           {/* Live mini preview, rendered in this theme's own tokens. */}
           <div class="flex flex-col gap-3 p-5 font-sans" style={`font-family: var(--lc-font)`}>
@@ -90,7 +92,7 @@ const contribute = "https://github.com/crs48/LIBCard/tree/main/themes";
             <code class="mt-2 block rounded bg-bg px-2 py-1 text-xs text-fg">theme: {t.designId ?? t.slug}</code>
           </div>
         </li>
-      ))
+      )))
     }
   </ul>
 

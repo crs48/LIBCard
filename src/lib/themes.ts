@@ -92,7 +92,7 @@ export function effectsForSlugs(slugs: string[]): { bgStage: boolean; pattern: b
 /** The LibCard gallery repo — where themes live and are credited. */
 export const LIBCARD_REPO = "https://github.com/crs48/LIBCard";
 
-/** Link to a theme's source file in the gallery, e.g. for the footer credit. */
+/** Link from a theme's gallery entry to its source file or package. */
 export function themeSourceUrl(theme: ThemeMeta): string {
   return theme.sourceUrl || (theme.designId ? theme.authorUrl || "" : `${LIBCARD_REPO}/blob/main/themes/${theme.file}`);
 }

@@ -346,6 +346,12 @@ Browse `/designs` for complete designs and `/themes` for appearances.
 Set `footer.designGallery: true` to add a “Try different designs” link at the
 bottom of your card. It is hidden by default.
 
+The footer names and links the complete design when its layout and theme match.
+Mixing them shows the actual layout and theme instead; each name opens its gallery
+entry. `footer.designCredit` controls optional design/layout credits, and
+`footer.themeCredit` controls optional theme credits. Required author attribution
+stays visible, including when a visitor changes the theme.
+
 ```sh
 pnpm run design:new -- your-name/notebook
 pnpm run design:check -- your-name/notebook
@@ -415,7 +421,9 @@ theme:
   random: [default, paper, mono]   # only these show on a random reload
 ```
 
-Browse them all on the `/themes` gallery page. The footer credits the active theme's author — **"Powered by LibCard · Theme by &lt;author&gt;"**.
+Browse them all on the `/themes` gallery page. Theme-only cards credit the active
+theme and author; complete designs use the design's name. Theme credits update
+when a visitor cycles themes, and link directly to the active theme's gallery entry.
 
 **Themes are data, not code.** Each theme is a single validated `themes/*.yaml` token file — no CSS, no JavaScript — so it's safe to accept from anyone. Add your own with `pnpm run new-theme` and open a pull request; see [`themes/README.md`](./themes/README.md) for the contribution guide. Community themes default to **CC-BY-4.0** (your credit stays), while LibCard itself is **MIT**.
 

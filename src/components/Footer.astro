@@ -1,18 +1,8 @@
 ---
-// The footer attribution badge: "Powered by LibCard · <Name> theme by <author>".
-//
-//  • "Powered by LibCard" — shown unless footer.poweredBy is false (MIT core,
-//    so it's removable goodwill).
-//  • "<Name> theme by <author>" — credits the ACTIVE theme by name (linked to
-//    its source file in the gallery) and its author (linked to authorUrl). Shown
-//    unless footer.themeCredit is false AND the theme's license permits removal
-//    (permissive licenses); a CC-BY theme keeps its credit regardless.
-//
-// The credit carries id="lc-theme-by" so the live switcher can update both the
-// theme name and the author as you cycle.
+// Credit the complete design, or the actual layout/theme combination in use.
 import { getConfig, getActiveTheme, hasLiveEmbeds, getAnalytics, hasRemoteMedia } from "../lib/config";
-import { getThemeMeta, licenseRequiresAttribution, LIBCARD_REPO, themeSourceUrl } from "../lib/themes";
-import catalog from "../../.libcard/designs.json";
+import { getThemeMeta, LIBCARD_REPO } from "../lib/themes";
+import { footerCredits, isHomePage } from "../lib/footer";
 import { withBase } from "../lib/site";
 
 const cfg = await getConfig();
@@ -27,7 +17,7 @@ const showDesignGallery = cfg.footer.designGallery && Astro.url.pathname.replace
 // the repo's Insights → Traffic → "Referring sites" — so the badge link keeps
 // rel="noopener" (security) but drops "noreferrer" so the referring card is
 // visible. The ?ref tag is just an explicit breadcrumb; nothing per-visitor is
-// tracked. (The theme-credit link below keeps noreferrer; only this one needs it.)
+// tracked. (External author-credit links keep noreferrer; only this one needs it.)
 const poweredByHref = `${LIBCARD_REPO}?ref=card`;
 // Be honest about the one place the "nothing tracks you" promise has an asterisk:
 // a live embed (video/booking/map/…) loads third-party content in its iframe.
@@ -38,15 +28,9 @@ const remoteMedia = hasRemoteMedia(cfg);
 // embed disclosure above. Only shown when the owner opted in; never by default.
 const analytics = await getAnalytics();
 
-// Show the credit if the owner kept it on, or the license demands it.
-const showCredit =
-  !!meta && (cfg.footer.themeCredit || licenseRequiresAttribution(meta.license));
-const sep = poweredBy ? " · " : "";
-type Credit = { name: string; author: string; authorUrl?: string; license: string; source?: string };
-const designCredits = [...new Set([cfg.design, cfg.layout])].flatMap((id) => {
-  const entry = catalog.find((d) => d.id === id);
-  const credit = entry && "credit" in entry ? entry.credit as Credit : undefined;
-  return credit && (cfg.footer.designCredit || licenseRequiresAttribution(credit.license)) ? [credit] : [];
+const credits = footerCredits(cfg, meta, {
+  base: import.meta.env.BASE_URL,
+  home: isHomePage(Astro.url.pathname, import.meta.env.BASE_URL),
 });
 ---
 <footer class="mt-10 text-center text-xs text-muted" data-libcard-utilities>
@@ -63,37 +47,16 @@ const designCredits = [...new Set([cfg.design, cfg.layout])].flatMap((id) => {
         </a>
       )
     }
-    <span id="lc-theme-by" hidden={!showCredit}>
-      {sep}
-      <a
-        href={meta ? themeSourceUrl(meta) || undefined : LIBCARD_REPO}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="underline-offset-4 hover:text-accent hover:underline"
-      >
-        {meta?.name}
-      </a>{" "}
-      theme by{" "}
-      {
-        meta?.authorUrl ? (
-          <a
-            href={meta.authorUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="underline-offset-4 hover:text-accent hover:underline"
-          >
-            {meta?.author}
-          </a>
-        ) : (
-          <span>{meta?.author}</span>
-        )
-      }
+    <span id="lc-presentation-credit" hidden={!credits.length}>
+      {credits.map((credit, index) => <span data-credit-kind={credit.kind}>
+        {(poweredBy || index > 0) && " · "}
+        <a href={credit.href} class="underline-offset-4 hover:text-accent hover:underline">{credit.name}</a>{" "}{credit.kind}
+        {credit.author && <> by {credit.authorUrl
+          ? <a href={credit.authorUrl} target="_blank" rel="noopener noreferrer" class="underline-offset-4 hover:text-accent hover:underline">{credit.author}</a>
+          : <span>{credit.author}</span>}</>}
+      </span>)}
     </span>
   </p>
-  {designCredits.map((credit) => <p class="mt-1" data-design-credit>
-    <a href={credit.source} target="_blank" rel="noopener noreferrer" class="hover:underline">{credit.name}</a>{" "}design by{" "}
-    <a href={credit.authorUrl} target="_blank" rel="noopener noreferrer" class="hover:underline">{credit.author}</a>
-  </p>)}
   {
     liveEmbeds && (
       <p class="mt-1 text-[0.7rem] text-muted/80">Some embedded content loads from third parties.</p>

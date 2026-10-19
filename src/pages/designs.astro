@@ -4,6 +4,8 @@ import catalog from "../../.libcard/designs.json";
 import community from "../../.libcard/catalog.json";
 import previews from "../../.libcard/previews";
 import { withBase } from "../lib/site";
+import { galleryId, galleryHref } from "../lib/footer";
+import { getThemeMeta } from "../lib/themes";
 const base = import.meta.env.BASE_URL;
 const available = catalog as Array<{ id: string; name: string; layout: string; theme: string; version?: string; builtin: boolean; credit?: { author: string; source?: string } }>;
 const entries = community as Array<{ id: string; name: string; description: string; author: string; source: string; version: string; ref: string; integrity: string; compatibility: { layoutApi: number; astro: string; libcard: string }; capabilities: { clientJavaScript: boolean; remoteAssets: boolean } }>;
@@ -16,12 +18,13 @@ const entries = community as Array<{ id: string; name: string; description: stri
     <nav class="flex justify-center gap-6 text-sm"><a href={withBase(base, "/themes")} class="underline underline-offset-4">Browse appearances</a><a href="https://github.com/crs48/LIBCard/blob/main/docs/DESIGNS.md" class="underline underline-offset-4">Make and share a design ↗</a></nav>
   </header>
   <ul class="grid w-full gap-5 sm:grid-cols-2">
-    {available.map((design) => <li class="overflow-hidden rounded-card border border-border bg-surface">
+    {available.map((design) => <li id={galleryId("design", design.id)} class="scroll-mt-6 overflow-hidden rounded-card border border-border bg-surface target:ring-2 target:ring-accent">
       {previews[design.id] && <img src={previews[design.id]} alt={`${design.name} design preview`} class="aspect-[4/3] w-full border-b border-border object-cover object-top" width="640" height="480" loading="lazy" />}
       <div class="flex flex-col gap-3 p-6">
         <div class="flex items-baseline justify-between gap-3"><h2 class="text-xl font-semibold">{design.name}</h2><span class="text-xs text-muted">{design.builtin ? "Built in" : `v${design.version}`}</span></div>
         <p class="text-sm text-muted">{design.id === "classic" ? "A compact, centered card. Familiar link buttons and all your content in one column." : design.id === "personal-home" ? "An editorial personal home. Rich project previews, numbered sections, and a monochrome appearance." : `By ${design.credit?.author ?? design.id.split("/")[0]}. Layout API 1.`}</p>
         <code class="overflow-x-auto rounded bg-bg p-3 text-sm">design: {design.id}</code>
+        <p class="text-xs text-muted">Layout: <code>{design.layout}</code>{" · "}Theme: <a href={galleryHref(base, "theme", getThemeMeta(design.theme)?.slug ?? design.theme)} class="underline underline-offset-4">{getThemeMeta(design.theme)?.name ?? design.theme}</a></p>
         {design.credit?.source && <a href={design.credit.source} target="_blank" rel="noopener noreferrer" class="text-sm underline underline-offset-4">Design source ↗</a>}
       </div>
     </li>)}

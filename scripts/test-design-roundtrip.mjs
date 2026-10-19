@@ -59,7 +59,10 @@ try {
   run("pnpm", ["build"]);
   let html = readFileSync(join(site, "dist/index.html"), "utf8");
   checkRendered(html, libcardSchema.parse({ ...content, design: "author/notebook" }));
-  assert(html.includes("Separate artist")); assert(html.includes("https://example.com/artist")); assert(html.includes("https://example.com/notebook")); assert(html.includes("https://example.com/ink-source"));
+  assert(html.includes("Separate artist")); assert(html.includes("https://example.com/artist"));
+  assert(html.includes('/fixture/designs#design-author%2Fnotebook'));
+  assert(readFileSync(join(site, "dist/designs/index.html"), "utf8").includes("https://example.com/notebook"));
+  assert(readFileSync(join(site, "dist/themes/index.html"), "utf8").includes("https://example.com/ink-source"));
   assert(html.includes("data-theme=\"design-")); assert(!allText(join(site, "dist")).includes("inactive-sentinel"));
   const packagedTheme = JSON.parse(readFileSync(join(site, ".libcard/themes.json"), "utf8"))[0];
   assert.equal(packagedTheme.schemes.dark.tokens.bg, "#171717");
@@ -81,7 +84,7 @@ try {
   writeFileSync(configPath, stringify({ ...content, design: "author/notebook", theme: { name: "author/notebook", switcher: true, random: ["author/notebook"] }, footer: { themeCredit: false, designCredit: false } }));
   run("pnpm", ["build"]);
   html = readFileSync(join(site, "dist/index.html"), "utf8");
-  assert(html.includes("Separate artist")); assert(!html.includes('id="lc-theme-by" hidden')); assert(!html.includes("data-design-credit"));
+  assert(html.includes("Separate artist")); assert(!html.includes('id="lc-presentation-credit" hidden')); assert(!html.includes('data-credit-kind="design"'));
   console.log("✓ Explicit update, edited-source fork, overwrite refusal, offline rollback and rebuild");
   // Watch the same config that clean builds use; test two live selections.
   server = spawn("pnpm", ["exec", "astro", "dev", "--host", "127.0.0.1", "--port", "0"], { cwd: site, env: { ...process.env, LIBCARD_CONFIG: "libcard.config.yaml" }, stdio: ["ignore", "pipe", "pipe"], detached: true });
