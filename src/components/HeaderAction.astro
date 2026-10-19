@@ -1,0 +1,24 @@
+---
+import Icon from "./Icon.astro";
+import type { PageModelV1 } from "../layout-api/model";
+interface Props { action?: PageModelV1["headerAction"]; }
+const { action } = Astro.props;
+---
+{action && (
+  <a
+    class="lc-header-action"
+    href={action.href}
+    target={action.newTab ? "_blank" : undefined}
+    rel={action.newTab ? "noopener noreferrer" : undefined}
+  >
+    {action.icon && <Icon name={action.icon} />}
+    <span>{action.label}</span>
+    {action.newTab && <span class="sr-only"> (opens in a new tab)</span>}
+  </a>
+)}
+<style>
+  .lc-header-action { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; color: inherit; text-decoration: none; }
+  .lc-header-action :global(svg) { width: 13px; height: 13px; flex-shrink: 0; }
+  .lc-header-action:hover { color: var(--lc-fg); text-decoration: underline; text-underline-offset: 4px; }
+  .lc-header-action:focus-visible { outline: 2px solid var(--lc-accent); outline-offset: 4px; border-radius: 2px; }
+</style>

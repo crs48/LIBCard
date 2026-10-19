@@ -333,20 +333,22 @@ const socialSchema = z
   })
   .strict();
 
-// A single optional persistent action, independent of Feedme or any provider.
-// Restrict destinations to navigable links, never executable URL schemes.
+// Header and corner actions share navigable destinations and link behavior.
+const actionSchema = z.object({
+  label: z.string().trim().min(1).max(48),
+  url: z.string().trim().pipe(z.union([
+    z.string().url().regex(/^(https?:\/\/|mailto:|tel:|sms:)/i).regex(/^\S+$/),
+    z.string().regex(/^(?:\/(?!\/)[^\s\\]*|#[^\s\\]*)$/),
+  ])).describe("HTTP(S), mailto, tel, sms, /site-path, or #anchor destination"),
+  icon: z.string().trim().min(1).optional(),
+  newTab: z.boolean().default(false),
+}).strict();
+const headerActionSchema = z.union([z.literal(false), actionSchema]).optional();
 const cornerButtonSchema = z.union([
   z.literal(false),
-  z.object({
-    label: z.string().trim().min(1).max(48),
-    url: z.string().trim().pipe(z.union([
-      z.string().url().regex(/^(https?:\/\/|mailto:|tel:|sms:)/i).regex(/^\S+$/),
-      z.string().regex(/^(?:\/(?!\/)[^\s\\]*|#[^\s\\]*)$/),
-    ])).describe("HTTP(S), mailto, tel, sms, /site-path, or #anchor destination"),
-    icon: z.string().trim().min(1).optional(),
+  actionSchema.extend({
     position: z.enum(["bottom-right", "bottom-left", "top-right", "top-left"]).default("bottom-right"),
-    newTab: z.boolean().default(false),
-  }).strict(),
+  }),
 ]).optional();
 
 // `cardMode:` — the landscape "rotate your phone to flash a business card" view.
@@ -645,6 +647,7 @@ export const libcardSchema = z.object({
   profile: z
     .object({
       name: z.string().min(1),
+      role: z.string().trim().min(1).max(160).optional(),
       tagline: z.string().optional(),
       avatar: z.string().optional(),
       location: z.string().optional(),
@@ -699,6 +702,7 @@ export const libcardSchema = z.object({
     }).strict().optional(),
   }).catchall(z.record(z.unknown())).optional(),
   theme: themeConfigSchema,
+  headerAction: headerActionSchema,
   cornerButton: cornerButtonSchema,
   footer: z
     .object({

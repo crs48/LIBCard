@@ -40,7 +40,7 @@ You can also use the copy button on [crs.land](https://crs.land).
 1. **Use this template.** Click **“Use this template” → Create a new repository**. Name it `your-links` (a project site) or `your-username.github.io` (a user site).
 2. **Make it yours.** Edit [`libcard.config.yaml`](./libcard.config.yaml) — your name, tagline, links, socials, contact details, and theme. That's the only file you need to touch.
    - Prefer prompts? Clone the repo and run `pnpm install && pnpm run setup` for an interactive wizard that fills the config in for you (including the tricky `site.url` / `site.base`).
-   - Replace or remove the demo `cornerButton` support link along with the other demo content so it points to your own destination.
+   - Replace or remove the demo `headerAction` support link along with the other demo content so it points to your own destination.
 3. **Turn on Pages.** In your repo, go to **Settings → Pages → Build and deployment** and set **Source: GitHub Actions**.
 4. **Push.** Every push to `main` rebuilds and deploys automatically (via [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml)). Your card goes live at `https://<username>.github.io/<repo>/`.
 
@@ -133,6 +133,27 @@ The button adds a small inline clipboard script **only when the block is used**.
 It copies on a click, shows confirmation, and opens/selects the text for manual
 copying if clipboard access fails. With JavaScript disabled, the readable text
 remains available and the button is hidden.
+
+### Profile identity and header action (optional)
+
+Personal home's masthead pairs the site name with an inline action. A short
+`profile.role` sits beside the location below your name; the longer `tagline`
+and `intro` remain separate. These fields also render in Classic.
+
+```yaml
+profile:
+  name: Ada Example
+  role: Engineer, writer & curious human
+  location: London
+headerAction:
+  label: Support
+  url: https://your-tip-page.example
+  icon: heart
+```
+
+Omit `headerAction` or set it to `false` to hide it. It uses the same destinations,
+optional icon, label limits, and `newTab` behavior as the corner button below,
+but scrolls with the page. The role is plain text, up to 160 characters.
 
 ### Persistent corner button (optional)
 

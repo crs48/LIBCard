@@ -3,6 +3,7 @@ export type { PageModelV1, LayoutProps, ResolvedLink, ProfileAction, ResolvedSec
 export type { PageSection, LinkSection } from "../lib/page";
 export { default as Profile } from "../components/Profile.astro";
 export { default as ProfileActions } from "../components/ProfileActions.astro";
+export { default as HeaderAction } from "../components/HeaderAction.astro";
 export { default as SocialRow } from "../components/SocialRow.astro";
 export { default as Section } from "../components/Section.astro";
 export { default as Block } from "../components/Block.astro";

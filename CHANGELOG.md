@@ -9,6 +9,12 @@ often to `libcard.config.yaml`); everything else is picked up automatically by
 
 ## Unreleased
 
+- **Personal home header.** The masthead supports an optional inline
+  `headerAction`, while `profile.role` joins the location beneath the name.
+  The portrait and identity share one aligned row with the reference's type
+  scale and spacing. Both fields are portable to Classic and custom layouts;
+  the existing fixed corner button remains a separate option.
+
 - **Faithful Personal home compositions.** Service features pair a narrative
   headline, session note, and action label with a square portrait. Image-free
   services use compact resource callouts; selected work uses copy above framed

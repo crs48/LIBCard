@@ -1,9 +1,15 @@
 profile:
   name: Ada Example
+  role: Engineer, writer & curious human
+  location: London
   intro: Useful tools, thoughtful work, and things worth exploring.
 contact:
   email: ada@example.com
 profileActions: [email, save-contact, show-card]
+headerAction:
+  label: Work together
+  url: /work-together
+  icon: heart
 design: personal-home
 links:
   - id: project

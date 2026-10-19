@@ -12,9 +12,10 @@
 # --- Who you are (the card header) ---
 profile:
   name: Christopher Smothers
+  role: Engineer, coach & curious human
   tagline: Experiments in a more human internet, a life that fits, and the things we can make together.
   avatar: /avatar.jpg # a file in /public, or a full https:// URL
-  location: San Francisco, CA
+  location: San Francisco
   intro: |-
     I build software, practice presence,
     and follow my curiosity.
@@ -408,13 +409,12 @@ layoutOptions:
     mediaTone: original
 profileActions: [email, save-contact, show-card]
 
-# --- Persistent corner button (optional; omit or set false to hide) ---
+# --- Header action (optional; omit or set false to hide) ---
 # Any link works here: support, booking, contact, or something else.
-cornerButton:
-  label: Support my work
+headerAction:
+  label: Support
   url: https://crs.tips
   icon: heart
-  position: top-right # bottom-right (default) | bottom-left | top-left
 
 # --- Footer credit ---
 # "Powered by LibCard · Theme by <author>". Both default on.

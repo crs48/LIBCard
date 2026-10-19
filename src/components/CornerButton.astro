@@ -1,18 +1,14 @@
 ---
 import Icon from "./Icon.astro";
 import type { LibcardConfig } from "../lib/config";
-import { withBase } from "../lib/site";
+import { resolveAction } from "../lib/action";
 
 interface Props {
   button: Exclude<LibcardConfig["cornerButton"], false | undefined>;
 }
 
 const { button } = Astro.props;
-const href = button.url.startsWith("/")
-  ? withBase(import.meta.env.BASE_URL, button.url)
-  : button.url;
-// Native app schemes should open their handler even when newTab is requested.
-const newTab = button.newTab && !/^(mailto:|tel:|sms:)/i.test(href);
+const { href, newTab } = resolveAction(button, import.meta.env.BASE_URL)!;
 ---
 <a
   class="lc-corner-button lc-solid group bg-surface shadow-sm hover:shadow-md"

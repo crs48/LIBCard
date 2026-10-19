@@ -11,6 +11,11 @@
               "type": "string",
               "minLength": 1
             },
+            "role": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
             "tagline": {
               "type": "string"
             },
@@ -3005,6 +3010,65 @@
             }
           ]
         },
+        "headerAction": {
+          "anyOf": [
+            {
+              "type": "boolean",
+              "const": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 48
+                },
+                "url": {
+                  "allOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "format": "uri",
+                          "allOf": [
+                            {
+                              "pattern": "^(https?:\\/\\/|mailto:|tel:|sms:)"
+                            },
+                            {
+                              "pattern": "^\\S+$"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "pattern": "^(?:\\/(?!\\/)[^\\s\\\\]*|#[^\\s\\\\]*)$"
+                        }
+                      ]
+                    }
+                  ],
+                  "description": "HTTP(S), mailto, tel, sms, /site-path, or #anchor destination"
+                },
+                "icon": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "newTab": {
+                  "type": "boolean",
+                  "default": false
+                }
+              },
+              "required": [
+                "label",
+                "url"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
         "cornerButton": {
           "anyOf": [
             {
@@ -3051,6 +3115,10 @@
                   "type": "string",
                   "minLength": 1
                 },
+                "newTab": {
+                  "type": "boolean",
+                  "default": false
+                },
                 "position": {
                   "type": "string",
                   "enum": [
@@ -3060,10 +3128,6 @@
                     "top-left"
                   ],
                   "default": "bottom-right"
-                },
-                "newTab": {
-                  "type": "boolean",
-                  "default": false
                 }
               },
               "required": [

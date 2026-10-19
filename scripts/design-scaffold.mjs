@@ -20,13 +20,13 @@ export function scaffold(root, id, from = "custom") {
     files: ["LICENSE", "README.md", "sample.config.yaml", ...(from === "preset" ? [] : ["Home.astro"]), ...(from === "custom" ? ["options.schema.json"] : [])],
   };
   const template = from === "custom" ? `---
-import { Profile, ProfileActions, Section, SocialRow, CardReveal, type LayoutProps } from "@libcard/layout";
+import { Profile, ProfileActions, HeaderAction, Section, SocialRow, CardReveal, type LayoutProps } from "@libcard/layout";
 type Props = LayoutProps;
 const { page, options } = Astro.props;
 ---
 <div class="notebook" data-width={options.width}>
   <main id="main-content">
-    <aside><Profile profile={page.profile} /><ProfileActions actions={page.actions} /><SocialRow socials={page.socials} /></aside>
+    <aside><HeaderAction action={page.headerAction} /><Profile profile={page.profile} /><ProfileActions actions={page.actions} /><SocialRow socials={page.socials} /></aside>
     <div class="entries">{page.sections.map((section, index) => <Section section={section} index={index} />)}<CardReveal url={page.card.url} /></div>
   </main>
   <slot name="utilities" />

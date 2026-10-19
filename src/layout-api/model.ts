@@ -1,6 +1,7 @@
 import { getConfig, getFeedme, type LibcardConfig, type LibcardLink, type LibcardBlock } from "../lib/config";
 import { normalizePage, type LinkSection } from "../lib/page";
 import { resolveLink } from "../lib/link-model";
+import { resolveAction } from "../lib/action";
 import { withBase, absoluteUrl } from "../lib/site";
 import { checkoutUrl, creatorTarget, formatSignal, tipActionFor, socialDisplayName } from "../lib/feedme";
 
@@ -32,6 +33,7 @@ export async function createPageModel(config: LibcardConfig, base: string, site?
     profile: { ...config.profile, avatar: mediaUrl(config.profile.avatar || "/avatar.svg"),
       give: feedme && config.feedme?.give !== false ? { href: checkoutUrl(feedme.origin), signal: creator ? formatSignal(creator) : null } : null },
     actions: profileActions(config, base),
+    headerAction: resolveAction(config.headerAction, base),
     links,
     sections: normalized.sections as ResolvedSection[],
     legacy: normalized.legacy,

@@ -57,6 +57,13 @@ Update before adding link `headline`, `note`, or `actionLabel` fields; older
 schemas reject them. Editorial service images now use a square crop, and work
 sections use framed previews with source footers. No media files are rewritten.
 
+Update before adding `profile.role` or `headerAction`. Personal home places the
+role beside the location beneath your name and the header action inline in the
+masthead. Classic preserves both. To move an existing support link into the
+header, replace its `cornerButton` block with `headerAction` and remove
+`position`; omitted settings remain off. The engine update does not change
+your profile or action choices.
+
 Sections must place every canonical link ID exactly once. Keep existing root
 blocks using a `type: blocks` section, or move the blocks into the section list.
 The explicit placement preserves Feedme's existing root-block about import.

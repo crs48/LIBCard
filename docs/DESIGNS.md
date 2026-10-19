@@ -167,12 +167,13 @@ Import from `@libcard/layout`. Do not import engine internals. The entry receive
 
 ```astro
 ---
-import { Profile, ProfileActions, Section, SocialRow, CardReveal, type LayoutProps } from "@libcard/layout";
+import { Profile, ProfileActions, HeaderAction, Section, SocialRow, CardReveal, type LayoutProps } from "@libcard/layout";
 type Props = LayoutProps;
 const { page, options } = Astro.props;
 ---
 <div class="my-layout" data-width={options.width}>
   <main id="main-content">
+    <HeaderAction action={page.headerAction} />
     <Profile profile={page.profile} />
     <ProfileActions actions={page.actions} />
     {page.sections.map((section, index) => <Section section={section} index={index} />)}
@@ -188,8 +189,9 @@ const { page, options } = Astro.props;
 | Field | Contents |
 |---|---|
 | `apiVersion` | Literal `1` |
-| `profile` | Name, tagline, location, intro, resolved avatar URL, optional resolved `give` action |
+| `profile` | Name, optional role, tagline, location, intro, resolved avatar URL, optional resolved `give` action |
 | `actions` | Deduplicated, available contact/card actions with label, href, icon, optional download |
+| `headerAction` | Optional masthead action: label, resolved href, optional icon, native-handler-aware newTab; null when absent |
 | `links` | Canonical inventory, resolved media URLs, and `presentation` metadata |
 | `sections` | Ordered link groups with resolved links, or existing block types; root block placeholders expanded |
 | `socials` | Social destinations, names, and optional resolved tip actions |
@@ -210,7 +212,7 @@ and counts, and Feedme tip metadata. Layouts must retain required destinations,
 descriptions, metadata actions, ordering, and collapsed content. Use the core
 primitives to get those details without reimplementing integrations.
 
-Exports: `Profile`, `ProfileActions`, `SocialRow`, `Section`, `Block`, `Link`,
+Exports: `Profile`, `ProfileActions`, `HeaderAction`, `SocialRow`, `Section`, `Block`, `Link`,
 `EditorialLink`, `Icon`, `CardReveal`, `Classic`, `Editorial`, `renderMarkdown`,
 `withBase`, `absoluteUrl`, and model types. `Section` accepts optional
 `layout="editorial"` or `"classic"`; `Block` is the standard fallback for every

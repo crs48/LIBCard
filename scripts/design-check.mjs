@@ -29,11 +29,16 @@ export function checkRendered(html, config) {
   }
   for (const social of config.socials) assert(hrefs.has(social.url), `missing social: ${social.url}`);
   const base = config.site.base.replace(/\/$/, "");
+  if (config.headerAction) {
+    const href = config.headerAction.url.startsWith("/") ? `${base}${config.headerAction.url}` : config.headerAction.url;
+    assert(hrefs.has(href), `missing header action: ${href}`);
+  }
   for (const kind of config.profileActions) {
     const href = kind === "email" ? config.contact.email ? `mailto:${config.contact.email}` : null : `${base}/${kind === "show-card" ? "card" : "contact.vcf"}`;
     if (href) assert(hrefs.has(href), `missing profile action: ${href}`);
   }
   const text = nodes.filter((n) => n.nodeName === "#text").map((n) => n.value).join(" ").replace(/\s+/g, " ");
+  if (config.profile.role) assert(text.includes(config.profile.role.replace(/\s+/g, " ")), "missing profile role");
   for (const link of config.links) for (const field of ["description", "headline", "note", "actionLabel"]) {
     if (link[field]) assert(text.includes(link[field].replace(/\s+/g, " ")), `missing ${field} for ${link.label}`);
   }

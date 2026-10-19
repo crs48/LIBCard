@@ -1,12 +1,12 @@
 ---
-import { Profile, ProfileActions, Section, SocialRow, CardReveal, type LayoutProps } from "@libcard/layout";
+import { Profile, ProfileActions, HeaderAction, Section, SocialRow, CardReveal, type LayoutProps } from "@libcard/layout";
 import mark from "./mark.svg?url";
 type Props = LayoutProps;
 const { page, options } = Astro.props;
 ---
 <div class="notebook" data-width={options.width}>
   <main id="main-content">
-    <aside><img src={mark} width="32" height="32" alt="" /><Profile profile={page.profile} /><ProfileActions actions={page.actions} /><SocialRow socials={page.socials} /></aside>
+    <aside><img src={mark} width="32" height="32" alt="" /><HeaderAction action={page.headerAction} /><Profile profile={page.profile} /><ProfileActions actions={page.actions} /><SocialRow socials={page.socials} /></aside>
     <div class="entries">{page.sections.map((section, index) => <Section section={section} index={index} />)}<CardReveal url={page.card.url} /></div>
   </main>
   <slot name="utilities" />
