@@ -2,8 +2,9 @@
 import { getPageModel, type PageModelV1 } from "../layout-api/model";
 import Icon from "./Icon.astro";
 
-interface Props { socials?: PageModelV1["socials"]; }
+interface Props { socials?: PageModelV1["socials"]; text?: boolean; }
 const socials = Astro.props.socials ?? (await getPageModel()).socials;
+const { text = false } = Astro.props;
 
 // Feedme "More of this" for opted-in socials. The icon row stays exactly as it
 // is; tips render as a separate row of LABELED chips below it (platform icon +
@@ -38,7 +39,7 @@ const BRAND_COLORS: Record<string, string> = {
 ---
 {
   socials.length > 0 && (
-    <nav aria-label="Social profiles" class="flex flex-wrap items-center justify-center gap-2">
+    <nav aria-label="Social profiles" class:list={["flex flex-wrap items-center justify-center gap-2", text && "lc-social-text"]}>
       {socials.map((social) => {
         const brand = BRAND_COLORS[social.platform];
         return (
@@ -46,11 +47,11 @@ const BRAND_COLORS: Record<string, string> = {
             href={social.url}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={social.label ?? social.platform}
-            class="lc-social flex size-11 items-center justify-center rounded-full border border-border bg-surface text-muted transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            aria-label={social.name}
+            class:list={["lc-social flex items-center justify-center text-muted transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent", text ? "min-h-11" : "size-11 rounded-full border border-border bg-surface"]}
             style={brand ? `--brand: ${brand}` : undefined}
           >
-            <Icon name={social.platform} class="size-5" />
+            {text ? <span>{social.name}</span> : <Icon name={social.platform} class="size-5" />}
           </a>
         );
       })}

@@ -57,6 +57,11 @@ images, and sections work in both layouts. See the
 Sections must place every canonical link ID exactly once. Keep existing root
 blocks using a `type: blocks` section, or move the blocks into the section list.
 The explicit placement preserves Feedme's existing root-block about import.
+Update the engine before using the `disclosure` block to group longer notes and
+actions into expandable rows. Older engines do not recognize it. Classic and
+Editorial both render its contents; Editorial uses compact rules and text links.
+External consumers that only read root `text` blocks will not import text nested
+inside disclosures, so keep any required importer summary at the root.
 Custom layouts live in `designs/local/` or `designs/installed/`, with pins in
 `designs.lock.yaml`. The updater preserves these and `designs/history/`, and checks
 package compatibility with the target engine before writing. Do not put

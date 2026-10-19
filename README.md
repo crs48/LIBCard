@@ -169,7 +169,7 @@ tiers; `copy-prompt` is an optional clipboard enhancement with a no-JS fallback:
 
 | Tier | Blocks | How it stays zero-JS / zero-server |
 |---|---|---|
-| **Static** | `heading`, `text` (Markdown), `divider`, `faq`, `gallery`, `contact-buttons`, `tip-buttons` | pure HTML/CSS |
+| **Static** | `heading`, `text` (Markdown), `divider`, `faq`, `gallery`, `contact-buttons`, `tip-buttons`, `disclosure` | pure HTML/CSS |
 | **Forms** | `signup` (newsletter), `form` (contact) | a plain `<form method="post">` to a third party |
 | **Live embeds** | `video`, `embed`, `booking`, `map` | a sandboxed `<iframe>` — **we** ship no JS |
 | **Build-time** | `tweet`, `rss`, `github` | fetched during the build, baked to static HTML |
@@ -195,6 +195,23 @@ blocks:
   - { type: tweet, url: "https://x.com/you/status/1750000000000000000" }
   - { type: rss, url: "https://yourblog.com/feed.xml", title: "Latest posts" }
 ```
+
+Use a `disclosure` to keep longer notes or secondary actions behind a native
+expandable row. It works in every layout and without JavaScript:
+
+```yaml
+blocks:
+  - type: disclosure
+    title: Make a little home of your own
+    open: false # default; true starts expanded
+    blocks:
+      - { type: text, markdown: "A little more about this project." }
+      - { type: copy-prompt }
+```
+
+Disclosures can contain any other block type, but cannot nest other disclosures.
+They can also appear directly in `sections`. Collapsing content does not change
+its embed privacy behavior or defer its build-time fetches.
 
 A few things worth knowing:
 

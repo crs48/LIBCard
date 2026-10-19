@@ -43,7 +43,7 @@ export function checkRendered(html, config) {
   const actual = attrs.map((a) => a["data-link-id"]).filter(Boolean);
   assert.deepEqual(actual, expected, "render every link once, in owner section order, with data-link-id");
   const expectedBlocks = config.sections ? config.sections.flatMap((s) => s.type === "blocks" ? config.blocks : s.type === "links" ? [] : [s]) : config.blocks;
-  assert.deepEqual(attrs.map((a) => a["data-libcard-block"]).filter(Boolean), expectedBlocks.map((b) => b.type), "render every block once in section order through the core fallback");
+  assert.deepEqual(attrs.map((a) => a["data-libcard-block"]).filter(Boolean), blockEntries({ blocks: expectedBlocks }).map(({ block }) => block.type), "render every block once in section order through the core fallback");
   let previousHeading = 0;
   for (const heading of elements.filter((n) => /^h[1-6]$/.test(n.tagName))) {
     const level = Number(heading.tagName[1]);

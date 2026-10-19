@@ -71,6 +71,32 @@ describe("portable content", () => {
     const config = parse({ blocks: [{ type: "text", markdown: "About" }], sections: [{ type: "blocks" }, { type: "video", provider: "youtube", id: "dQw4w9WgXcQ" }] });
     expect(blockEntries(config).map(({ block }) => block.type)).toEqual(["text", "video"]);
   });
+  it("keeps disclosure contents portable and validates nested integration paths", () => {
+    const disclosure = { type: "disclosure", title: "More about this", blocks: [
+      { type: "text", markdown: "A longer note" },
+      { type: "video", provider: "youtube", id: "dQw4w9WgXcQ" },
+    ] };
+    const config = resolved({ blocks: [disclosure], sections: [{ type: "blocks" }] });
+    expect(normalizePage(config).sections[0]).toMatchObject({ ...disclosure, open: false });
+    expect(blockEntries(config).map(({ block, path }) => [block.type, path])).toEqual([
+      ["disclosure", ["blocks", 0]],
+      ["text", ["blocks", 0, "blocks", 0]],
+      ["video", ["blocks", 0, "blocks", 1]],
+    ]);
+    const result = libcardSchema.safeParse({ ...minimal, sections: [
+      { ...disclosure, blocks: [{ type: "tip-buttons", feedme: true }] },
+    ] });
+    expect(result.success).toBe(false);
+    if (!result.success) expect(result.error.issues[0].path).toEqual(["sections", 0, "blocks", 0, "feedme"]);
+  });
+  it("rejects empty disclosures and nested disclosure trees", () => {
+    const note = { type: "text", markdown: "Hello" };
+    for (const block of [
+      { type: "disclosure", title: "", blocks: [note] },
+      { type: "disclosure", title: "Empty", blocks: [] },
+      { type: "disclosure", title: "Nested", blocks: [{ type: "disclosure", title: "Child", blocks: [note] }] },
+    ]) expect(() => parse({ blocks: [block] })).toThrow();
+  });
   it("requires useful image metadata and rejects unsafe media sources", () => {
     const image = { src: "/projects/one.webp", alt: "App screenshot", width: 1200, height: 800 };
     expect(parse({ links: [{ ...links[0], image }] }).links[0].image).toEqual(image);

@@ -19,6 +19,7 @@ import ContactForm from "./blocks/ContactForm.astro";
 import Tweet from "./blocks/Tweet.astro";
 import Rss from "./blocks/Rss.astro";
 import GitHubCard from "./blocks/GitHubCard.astro";
+import Disclosure from "./blocks/Disclosure.astro";
 
 interface Props {
   block: LibcardBlock;
@@ -44,5 +45,8 @@ const { block } = Astro.props;
 {block.type === "tweet" && <Tweet block={block} />}
 {block.type === "rss" && <Rss block={block} />}
 {block.type === "github" && <GitHubCard block={block} />}
+{block.type === "disclosure" && <Disclosure block={block}>
+  {block.blocks.map((child) => <Astro.self block={child} />)}
+</Disclosure>}
 
 </div>

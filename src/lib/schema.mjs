@@ -417,7 +417,7 @@ export const EMBED_PROVIDERS = [
   "oembed",
 ];
 
-const blockSchema = z.discriminatedUnion("type", [
+const leafBlockSchema = z.discriminatedUnion("type", [
   // Opt-in clipboard enhancement; no script is rendered without this block.
   z
     .object({
@@ -567,6 +567,17 @@ const blockSchema = z.discriminatedUnion("type", [
       repo: z.string().optional(),
     })
     .strict(),
+]);
+
+// One level of optional detail keeps longer notes available in any layout.
+const blockSchema = z.discriminatedUnion("type", [
+  ...leafBlockSchema.options,
+  z.object({
+    type: z.literal("disclosure"),
+    title: z.string().trim().min(1).max(160),
+    open: z.boolean().default(false),
+    blocks: z.array(leafBlockSchema).min(1),
+  }).strict(),
 ]);
 
 // --- Privacy-first, cookieless analytics (optional, OFF by default) ----------

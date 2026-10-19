@@ -207,6 +207,10 @@ Exports: `Profile`, `ProfileActions`, `SocialRow`, `Section`, `Block`, `Link`,
 `withBase`, `absoluteUrl`, and model types. `Section` accepts optional
 `layout="editorial"` or `"classic"`; `Block` is the standard fallback for every
 existing block type and owns the integration handling those blocks need.
+This includes `disclosure` groups (`title`, `open`, and a non-nested `blocks`
+list). Delegate these to `Block` or `Section` to retain their native disclosure,
+all child blocks, and integration behavior. Editorial renders social profiles as
+text links and gives supplemental blocks the same compact treatment as its archive.
 Editorial's full styling comes with the `Editorial` wrapper; a fully custom layout
 styles its own rich links. Core primitives accept the model values above. Their
 internal config fallback remains available for engine utility pages.

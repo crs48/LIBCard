@@ -1,0 +1,16 @@
+---
+import type { BlockOf } from "../../lib/config";
+import Icon from "../Icon.astro";
+interface Props { block: BlockOf<"disclosure">; }
+const { block } = Astro.props;
+---
+<details class="lc-content-disclosure w-full rounded-card border border-border bg-surface" open={block.open}>
+  <summary class="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 px-4 py-3 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent [&::-webkit-details-marker]:hidden">
+    <span>{block.title}</span>
+    <Icon name="plus" class="lc-content-disclosure-icon size-4 shrink-0 text-muted" />
+  </summary>
+  <div class="lc-disclosure-content flex flex-col gap-4 border-t border-border px-4 py-5"><slot /></div>
+</details>
+<style>
+  details[open] > summary .lc-content-disclosure-icon { transform: rotate(45deg); }
+</style>

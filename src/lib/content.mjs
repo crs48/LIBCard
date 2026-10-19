@@ -1,11 +1,17 @@
 // Shared traversal for schema refinement and runtime disclosures. Do not select
 // one branch here: validation must also inspect an invalid mixed-mode input.
 export function blockEntries(doc) {
-  return [
+  const entries = [
     ...(doc.blocks ?? []).map((block, index) => ({ block, path: ["blocks", index] })),
     ...(doc.sections ?? []).flatMap((block, index) =>
       ["links", "blocks"].includes(block.type) ? [] : [{ block, path: ["sections", index] }]),
   ];
+  return entries.flatMap((entry) => [
+    entry,
+    ...(entry.block.type === "disclosure" ? entry.block.blocks.map((block, index) => ({
+      block, path: [...entry.path, "blocks", index],
+    })) : []),
+  ]);
 }
 
 export function validateSections(doc, ctx) {

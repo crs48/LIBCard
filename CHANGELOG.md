@@ -9,6 +9,13 @@ often to `libcard.config.yaml`); everything else is picked up automatically by
 
 ## Unreleased
 
+- **Integrated Editorial closing sections.** Longer notes and secondary actions
+  can live in native `disclosure` blocks, with the same content available in
+  Classic. Editorial carries ruled headings, compact controls, text social links,
+  and a quieter business-card reveal through the bottom of the page. Nested
+  integrations retain validation and privacy disclosures; no JavaScript is
+  required to expand the content.
+
 - **Designs and portable layouts.** `design: personal-home` selects the new
   Editorial layout and Monochrome appearance; Classic remains the default for
   existing configs. Explicit `layout:` and `theme:` override preset defaults.

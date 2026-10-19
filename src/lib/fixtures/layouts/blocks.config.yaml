@@ -29,3 +29,9 @@ blocks:
   - { type: tweet, url: "https://example.com/sample-post" }
   - { type: rss, url: "https://example.invalid/feed.xml" }
   - { type: github, user: libcard-conformance-nonexistent-user }
+  - type: disclosure
+    title: A little more detail
+    blocks:
+      - { type: text, markdown: "This note remains available without JavaScript." }
+      - { type: contact-buttons, email: true }
+      - { type: copy-prompt, text: A prompt inside a disclosure }
