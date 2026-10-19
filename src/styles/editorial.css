@@ -150,10 +150,21 @@
 .lc-editorial .lc-card-reveal > summary { justify-content: flex-end; width: fit-content; margin-inline-start: auto; min-height: 44px; padding: 0; color: var(--lc-muted); font-size: .75rem; font-weight: 400; text-align: right; }
 .lc-editorial .lc-card-reveal > summary svg { width: 1rem; height: 1rem; }
 .lc-editorial .lc-card-reveal > div { width: min(100%, 24rem); margin-top: .5rem; margin-inline-start: auto; border: 1px solid var(--lc-border); border-radius: var(--lc-radius); }
-.lc-editorial footer { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--lc-border); text-align:left; font-size: .6875rem; line-height: 1.8; }
+.lc-editorial-footer { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 0 1.5rem; margin-top: 1.25rem; padding-top: .5rem; border-top: 1px solid var(--lc-border); }
+.lc-editorial-footer > * { grid-column: 1 / -1; min-width: 0; }
+.lc-editorial-footer > footer { grid-column: 1; grid-row: 1; }
+.lc-editorial-footer > .lc-card-reveal { grid-column: 2; grid-row: 1; width: fit-content; max-width: 24rem; }
+.lc-editorial footer { margin: 0; text-align:left; font-size: .6875rem; line-height: 1.8; }
+.lc-editorial-footer > footer > p:first-child { min-height: 44px; padding-block: calc((44px - 1.8em) / 2); }
 .lc-editorial footer p + p { font-size: .625rem; }
 .lc-editorial[data-media-tone="grayscale"] :is(.lc-link-image, .lc-mark img, .lc-editorial-profile > img, .lc-editorial-profile > p, .lc-standard-block img) { filter:grayscale(1); }
+@media (orientation: landscape) and (max-height: 540px) and (pointer: coarse) {
+  body[data-card-mode] .lc-editorial-footer > .lc-card-reveal { display: none; }
+}
 @media (max-width: 640px) {
+  .lc-editorial-footer { grid-template-columns: minmax(0, 1fr); gap: .5rem; }
+  .lc-editorial-footer > footer { grid-column: 1; grid-row: auto; }
+  .lc-editorial-footer > .lc-card-reveal { grid-column: 1; grid-row: auto; justify-self: end; max-width: 100%; }
   .lc-editorial .lc-standard-block:has(> [data-libcard-block="heading"]):has(+ .lc-standard-block > [data-libcard-block="contact-buttons"]),
   .lc-editorial .lc-standard-block:has(> [data-libcard-block="heading"]) + .lc-standard-block:has(> [data-libcard-block="contact-buttons"]) { grid-column: 1 / -1; }
 }

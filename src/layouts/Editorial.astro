@@ -20,7 +20,10 @@ const { page, options } = Astro.props;
     </div>
     <div class="lc-editorial-introduction"><Profile profile={page.profile} editorial /><ProfileActions actions={page.actions} /></div>
     <div class="lc-editorial-sections">{page.sections.map((section, index) => <Section section={section} layout="editorial" index={index} />)}</div>
-    <div class="lc-editorial-contact"><SocialRow socials={page.socials} text /><CardReveal url={page.card.url} /></div>
+    <div class="lc-editorial-contact"><SocialRow socials={page.socials} text /></div>
   </main>
-  <slot name="utilities" />
+  <div class="lc-editorial-footer">
+    <slot name="utilities" />
+    <CardReveal url={page.card.url} />
+  </div>
 </div>
