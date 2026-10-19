@@ -34,7 +34,9 @@ export function checkRendered(html, config) {
     if (href) assert(hrefs.has(href), `missing profile action: ${href}`);
   }
   const text = nodes.filter((n) => n.nodeName === "#text").map((n) => n.value).join(" ").replace(/\s+/g, " ");
-  for (const link of config.links) if (link.description) assert(text.includes(link.description.replace(/\s+/g, " ")), `missing description for ${link.label}`);
+  for (const link of config.links) for (const field of ["description", "headline", "note", "actionLabel"]) {
+    if (link[field]) assert(text.includes(link[field].replace(/\s+/g, " ")), `missing ${field} for ${link.label}`);
+  }
   for (const image of elements.filter((n) => n.tagName === "img")) assert("alt" in attributes(image), "every image needs alt text (empty for decoration)");
   for (const attr of attrs) for (const path of [attr.href, attr.src].filter(Boolean)) {
     if (path.startsWith("/") && !path.startsWith("//")) assert(path === base || path.startsWith(`${base}/`), `URL ignores site.base: ${path}`);

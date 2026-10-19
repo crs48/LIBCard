@@ -20,6 +20,16 @@ links:
   - id: coaching
     label: Coaching
     url: https://example.com/coaching
+    headline: |-
+      A little space
+      to think together.
+    description: A personal service with a square portrait and a clear next step.
+    note: 60 minutes · video
+    actionLabel: Explore coaching
+    image: { src: /avatar.svg, alt: A generic portrait, width: 96, height: 96 }
+  - id: resources
+    label: Resources
+    url: https://example.com/resources
     description: A plain link with no icon or preview image.
   - id: archive
     label: An archived experiment
@@ -35,7 +45,7 @@ sections:
     id: services
     title: Work together
     purpose: services
-    items: [coaching]
+    items: [coaching, resources]
   - type: links
     id: archive
     title: More experiments

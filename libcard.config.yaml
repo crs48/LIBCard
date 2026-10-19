@@ -12,11 +12,12 @@
 # --- Who you are (the card header) ---
 profile:
   name: Christopher Smothers
-  tagline: hi 👋 i'm chris and i'm running experiments to illuminate a world that lights us all up to
-    live in
+  tagline: Experiments in a more human internet, a life that fits, and the things we can make together.
   avatar: /avatar.jpg # a file in /public, or a full https:// URL
   location: San Francisco, CA
-  intro: I build software, practice presence, and follow my curiosity.
+  intro: |-
+    I build software, practice presence,
+    and follow my curiosity.
 
 # --- Contact details ---
 # These power the "Save contact" button (a downloadable vCard) and the QR
@@ -64,46 +65,49 @@ socials:
 # what state the thing is in: ready | wip | experiment | exploration | writing | reading | dormant
 # (rephrase any label in the `statuses:` map below the links).
 links:
-  - label: 75m of presence aka coaching
+  - label: Coaching
     url: https://crs.coach/
     icon: heart
-    status: ready
     id: coaching
-    description: Space to slow down, practice presence, and find your own way.
+    headline: |-
+      A little room
+      to be yourself.
+    description: One-to-one coaching for neurodiverse people, founders, and humans finding their way through burnout.
+    note: 75 minutes · video · tip what you want
+    actionLabel: Explore coaching
     image:
       src: /avatar.jpg
       alt: Portrait of Chris
       width: 695
       height: 696
-  - label: Nervous system healing (resources)
+  - label: Gently — nervous system resources
     url: https://crs48.github.io/nervous-system-healing
     icon: activity
-    status: ready
     id: nervous-system
-    description: Resources and practices for understanding your nervous system.
+    description: A free guide to understanding your nervous system, with short practices and places to start.
     iconImage: /projects/gently.svg
-  - label: LIBCard (this site)
+  - label: LibCard
     url: https://crs48.github.io/LIBCard
     icon: id-card
-    status: ready
     github: https://github.com/crs48/LIBCard
     stars: build
     id: libcard
-    description: A personal home on the web that you own.
+    description: A little home on the internet. Your links, your contact card, your own.
+    note: Free & open source
     iconImage: /favicon.svg
     image:
       src: /projects/libcard-preview.webp
       alt: LibCard’s digital business card with a QR code
       width: 1200
       height: 555
-  - label: Feed Me Fund (open-source creator tips)
+  - label: Feedme
     url: https://feedme.fund/
     icon: coins
-    status: ready
     github: https://github.com/crs48/feedme
     stars: build
     id: feedme
-    description: A little support for the things you want to see more of.
+    description: Support independent work and the people behind it.
+    note: Made for creators
     iconImage: /projects/feedme.svg
     image:
       src: /projects/feedme-preview.webp
@@ -131,7 +135,8 @@ links:
     github: https://github.com/crs48/xNet # show the repo + star count beside the site
     stars: build # bake the star count in at build time (zero runtime JS)
     id: xnet
-    description: Local-first tools for a more human internet. Your data, your devices, your rules.
+    description: Documents, databases, and canvases in a workspace you own.
+    note: Local-first · open source
     iconImage: /projects/xnet.svg
     image:
       src: /projects/xnet-preview.webp
@@ -141,7 +146,6 @@ links:
   - label: A great pirate age
     url: https://xnet.fyi/blog/a-great-pirate-age/
     icon: pirate
-    status: writing
     id: pirate-age
     description: On the open internet and what becomes possible when the gates come down.
     image:
@@ -152,7 +156,6 @@ links:
   - label: Timeout
     url: https://xnet.fyi/blog/timeout/
     icon: clock
-    status: writing
     id: timeout
     description: On disconnection, coming back, and the systems we build for ourselves.
     image:
@@ -160,7 +163,7 @@ links:
       alt: Cover illustration for Timeout
       width: 800
       height: 400
-  - label: Murmuration (flocking)
+  - label: Murmuration
     url: https://crs48.github.io/murmuration
     icon: simulation
     status: experiment
@@ -168,7 +171,7 @@ links:
     stars: build
     id: murmuration
     description: Flocking, emergence, and a little wonder.
-  - label: Warp-voyage (tunnel game)
+  - label: Warp voyage
     url: https://crs48.github.io/warp-voyage
     icon: game
     status: experiment
@@ -243,7 +246,7 @@ links:
     stars: build
     id: courtyard-blocks
     description: Housing shaped around shared space.
-  - label: Courtyard block game (community sim)
+  - label: Courtyard block
     url: https://crs48.github.io/courtyard-block/
     icon: game
     status: wip
@@ -251,7 +254,7 @@ links:
     stars: build
     id: courtyard-game
     description: A community simulation to play with.
-  - label: Wealthglobe (net worth as land)
+  - label: Wealthglobe
     url: https://crs48.github.io/wealthglobe/
     icon: globe
     status: experiment

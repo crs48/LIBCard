@@ -197,6 +197,14 @@ const { page, options } = Astro.props;
 | `site` | URL and base path |
 | `legacy`, `firstRun` | Compatibility and setup state |
 
+Optional link `headline`, `note`, and `actionLabel` provide a display headline,
+supporting detail, and visible invitation without changing the canonical label
+or destination. Preserve them when rendering richer content. `EditorialLink`
+accepts `purpose` (`work`, `services`, `writing`, `experiments`, or `general`);
+`Section` passes it automatically. Services with images use square portraits;
+services without images use resource callouts. Work previews sit below their
+copy and above a source footer.
+
 Link `presentation` includes external-link attributes, status, GitHub companion
 and counts, and Feedme tip metadata. Layouts must retain required destinations,
 descriptions, metadata actions, ordering, and collapsed content. Use the core

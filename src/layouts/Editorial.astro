@@ -13,6 +13,7 @@ const { page, options } = Astro.props;
 <div class="lc-editorial" data-density={options.density} data-media-tone={options.mediaTone}>
   <main id="main-content">
     <FirstRunNudge />
+    <div class="lc-editorial-masthead">{new URL(page.site.url).host} / a personal home</div>
     <div class="lc-editorial-introduction"><Profile profile={page.profile} editorial /><ProfileActions actions={page.actions} /></div>
     <div class="lc-editorial-sections">{page.sections.map((section, index) => <Section section={section} layout="editorial" index={index} />)}</div>
     <div class="lc-editorial-contact"><SocialRow socials={page.socials} text /><CardReveal url={page.card.url} /></div>

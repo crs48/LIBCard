@@ -9,6 +9,13 @@ often to `libcard.config.yaml`); everything else is picked up automatically by
 
 ## Unreleased
 
+- **Faithful Personal home compositions.** Service features pair a narrative
+  headline, session note, and action label with a square portrait. Image-free
+  services use compact resource callouts; selected work uses copy above framed
+  previews and separate source footers. Optional `headline`, `note`, and
+  `actionLabel` link fields also render in Classic. The introduction, section
+  spacing, and writing scale follow the Personal home mockup.
+
 - **Integrated Editorial closing sections.** Longer notes and secondary actions
   can live in native `disclosure` blocks, with the same content available in
   Classic. Editorial carries ruled headings, compact controls, text social links,

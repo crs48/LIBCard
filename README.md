@@ -277,6 +277,31 @@ precedence over the existing `icon`. Image dimensions reserve space while loadin
 Email actions require `contact.email`; the other actions use LibCard's existing
 download and card routes.
 
+For a service feature, add a `headline`, a short `note`, and an `actionLabel`
+to the canonical link, then put its ID in a `purpose: services` section:
+
+```yaml
+# A link in links:
+- id: coaching
+  label: Coaching
+  headline: |-
+    A little space
+    to think together.
+  description: One-to-one conversations about what comes next.
+  note: 60 minutes · video
+  actionLabel: Explore coaching
+  url: https://example.com/coaching
+  image: { src: /portrait.jpg, alt: My portrait, width: 800, height: 800 }
+```
+
+Editorial displays service images as square portraits alongside the copy;
+service links without images become compact resource callouts. Work sections
+place copy above their previews, with `note` and source links in the footer.
+These fields also remain visible in Classic. Their text is plain text, with
+intentional line breaks supported in `headline`. Image files keep their original
+dimensions; the layout supplies the crop. Set
+`layoutOptions: { editorial: { mediaTone: original } }` to preserve media colors.
+
 Sections reference canonical link IDs. Each link must appear exactly once, and
 IDs must be unique. A group can have `collapsed: true` to create a native archive
 disclosure. The optional purpose is `work`, `services`, `writing`, `experiments`,

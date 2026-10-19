@@ -20,9 +20,12 @@ const asset = (src: string) => "presentation" in link || /^https?:\/\//i.test(sr
   >
     {link.iconImage && <img src={asset(link.iconImage)} alt="" width="24" height="24" class="size-6 shrink-0 object-contain" loading="lazy" />}
     {!link.iconImage && link.icon && <Icon name={link.icon} class="size-5 shrink-0 text-muted group-hover:text-accent transition-colors" />}
-    <span class:list={["min-w-0 flex-1 text-center", !link.description && !link.image && "truncate"]}>
+    <span class:list={["min-w-0 flex-1 text-center", !link.description && !link.image && !link.headline && !link.note && !link.actionLabel && "truncate"]}>
       <span>{link.label}</span>
+      {link.headline && <span class="mt-2 block whitespace-pre-line">{link.headline}</span>}
       {link.description && <span class="mt-1 block text-sm font-normal leading-relaxed text-muted">{link.description}</span>}
+      {link.note && <span class="mt-2 block text-xs font-normal text-muted">{link.note}</span>}
+      {link.actionLabel && <span class="mt-2 block text-sm underline underline-offset-4">{link.actionLabel}</span>}
       {link.image && <img src={asset(link.image.src)} alt={link.image.alt} width={link.image.width} height={link.image.height} loading="lazy" decoding="async" class="mt-3 max-h-48 w-full rounded-card object-cover" />}
     </span>
     {/* Status badge: text + dot, perched on the button's top-right corner like

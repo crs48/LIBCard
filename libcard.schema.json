@@ -87,6 +87,24 @@
                 "type": "string",
                 "minLength": 1
               },
+              "headline": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160,
+                "description": "Optional display headline; newlines create intentional line breaks. The label remains the short link name."
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 240,
+                "description": "Short supporting detail, such as session length or project context."
+              },
+              "actionLabel": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80,
+                "description": "Visible invitation on the main destination, such as Explore coaching."
+              },
               "iconImage": {
                 "type": "string",
                 "minLength": 1

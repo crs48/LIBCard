@@ -4,28 +4,36 @@ import { resolveLink } from "../lib/link-model";
 import { withBase } from "../lib/site";
 import Icon from "./Icon.astro";
 import type { ResolvedLink } from "../layout-api/model";
-interface Props { link: LibcardLink | ResolvedLink; headingLevel?: 2 | 3; }
-const { link, headingLevel = 3 } = Astro.props;
+import type { LinkSection } from "../lib/page";
+interface Props { link: LibcardLink | ResolvedLink; headingLevel?: 2 | 3; purpose?: LinkSection["purpose"]; }
+const { link, headingLevel = 3, purpose = "general" } = Astro.props;
 const Heading = headingLevel === 2 ? "h2" : "h3";
+const feature = purpose === "services" && !!link.image;
+const resource = purpose === "services" && !link.image;
+const work = purpose === "work";
 const model = "presentation" in link ? link.presentation : await resolveLink(link, (await getConfig()).statuses, await getFeedme());
 const asset = (src: string) => "presentation" in link || /^https?:\/\//i.test(src) ? src : withBase(import.meta.env.BASE_URL, src);
 ---
-<article class:list={["lc-editorial-link", !!link.image && "has-image"]} data-link-id={link.id}>
+<article class:list={["lc-editorial-link", !!link.image && "has-image", feature && "lc-service-feature", resource && "lc-service-resource"]} data-link-id={link.id}>
   <a class="lc-destination" href={link.url} target={model.target} rel={model.rel}>
-    {link.image && <div class="lc-image-frame"><img class="lc-link-image" src={asset(link.image.src)} alt={link.image.alt} width={link.image.width} height={link.image.height} loading="lazy" decoding="async" /></div>}
     <div class="lc-link-copy">
       <div class="lc-link-heading">
         <span class="lc-mark" aria-hidden="true">
           {link.iconImage ? <img src={asset(link.iconImage)} alt="" width="24" height="24" loading="lazy" /> : <Icon name={link.icon ?? "arrow-up-right"} class="size-5" />}
         </span>
-        <Heading>{link.label}</Heading>
+        <Heading>{link.headline ?? link.label}</Heading>
+        {work && model.status && <span class="lc-work-status"><span class="sr-only">Status: </span>{model.status.label}</span>}
         {model.external && <span class="lc-outbound" aria-hidden="true">↗</span>}
       </div>
       {link.description && <p class="lc-link-description">{link.description}</p>}
+      {link.note && !work && <p class="lc-link-note">{link.note}</p>}
+      {link.actionLabel && <span class="lc-link-action">{link.actionLabel}{model.external && <span aria-hidden="true"> ↗</span>}</span>}
     </div>
+    {link.image && <div class="lc-image-frame"><img class="lc-link-image" src={asset(link.image.src)} alt={link.image.alt} width={link.image.width} height={link.image.height} loading="lazy" decoding="async" /></div>}
   </a>
-  {(model.status || model.repo || model.tip) && <div class="lc-link-meta">
-    {model.status && <span class="lc-editorial-status"><span class="sr-only">Status: </span>{model.status.label}</span>}
+  {((!work && model.status) || model.repo || model.tip || (work && link.note)) && <div class="lc-link-meta">
+    {work && link.note && <span class="lc-link-note">{link.note}</span>}
+    {model.status && !work && <span class="lc-editorial-status"><span class="sr-only">Status: </span>{model.status.label}</span>}
     {model.repo && <a href={model.pillHref} target="_blank" rel="noopener noreferrer" aria-label={model.pillLabel}>
       <Icon name={model.companion ? "github" : "star"} class="size-3.5" />
       {model.companion ? "Source" : "Star"}{model.count && <span> · {model.count}</span>}

@@ -267,6 +267,12 @@ const linkSchema = z
     label: z.string().min(1),
     id: contentId.optional(),
     description: z.string().min(1).optional(),
+    headline: z.string().trim().min(1).max(160).optional()
+      .describe("Optional display headline; newlines create intentional line breaks. The label remains the short link name."),
+    note: z.string().trim().min(1).max(240).optional()
+      .describe("Short supporting detail, such as session length or project context."),
+    actionLabel: z.string().trim().min(1).max(80).optional()
+      .describe("Visible invitation on the main destination, such as Explore coaching."),
     iconImage: mediaSource.optional(),
     image: z.object({
       src: mediaSource,

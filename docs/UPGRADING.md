@@ -53,6 +53,9 @@ or `layout:` remains an override; remove it if you want the complete preset.
 Omitting the new fields keeps Classic. Rich link descriptions, icons, preview
 images, and sections work in both layouts. See the
 [configuration examples](../README.md#designs-layouts-and-rich-links).
+Update before adding link `headline`, `note`, or `actionLabel` fields; older
+schemas reject them. Editorial service images now use a square crop, and work
+sections use framed previews with source footers. No media files are rewritten.
 
 Sections must place every canonical link ID exactly once. Keep existing root
 blocks using a `type: blocks` section, or move the blocks into the section list.
