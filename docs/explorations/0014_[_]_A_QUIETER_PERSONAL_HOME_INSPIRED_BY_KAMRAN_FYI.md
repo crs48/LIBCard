@@ -19,6 +19,10 @@ This is a research and design proposal dated **2026-10-19**, not an implemented
 redesign. The accompanying conversational sketches use proposed copy and a
 selection of existing destinations. They do not modify the owner's site.
 
+The follow-up [portable layouts and shareable designs exploration](./0015_[_]_PORTABLE_LAYOUTS_AND_SHAREABLE_DESIGNS.md)
+develops the renderer/config architecture and supersedes the illustrative API
+below where it differs. This document remains the visual-direction reference.
+
 ### Second design pass: monochrome with richer content
 
 The owner selected **Personal home**, accepted the information architecture, and
