@@ -410,6 +410,9 @@ blocks:
 # --- Design and contact shortcuts ---
 # A complete look; explicit layout/theme settings can override it.
 design: personal-home
+layoutOptions:
+  editorial:
+    mediaTone: original
 profileActions: [email, save-contact, show-card]
 
 # --- Persistent corner button (optional; omit or set false to hide) ---
