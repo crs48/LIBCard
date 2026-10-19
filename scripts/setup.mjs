@@ -12,6 +12,9 @@ import { execSync } from "node:child_process";
 import { stdin, stdout } from "node:process";
 import { parse, stringify } from "yaml";
 import { THEMES, libcardSchema } from "../src/lib/schema.mjs";
+import { builtinDesigns, resolveDesign } from "../src/lib/design-manifest.mjs";
+import { discoverPackages, packageCatalog } from "../src/lib/design-packages.mjs";
+import { fileURLToPath } from "node:url";
 
 const CONFIG_PATH = new URL("../libcard.config.yaml", import.meta.url);
 
@@ -44,6 +47,7 @@ function deriveSite() {
 async function main() {
   const existing = existsSync(CONFIG_PATH) ? parse(readFileSync(CONFIG_PATH, "utf-8")) ?? {} : {};
   const guessed = deriveSite();
+  const catalog = [...builtinDesigns, ...packageCatalog(discoverPackages(fileURLToPath(new URL("../", import.meta.url))))];
 
   console.log("\n  LibCard setup — press Enter to keep the value in [brackets].\n");
 
@@ -65,8 +69,8 @@ async function main() {
 
   // `theme` may be a bare slug or the object (switcher) form — read the name.
   const currentTheme = typeof existing.theme === "string" ? existing.theme : (existing.theme?.name ?? "default");
-  const design = await ask("Design (classic | personal-home)", existing.design ?? "classic");
-  const layout = await ask("Layout override (preset | classic | editorial)", existing.layout ?? "preset");
+  const design = await ask(`Design (${catalog.map((d) => d.id).join(" | ")})`, existing.design ?? "classic");
+  const layout = await ask(`Layout override (preset | classic | editorial | ${catalog.filter((d) => d.layout === d.id && !d.builtin).map((d) => d.id).join(" | ")})`, existing.layout ?? "preset");
   const theme = await ask(`Theme override (preset | ${THEMES.join(" | ")})`, existing.theme ? currentTheme : "preset");
   const description = await ask("SEO description", seo.description ?? tagline);
 
@@ -116,6 +120,7 @@ async function main() {
     throw new Error("Config was not changed. Resolve these issues (including section placements for new links):\n" +
       validation.error.issues.map((issue) => `  ${issue.path.join(".")}: ${issue.message}`).join("\n"));
   }
+  resolveDesign(validation.data, catalog);
   if (theme !== "preset" && !THEMES.includes(theme)) throw new Error(`Unknown theme "${theme}". Config was not changed.`);
 
   const header =

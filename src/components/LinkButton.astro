@@ -3,11 +3,12 @@ import { getConfig, getFeedme, type LibcardLink } from "../lib/config";
 import Icon from "./Icon.astro";
 import { resolveLink } from "../lib/link-model";
 import { withBase } from "../lib/site";
-interface Props { link: LibcardLink; }
+import type { ResolvedLink } from "../layout-api/model";
+interface Props { link: LibcardLink | ResolvedLink; }
 const { link } = Astro.props;
 const { external, status, rel, target, companion, repo, count, pillHref, badgeSrc, pillLabel, tip, tipTitle } =
-  await resolveLink(link, (await getConfig()).statuses, await getFeedme());
-const asset = (src: string) => /^https?:\/\//i.test(src) ? src : withBase(import.meta.env.BASE_URL, src);
+  "presentation" in link ? link.presentation : await resolveLink(link, (await getConfig()).statuses, await getFeedme());
+const asset = (src: string) => "presentation" in link || /^https?:\/\//i.test(src) ? src : withBase(import.meta.env.BASE_URL, src);
 
 ---
 <div class="flex w-full items-stretch gap-2" data-link-id={link.id}>

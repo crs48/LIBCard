@@ -6,20 +6,16 @@ import SocialRow from "../components/SocialRow.astro";
 import Section from "../components/Section.astro";
 import CardReveal from "../components/CardReveal.astro";
 import FirstRunNudge from "../components/FirstRunNudge.astro";
-import PageUtilities from "../components/PageUtilities.astro";
-import { getConfig } from "../lib/config";
-import { normalizePage } from "../lib/page";
-interface Props { cardUrl: string; }
-const { cardUrl } = Astro.props;
-const config = await getConfig();
-const page = normalizePage(config);
+import type { LayoutProps } from "../layout-api/model";
+type Props = LayoutProps;
+const { page, options } = Astro.props;
 ---
-<div class="lc-editorial" data-density={config.options.density} data-media-tone={config.options.mediaTone}>
+<div class="lc-editorial" data-density={options.density} data-media-tone={options.mediaTone}>
   <main id="main-content">
     <FirstRunNudge />
-    <div class="lc-editorial-introduction"><Profile editorial /><ProfileActions /></div>
+    <div class="lc-editorial-introduction"><Profile profile={page.profile} editorial /><ProfileActions actions={page.actions} /></div>
     <div class="lc-editorial-sections">{page.sections.map((section, index) => <Section section={section} layout="editorial" index={index} />)}</div>
-    <div class="lc-editorial-contact"><SocialRow /><CardReveal url={cardUrl} /></div>
+    <div class="lc-editorial-contact"><SocialRow socials={page.socials} /><CardReveal url={page.card.url} /></div>
   </main>
-  <PageUtilities />
+  <slot name="utilities" />
 </div>

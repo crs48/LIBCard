@@ -1,0 +1,31 @@
+profile:
+  name: Ada Example
+contact:
+  email: ada@example.com
+site:
+  url: https://example.com
+  base: /fixture
+cardMode:
+  enabled: false
+blocks:
+  - { type: heading, text: Every supported block }
+  - { type: text, markdown: "A **portable** paragraph." }
+  - { type: copy-prompt, text: A generic sample prompt }
+  - { type: divider, label: Contact }
+  - { type: contact-buttons, email: true }
+  - { type: tip-buttons, paypal: example }
+  - type: gallery
+    images: [{ src: /avatar.svg, alt: Generic avatar }]
+  - type: faq
+    items: [{ q: Can this be shared?, a: Yes. }]
+  - { type: video, provider: youtube, id: dQw4w9WgXcQ, title: Sample video }
+  - { type: embed, provider: spotify, url: "https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT", title: Sample audio }
+  - { type: booking, provider: calcom, url: "https://cal.com/example", title: Sample booking }
+  - { type: map, provider: osm, src: "https://www.openstreetmap.org/export/embed.html?bbox=0,0,1,1", title: Sample map }
+  - { type: signup, provider: buttondown, username: example, title: Subscribe }
+  - type: form
+    action: https://formspree.io/f/example
+    fields: [{ name: email, type: email, label: Email }]
+  - { type: tweet, url: "https://example.com/sample-post" }
+  - { type: rss, url: "https://example.invalid/feed.xml" }
+  - { type: github, user: libcard-conformance-nonexistent-user }

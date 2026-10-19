@@ -2,8 +2,8 @@
 import type { PageSection } from "../lib/page";
 import Block from "./Block.astro";
 import LinkGroup from "./LinkGroup.astro";
-interface Props { section: PageSection; layout: "classic" | "editorial"; index: number; }
-const { section, layout, index } = Astro.props;
+interface Props { section: PageSection; layout?: "classic" | "editorial"; index?: number; }
+const { section, layout = "classic", index = 0 } = Astro.props;
 ---
 {section.type === "links" ? <section class="lc-content-section w-full" id={`lc-section-${section.id}`} data-purpose={section.purpose} aria-labelledby={section.title ? `lc-title-${section.id}` : undefined}>
   {section.collapsed ? <details class="lc-section-disclosure">

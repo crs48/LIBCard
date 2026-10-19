@@ -6,25 +6,22 @@ import Section from "../components/Section.astro";
 import Block from "../components/Block.astro";
 import CardReveal from "../components/CardReveal.astro";
 import FirstRunNudge from "../components/FirstRunNudge.astro";
-import PageUtilities from "../components/PageUtilities.astro";
-import { getConfig } from "../lib/config";
-import { normalizePage } from "../lib/page";
-interface Props { cardUrl: string; }
-const { cardUrl } = Astro.props;
-const config = await getConfig();
-const page = normalizePage(config);
+import type { LayoutProps } from "../layout-api/model";
+type Props = LayoutProps;
+const { page } = Astro.props;
+const blocks = page.sections.filter((section) => section.type !== "links");
 ---
 <div class="mx-auto flex min-h-dvh w-full max-w-md flex-col items-center px-4 py-12 sm:py-14">
   <main id="main-content" class="flex w-full flex-1 flex-col items-center gap-6">
     <FirstRunNudge />
-    <Profile />
-    {config.profileActions.length > 0 && <ProfileActions />}
-    <SocialRow />
+    <Profile profile={page.profile} />
+    <ProfileActions actions={page.actions} />
+    <SocialRow socials={page.socials} />
     {page.legacy ? <>
       {page.sections.filter((section) => section.type === "links").map((section) => <Section section={section} layout="classic" index={0} />)}
-      {config.blocks.length > 0 && <div class="flex w-full flex-col gap-4">{config.blocks.map((block) => <Block block={block} />)}</div>}
+      {blocks.length > 0 && <div class="flex w-full flex-col gap-4">{blocks.map((block) => <Block block={block} />)}</div>}
     </> : page.sections.map((section, index) => <Section section={section} layout="classic" index={index} />)}
-    <CardReveal url={cardUrl} />
+    <CardReveal url={page.card.url} />
   </main>
-  <PageUtilities />
+  <slot name="utilities" />
 </div>

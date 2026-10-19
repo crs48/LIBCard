@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import "../../.libcard/themes.css";
 import BaseHead from "../components/BaseHead.astro";
 import ThemeBoot from "../components/ThemeBoot.astro";
 import CornerButton from "../components/CornerButton.astro";
@@ -9,7 +10,7 @@ interface Props {
   title?: string;
   /** Widen the container (used by the multi-column theme gallery). */
   wide?: boolean;
-  layout?: "classic" | "editorial";
+  layout?: string;
 }
 
 const { title, wide, layout = "classic" } = Astro.props;

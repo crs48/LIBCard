@@ -20,7 +20,7 @@ const items = active.cycle.map((slug) => {
   return {
     slug,
     name: m?.name ?? slug,
-    sourceUrl: m ? themeSourceUrl(m.file) : "",
+    sourceUrl: m ? themeSourceUrl(m) : "",
     author: m?.author ?? "",
     authorUrl: m?.authorUrl ?? "",
     requiresAttr: m ? licenseRequiresAttribution(m.license) : true,
@@ -60,14 +60,14 @@ const animate = active.animate;
   const slugs = items.map((i) => i.slug);
 
   function escapeAttr(s) {
-    return String(s).replace(/"/g, "&quot;");
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
   function badgeHtml(it) {
     const linkCls = "underline-offset-4 hover:text-accent hover:underline";
-    const nameLink = `<a href="${escapeAttr(it.sourceUrl)}" target="_blank" rel="noopener noreferrer" class="${linkCls}">${it.name}</a>`;
+    const nameLink = it.sourceUrl ? `<a href="${escapeAttr(it.sourceUrl)}" target="_blank" rel="noopener noreferrer" class="${linkCls}">${escapeAttr(it.name)}</a>` : escapeAttr(it.name);
     const who = it.authorUrl
-      ? `<a href="${escapeAttr(it.authorUrl)}" target="_blank" rel="noopener noreferrer" class="${linkCls}">${it.author}</a>`
-      : `<span>${it.author}</span>`;
+      ? `<a href="${escapeAttr(it.authorUrl)}" target="_blank" rel="noopener noreferrer" class="${linkCls}">${escapeAttr(it.author)}</a>`
+      : `<span>${escapeAttr(it.author)}</span>`;
     return `${sep}${nameLink} theme by ${who}`;
   }
   // Reflect a theme in the footer credit (the footer is parsed after this script,

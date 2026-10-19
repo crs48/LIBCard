@@ -1,19 +1,17 @@
 ---
-import { getConfig, getFeedme } from "../lib/config";
+import { getPageModel, type PageModelV1 } from "../layout-api/model";
 import Icon from "./Icon.astro";
-import { tipActionFor, socialDisplayName } from "../lib/feedme";
 
-const { socials } = await getConfig();
+interface Props { socials?: PageModelV1["socials"]; }
+const socials = Astro.props.socials ?? (await getPageModel()).socials;
 
 // Feedme "More of this" for opted-in socials. The icon row stays exactly as it
 // is; tips render as a separate row of LABELED chips below it (platform icon +
 // name), so on a narrow screen a visitor sees "More of this: [X] [Bluesky]"
 // rather than a cluster of identical tiny hearts. Empty unless the integration
 // is on AND a social carries its own `feedme:` opt-in.
-const feedme = await getFeedme();
 const tips = socials.flatMap((social) => {
-  const name = socialDisplayName(social);
-  const tip = tipActionFor(feedme, "social", social, name);
+  const { name, tip } = social;
   return tip ? [{ social, name, tip }] : [];
 });
 

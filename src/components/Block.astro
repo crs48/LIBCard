@@ -26,6 +26,7 @@ interface Props {
 
 const { block } = Astro.props;
 ---
+<div class="contents" data-libcard-block={block.type}>
 {block.type === "heading" && <Heading block={block} />}
 {block.type === "text" && <TextBlock block={block} />}
 {block.type === "copy-prompt" && <CopyPrompt block={block} />}
@@ -43,3 +44,5 @@ const { block } = Astro.props;
 {block.type === "tweet" && <Tweet block={block} />}
 {block.type === "rss" && <Rss block={block} />}
 {block.type === "github" && <GitHubCard block={block} />}
+
+</div>

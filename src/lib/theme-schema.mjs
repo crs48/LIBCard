@@ -170,7 +170,7 @@ export const themeSchema = z
       .regex(/^[a-z0-9-]+$/, "lowercase letters, numbers, and dashes only")
       .optional(),
     author: z.string().min(1),
-    authorUrl: z.union([z.string().url(), z.literal("")]).optional(),
+    authorUrl: z.union([z.string().url().regex(/^https?:\/\//, "use an http(s) author URL"), z.literal("")]).optional(),
     license: z.string().default("CC-BY-4.0"), // SPDX identifier
     official: z.boolean().default(false),
     mode: z.enum(["light", "dark"]).default("light"),

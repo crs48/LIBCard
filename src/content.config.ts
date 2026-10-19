@@ -2,6 +2,7 @@ import { defineCollection } from "astro:content";
 import { readFileSync } from "node:fs";
 import { parse } from "yaml";
 import { libcardSchema } from "./lib/schema.mjs";
+import { resolve } from "node:path";
 
 // LibCard's entire content is one config object. We load it with a tiny inline
 // loader (the built-in file() loader is built for files holding *many* entries,
@@ -16,7 +17,7 @@ const configPath = process.env.LIBCARD_CONFIG || "libcard.config.yaml";
 
 const libcard = defineCollection({
   loader: () => {
-    const raw = readFileSync(new URL(`../${configPath}`, import.meta.url), "utf-8");
+    const raw = readFileSync(resolve(configPath), "utf-8");
     const data = parse(raw);
     return [{ id: "libcard", ...data }];
   },

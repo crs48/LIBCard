@@ -1,9 +1,11 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"],
+  "exclude": ["dist", "designs/history", "output", ".claude/worktrees"],
   "compilerOptions": {
     "allowJs": true,
-    "strict": true
+    "strict": true,
+    "baseUrl": ".",
+    "paths": { "@libcard/layout": ["src/layout-api/index.ts"], "@libcard/selected": [".libcard/Selected.astro"] }
   }
 }

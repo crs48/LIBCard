@@ -59,7 +59,7 @@ const contribute = "https://github.com/crs48/LIBCard/tree/main/themes";
           <div class="border-t border-border bg-surface px-5 py-3">
             <div class="flex items-baseline justify-between gap-2">
               <a
-                href={themeSourceUrl(t.file)}
+                href={themeSourceUrl(t) || undefined}
                 target="_blank"
                 rel="noopener noreferrer"
                 class="font-semibold text-fg underline-offset-4 hover:text-accent hover:underline"

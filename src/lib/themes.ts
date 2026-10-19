@@ -3,6 +3,7 @@
 // themes/*.yaml by `pnpm run gen:themes`. Node scripts use theme-schema.mjs (the
 // Zod schema + CSS generator) instead — this file is the Astro-facing half.
 import themesData from "../data/themes.json";
+import packageThemes from "../../.libcard/themes.json";
 
 export interface ThemeTokens {
   bg: string;
@@ -35,6 +36,8 @@ export interface ThemeButtons {
 }
 
 export interface ThemeMeta {
+  sourceUrl?: string;
+  designId?: string;
   slug: string;
   name: string;
   /** Source filename in themes/ (e.g. "midnight.yaml") — used to link the theme. */
@@ -55,7 +58,7 @@ export interface ThemeMeta {
 }
 
 /** Every shipped theme, in display order (default first, then official, A→Z). */
-export const themes = themesData as ThemeMeta[];
+export const themes = [...themesData, ...packageThemes] as ThemeMeta[];
 
 const bySlug = new Map(themes.map((t) => [t.slug, t]));
 
@@ -83,8 +86,8 @@ export function effectsForSlugs(slugs: string[]): { bgStage: boolean; pattern: b
 export const LIBCARD_REPO = "https://github.com/crs48/LIBCard";
 
 /** Link to a theme's source file in the gallery, e.g. for the footer credit. */
-export function themeSourceUrl(file: string): string {
-  return `${LIBCARD_REPO}/blob/main/themes/${file}`;
+export function themeSourceUrl(theme: ThemeMeta): string {
+  return theme.designId ? theme.sourceUrl || theme.authorUrl || "" : `${LIBCARD_REPO}/blob/main/themes/${theme.file}`;
 }
 
 // Permissive licenses where keeping the "Theme by" credit is goodwill, not a

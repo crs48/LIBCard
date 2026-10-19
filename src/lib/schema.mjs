@@ -673,14 +673,14 @@ export const libcardSchema = z.object({
   ])).optional(),
   profileActions: z.array(z.enum(["email", "save-contact", "show-card"])).default([]),
   socials: z.array(socialSchema).default([]),
-  design: z.enum(["classic", "personal-home"]).optional(),
-  layout: z.enum(["classic", "editorial"]).optional(),
+  design: z.union([z.enum(["classic", "personal-home"]), z.string().regex(/^[a-z][a-z0-9-]{0,63}\/[a-z][a-z0-9-]{0,63}$/)]).optional(),
+  layout: z.union([z.enum(["classic", "editorial"]), z.string().regex(/^[a-z][a-z0-9-]{0,63}\/[a-z][a-z0-9-]{0,63}$/)]).optional(),
   layoutOptions: z.object({
     editorial: z.object({
       density: z.enum(["compact", "comfortable"]).optional(),
       mediaTone: z.enum(["original", "grayscale"]).optional(),
     }).strict().optional(),
-  }).strict().optional(),
+  }).catchall(z.record(z.unknown())).optional(),
   theme: themeConfigSchema,
   cornerButton: cornerButtonSchema,
   footer: z
@@ -691,6 +691,7 @@ export const libcardSchema = z.object({
       // credit for permissively-licensed themes (MIT/CC0/…). Themes under a
       // license that requires attribution (e.g. CC-BY-4.0) keep their credit.
       themeCredit: z.boolean().default(true),
+      designCredit: z.boolean().default(true),
     })
     .strict()
     .default({}),

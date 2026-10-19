@@ -1,14 +1,11 @@
 ---
-import { getConfig, getFeedme } from "../lib/config";
-import { withBase } from "../lib/site";
+import { getPageModel, type PageModelV1 } from "../layout-api/model";
 import Icon from "./Icon.astro";
-import { checkoutUrl, creatorTarget, formatSignal } from "../lib/feedme";
 import { renderMarkdown } from "../lib/markdown";
-interface Props { editorial?: boolean; }
+interface Props { editorial?: boolean; profile?: PageModelV1["profile"]; }
 const { editorial = false } = Astro.props;
 
-const config = await getConfig();
-const { profile } = config;
+const profile = Astro.props.profile ?? (await getPageModel()).profile;
 // Optional Feedme CTA: "Give to <name>" opens the creator's checkout with
 // nothing pre-selected (no query string) so the visitor chooses there. Shown
 // whenever the integration is enabled and `feedme.give` isn't false — even if
@@ -16,18 +13,12 @@ const { profile } = config;
 // again at checkout. (`give: false` is for owners whose checkout link already
 // sits in a `tip-buttons` block.) The name is the LOCAL profile name, so card
 // copy stays consistent whatever Feedme says.
-const feedme = await getFeedme();
-const giveHref = feedme && config.feedme?.give !== false ? checkoutUrl(feedme.origin) : null;
+const giveHref = profile.give?.href;
 // If the endpoint answered, show the synthesized creator target's public
 // signal under the CTA (a build-time snapshot). Unavailable → no numbers.
-const creator = creatorTarget(feedme);
+const signal = profile.give?.signal;
 const firstName = profile.name.trim().split(/\s+/)[0];
-const base = import.meta.env.BASE_URL;
-const avatar = profile.avatar
-  ? profile.avatar.startsWith("http")
-    ? profile.avatar
-    : withBase(base, profile.avatar)
-  : withBase(base, "/avatar.svg");
+const avatar = profile.avatar;
 ---
 <header class:list={["flex flex-col items-center text-center gap-3", editorial && "lc-editorial-profile"]}>
   <img
@@ -63,9 +54,9 @@ const avatar = profile.avatar
           <span>Give to {profile.name}</span>
         </a>
         <p class="max-w-xs text-xs text-muted text-balance">They get all of it. Where you placed it is a suggestion.</p>
-        {creator && (
+        {signal && (
           <p class="lc-tip-signal text-[11px] text-muted/80">
-            Just {firstName}: {formatSignal(creator)}
+            Just {firstName}: {signal}
           </p>
         )}
       </div>

@@ -3,10 +3,11 @@ import { getConfig, getFeedme, type LibcardLink } from "../lib/config";
 import { resolveLink } from "../lib/link-model";
 import { withBase } from "../lib/site";
 import Icon from "./Icon.astro";
-interface Props { link: LibcardLink; }
+import type { ResolvedLink } from "../layout-api/model";
+interface Props { link: LibcardLink | ResolvedLink; }
 const { link } = Astro.props;
-const model = await resolveLink(link, (await getConfig()).statuses, await getFeedme());
-const asset = (src: string) => /^https?:\/\//i.test(src) ? src : withBase(import.meta.env.BASE_URL, src);
+const model = "presentation" in link ? link.presentation : await resolveLink(link, (await getConfig()).statuses, await getFeedme());
+const asset = (src: string) => "presentation" in link || /^https?:\/\//i.test(src) ? src : withBase(import.meta.env.BASE_URL, src);
 ---
 <article class:list={["lc-editorial-link", !!link.image && "has-image"]} data-link-id={link.id}>
   <a class="lc-destination" href={link.url} target={model.target} rel={model.rel}>

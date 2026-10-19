@@ -12,6 +12,7 @@
 // theme name and the author as you cycle.
 import { getConfig, getActiveTheme, hasLiveEmbeds, getAnalytics, hasRemoteMedia } from "../lib/config";
 import { getThemeMeta, licenseRequiresAttribution, LIBCARD_REPO, themeSourceUrl } from "../lib/themes";
+import catalog from "../../.libcard/designs.json";
 
 const cfg = await getConfig();
 const active = await getActiveTheme();
@@ -38,8 +39,14 @@ const analytics = await getAnalytics();
 const showCredit =
   !!meta && (cfg.footer.themeCredit || licenseRequiresAttribution(meta.license));
 const sep = poweredBy ? " · " : "";
+type Credit = { name: string; author: string; authorUrl?: string; license: string; source?: string };
+const designCredits = [...new Set([cfg.design, cfg.layout])].flatMap((id) => {
+  const entry = catalog.find((d) => d.id === id);
+  const credit = entry && "credit" in entry ? entry.credit as Credit : undefined;
+  return credit && (cfg.footer.designCredit || licenseRequiresAttribution(credit.license)) ? [credit] : [];
+});
 ---
-<footer class="mt-10 text-center text-xs text-muted">
+<footer class="mt-10 text-center text-xs text-muted" data-libcard-utilities>
   <p>
     {
       poweredBy && (
@@ -56,7 +63,7 @@ const sep = poweredBy ? " · " : "";
     <span id="lc-theme-by" hidden={!showCredit}>
       {sep}
       <a
-        href={meta ? themeSourceUrl(meta.file) : LIBCARD_REPO}
+        href={meta ? themeSourceUrl(meta) || undefined : LIBCARD_REPO}
         target="_blank"
         rel="noopener noreferrer"
         class="underline-offset-4 hover:text-accent hover:underline"
@@ -80,6 +87,10 @@ const sep = poweredBy ? " · " : "";
       }
     </span>
   </p>
+  {designCredits.map((credit) => <p class="mt-1" data-design-credit>
+    <a href={credit.source} target="_blank" rel="noopener noreferrer" class="hover:underline">{credit.name}</a>{" "}design by{" "}
+    <a href={credit.authorUrl} target="_blank" rel="noopener noreferrer" class="hover:underline">{credit.author}</a>
+  </p>)}
   {
     liveEmbeds && (
       <p class="mt-1 text-[0.7rem] text-muted/80">Some embedded content loads from third parties.</p>

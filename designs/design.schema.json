@@ -1,0 +1,209 @@
+{
+  "$ref": "#/definitions/LibcardDesign",
+  "definitions": {
+    "LibcardDesign": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "number",
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "maxLength": 129,
+          "pattern": "^[a-z][a-z0-9-]{0,63}\\/[a-z][a-z0-9-]{0,63}$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "version": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "author": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authorUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "source": {
+          "type": "string",
+          "format": "uri"
+        },
+        "license": {
+          "type": "string",
+          "minLength": 1
+        },
+        "compatibility": {
+          "type": "object",
+          "properties": {
+            "layoutApi": {
+              "type": "number",
+              "const": 1
+            },
+            "astro": {
+              "type": "string"
+            },
+            "libcard": {
+              "type": "string",
+              "default": ">=0.2.0 <1"
+            }
+          },
+          "required": [
+            "layoutApi",
+            "astro"
+          ],
+          "additionalProperties": false
+        },
+        "layout": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "use": {
+                  "type": "string",
+                  "enum": [
+                    "classic",
+                    "editorial"
+                  ]
+                }
+              },
+              "required": [
+                "use"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "entry": {
+                  "type": "string",
+                  "maxLength": 240,
+                  "pattern": "^(?:\\.\\/)?[a-zA-Z0-9_-][a-zA-Z0-9_./-]*$"
+                },
+                "optionsSchema": {
+                  "type": "string",
+                  "maxLength": 240,
+                  "pattern": "^(?:\\.\\/)?[a-zA-Z0-9_-][a-zA-Z0-9_./-]*$"
+                }
+              },
+              "required": [
+                "entry"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "appearance": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "use": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9-]+$"
+                }
+              },
+              "required": [
+                "use"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "file": {
+                  "type": "string",
+                  "maxLength": 240,
+                  "pattern": "^(?:\\.\\/)?[a-zA-Z0-9_-][a-zA-Z0-9_./-]*$"
+                }
+              },
+              "required": [
+                "file"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "defaults": {
+          "type": "object",
+          "additionalProperties": {},
+          "default": {}
+        },
+        "capabilities": {
+          "type": "object",
+          "properties": {
+            "blockFallback": {
+              "type": "string",
+              "const": "core"
+            },
+            "clientJavaScript": {
+              "type": "boolean"
+            },
+            "remoteAssets": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "blockFallback",
+            "clientJavaScript",
+            "remoteAssets"
+          ],
+          "additionalProperties": false
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 240,
+            "pattern": "^(?:\\.\\/)?[a-zA-Z0-9_-][a-zA-Z0-9_./-]*$"
+          },
+          "minItems": 1,
+          "maxItems": 500
+        },
+        "previews": {
+          "type": "object",
+          "properties": {
+            "desktop": {
+              "type": "string",
+              "maxLength": 240,
+              "pattern": "^(?:\\.\\/)?[a-zA-Z0-9_-][a-zA-Z0-9_./-]*$"
+            },
+            "mobile": {
+              "type": "string",
+              "maxLength": 240,
+              "pattern": "^(?:\\.\\/)?[a-zA-Z0-9_-][a-zA-Z0-9_./-]*$"
+            }
+          },
+          "required": [
+            "desktop",
+            "mobile"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "id",
+        "name",
+        "version",
+        "author",
+        "license",
+        "compatibility",
+        "layout",
+        "capabilities",
+        "files"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

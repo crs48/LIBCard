@@ -1,14 +1,8 @@
 ---
-import { getConfig } from "../lib/config";
-import { withBase } from "../lib/site";
+import { getPageModel, type ProfileAction } from "../layout-api/model";
 import Icon from "./Icon.astro";
-const config = await getConfig();
-type Action = { label: string; href: string; icon: string; download?: string };
-const actions = [...new Set(config.profileActions)].flatMap((kind): Action[] => {
-  if (kind === "email") return config.contact.email ? [{ label: "Say hello", href: `mailto:${config.contact.email}`, icon: "mail", download: undefined }] : [];
-  if (kind === "save-contact") return [{ label: "Save contact", href: withBase(import.meta.env.BASE_URL, "/contact.vcf"), icon: "contact", download: "contact.vcf" }];
-  return [{ label: "Show card", href: withBase(import.meta.env.BASE_URL, "/card"), icon: "qr-code", download: undefined }];
-});
+interface Props { actions?: ProfileAction[]; }
+const actions = Astro.props.actions ?? (await getPageModel()).actions;
 ---
 {actions.length > 0 && <nav class="lc-profile-actions" aria-label="Contact and business card">
   {actions.map((action) => <a href={action.href} download={action.download}><Icon name={action.icon} class="size-4" />{action.label}</a>)}

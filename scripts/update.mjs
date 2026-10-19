@@ -20,6 +20,9 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname } from "node:path";
+import { isEnginePath } from "../src/lib/engine-ownership.mjs";
+import { discoverPackages, safePath } from "../src/lib/design-packages.mjs";
+import semver from "semver";
 
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
@@ -29,32 +32,6 @@ const refArg = (args.find((a) => a.startsWith("--ref=")) ?? "").split("=")[1] ||
 const root = fileURLToPath(new URL("../", import.meta.url));
 const ua = "libcard-update";
 const apiHeaders = { "User-Agent": ua, Accept: "application/vnd.github+json" };
-
-// Derived files are rebuilt by the post-update build (prebuild → gen-themes +
-// generate-schema), so we skip them rather than copy a stale snapshot that
-// wouldn't know about a theme you authored.
-const REGENERATED = new Set([
-  "libcard.schema.json",
-  "src/data/themes.json",
-  "src/styles/themes.gen.css",
-  "themes/theme.schema.json",
-]);
-
-// The engine — the only files this script writes. A path is synced only if it
-// matches one of these rules. Everything else upstream (README.md, AGENTS.md,
-// docs/**, LICENSE, .github/CODEOWNERS, and — crucially — your libcard.config.yaml
-// and public/**) is left untouched.
-const ENGINE_FILES = new Set(["astro.config.mjs", "package.json", "pnpm-lock.yaml", "tsconfig.json"]);
-const ENGINE_DIRS = ["src/", "scripts/", ".github/workflows/"];
-
-/** Built-in themes ship as themes/*.yaml in the upstream tree. A theme that
- *  exists only in YOUR repo isn't in that tree, so it's never matched here —
- *  that's how owner-authored themes are preserved (a plain set difference). */
-const isEngine = (p) =>
-  !REGENERATED.has(p) &&
-  (ENGINE_FILES.has(p) ||
-    ENGINE_DIRS.some((d) => p.startsWith(d)) ||
-    (p.startsWith("themes/") && p.endsWith(".yaml")));
 
 /** Resolve which ref to sync from: an explicit --ref, else the latest published
  *  release, else main (a brand-new project may not have cut a release yet). */
@@ -90,19 +67,41 @@ async function main() {
     console.error(`Failed to list ${upstream}@${ref} (HTTP ${res.status}).${hint}`);
     process.exit(1);
   }
-  const { tree, truncated } = await res.json();
-  if (truncated) console.warn("⚠ Upstream tree was truncated by the API; some files may be missing.");
+  const { tree, truncated, sha: revision } = await res.json();
+  if (truncated) throw new Error("Upstream tree was truncated; no files were changed.");
 
-  const wanted = tree.filter((e) => e.type === "blob" && isEngine(e.path));
+  const wanted = tree.filter((e) => e.type === "blob" && isEnginePath(e.path));
 
+  const packages = discoverPackages(root);
+  const fetchFile = async (path) => {
+    const response = await fetch(`https://raw.githubusercontent.com/${upstream}/${revision}/${path}`, { headers: { "User-Agent": ua } });
+    if (!response.ok) throw new Error(`Cannot read ${path} (HTTP ${response.status}); no files were changed.`);
+    return Buffer.from(await response.arrayBuffer());
+  };
+  if (packages.length) {
+    const remotePackage = JSON.parse((await fetchFile("package.json")).toString("utf8"));
+    const remoteApi = JSON.parse((await fetchFile("src/layout-api/version.json")).toString("utf8"));
+    for (const { manifest } of packages) {
+      if (remoteApi.layoutApi !== manifest.compatibility.layoutApi ||
+          !semver.satisfies(remotePackage.version, manifest.compatibility.libcard) ||
+          !semver.intersects(remotePackage.dependencies.astro, manifest.compatibility.astro)) {
+        throw new Error(`${manifest.id} is incompatible with the target engine. Update or remove that design before updating the engine; no files were changed.`);
+      }
+    }
+  }
+  // Download and validate every destination before making the update reviewable.
+  const files = [];
+  for (const entry of wanted) {
+    if (entry.mode === "120000") throw new Error(`Upstream symlink is unsupported: ${entry.path}`);
+    const localPath = safePath(root, entry.path);
+    files.push({ ...entry, localPath, remote: await fetchFile(entry.path) });
+  }
   let added = 0;
   let updated = 0;
-  for (const e of wanted) {
-    const localPath = `${root}${e.path}`;
-    const rawUrl = `https://raw.githubusercontent.com/${upstream}/${ref}/${e.path}`;
-    const remote = await (await fetch(rawUrl, { headers: { "User-Agent": ua } })).text();
-    const current = existsSync(localPath) ? readFileSync(localPath, "utf-8") : null;
-    if (current === remote) continue;
+  for (const e of files) {
+    const { localPath, remote } = e;
+    const current = existsSync(localPath) ? readFileSync(localPath) : null;
+    if (current?.equals(remote)) continue;
     const isNew = current === null;
     console.log(`  ${isNew ? "+ add " : "~ update"} ${e.path}`);
     if (!dryRun) {
@@ -118,7 +117,7 @@ async function main() {
     return;
   }
   console.log(`${dryRun ? "Would apply" : "Applied"} ${added} new, ${updated} updated engine file(s) from ${upstream}@${ref}.`);
-  console.log("Your libcard.config.yaml, public/, and any themes you wrote were left untouched.");
+  console.log("Your config, public/, custom themes, designs/, and designs.lock.yaml were left untouched.");
   if (!dryRun) {
     console.log("\nNext:");
     console.log("  pnpm install && pnpm build   # reinstall deps + regenerate derived files (fails loudly if the");

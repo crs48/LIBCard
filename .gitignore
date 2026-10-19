@@ -27,6 +27,7 @@ pnpm-debug.log*
 dist/
 .astro/
 .tmp/
+.libcard/
 
 # ---- Generated theme previews (rebuilt by `pnpm run shoot-themes` / theme CI) ----
 themes/.previews/

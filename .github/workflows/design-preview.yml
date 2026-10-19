@@ -1,0 +1,56 @@
+name: Design conformance and previews
+
+# Executable community layouts NEVER run in pull_request_target or in the
+# privileged theme-preview workflow. This job publishes only an Actions artifact.
+on:
+  pull_request:
+    paths: ["designs/local/**", "src/layout-api/**", "src/layouts/**", "scripts/design*.mjs", "src/lib/design*.mjs"]
+  workflow_dispatch:
+    inputs:
+      repository:
+        description: HTTPS URL of a self-contained design repository
+        required: true
+        type: string
+      ref:
+        description: Version tag or exact commit
+        required: true
+        type: string
+      design:
+        description: Package ID (author/name)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Install requested release without running package code
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          DESIGN_SOURCE: ${{ inputs.repository }}
+          DESIGN_REF: ${{ inputs.ref }}
+        run: pnpm run design:add -- "$DESIGN_SOURCE" "--ref=$DESIGN_REF"
+      - name: Build generic fixtures and capture previews (no deployment secrets)
+        env:
+          DESIGN_ID: ${{ inputs.design }}
+        run: node scripts/check-designs-ci.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: design-previews
+          path: .libcard/checks/**/*.png
+          include-hidden-files: true
+          if-no-files-found: error
