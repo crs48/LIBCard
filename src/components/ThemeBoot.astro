@@ -21,11 +21,15 @@ interface Props {
   random?: boolean;
   restoreTheme?: boolean;
   restoreMode?: boolean;
+  preview?: boolean;
 }
-const { pool, allowed, random = false, restoreTheme = true, restoreMode = false } = Astro.props;
+const { pool, allowed, random = false, restoreTheme = true, restoreMode = false, preview = false } = Astro.props;
 ---
-<script is:inline define:vars={{ pool, allowed, random, restoreTheme, restoreMode }}>
-  if (random && pool.length) {
+<script is:inline define:vars={{ pool, allowed, random, restoreTheme, restoreMode, preview }}>
+  if (preview) {
+    const requested = new URLSearchParams(location.search).get("theme");
+    if (allowed.includes(requested)) document.documentElement.dataset.theme = requested;
+  } else if (random && pool.length) {
     document.documentElement.dataset.theme = pool[Math.floor(Math.random() * pool.length)];
   } else if (restoreTheme) {
     try {

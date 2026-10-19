@@ -4,23 +4,27 @@ import "../../.libcard/themes.css";
 import BaseHead from "../components/BaseHead.astro";
 import ThemeBoot from "../components/ThemeBoot.astro";
 import CornerButton from "../components/CornerButton.astro";
-import { getConfig, getActiveTheme, getCardMode, getThemeEffects, getAnalytics } from "../lib/config";
+import { getConfig, getActiveTheme, getCardMode, getAnalytics, type LibcardConfig } from "../lib/config";
+import { effectsForSlugs, themes } from "../lib/themes";
 
 interface Props {
   title?: string;
   /** Widen the container (used by the multi-column theme gallery). */
   wide?: boolean;
   layout?: string;
+  config?: LibcardConfig;
+  preview?: boolean;
 }
 
-const { title, wide, layout = "classic" } = Astro.props;
-const { cornerButton } = await getConfig();
+const { title, wide, layout = "classic", preview = false } = Astro.props;
+const config = Astro.props.config ?? await getConfig();
+const { cornerButton } = config;
 // The owner's chosen theme is server-rendered into <html data-theme> so first
 // paint, crawlers, and no-JS visitors all see it. The switcher/random mode (if
 // enabled) only re-themes on the client.
-const theme = await getActiveTheme();
+const theme = await getActiveTheme(config);
 // Client theme JS ships only for opt-in theme or color-mode controls.
-const themeJs = theme.switcher || theme.random || theme.modeSwitcher;
+const themeJs = theme.switcher || theme.random || theme.modeSwitcher || preview;
 // Landscape "card mode": the rotate-to-reveal business card. Suppressed on the
 // wide gallery layout, where flipping to a card overlay makes no sense.
 const card = await getCardMode();
@@ -29,7 +33,8 @@ const showCardMode = card.enabled && !wide;
 // pattern texture). Both are pure CSS; absent unless a theme opts in. The body
 // is deliberately NOT given an opaque `bg-bg`: `html` already paints `--lc-bg`,
 // and a transparent body lets the fixed mesh stage (z-index:-2) show through.
-const fx = await getThemeEffects();
+const candidates = preview ? themes.map((theme) => theme.slug) : theme.switcher || theme.random ? [...theme.cycle, ...theme.randomPool] : [theme.name];
+const fx = effectsForSlugs(candidates);
 // Opt-in cookieless analytics. The GoatCounter `pixel` mode is the zero-JS path:
 // a single <img> beacon rendered at the end of the body (no script at all). The
 // Umami auto-tagger decorates outbound links so their clicks are counted; it
@@ -48,9 +53,9 @@ const umamiTagger =
 <!doctype html>
 <html lang="en" data-theme={theme.name} data-color-mode={theme.mode} data-corner-button={cornerButton ? cornerButton.position : undefined}>
   <head>
-    <BaseHead title={title} />
+    <BaseHead title={title} preview={preview} />
     {/* Restore opted-in visitor choices before paint. System mode itself is CSS-only. */}
-    {themeJs && <ThemeBoot pool={theme.randomPool} allowed={theme.cycle} random={theme.random} restoreTheme={theme.switcher || theme.random} restoreMode={theme.modeSwitcher} />}
+    {themeJs && <ThemeBoot pool={theme.randomPool} allowed={preview ? candidates : theme.cycle} random={theme.random} restoreTheme={theme.switcher || theme.random} restoreMode={theme.modeSwitcher} preview={preview} />}
   </head>
   <body data-layout={layout} class="min-h-dvh font-sans antialiased" data-card-mode={showCardMode ? "true" : undefined}>
     {fx.bgStage && <div class="lc-bg-stage" aria-hidden="true" />}

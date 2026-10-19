@@ -6,17 +6,19 @@
 //     Transitions API (instant-swap fallback);
 //   • (always, when included) syncs the footer design/layout/theme credits to whatever
 //     theme is active on load — which ThemeBoot may have randomized or restored.
-import { getConfig, getActiveTheme } from "../lib/config";
-import { getThemeMeta } from "../lib/themes";
+import { getConfig, getActiveTheme, type LibcardConfig } from "../lib/config";
+import { getThemeMeta, themes } from "../lib/themes";
 import { footerCredits, isHomePage } from "../lib/footer";
 
-const cfg = await getConfig();
-const active = await getActiveTheme();
+interface Props { config?: LibcardConfig; preview?: boolean; }
+const cfg = Astro.props.config ?? await getConfig();
+const active = await getActiveTheme(cfg);
 const switcher = active.switcher;
 
-const context = { base: import.meta.env.BASE_URL, home: isHomePage(Astro.url.pathname, import.meta.env.BASE_URL) };
+const context = { base: import.meta.env.BASE_URL, home: Astro.props.preview || isHomePage(Astro.url.pathname, import.meta.env.BASE_URL) };
 // Resolve the same credits as the server for every possible visitor selection.
-const items = [...new Set([...active.cycle, ...active.randomPool])].map((slug) => {
+const candidates = Astro.props.preview ? themes.map((theme) => theme.slug) : [...active.cycle, ...active.randomPool];
+const items = [...new Set(candidates)].map((slug) => {
   const m = getThemeMeta(slug);
   return {
     slug,

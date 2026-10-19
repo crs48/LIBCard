@@ -73,6 +73,12 @@ its layout and theme match, or the layout and active theme when mixed. Existing
 `footer.designCredit` and `footer.themeCredit` settings still control optional
 credits; required attribution remains. No config change is needed.
 
+With `footer.designGallery: true`, the footer action now tries a random design
+and theme directly. Update and rebuild to generate its `/designs/try/…` pages.
+This opt-in builds all installed layouts for previews; with it off, inactive
+layout code stays out of the build. Previews preserve your content and do not
+change your configured home design or theme. Existing gallery URLs still work.
+
 Update before adding `profile.role` or `headerAction`. Personal home places the
 role beside the location beneath your name and the header action inline in the
 masthead. Classic preserves both. To move an existing support link into the

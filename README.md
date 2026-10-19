@@ -343,8 +343,15 @@ layoutOptions:
 
 The same rich config works with `layout: classic` or an installed custom layout.
 Browse `/designs` for complete designs and `/themes` for appearances.
-Set `footer.designGallery: true` to add a “Try different designs” link at the
-bottom of your card. It is hidden by default.
+Set `footer.designGallery: true` to add “Try a different design” at the bottom
+of your card. Each click picks a different installed design and a random theme,
+opening a separately rendered preview of your own content. The preview URL keeps
+the selection on reload; “Back to …” returns to your configured default. The home
+URL always keeps its configured design (`design: personal-home` on this site).
+Without JavaScript, the link opens another design with its default theme.
+This control is off by default. Enabling it builds preview pages for all installed
+designs, including their layout code. The `/designs` gallery remains available
+through the footer credits.
 
 The footer names and links the complete design when its layout and theme match.
 Mixing them shows the actual layout and theme instead; each name opens its gallery

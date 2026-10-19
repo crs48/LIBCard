@@ -4,16 +4,18 @@ import { absoluteUrl, withBase } from "../lib/site";
 
 interface Props {
   title?: string;
+  preview?: boolean;
 }
 
 const cfg = await getConfig();
-const { title } = Astro.props;
+const { title, preview = false } = Astro.props;
 const base = import.meta.env.BASE_URL;
 
 const pageTitle = title ? `${title} · ${cfg.profile.name}` : `${cfg.profile.name} · LibCard`;
 const description = cfg.seo?.description ?? cfg.profile.tagline ?? `${cfg.profile.name}'s links, all in one place.`;
 
-const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname;
+const canonicalPath = preview ? withBase(base, "/") : Astro.url.pathname;
+const canonical = Astro.site ? new URL(canonicalPath, Astro.site).href : canonicalPath;
 
 const ogImage = cfg.seo?.ogImage
   ? cfg.seo.ogImage.startsWith("http")
@@ -36,6 +38,7 @@ const analytics = await getAnalytics();
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{pageTitle}</title>
 <meta name="description" content={description} />
+{preview && <meta name="robots" content="noindex, follow" />}
 <link rel="icon" href={favicon} type="image/svg+xml" />
 <link rel="icon" href={faviconPng} type="image/png" sizes="32x32" />
 <link rel="apple-touch-icon" href={appleTouchIcon} />

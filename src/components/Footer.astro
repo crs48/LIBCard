@@ -3,15 +3,16 @@
 import { getConfig, getActiveTheme, hasLiveEmbeds, getAnalytics, hasRemoteMedia } from "../lib/config";
 import { getThemeMeta, LIBCARD_REPO } from "../lib/themes";
 import { footerCredits, isHomePage } from "../lib/footer";
-import { withBase } from "../lib/site";
+import type { LibcardConfig } from "../lib/config";
+import DesignSwitcher from "./DesignSwitcher.astro";
 
-const cfg = await getConfig();
-const active = await getActiveTheme();
+interface Props { config?: LibcardConfig; preview?: boolean; }
+const { config, preview = false } = Astro.props;
+const cfg = config ?? await getConfig();
+const active = await getActiveTheme(cfg);
 const meta = getThemeMeta(active.name);
 
 const poweredBy = cfg.footer.poweredBy;
-const designGalleryHref = withBase(import.meta.env.BASE_URL, "/designs");
-const showDesignGallery = cfg.footer.designGallery && Astro.url.pathname.replace(/\/$/, "") !== designGalleryHref.replace(/\/$/, "");
 // Coarse, non-identifying attribution on the badge link. It ships no JS and sets
 // no cookies. The real signal is the click's Referer header, which shows up under
 // the repo's Insights → Traffic → "Referring sites" — so the badge link keeps
@@ -30,7 +31,7 @@ const analytics = await getAnalytics();
 
 const credits = footerCredits(cfg, meta, {
   base: import.meta.env.BASE_URL,
-  home: isHomePage(Astro.url.pathname, import.meta.env.BASE_URL),
+  home: preview || isHomePage(Astro.url.pathname, import.meta.env.BASE_URL),
 });
 ---
 <footer class="mt-10 text-center text-xs text-muted" data-libcard-utilities>
@@ -68,7 +69,5 @@ const credits = footerCredits(cfg, meta, {
       <p class="mt-1 text-[0.7rem] text-muted/80">This page counts anonymous visits — no cookies, no personal data.</p>
     )
   }
-  {showDesignGallery && <a href={designGalleryHref} class="lc-design-gallery mt-2 inline-flex min-h-11 items-center gap-2 text-xs underline-offset-4 hover:text-accent hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent">
-    Try different designs <span aria-hidden="true">→</span>
-  </a>}
+  {cfg.footer.designGallery && <DesignSwitcher current={cfg.design ?? "classic"} preview={preview} />}
 </footer>

@@ -83,7 +83,8 @@ entry, and remove any obsolete options/appearance references.
 
 **Trust model:** installing and inspecting metadata does not execute package code.
 Building, running `pnpm dev`, or running a full design check executes the selected
-Astro layout with your build's privileges. Review executable packages as source
+Astro layout with your build's privileges. Opting into `footer.designGallery`
+also builds the installed layouts for visitor previews. Review executable packages as source
 code. Data-only presets and appearance YAML stay validated data. This format
 accepts no package dependencies, install scripts, symlinks, submodules, hidden
 files, or paths outside a package. It is not a sandbox for malicious source code.

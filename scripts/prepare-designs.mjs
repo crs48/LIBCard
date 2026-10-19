@@ -39,9 +39,18 @@ export function prepareDesigns(root = projectRoot) {
   // Gallery thumbnails are data assets, never an import of inactive layout code.
   const previews = packages.filter((p) => p.manifest.previews).map((p, i) => ({ id: p.manifest.id, i, path: relative(output, resolve(p.dir, p.manifest.previews.desktop)).split("\\").join("/") }));
   writeChanged(join(output, "previews.ts"), previews.map((p) => `import preview${p.i} from ${JSON.stringify(`${p.path}?url`)};`).join("\n") + `\nexport default {${previews.map((p) => `${JSON.stringify(p.id)}: preview${p.i}`).join(",")}} as Record<string, string>;\n`);
-  // One literal import. Inactive Astro/JS/CSS never enters Vite's module graph.
+  // The home page imports only its selected layout; visitor previews opt in below.
   const importPath = relative(output, entry).split("\\").join("/");
   writeChanged(join(output, "Selected.astro"), `---\nimport Home from ${JSON.stringify(importPath.startsWith(".") ? importPath : `./${importPath}`)};\nimport type { LayoutProps } from "@libcard/layout";\ntype Props = LayoutProps;\nconst { page, options } = Astro.props;\n---\n<Home page={page} options={options}><slot name="utilities" slot="utilities" /></Home>\n`);
+  // Opting into the design switcher builds separate pages for installed designs.
+  // Otherwise keep inactive executable layouts out of the module graph.
+  const previewLayouts = config.footer?.designGallery ? [...new Set(catalog.map((design) => design.layout))] : [selected.layout];
+  const previewImports = previewLayouts.map((layout, i) => {
+    const pkg = packages.find((p) => p.manifest.id === layout);
+    const path = pkg ? resolve(pkg.dir, pkg.manifest.layout.entry) : join(root, `src/layouts/${layout === "classic" ? "Classic" : "Editorial"}.astro`);
+    return `import Home${i} from ${JSON.stringify(`./${relative(output, path).split("\\").join("/")}`)};`;
+  });
+  writeChanged(join(output, "Preview.astro"), `---\n${previewImports.join("\n")}\nimport type { LayoutProps } from "@libcard/layout";\ntype Props = LayoutProps & { layout: string };\nconst { layout, page, options } = Astro.props;\nconst layouts: Record<string, typeof Home0> = {${previewLayouts.map((layout, i) => `${JSON.stringify(layout)}: Home${i}`).join(",")}};\nconst Home = layouts[layout];\nif (!Home) throw new Error("Unknown preview layout: " + layout);\n---\n<Home page={page} options={options}><slot name="utilities" slot="utilities" /></Home>\n`);
   writeChanged(join(output, "designs.json"), JSON.stringify(catalog, null, 2) + "\n");
   writeChanged(join(output, "themes.json"), JSON.stringify(appearances.map((theme) => ({ ...toRegistryEntry(theme), sourceUrl: theme.sourceUrl, designId: theme.designId, preview: "" })), null, 2) + "\n");
   writeChanged(join(output, "themes.css"), appearances.map(themeToCss).join("\n\n"));

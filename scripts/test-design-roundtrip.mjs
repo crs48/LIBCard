@@ -64,6 +64,7 @@ try {
   assert(readFileSync(join(site, "dist/designs/index.html"), "utf8").includes("https://example.com/notebook"));
   assert(readFileSync(join(site, "dist/themes/index.html"), "utf8").includes("https://example.com/ink-source"));
   assert(html.includes("data-theme=\"design-")); assert(!allText(join(site, "dist")).includes("inactive-sentinel"));
+  assert(!existsSync(join(site, "dist/designs/try")));
   const packagedTheme = JSON.parse(readFileSync(join(site, ".libcard/themes.json"), "utf8"))[0];
   assert.equal(packagedTheme.schemes.dark.tokens.bg, "#171717");
   assert(readFileSync(join(site, ".libcard/themes.css"), "utf8").includes("prefers-color-scheme: dark"));
@@ -86,6 +87,22 @@ try {
   html = readFileSync(join(site, "dist/index.html"), "utf8");
   assert(html.includes("Separate artist")); assert(!html.includes('id="lc-presentation-credit" hidden')); assert(!html.includes('data-credit-kind="design"'));
   console.log("✓ Explicit update, edited-source fork, overwrite refusal, offline rollback and rebuild");
+  // Opt-in previews render every installed layout, including namespaced packages.
+  rmSync(join(site, "designs/local/author/inactive"), { recursive: true });
+  writeFileSync(configPath, stringify({ ...content, design: "author/notebook", footer: { designGallery: true } }));
+  run("pnpm", ["build"]);
+  for (const [id, layout] of [["classic", "classic"], ["personal-home", "editorial"], ["author/notebook", "author/notebook"]]) {
+    const preview = readFileSync(join(site, `dist/designs/try/${id}/index.html`), "utf8");
+    assert(preview.includes(`data-layout="${layout}"`));
+    assert(preview.includes('content="noindex, follow"'));
+    assert(preview.includes('rel="canonical" href="https://example.com/fixture/"'));
+    assert(preview.includes('/fixture/designs/try/author/notebook/'));
+    assert(preview.includes('id="lc-design-next"'));
+    checkRendered(preview, libcardSchema.parse({ ...content, design: id }));
+  }
+  assert(readFileSync(join(site, "dist/index.html"), "utf8").includes('data-layout="author/notebook"'));
+  console.log("✓ Opt-in design previews, namespaced package routes, canonical URLs, and unchanged owner default");
+  writeFileSync(configPath, stringify({ ...content, design: "author/notebook" }));
   // Watch the same config that clean builds use; test two live selections.
   server = spawn("pnpm", ["exec", "astro", "dev", "--host", "127.0.0.1", "--port", "0"], { cwd: site, env: { ...process.env, LIBCARD_CONFIG: "libcard.config.yaml" }, stdio: ["ignore", "pipe", "pipe"], detached: true });
   const url = await new Promise((done, reject) => {

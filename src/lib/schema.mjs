@@ -714,6 +714,7 @@ export const libcardSchema = z.object({
       // credit for permissively-licensed themes (MIT/CC0/…). Themes under a
       // license that requires attribution (e.g. CC-BY-4.0) keep their credit.
       themeCredit: z.boolean().default(true),
+      // Opt-in visitor previews: randomly try an installed design and theme.
       designGallery: z.boolean().default(false),
       designCredit: z.boolean().default(true),
     })

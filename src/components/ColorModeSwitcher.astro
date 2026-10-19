@@ -1,9 +1,10 @@
 ---
-import { getActiveTheme } from "../lib/config";
-import { getThemeMeta } from "../lib/themes";
+import { getActiveTheme, getConfig } from "../lib/config";
+import { getThemeMeta, themes } from "../lib/themes";
 const active = await getActiveTheme();
 const defaultMode = active.mode;
-const candidates = active.switcher || active.random ? [...active.cycle, ...active.randomPool] : [active.name];
+const config = await getConfig();
+const candidates = config.footer.designGallery ? themes.map((theme) => theme.slug) : active.switcher || active.random ? [...active.cycle, ...active.randomPool] : [active.name];
 const dualThemes = [...new Set(candidates)].filter((slug) => {
   const theme = getThemeMeta(slug);
   const modes = new Set([theme?.mode, ...Object.keys(theme?.schemes ?? {})]);

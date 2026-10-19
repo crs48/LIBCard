@@ -1,0 +1,23 @@
+---
+import Document from "../../../layouts/Document.astro";
+import PageUtilities from "../../../components/PageUtilities.astro";
+import Home from "../../../../.libcard/Preview.astro";
+import { getConfig, type LibcardConfig } from "../../../lib/config";
+import { designChoices, previewConfig } from "../../../lib/design-preview";
+import { createPageModel } from "../../../layout-api/model";
+
+export async function getStaticPaths() {
+  const config = await getConfig();
+  return designChoices(config, import.meta.env.BASE_URL).map(({ id }) => ({
+    params: { design: id }, props: { config: previewConfig(config, id) },
+  }));
+}
+interface Props { config: LibcardConfig; }
+const { config } = Astro.props;
+const page = await createPageModel(config, import.meta.env.BASE_URL, Astro.site);
+---
+<Document config={config} layout={config.layout} preview>
+  <Home layout={config.layout} page={page} options={config.options}>
+    <PageUtilities slot="utilities" config={config} preview colorMode={!["classic", "editorial"].includes(config.layout)} />
+  </Home>
+</Document>

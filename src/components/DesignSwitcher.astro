@@ -1,0 +1,39 @@
+---
+import { getConfig } from "../lib/config";
+import { designs } from "../lib/presentation";
+import { designChoices } from "../lib/design-preview";
+import { themes } from "../lib/themes";
+import { withBase } from "../lib/site";
+interface Props { current: string; preview?: boolean; }
+const { current, preview = false } = Astro.props;
+const config = await getConfig();
+const choices = designChoices(config, import.meta.env.BASE_URL);
+const fallback = choices.find((choice) => choice.id !== current) ?? choices[0];
+const defaultName = designs.find((design) => design.id === (config.design ?? "classic"))?.name ?? "default design";
+---
+{fallback && <div class="lc-design-controls mt-2 flex flex-wrap items-center justify-center gap-x-4">
+  <a id="lc-design-next" href={fallback.href} data-current-design={current} data-design-choices={JSON.stringify(choices)} data-theme-choices={JSON.stringify(themes.map((theme) => theme.slug))} class="lc-design-gallery inline-flex min-h-11 items-center gap-2 text-xs underline-offset-4 hover:text-accent hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent">
+    Try a different design <span aria-hidden="true">↻</span>
+  </a>
+  {preview && <a href={withBase(import.meta.env.BASE_URL, "/")} class="inline-flex min-h-11 items-center text-xs underline-offset-4 hover:text-accent hover:underline">Back to {defaultName}</a>}
+</div>}
+<script>
+  import { randomAlternative } from "../lib/random-choice";
+  const control = document.getElementById("lc-design-next");
+  control?.addEventListener("click", (event) => {
+    if (event instanceof MouseEvent && (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)) return;
+    const choices: Array<{ id: string; href: string }> = JSON.parse(control.dataset.designChoices ?? "[]");
+    const themes: string[] = JSON.parse(control.dataset.themeChoices ?? "[]");
+    const id = randomAlternative(choices.map((choice) => choice.id), control.dataset.currentDesign);
+    const choice = choices.find((entry) => entry.id === id);
+    if (!choice) return;
+    event.preventDefault();
+    const url = new URL(choice.href, location.href);
+    const theme = randomAlternative(themes, document.documentElement.dataset.theme);
+    if (theme) url.searchParams.set("theme", theme);
+    location.assign(url.href);
+  });
+</script>
+<style>
+  :global(.lc-editorial-footer) .lc-design-controls { justify-content: flex-start; }
+</style>

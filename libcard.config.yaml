@@ -425,7 +425,7 @@ headerAction:
 footer:
   poweredBy: true # set false to drop "Powered by LibCard" (it's MIT)
   themeCredit: true # "Theme by <author>" — required for CC-BY themes regardless
-  designGallery: true # Link to the design gallery at the bottom of the page
+  designGallery: true # Let visitors try random designs and themes
 
 # --- First-run nudge (template only, off by default) ---
 # A fresh "Use this template" card can show a subtle "edit libcard.config.yaml"

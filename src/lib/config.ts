@@ -27,8 +27,8 @@ export async function getConfig() {
  * resolved theme — the Layout bakes `name` into `<html data-theme>`, the footer
  * reads its author, and the switcher cycles `cycle`.
  */
-export async function getActiveTheme(): Promise<ResolvedTheme> {
-  const cfg = await getConfig();
+export async function getActiveTheme(config?: LibcardConfig): Promise<ResolvedTheme> {
+  const cfg = config ?? await getConfig();
   return resolveTheme(cfg.theme);
 }
 
