@@ -33,7 +33,11 @@ const avatar = profile.avatar;
   <div class="lc-profile-identity flex flex-col items-center gap-3">
     <h1 class="text-2xl font-bold tracking-tight text-fg">{profile.name}</h1>
     {editorial ? (
-      (profile.role || profile.location) && <p class="lc-profile-subtitle text-muted">{[profile.role, profile.location].filter(Boolean).join(" · ")}</p>
+      (profile.role || profile.location) && <p class="lc-profile-subtitle text-muted">
+        {profile.role && <span>{profile.role}</span>}
+        {profile.role && profile.location && <span class="lc-profile-separator"> · </span>}
+        {profile.location && <span class="lc-profile-location">{profile.location}</span>}
+      </p>
     ) : profile.role && <p class="text-sm text-muted">{profile.role}</p>}
   </div>
   {!editorial && profile.tagline && <p class="text-muted max-w-prose text-balance">{profile.tagline}</p>}

@@ -12,6 +12,6 @@ const theme = await getActiveTheme();
   {theme.modeSwitcher && <ColorModeSwitcher />}
 </div>}
 <style>
-  .lc-header-controls { display: flex; align-items: center; justify-content: flex-end; gap: .5rem; margin-inline-start: auto; color: var(--lc-muted); }
+  .lc-header-controls { display: flex; flex-shrink: 0; align-items: center; justify-content: flex-end; gap: .5rem; margin-inline-start: auto; color: var(--lc-muted); }
   .lc-header-controls:not(:has(a, button:not([hidden]))) { display: none; }
 </style>

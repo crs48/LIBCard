@@ -55,5 +55,9 @@ const dualThemes = [...new Set(candidates)].filter((slug) => {
   svg { grid-area: 1 / 1; width: 15px; height: 15px; }
   .lc-color-mode[data-mode="dark"] .lc-mode-moon,
   .lc-color-mode[data-mode="light"] .lc-mode-sun { display: none; }
+  @media (pointer: coarse), (max-width: 560px) {
+    .lc-color-mode { flex-basis: 44px; width: 44px; height: 44px; }
+    svg { width: 18px; height: 18px; }
+  }
   @media print { .lc-color-mode { display: none; } }
 </style>

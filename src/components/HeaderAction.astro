@@ -21,4 +21,7 @@ const { action } = Astro.props;
   .lc-header-action :global(svg) { width: 13px; height: 13px; flex-shrink: 0; }
   .lc-header-action:hover { color: var(--lc-fg); text-decoration: underline; text-underline-offset: 4px; }
   .lc-header-action:focus-visible { outline: 2px solid var(--lc-accent); outline-offset: 4px; border-radius: 2px; }
+  @media (pointer: coarse), (max-width: 560px) {
+    .lc-header-action { min-height: 44px; }
+  }
 </style>

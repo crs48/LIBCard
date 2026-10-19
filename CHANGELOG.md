@@ -9,6 +9,11 @@ often to `libcard.config.yaml`); everything else is picked up automatically by
 
 ## Unreleased
 
+- **Personal home on phones.** Larger touch targets and more readable text,
+  stacked writing cards, full-width coaching copy below the square portrait,
+  and contact actions that reflow on narrow screens. Safe-area spacing keeps
+  the page comfortable on phones with display cutouts.
+
 - **Light and dark appearances within one theme.** Themes can define optional
   `schemes` with inherited tokens and appearance overrides. Monochrome includes
   a charcoal dark palette and follows the device setting by default, even
