@@ -13,5 +13,6 @@ export { default as Icon } from "../components/Icon.astro";
 export { default as CardReveal } from "../components/CardReveal.astro";
 export { default as Classic } from "../layouts/Classic.astro";
 export { default as Editorial } from "../layouts/Editorial.astro";
+export { default as Studio } from "../layouts/Studio.astro";
 export { withBase, absoluteUrl } from "../lib/site";
 export { renderMarkdown } from "../lib/markdown";

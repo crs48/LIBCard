@@ -18,7 +18,11 @@ const dualThemes = [...new Set(candidates)].filter((slug) => {
 <script is:inline define:vars={{ dualThemes, defaultMode }}>
   (() => {
     const root = document.documentElement;
-    const control = document.getElementById("lc-color-mode-control");
+    const control = document.currentScript?.previousElementSibling;
+    if (!(control instanceof HTMLButtonElement)) return;
+    // A custom design can wrap a core layout with its own header control. The
+    // engine's fallback must not bind a second click handler to that button.
+    if (control !== document.getElementById("lc-color-mode-control")) { control.remove(); return; }
     const system = window.matchMedia("(prefers-color-scheme: dark)");
     const valid = (mode) => ["system", "light", "dark"].includes(mode);
     const isDark = () => {

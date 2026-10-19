@@ -695,12 +695,18 @@ export const libcardSchema = z.object({
   ])).optional(),
   profileActions: z.array(z.enum(["email", "save-contact", "show-card"])).default([]),
   socials: z.array(socialSchema).default([]),
-  design: z.union([z.enum(["classic", "personal-home"]), z.string().regex(/^[a-z][a-z0-9-]{0,63}\/[a-z][a-z0-9-]{0,63}$/)]).optional(),
-  layout: z.union([z.enum(["classic", "editorial"]), z.string().regex(/^[a-z][a-z0-9-]{0,63}\/[a-z][a-z0-9-]{0,63}$/)]).optional(),
+  design: z.union([z.enum(["classic", "personal-home", "studio"]), z.string().regex(/^[a-z][a-z0-9-]{0,63}\/[a-z][a-z0-9-]{0,63}$/)]).optional(),
+  layout: z.union([z.enum(["classic", "editorial", "studio"]), z.string().regex(/^[a-z][a-z0-9-]{0,63}\/[a-z][a-z0-9-]{0,63}$/)]).optional(),
   layoutOptions: z.object({
     editorial: z.object({
       density: z.enum(["compact", "comfortable"]).optional(),
       mediaTone: z.enum(["original", "grayscale"]).optional(),
+    }).strict().optional(),
+    studio: z.object({
+      density: z.enum(["compact", "comfortable"]).optional(),
+      mediaTone: z.enum(["original", "grayscale"]).optional(),
+      masthead: z.string().max(80).optional(),
+      collapseExperiments: z.boolean().optional(),
     }).strict().optional(),
   }).catchall(z.record(z.unknown())).optional(),
   theme: themeConfigSchema,

@@ -28,6 +28,7 @@ describe("visitor design previews", () => {
     expect(designChoices(config, "/cards/")).toMatchObject([
       { id: "classic", href: "/cards/designs/try/classic/" },
       { id: "personal-home", href: "/cards/designs/try/personal-home/" },
+      { id: "studio", href: "/cards/designs/try/studio/" },
     ]);
     expect(designChoices({ ...config, footer: { ...config.footer, designGallery: false } }, "/")).toEqual([]);
     expect(designPreviewHref("/cards", "author/notebook")).toBe("/cards/designs/try/author/notebook/");

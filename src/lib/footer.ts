@@ -1,6 +1,7 @@
 import catalog from "../../.libcard/designs.json";
 import { licenseRequiresAttribution, type ThemeMeta } from "./themes";
 import { withBase } from "./site";
+import { builtinLayouts } from "./design-manifest.mjs";
 
 export interface DesignEntry {
   id: string;
@@ -43,7 +44,7 @@ export function footerCredits(
   const required = (entry: DesignEntry | undefined) => !!entry?.credit && licenseRequiresAttribution(entry.credit.license);
   const credit = (entry: DesignEntry, kind: "design" | "layout"): FooterCredit => ({
     name: kind === "layout" && entry.builtin
-      ? config.layout === "editorial" ? "Editorial" : "Classic"
+      ? builtinLayouts[config.layout as keyof typeof builtinLayouts]?.name ?? entry.name
       : entry.name,
     kind,
     href: galleryHref(base, "design", entry.id),

@@ -477,6 +477,165 @@
   mask-image: radial-gradient(ellipse at center, #000 38%, transparent 100%);
 }
 
+[data-theme="studio"] {
+  color-scheme: light;
+  --lc-bg: #fcfbf8;
+  --lc-surface: #f0f0e9;
+  --lc-fg: #292a27;
+  --lc-muted: #696b63;
+  --lc-accent: #9b452b;
+  --lc-accent-contrast: #ffffff;
+  --lc-border: #dedfd7;
+  --lc-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --lc-display-font: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+  --lc-radius: 0.5625rem;
+  --lc-mesh-1: transparent;
+  --lc-mesh-2: transparent;
+  --lc-mesh-3: transparent;
+  --lc-mesh-4: transparent;
+  --lc-bg-animation: none;
+  --lc-glass-pct: 100%;
+  --lc-cta-bg: var(--lc-accent);
+  --lc-cta-fg: var(--lc-accent-contrast);
+  --lc-cta-border: transparent;
+  --lc-ink: transparent;
+  --lc-pat-size: 44px;
+}
+
+[data-theme="studio"] .lc-pattern {
+  background: none;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 38%, transparent 100%);
+  mask-image: radial-gradient(ellipse at center, #000 38%, transparent 100%);
+}
+
+[data-theme="studio"][data-color-mode="light"] {
+  color-scheme: light;
+  --lc-bg: #fcfbf8;
+  --lc-surface: #f0f0e9;
+  --lc-fg: #292a27;
+  --lc-muted: #696b63;
+  --lc-accent: #9b452b;
+  --lc-accent-contrast: #ffffff;
+  --lc-border: #dedfd7;
+  --lc-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --lc-display-font: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+  --lc-radius: 0.5625rem;
+  --lc-mesh-1: transparent;
+  --lc-mesh-2: transparent;
+  --lc-mesh-3: transparent;
+  --lc-mesh-4: transparent;
+  --lc-bg-animation: none;
+  --lc-glass-pct: 100%;
+  --lc-cta-bg: var(--lc-accent);
+  --lc-cta-fg: var(--lc-accent-contrast);
+  --lc-cta-border: transparent;
+  --lc-ink: transparent;
+  --lc-pat-size: 44px;
+}
+
+[data-theme="studio"][data-color-mode="light"] .lc-pattern {
+  background: none;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 38%, transparent 100%);
+  mask-image: radial-gradient(ellipse at center, #000 38%, transparent 100%);
+}
+
+@media (prefers-color-scheme: light) {
+[data-theme="studio"]:not([data-color-mode="light"]):not([data-color-mode="dark"]) {
+  color-scheme: light;
+  --lc-bg: #fcfbf8;
+  --lc-surface: #f0f0e9;
+  --lc-fg: #292a27;
+  --lc-muted: #696b63;
+  --lc-accent: #9b452b;
+  --lc-accent-contrast: #ffffff;
+  --lc-border: #dedfd7;
+  --lc-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --lc-display-font: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+  --lc-radius: 0.5625rem;
+  --lc-mesh-1: transparent;
+  --lc-mesh-2: transparent;
+  --lc-mesh-3: transparent;
+  --lc-mesh-4: transparent;
+  --lc-bg-animation: none;
+  --lc-glass-pct: 100%;
+  --lc-cta-bg: var(--lc-accent);
+  --lc-cta-fg: var(--lc-accent-contrast);
+  --lc-cta-border: transparent;
+  --lc-ink: transparent;
+  --lc-pat-size: 44px;
+}
+
+[data-theme="studio"]:not([data-color-mode="light"]):not([data-color-mode="dark"]) .lc-pattern {
+  background: none;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 38%, transparent 100%);
+  mask-image: radial-gradient(ellipse at center, #000 38%, transparent 100%);
+}
+}
+
+[data-theme="studio"][data-color-mode="dark"] {
+  color-scheme: dark;
+  --lc-bg: #1c1c1a;
+  --lc-surface: #292a25;
+  --lc-fg: #efeee8;
+  --lc-muted: #b0b1a7;
+  --lc-accent: #ecac90;
+  --lc-accent-contrast: #1c1c1a;
+  --lc-border: #41423b;
+  --lc-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --lc-display-font: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+  --lc-radius: 0.5625rem;
+  --lc-mesh-1: transparent;
+  --lc-mesh-2: transparent;
+  --lc-mesh-3: transparent;
+  --lc-mesh-4: transparent;
+  --lc-bg-animation: none;
+  --lc-glass-pct: 100%;
+  --lc-cta-bg: var(--lc-accent);
+  --lc-cta-fg: var(--lc-accent-contrast);
+  --lc-cta-border: transparent;
+  --lc-ink: transparent;
+  --lc-pat-size: 44px;
+}
+
+[data-theme="studio"][data-color-mode="dark"] .lc-pattern {
+  background: none;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 38%, transparent 100%);
+  mask-image: radial-gradient(ellipse at center, #000 38%, transparent 100%);
+}
+
+@media (prefers-color-scheme: dark) {
+[data-theme="studio"]:not([data-color-mode="light"]):not([data-color-mode="dark"]) {
+  color-scheme: dark;
+  --lc-bg: #1c1c1a;
+  --lc-surface: #292a25;
+  --lc-fg: #efeee8;
+  --lc-muted: #b0b1a7;
+  --lc-accent: #ecac90;
+  --lc-accent-contrast: #1c1c1a;
+  --lc-border: #41423b;
+  --lc-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --lc-display-font: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+  --lc-radius: 0.5625rem;
+  --lc-mesh-1: transparent;
+  --lc-mesh-2: transparent;
+  --lc-mesh-3: transparent;
+  --lc-mesh-4: transparent;
+  --lc-bg-animation: none;
+  --lc-glass-pct: 100%;
+  --lc-cta-bg: var(--lc-accent);
+  --lc-cta-fg: var(--lc-accent-contrast);
+  --lc-cta-border: transparent;
+  --lc-ink: transparent;
+  --lc-pat-size: 44px;
+}
+
+[data-theme="studio"]:not([data-color-mode="light"]):not([data-color-mode="dark"]) .lc-pattern {
+  background: none;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 38%, transparent 100%);
+  mask-image: radial-gradient(ellipse at center, #000 38%, transparent 100%);
+}
+}
+
 [data-theme="sunset"] {
   color-scheme: dark;
   --lc-bg: #1c1117;

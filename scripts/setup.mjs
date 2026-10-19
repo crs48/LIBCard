@@ -12,7 +12,7 @@ import { execSync } from "node:child_process";
 import { stdin, stdout } from "node:process";
 import { parse, stringify } from "yaml";
 import { THEMES, libcardSchema } from "../src/lib/schema.mjs";
-import { builtinDesigns, resolveDesign } from "../src/lib/design-manifest.mjs";
+import { builtinDesigns, builtinLayouts, resolveDesign } from "../src/lib/design-manifest.mjs";
 import { discoverPackages, packageCatalog } from "../src/lib/design-packages.mjs";
 import { fileURLToPath } from "node:url";
 
@@ -72,7 +72,7 @@ async function main() {
   // `theme` may be a bare slug or the object (switcher) form — read the name.
   const currentTheme = typeof existing.theme === "string" ? existing.theme : (existing.theme?.name ?? "default");
   const design = await ask(`Design (${catalog.map((d) => d.id).join(" | ")})`, existing.design ?? "classic");
-  const layout = await ask(`Layout override (preset | classic | editorial | ${catalog.filter((d) => d.layout === d.id && !d.builtin).map((d) => d.id).join(" | ")})`, existing.layout ?? "preset");
+  const layout = await ask(`Layout override (${["preset", ...Object.keys(builtinLayouts), ...catalog.filter((d) => d.layout === d.id && !d.builtin).map((d) => d.id)].join(" | ")})`, existing.layout ?? "preset");
   const theme = await ask(`Theme override (preset | ${availableThemes.join(" | ")})`, existing.theme ? currentTheme : "preset");
   const description = await ask("SEO description", seo.description ?? tagline);
 

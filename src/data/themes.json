@@ -412,6 +412,55 @@
     }
   },
   {
+    "slug": "studio",
+    "name": "Studio",
+    "file": "studio.yaml",
+    "author": "@crs48",
+    "authorUrl": "https://github.com/crs48",
+    "license": "MIT",
+    "official": true,
+    "mode": "light",
+    "tags": [
+      "light",
+      "dark",
+      "warm",
+      "minimal"
+    ],
+    "description": "Warm paper, terracotta accents, and soft charcoal for independent work.",
+    "preview": "themes/.previews/studio.png",
+    "tokens": {
+      "bg": "#fcfbf8",
+      "surface": "#f0f0e9",
+      "fg": "#292a27",
+      "muted": "#696b63",
+      "accent": "#9b452b",
+      "accentContrast": "#ffffff",
+      "border": "#dedfd7",
+      "font": "sans",
+      "displayFont": "serif",
+      "radius": "0.5625rem"
+    },
+    "schemes": {
+      "dark": {
+        "tokens": {
+          "bg": "#1c1c1a",
+          "surface": "#292a25",
+          "fg": "#efeee8",
+          "muted": "#b0b1a7",
+          "accent": "#ecac90",
+          "accentContrast": "#1c1c1a",
+          "border": "#41423b"
+        }
+      }
+    },
+    "background": null,
+    "pattern": null,
+    "buttons": {
+      "fill": "solid",
+      "glassFillOpacity": 0.18
+    }
+  },
+  {
     "slug": "sunset",
     "name": "Sunset",
     "file": "sunset.yaml",

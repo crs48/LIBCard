@@ -72,7 +72,8 @@
                   "type": "string",
                   "enum": [
                     "classic",
-                    "editorial"
+                    "editorial",
+                    "studio"
                   ]
                 }
               },

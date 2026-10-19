@@ -57,16 +57,22 @@ Engine updates preserve your config and authored themes; changing modes does
 not rewrite media. See [theme configuration](../README.md#themes) and the
 [theme authoring guide](../themes/README.md#light-and-dark-appearances).
 
-### Opting into the personal-home layout
+### Opting into Personal home or Studio
 
 Update the engine first, then set `design: personal-home`. An explicit `theme:`
 or `layout:` remains an override; remove it if you want the complete preset.
 Omitting the new fields keeps Classic. Rich link descriptions, icons, preview
-images, and sections work in both layouts. See the
+images, and sections work in all layouts. See the
 [configuration examples](../README.md#designs-layouts-and-rich-links).
 Update before adding link `headline`, `note`, or `actionLabel` fields; older
 schemas reject them. Editorial service images now use a square crop, and work
 sections use framed previews with source footers. No media files are rewritten.
+
+Update before selecting `design: studio`, `layout: studio`, or `theme: studio`.
+Studio adds a profile sidebar, image-led projects, coaching card, and compact
+writing rows, with responsive single-column rendering and a warm light/dark
+theme. Existing settings and your default home design are preserved. See
+[Studio options](./DESIGNS.md#studio-options) for its optional layout settings.
 
 Footer credits now link to the matching gallery entry: the complete design when
 its layout and theme match, or the layout and active theme when mixed. Existing

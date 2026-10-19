@@ -28,6 +28,15 @@ describe("presentation selection", () => {
     expect(config.theme).toMatchObject(theme);
     expect(resolved({ design: "personal-home", layoutOptions: { editorial: { mediaTone: "original" } } }).options.mediaTone).toBe("original");
   });
+  it("resolves Studio and independently validates its presentation options", () => {
+    expect(resolved({ design: "studio" })).toMatchObject({ layout: "studio", theme: "studio", options: {
+      density: "comfortable", mediaTone: "original", masthead: "independent work", collapseExperiments: true,
+    } });
+    expect(resolved({ design: "studio", theme: "monochrome", layoutOptions: { studio: { masthead: "", collapseExperiments: false } } })).toMatchObject({
+      theme: "monochrome", options: { masthead: "", collapseExperiments: false },
+    });
+    expect(() => parse({ layoutOptions: { studio: { typo: true } } })).toThrow();
+  });
   it("rejects misspelled designs, layouts, and layout options", () => {
     for (const input of [{ design: "notebook" }, { layout: "rows" }, { layoutOptions: { editorial: { typo: true } } }]) expect(() => parse(input)).toThrow();
   });
@@ -41,11 +50,12 @@ describe("portable content", () => {
     expect(page.sections[0]).toMatchObject({ links: config.links });
     expect(page.sections[1]).toEqual(config.blocks[0]);
   });
-  it("renders the same normalized content in both layouts, including archives", () => {
+  it("renders the same normalized content in all built-in layouts, including archives", () => {
     const content = { links, sections: [{ ...section, collapsed: true }, { type: "text", markdown: "A note" }] };
     const classic = normalizePage(resolved({ ...content, design: "classic" }));
     const editorial = normalizePage(resolved({ ...content, design: "personal-home" }));
     expect(editorial).toEqual(classic);
+    expect(normalizePage(resolved({ ...content, design: "studio" }))).toEqual(classic);
     expect(editorial.sections[0]).toMatchObject({ collapsed: true, links: [expect.objectContaining({ id: "second", feedme: { skip: true } }), expect.objectContaining({ id: "first" })] });
   });
   it("keeps canonical blocks available to importers with an explicit placement", () => {

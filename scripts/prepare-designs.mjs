@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "yaml";
-import { builtinDesigns, resolveDesign, designCatalogSchema } from "../src/lib/design-manifest.mjs";
+import { builtinDesigns, builtinLayouts, resolveDesign, designCatalogSchema } from "../src/lib/design-manifest.mjs";
 import { discoverPackages, packageCatalog, appearanceKey } from "../src/lib/design-packages.mjs";
 import { loadThemes, toRegistryEntry, themeToCss, themeArtifacts } from "../src/lib/theme-schema.mjs";
 import { assertLayoutShell } from "../src/lib/layout-conformance.mjs";
@@ -29,8 +29,8 @@ export function prepareDesigns(root = projectRoot) {
     designId: p.manifest.id,
   }));
   for (const pkg of catalog) if (!themes.some((t) => t.slug === pkg.theme) && !appearances.some((t) => t.slug === pkg.theme)) throw new Error(`${pkg.id}: unknown appearance ${pkg.theme}`);
-  const entry = selected.layout === "classic" || selected.layout === "editorial"
-    ? join(root, `src/layouts/${selected.layout === "classic" ? "Classic" : "Editorial"}.astro`)
+  const entry = builtinLayouts[selected.layout]
+    ? join(root, "src/layouts", builtinLayouts[selected.layout].component)
     : (() => { const pkg = packages.find((p) => p.manifest.id === selected.layout); return resolve(pkg.dir, pkg.manifest.layout.entry); })();
   const output = join(root, ".libcard");
   const indexPath = join(root, "designs/catalog.json");
@@ -47,7 +47,7 @@ export function prepareDesigns(root = projectRoot) {
   const previewLayouts = config.footer?.designGallery ? [...new Set(catalog.map((design) => design.layout))] : [selected.layout];
   const previewImports = previewLayouts.map((layout, i) => {
     const pkg = packages.find((p) => p.manifest.id === layout);
-    const path = pkg ? resolve(pkg.dir, pkg.manifest.layout.entry) : join(root, `src/layouts/${layout === "classic" ? "Classic" : "Editorial"}.astro`);
+    const path = pkg ? resolve(pkg.dir, pkg.manifest.layout.entry) : join(root, "src/layouts", builtinLayouts[layout].component);
     return `import Home${i} from ${JSON.stringify(`./${relative(output, path).split("\\").join("/")}`)};`;
   });
   writeChanged(join(output, "Preview.astro"), `---\n${previewImports.join("\n")}\nimport type { LayoutProps } from "@libcard/layout";\ntype Props = LayoutProps & { layout: string };\nconst { layout, page, options } = Astro.props;\nconst layouts: Record<string, typeof Home0> = {${previewLayouts.map((layout, i) => `${JSON.stringify(layout)}: Home${i}`).join(",")}};\nconst Home = layouts[layout];\nif (!Home) throw new Error("Unknown preview layout: " + layout);\n---\n<Home page={page} options={options}><slot name="utilities" slot="utilities" /></Home>\n`);

@@ -23,8 +23,10 @@ design: personal-home
 ```
 
 `classic` preserves the original centered card. `personal-home` selects Editorial,
-Monochrome, compact spacing, and grayscale media. Without new settings, Classic
-and the default theme remain active. Browse `/designs` and `/themes` on your site,
+Monochrome, compact spacing, and grayscale media. `studio` selects a profile
+sidebar, image-led project gallery, coaching feature, and compact writing rows,
+with a warm Studio theme supporting light and dark mode. Without new settings,
+Classic and the default theme remain active. Browse `/designs` and `/themes` on your site,
 or run `pnpm run design:list`.
 
 Explicit owner settings win over design defaults:
@@ -38,10 +40,38 @@ layoutOptions:
     mediaTone: original
 ```
 
-`layout:` can independently select `classic`, `editorial`, or the ID of an
+`layout:` can independently select `classic`, `editorial`, `studio`, or the ID of an
 installed Astro layout. If you override a design with a different layout, its
 layout defaults do not carry across. The chosen appearance remains independent.
 Options are keyed by layout ID; a preset using Editorial uses `editorial` here.
+
+### Studio options
+
+```yaml
+design: studio
+theme:
+  name: studio
+  mode: system
+  modeSwitcher: true
+layoutOptions:
+  studio:
+    density: comfortable # Or compact
+    mediaTone: original # Or grayscale; source images are unchanged
+    masthead: independent work # An empty string hides this suffix
+    collapseExperiments: true
+```
+
+These are Studio's default layout options. Set `collapseExperiments: false` to
+honor each experiment section's own `collapsed` setting; untitled sections always
+retain their original setting. Studio preserves your
+section order, contact actions, social links, metadata, and rich blocks. A single
+column replaces the sidebar and project grid on narrow screens. The Studio theme
+also works with any other layout; `layout: studio` works with any theme.
+
+With `footer.designGallery: true`, Studio is included in the random design/theme
+action and has a direct preview at `/designs/try/studio/`. Gallery cards also link
+to previews of their complete presets. Trying a preview never changes the owner's
+configured home design.
 
 ## Install and update a shared design
 
@@ -99,8 +129,8 @@ pnpm run design:new -- your-name/folio --from=editorial
 pnpm run design:new -- your-name/quiet --from=preset
 ```
 
-The default scaffold is a responsive two-column notebook. `--from=classic` and
-`--from=editorial` wrap the corresponding core layout; expand or replace their
+The default scaffold is a responsive two-column notebook. `--from=classic`,
+`--from=editorial`, and `--from=studio` wrap the corresponding core layout; expand or replace their
 markup as needed. Files live in `designs/local/AUTHOR/NAME/`, which engine updates
 preserve. `sample.config.yaml` contains generic example content, never a copy of
 your card. Preview it with:
@@ -162,7 +192,7 @@ optional light/dark `schemes`. Their colors work with `theme.mode` and
 header; custom layout authors receive it through the existing utilities slot.
 See [theme color schemes](../themes/README.md#light-and-dark-appearances).
 
-For a data-only preset, use `layout: { use: editorial }` or `classic` and omit the
+For a data-only preset, use `layout: { use: editorial }`, `classic`, or `studio` and omit the
 Astro entry. Presets cannot override content. Arbitrary dependencies, nested
 presets, custom block types, multi-page routing, and visitor-side layout switching
 are outside API 1.
@@ -220,7 +250,7 @@ descriptions, metadata actions, ordering, and collapsed content. Use the core
 primitives to get those details without reimplementing integrations.
 
 Exports: `Profile`, `ProfileActions`, `HeaderAction`, `SocialRow`, `Section`, `Block`, `Link`,
-`EditorialLink`, `Icon`, `CardReveal`, `Classic`, `Editorial`, `renderMarkdown`,
+`EditorialLink`, `Icon`, `CardReveal`, `Classic`, `Editorial`, `Studio`, `renderMarkdown`,
 `withBase`, `absoluteUrl`, and model types. `Section` accepts optional
 `layout="editorial"` or `"classic"`; `Block` is the standard fallback for every
 existing block type and owns the integration handling those blocks need.
@@ -334,8 +364,10 @@ artifacts only. Never add executable designs to the separate privileged
 
 `pnpm run test:designs` reproduces a complete local release/adoption round trip in
 an isolated site: export, Git tag, pinned install, asset/credit checks, inactive
-code isolation, update, edited-source fork, offline rollback, and live dev
-selection changes. It neither publishes remotely nor modifies your card.
+code isolation, update, edited-source fork, offline rollback, live dev selection
+changes, and the shared Studio wrapper's light/dark control. Install its browser
+first with `pnpm exec playwright install chromium`. It neither publishes remotely
+nor modifies your card.
 
 ## Ownership and upgrades
 

@@ -4,7 +4,8 @@ import { getConfig } from "../lib/config";
 import { createPageModel } from "../layout-api/model";
 import Home from "@libcard/selected";
 import PageUtilities from "../components/PageUtilities.astro";
+import { builtinLayouts } from "../lib/design-manifest.mjs";
 const config = await getConfig();
 const page = await createPageModel(config, import.meta.env.BASE_URL, Astro.site);
 ---
-<Document layout={config.layout}><Home page={page} options={config.options}><PageUtilities slot="utilities" colorMode={!["classic", "editorial"].includes(config.layout)} /></Home></Document>
+<Document layout={config.layout}><Home page={page} options={config.options}><PageUtilities slot="utilities" colorMode={!Object.hasOwn(builtinLayouts, config.layout)} /></Home></Document>

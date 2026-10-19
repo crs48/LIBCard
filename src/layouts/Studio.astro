@@ -1,0 +1,36 @@
+---
+import "../styles/studio.css";
+import Profile from "../components/Profile.astro";
+import ProfileActions from "../components/ProfileActions.astro";
+import HeaderControls from "../components/HeaderControls.astro";
+import SocialRow from "../components/SocialRow.astro";
+import Section from "../components/Section.astro";
+import CardReveal from "../components/CardReveal.astro";
+import FirstRunNudge from "../components/FirstRunNudge.astro";
+import type { LayoutProps } from "../layout-api/model";
+type Props = LayoutProps;
+const { page, options } = Astro.props;
+const sections = page.sections.map((section) => section.type === "links" && section.purpose === "experiments" && section.title && options.collapseExperiments
+  ? { ...section, collapsed: true } : section);
+---
+<div class="lc-studio" data-density={options.density} data-media-tone={options.mediaTone}>
+  <div class="lc-studio-masthead">
+    <span>{new URL(page.site.url).host}{options.masthead && <span class="lc-studio-masthead-note"> / {String(options.masthead)}</span>}</span>
+    <HeaderControls action={page.headerAction} />
+  </div>
+  <main id="main-content" class="lc-studio-body">
+    <aside class="lc-studio-identity" aria-label={`About ${page.profile.name}`}>
+      <Profile profile={page.profile} studio />
+      <ProfileActions actions={page.actions} />
+      <SocialRow socials={page.socials} text />
+    </aside>
+    <div class="lc-studio-main">
+      <FirstRunNudge />
+      {sections.map((section, index) => <Section section={section} layout="studio" index={index} />)}
+    </div>
+  </main>
+  <div class="lc-studio-footer">
+    <slot name="utilities" />
+    <CardReveal url={page.card.url} />
+  </div>
+</div>

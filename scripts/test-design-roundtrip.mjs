@@ -9,12 +9,14 @@ import { spawnSync, spawn } from "node:child_process";
 import { parse, stringify } from "yaml";
 import { checkRendered } from "./design-check.mjs";
 import { libcardSchema } from "../src/lib/schema.mjs";
+import { chromium } from "playwright";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const scratch = mkdtempSync(join(realpathSync(tmpdir()), "libcard-roundtrip-"));
 const site = join(scratch, "site"); const published = join(scratch, "notebook");
 mkdirSync(site);
 let server;
+let browser;
 const run = (cmd, args, cwd = site) => {
   const result = spawnSync(cmd, args, { cwd, encoding: "utf8", env: { ...process.env, LIBCARD_CONFIG: "libcard.config.yaml", GITHUB_TOKEN: "" } });
   assert.equal(result.status, 0, `${cmd} ${args.join(" ")}\n${result.stdout}\n${result.stderr}`);
@@ -27,7 +29,11 @@ const allText = (dir) => readdirSync(dir, { withFileTypes: true }).flatMap((e) =
 try {
   for (const dir of ["src", "scripts", "themes"]) cpSync(join(root, dir), join(site, dir), { recursive: true, filter: (p) => !p.includes("/.previews") });
   for (const file of ["package.json", "pnpm-lock.yaml", "tsconfig.json", "astro.config.mjs"]) cpSync(join(root, file), join(site, file));
-  symlinkSync(join(root, "node_modules"), join(site, "node_modules"), "dir");
+  // Reuse dependencies, but keep Astro/Vite's content caches inside this fixture.
+  mkdirSync(join(site, "node_modules"));
+  for (const entry of readdirSync(join(root, "node_modules")).filter((name) => !name.startsWith(".") || [".bin", ".pnpm"].includes(name))) {
+    symlinkSync(join(root, "node_modules", entry), join(site, "node_modules", entry));
+  }
   mkdirSync(join(site, "public"));
   const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"><rect width="96" height="96" fill="#ddd"/><circle cx="48" cy="48" r="24" fill="#555"/></svg>';
   for (const file of ["avatar.svg", "favicon.svg"]) writeFileSync(join(site, "public", file), svg);
@@ -89,9 +95,10 @@ try {
   console.log("✓ Explicit update, edited-source fork, overwrite refusal, offline rollback and rebuild");
   // Opt-in previews render every installed layout, including namespaced packages.
   rmSync(join(site, "designs/local/author/inactive"), { recursive: true });
+  cli("new", "author/studio", "--from=studio");
   writeFileSync(configPath, stringify({ ...content, design: "author/notebook", footer: { designGallery: true } }));
   run("pnpm", ["build"]);
-  for (const [id, layout] of [["classic", "classic"], ["personal-home", "editorial"], ["author/notebook", "author/notebook"]]) {
+  for (const [id, layout] of [["classic", "classic"], ["personal-home", "editorial"], ["studio", "studio"], ["author/studio", "author/studio"], ["author/notebook", "author/notebook"]]) {
     const preview = readFileSync(join(site, `dist/designs/try/${id}/index.html`), "utf8");
     assert(preview.includes(`data-layout="${layout}"`));
     assert(preview.includes('content="noindex, follow"'));
@@ -99,6 +106,11 @@ try {
     assert(preview.includes('/fixture/designs/try/author/notebook/'));
     assert(preview.includes('id="lc-design-next"'));
     checkRendered(preview, libcardSchema.parse({ ...content, design: id }));
+    if (id === "author/studio") {
+      assert(preview.includes('data-theme="studio"'));
+      assert(preview.includes("independent work"));
+      assert(preview.includes('class="lc-studio"'));
+    }
   }
   assert(readFileSync(join(site, "dist/index.html"), "utf8").includes('data-layout="author/notebook"'));
   console.log("✓ Opt-in design previews, namespaced package routes, canonical URLs, and unchanged owner default");
@@ -121,8 +133,21 @@ try {
   await waitForLayout("author/notebook");
   writeFileSync(configPath, stringify({ ...content, design: "classic" })); await waitForLayout("classic");
   writeFileSync(configPath, stringify({ ...content, design: "personal-home" })); await waitForLayout("editorial");
-  console.log("✓ Dev config changes switch custom → Classic → Editorial without importing the inactive package");
+  writeFileSync(configPath, stringify({ ...content, design: "studio" })); await waitForLayout("studio");
+  console.log("✓ Dev config changes switch custom → Classic → Editorial → Studio without importing the inactive package");
+  writeFileSync(configPath, stringify({ ...content, design: "author/studio", theme: { name: "studio", mode: "light", modeSwitcher: true } }));
+  await waitForLayout("author/studio");
+  browser = await chromium.launch();
+  const page = await browser.newPage();
+  await page.goto(url);
+  assert.equal(await page.locator("#lc-color-mode-control").count(), 1);
+  await page.getByRole("button", { name: "Switch to dark mode" }).click();
+  assert.equal(await page.locator("html").getAttribute("data-color-mode"), "dark");
+  await page.getByRole("button", { name: "Switch to light mode" }).click();
+  assert.equal(await page.locator("html").getAttribute("data-color-mode"), "light");
+  console.log("✓ Shared Studio wrapper keeps one working light/dark control");
 } finally {
+  await browser?.close();
   if (server?.pid) { try { process.kill(-server.pid, "SIGTERM"); } catch {} }
   rmSync(scratch, { recursive: true, force: true });
 }

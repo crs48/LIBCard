@@ -23,7 +23,7 @@ LibCard is a tiny [Astro](https://astro.build) static site you host on **GitHub 
 - **QR business card** — built-in QR codes for conferences: one points to your page, another saves your contact offline.
 - **Rotate to flash a card** — turn your phone sideways and the page flips into a pretty, physical-looking business card beside a QR code; rotate back for the full page. Pure CSS, no JavaScript.
 - **Themes you can cycle** — a gallery of built-in themes plus an optional live switcher, so visitors can try your card in each look. Add your own with a pull request.
-- **Two layouts, one config** — keep the compact Classic card or choose an Editorial personal home with project previews, writing, and grouped links.
+- **Three layouts, one config** — choose the compact Classic card, an Editorial personal home, or Studio's profile sidebar and project gallery.
 - **Yours to own** — no third-party platform between you and your audience; you control the content and the domain.
 - **Fast & private** — zero client-side JavaScript by default; nothing to track you.
 
@@ -260,7 +260,8 @@ them), and there's a worked example in
 ### Designs, layouts, and rich links
 
 Choose a complete built-in design with `design: personal-home` (Editorial with
-Monochrome) or `design: classic` (the original card with the default appearance).
+Monochrome), `design: studio` (a profile sidebar and project gallery with a warm,
+light/dark appearance), or `design: classic` (the original centered card).
 Omitting both `design` and `layout` retains Classic. Explicit `layout:` and
 `theme:` override a design's defaults; remove an existing `theme:` setting to use
 the design's appearance. The visitor theme switcher changes appearance only.
@@ -292,6 +293,13 @@ sections:
 ```
 
 Add these fields to your config; keep its existing contact and site settings.
+Studio uses the same content: `purpose: work` becomes an image-led grid with a
+full-width first project, `services` becomes a coaching feature and resource rows,
+and `writing` becomes compact thumbnail rows. Its profile sidebar stacks above
+the content on mobile. Experiments are collapsed by default, with all links still
+available without JavaScript. See [Studio options](./docs/DESIGNS.md#studio-options)
+to customize the masthead, spacing, media treatment, and experiment disclosure.
+
 Images are optional. Local paths refer to files in `public/` and respect
 `site.base`; remote HTTP(S) media is explicit and disclosed. `iconImage` takes
 precedence over the existing `icon`. Image dimensions reserve space while loading.

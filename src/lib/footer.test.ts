@@ -40,6 +40,16 @@ describe("contextual footer credits", () => {
     ]) expect(credits.map((c) => c.kind)).toEqual(["theme"]);
     expect(footerCredits({ ...config, design: undefined }, frost, context).map((c) => c.kind)).toEqual(["layout", "theme"]);
   });
+  it("credits Studio as a complete design or as a layout with another theme", () => {
+    const studio = { ...config, design: "studio", layout: "studio" };
+    expect(footerCredits(studio, getThemeMeta("studio")!, context)).toEqual([
+      { name: "Studio", kind: "design", href: "/cards/designs#design-studio" },
+    ]);
+    expect(footerCredits(studio, frost, context)).toMatchObject([
+      { name: "Studio", kind: "layout", href: "/cards/designs#design-studio" },
+      { name: frost.name, kind: "theme", href: "/cards/themes#theme-frost" },
+    ]);
+  });
 
   it("credits installed designs once and links namespaced IDs to real anchors", () => {
     const credits = footerCredits({ ...config, design: notebook.id, layout: notebook.layout }, packaged, { ...context, designs });

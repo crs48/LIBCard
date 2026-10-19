@@ -23,7 +23,7 @@ const findPackage = (id) => {
 
 try {
   if (command === "new") {
-    const id = required(positional[0], "Usage: design:new author/name [--from=custom|classic|editorial|preset]");
+    const id = required(positional[0], "Usage: design:new author/name [--from=custom|classic|editorial|studio|preset]");
     console.log(`✓ Created ${scaffold(root, id, option("from"))}\nSelect design: ${id}, then run pnpm dev.`);
   } else if (command === "list") {
     const catalog = [...builtinDesigns, ...packageCatalog(discoverPackages(root))];

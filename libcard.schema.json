@@ -2899,7 +2899,8 @@
               "type": "string",
               "enum": [
                 "classic",
-                "personal-home"
+                "personal-home",
+                "studio"
               ]
             },
             {
@@ -2914,7 +2915,8 @@
               "type": "string",
               "enum": [
                 "classic",
-                "editorial"
+                "editorial",
+                "studio"
               ]
             },
             {
@@ -2942,6 +2944,33 @@
                     "original",
                     "grayscale"
                   ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "studio": {
+              "type": "object",
+              "properties": {
+                "density": {
+                  "type": "string",
+                  "enum": [
+                    "compact",
+                    "comfortable"
+                  ]
+                },
+                "mediaTone": {
+                  "type": "string",
+                  "enum": [
+                    "original",
+                    "grayscale"
+                  ]
+                },
+                "masthead": {
+                  "type": "string",
+                  "maxLength": 80
+                },
+                "collapseExperiments": {
+                  "type": "boolean"
                 }
               },
               "additionalProperties": false

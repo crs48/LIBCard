@@ -5,6 +5,7 @@ import Home from "../../../../.libcard/Preview.astro";
 import { getConfig, type LibcardConfig } from "../../../lib/config";
 import { designChoices, previewConfig } from "../../../lib/design-preview";
 import { createPageModel } from "../../../layout-api/model";
+import { builtinLayouts } from "../../../lib/design-manifest.mjs";
 
 export async function getStaticPaths() {
   const config = await getConfig();
@@ -18,6 +19,6 @@ const page = await createPageModel(config, import.meta.env.BASE_URL, Astro.site)
 ---
 <Document config={config} layout={config.layout} preview>
   <Home layout={config.layout} page={page} options={config.options}>
-    <PageUtilities slot="utilities" config={config} preview colorMode={!["classic", "editorial"].includes(config.layout)} />
+    <PageUtilities slot="utilities" config={config} preview colorMode={!Object.hasOwn(builtinLayouts, config.layout)} />
   </Home>
 </Document>

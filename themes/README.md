@@ -31,6 +31,7 @@ Browse them live on the `/themes` page.
 | **Monochrome** (`monochrome`) | light / dark | [@crs48](https://github.com/crs48) | MIT | ✅ |
 | **Ocean** (`ocean`) | dark | [@crs48](https://github.com/crs48) | MIT | ✅ |
 | **Paper** (`paper`) | light | [@crs48](https://github.com/crs48) | MIT | ✅ |
+| **Studio** (`studio`) | light / dark | [@crs48](https://github.com/crs48) | MIT | ✅ |
 | **Sunset** (`sunset`) | dark | [@crs48](https://github.com/crs48) | MIT | ✅ |
 | **Terminal** (`terminal`) | dark | [@crs48](https://github.com/crs48) | MIT | ✅ |
 

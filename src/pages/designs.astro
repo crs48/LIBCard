@@ -6,7 +6,15 @@ import previews from "../../.libcard/previews";
 import { withBase } from "../lib/site";
 import { galleryId, galleryHref } from "../lib/footer";
 import { getThemeMeta } from "../lib/themes";
+import { getConfig } from "../lib/config";
+import { designPreviewHref } from "../lib/design-preview";
 const base = import.meta.env.BASE_URL;
+const previewEnabled = (await getConfig()).footer.designGallery;
+const descriptions: Record<string, string> = {
+  classic: "A compact, centered card. Familiar link buttons and all your content in one column.",
+  "personal-home": "An editorial personal home. Rich project previews, numbered sections, and a monochrome appearance.",
+  studio: "A quiet profile sidebar beside an image-led project gallery, warm coaching cards, and compact writing rows. Warm paper and terracotta, in light or dark.",
+};
 const available = catalog as Array<{ id: string; name: string; layout: string; theme: string; version?: string; builtin: boolean; credit?: { author: string; source?: string } }>;
 const entries = community as Array<{ id: string; name: string; description: string; author: string; source: string; version: string; ref: string; integrity: string; compatibility: { layoutApi: number; astro: string; libcard: string }; capabilities: { clientJavaScript: boolean; remoteAssets: boolean } }>;
 ---
@@ -22,9 +30,10 @@ const entries = community as Array<{ id: string; name: string; description: stri
       {previews[design.id] && <img src={previews[design.id]} alt={`${design.name} design preview`} class="aspect-[4/3] w-full border-b border-border object-cover object-top" width="640" height="480" loading="lazy" />}
       <div class="flex flex-col gap-3 p-6">
         <div class="flex items-baseline justify-between gap-3"><h2 class="text-xl font-semibold">{design.name}</h2><span class="text-xs text-muted">{design.builtin ? "Built in" : `v${design.version}`}</span></div>
-        <p class="text-sm text-muted">{design.id === "classic" ? "A compact, centered card. Familiar link buttons and all your content in one column." : design.id === "personal-home" ? "An editorial personal home. Rich project previews, numbered sections, and a monochrome appearance." : `By ${design.credit?.author ?? design.id.split("/")[0]}. Layout API 1.`}</p>
+        <p class="text-sm text-muted">{descriptions[design.id] ?? `By ${design.credit?.author ?? design.id.split("/")[0]}. Layout API 1.`}</p>
         <code class="overflow-x-auto rounded bg-bg p-3 text-sm">design: {design.id}</code>
         <p class="text-xs text-muted">Layout: <code>{design.layout}</code>{" · "}Theme: <a href={galleryHref(base, "theme", getThemeMeta(design.theme)?.slug ?? design.theme)} class="underline underline-offset-4">{getThemeMeta(design.theme)?.name ?? design.theme}</a></p>
+        {previewEnabled && <a href={designPreviewHref(base, design.id)} class="inline-flex min-h-11 items-center self-start text-sm underline underline-offset-4">Preview {design.name} →</a>}
         {design.credit?.source && <a href={design.credit.source} target="_blank" rel="noopener noreferrer" class="text-sm underline underline-offset-4">Design source ↗</a>}
       </div>
     </li>)}

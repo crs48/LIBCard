@@ -8,7 +8,7 @@ export const packagePath = z.string().max(240).regex(/^(?:\.\/)?[a-zA-Z0-9_-][a-
   .refine((p) => !p.replace(/^\.\//, "").split("/").some((s) => !s || s === "." || s === ".." || s.startsWith(".")), "package paths must stay inside the package and cannot contain hidden files");
 const httpUrl = z.string().url().refine((s) => /^https?:\/\//.test(s), "use an http(s) URL");
 const range = z.string().refine((s) => !!semver.validRange(s), "invalid semver range");
-const builtinLayout = z.enum(["classic", "editorial"]);
+const builtinLayout = z.enum(["classic", "editorial", "studio"]);
 export const designManifestSchema = z.object({
   schemaVersion: z.literal(1),
   id: designId,
@@ -54,15 +54,25 @@ export const editorialOptions = {
   type: "object", additionalProperties: false,
   properties: { density: { type: "string", enum: ["compact", "comfortable"] }, mediaTone: { type: "string", enum: ["original", "grayscale"] } },
 };
+export const studioOptions = {
+  type: "object", additionalProperties: false,
+  properties: {
+    ...editorialOptions.properties,
+    masthead: { type: "string", maxLength: 80 },
+    collapseExperiments: { type: "boolean" },
+  },
+};
 /** @typedef {{ id: string, name?: string, layout: string, theme: string, defaults: Record<string, unknown>, optionsSchema: object, builtin?: boolean }} DesignDefinition */
 /** @type {DesignDefinition[]} */
 export const builtinDesigns = [
   { id: "classic", name: "Classic", layout: "classic", theme: "default", defaults: {}, optionsSchema: emptyOptions, builtin: true },
   { id: "personal-home", name: "Personal home", layout: "editorial", theme: "monochrome", defaults: { density: "compact", mediaTone: "grayscale" }, optionsSchema: editorialOptions, builtin: true },
+  { id: "studio", name: "Studio", layout: "studio", theme: "studio", defaults: {}, optionsSchema: studioOptions, builtin: true },
 ];
 export const builtinLayouts = {
-  classic: { defaults: {}, optionsSchema: emptyOptions },
-  editorial: { defaults: { density: "comfortable", mediaTone: "original" }, optionsSchema: editorialOptions },
+  classic: { name: "Classic", component: "Classic.astro", defaults: {}, optionsSchema: emptyOptions },
+  editorial: { name: "Editorial", component: "Editorial.astro", defaults: { density: "comfortable", mediaTone: "original" }, optionsSchema: editorialOptions },
+  studio: { name: "Studio", component: "Studio.astro", defaults: { density: "comfortable", mediaTone: "original", masthead: "independent work", collapseExperiments: true }, optionsSchema: studioOptions },
 };
 
 export function assertCompatibility(manifest, versions) {
