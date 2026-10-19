@@ -147,9 +147,9 @@
 .lc-editorial-contact .lc-social-text a:hover { text-decoration: underline; text-underline-offset: 4px; }
 .lc-editorial-contact .lc-social:hover { color:var(--lc-accent); border-color:var(--lc-accent); }
 .lc-editorial .lc-card-reveal { background: transparent; border: 0; border-radius: 0; box-shadow: none; }
-.lc-editorial .lc-card-reveal > summary { justify-content: flex-start; width: fit-content; min-height: 44px; padding: 0; color: var(--lc-muted); font-size: .75rem; font-weight: 400; }
+.lc-editorial .lc-card-reveal > summary { justify-content: flex-end; width: fit-content; margin-inline-start: auto; min-height: 44px; padding: 0; color: var(--lc-muted); font-size: .75rem; font-weight: 400; text-align: right; }
 .lc-editorial .lc-card-reveal > summary svg { width: 1rem; height: 1rem; }
-.lc-editorial .lc-card-reveal > div { margin-top: .5rem; border: 1px solid var(--lc-border); border-radius: var(--lc-radius); }
+.lc-editorial .lc-card-reveal > div { width: min(100%, 24rem); margin-top: .5rem; margin-inline-start: auto; border: 1px solid var(--lc-border); border-radius: var(--lc-radius); }
 .lc-editorial footer { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--lc-border); text-align:left; font-size: .6875rem; line-height: 1.8; }
 .lc-editorial footer p + p { font-size: .625rem; }
 .lc-editorial[data-media-tone="grayscale"] :is(.lc-link-image, .lc-mark img, .lc-editorial-profile > img, .lc-editorial-profile > p, .lc-standard-block img) { filter:grayscale(1); }
