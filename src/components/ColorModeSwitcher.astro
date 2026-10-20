@@ -39,12 +39,19 @@ const dualThemes = [...new Set(candidates)].filter((slug) => {
     control.addEventListener("click", () => {
       const mode = isDark() ? "light" : "dark";
       root.dataset.colorMode = mode;
-      try { localStorage.setItem("libcard-color-mode", mode); } catch {}
+      // In system mode the icon is a temporary override, never a saved lock.
+      if (defaultMode !== "system") {
+        try { localStorage.setItem("libcard-color-mode", mode); } catch {}
+      }
       sync();
     });
     root.addEventListener("libcard:theme-change", sync);
-    system.addEventListener("change", sync);
+    system.addEventListener("change", () => {
+      if (defaultMode === "system") root.dataset.colorMode = "system";
+      sync();
+    });
     window.addEventListener("storage", (event) => {
+      if (defaultMode === "system") return;
       if (event.key !== "libcard-color-mode" && event.key !== null) return;
       root.dataset.colorMode = valid(event.newValue) ? event.newValue : defaultMode;
       sync();

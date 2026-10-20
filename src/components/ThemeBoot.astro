@@ -5,8 +5,9 @@
 //     reload; the pool may be narrower than the switcher's full cycle ring);
 //   • otherwise: restore a returning visitor's previously chosen theme (no flash
 //     of the owner's default).
-// Color mode restores independently of the theme. Without JavaScript, CSS
-// follows the configured light/dark/system mode, including live device changes.
+// Fixed color modes restore independently of the theme. System mode always
+// starts with the device preference, including when an older override is saved.
+// Without JavaScript, CSS follows the configured mode and live device changes.
 //
 // Kept in its own component so the inline script body is emitted as raw JS rather
 // than inside a JSX expression (where it would be stringified, not executed).
@@ -37,7 +38,7 @@ const { pool, allowed, random = false, restoreTheme = true, restoreMode = false,
       if (stored && allowed.includes(stored)) document.documentElement.dataset.theme = stored;
     } catch {}
   }
-  if (restoreMode) {
+  if (restoreMode && document.documentElement.dataset.colorMode !== "system") {
     try {
       const storedMode = localStorage.getItem("libcard-color-mode");
       if (["system", "light", "dark"].includes(storedMode)) document.documentElement.dataset.colorMode = storedMode;

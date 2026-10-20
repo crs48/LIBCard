@@ -127,6 +127,8 @@ mode. All values remain validated data; raw CSS is not accepted.
 The page follows `prefers-color-scheme` by default. Owners can set
 `theme: { name: monochrome, mode: dark }` to choose a fixed mode or add
 `modeSwitcher: true` to let visitors override it with a light/dark icon toggle.
+In system mode, the override lasts until navigation, reload, or the next system
+appearance change. Saved visitor choices only apply to fixed light/dark defaults.
 Built-in layouts place the toggle beside the header action. A theme without the requested
 scheme uses its original palette. The `/themes` gallery renders both appearances;
 contrast checks and `shoot-themes` cover each one. Static OG images and install

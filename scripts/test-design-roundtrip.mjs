@@ -138,14 +138,55 @@ try {
   writeFileSync(configPath, stringify({ ...content, design: "author/studio", theme: { name: "studio", mode: "light", modeSwitcher: true } }));
   await waitForLayout("author/studio");
   browser = await chromium.launch();
-  const page = await browser.newPage();
+  const context = await browser.newContext();
+  const page = await context.newPage();
   await page.goto(url);
   assert.equal(await page.locator("#lc-color-mode-control").count(), 1);
   await page.getByRole("button", { name: "Switch to dark mode" }).click();
   assert.equal(await page.locator("html").getAttribute("data-color-mode"), "dark");
+  await page.reload();
+  assert.equal(await page.locator("html").getAttribute("data-color-mode"), "dark");
   await page.getByRole("button", { name: "Switch to light mode" }).click();
   assert.equal(await page.locator("html").getAttribute("data-color-mode"), "light");
+  await page.reload();
+  assert.equal(await page.locator("html").getAttribute("data-color-mode"), "light");
   console.log("✓ Shared Studio wrapper keeps one working light/dark control");
+  writeFileSync(configPath, stringify({ ...content, design: "personal-home", theme: { name: "monochrome", mode: "system", modeSwitcher: true } }));
+  await waitForLayout("editorial");
+  await page.evaluate(() => localStorage.setItem("libcard-color-mode", "dark"));
+  await page.emulateMedia({ colorScheme: "light" });
+  await page.goto(url);
+  const expectAppearance = async (scheme) => {
+    await page.waitForFunction((value) => getComputedStyle(document.documentElement).colorScheme === value, scheme);
+    // CSS updates before the browser dispatches the media-query change event.
+    await page.waitForFunction((value) => document.querySelector("#lc-color-mode-control")?.getAttribute("data-mode") === value, scheme);
+    assert.equal(await page.locator("#lc-color-mode-control").getAttribute("data-mode"), scheme);
+  };
+  await expectAppearance("light");
+  assert.equal(await page.locator("html").getAttribute("data-color-mode"), "system");
+  await page.emulateMedia({ colorScheme: "dark" }); await expectAppearance("dark");
+  await page.emulateMedia({ colorScheme: "light" }); await expectAppearance("light");
+  await page.getByRole("button", { name: "Switch to dark mode" }).click();
+  await expectAppearance("dark");
+  await page.reload(); await expectAppearance("light");
+  // Old tabs can still write a saved preference; system mode must ignore it.
+  const other = await page.context().newPage();
+  await other.goto(url);
+  await other.evaluate(() => localStorage.setItem("libcard-color-mode", "light"));
+  await other.evaluate(() => localStorage.setItem("libcard-color-mode", "dark"));
+  await other.close(); await expectAppearance("light");
+  await page.getByRole("button", { name: "Switch to dark mode" }).click();
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.waitForFunction(() => document.documentElement.dataset.colorMode === "system");
+  await expectAppearance("dark");
+  await page.emulateMedia({ colorScheme: "light" }); await expectAppearance("light");
+  const noJs = await browser.newContext({ javaScriptEnabled: false, colorScheme: "dark" });
+  const noJsPage = await noJs.newPage(); await noJsPage.goto(url);
+  assert.equal(await noJsPage.locator("html").evaluate((root) => getComputedStyle(root).colorScheme), "dark");
+  await noJsPage.emulateMedia({ colorScheme: "light" });
+  assert.equal(await noJsPage.locator("html").evaluate((root) => getComputedStyle(root).colorScheme), "light");
+  await noJs.close();
+  console.log("✓ System appearance follows live device changes, ignores saved overrides, and works without JavaScript");
 } finally {
   await browser?.close();
   if (server?.pid) { try { process.kill(-server.pid, "SIGTERM"); } catch {} }

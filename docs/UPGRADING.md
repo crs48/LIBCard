@@ -53,6 +53,9 @@ file's `schemes` overrides. Older schemas reject these fields. Existing themes
 and string selections remain valid; Monochrome now follows the device's light
 or dark preference. Use `theme: { name: monochrome, mode: light }` to keep its
 previous light appearance, or add `modeSwitcher: true` for a visitor control.
+System mode ignores previously saved overrides and follows device changes live.
+Its icon toggle is temporary, resetting on navigation, reload, or the next system
+appearance change; fixed light/dark defaults still remember visitor choices.
 Engine updates preserve your config and authored themes; changing modes does
 not rewrite media. See [theme configuration](../README.md#themes) and the
 [theme authoring guide](../themes/README.md#light-and-dark-appearances).

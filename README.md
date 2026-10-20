@@ -411,8 +411,11 @@ theme:
 
 `mode` selects an appearance within the same theme. `switcher` below changes the
 whole theme. The icon toggle sits beside the header action in built-in layouts.
-It follows the configured mode until clicked, then remembers the visitor's light
-or dark choice and restores it before paint. It adds a small script only when
+With `mode: system`, each visit follows the device setting and updates immediately
+when it changes. Clicking the icon temporarily overrides it until the next page
+load or system appearance change; previously saved choices do not override
+system mode. With a fixed `light` or `dark` default, the toggle remembers the
+visitor's choice and restores it before paint. It adds a small script only when
 enabled and hides for themes with just one palette. With JavaScript disabled,
 the configured mode still works and the toggle is hidden.
 Older themes keep their existing palette if they do not provide the requested
