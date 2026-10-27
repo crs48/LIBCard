@@ -87,6 +87,20 @@ links:
     id: nervous-system
     description: A free guide to understanding your nervous system, with short practices and places to start.
     iconImage: /projects/gently.svg
+  - label: Diff City
+    url: https://diff.city/
+    icon: git-merge
+    github: https://github.com/crs48/diffcity
+    stars: build
+    id: diffcity
+    description: A desktop workspace for code review, with AI-guided walkthroughs and conversations beside the code.
+    note: GitHub pull requests · AI-assisted review
+    iconImage: /projects/diffcity.svg
+    image:
+      src: /projects/diffcity-preview.webp
+      alt: Diff City showing a guided pull request review with notes beside the code
+      width: 1440
+      height: 940
   - label: LibCard
     url: https://crs48.github.io/LIBCard
     icon: id-card
@@ -276,7 +290,7 @@ sections:
     id: work
     title: Selected work
     purpose: work
-    items: [ xnet, libcard, feedme ]
+    items: [ diffcity, xnet, libcard ]
   - type: links
     id: together
     title: Work together
@@ -293,6 +307,7 @@ sections:
     purpose: experiments
     items:
       [
+        feedme,
         murmuration,
         warp-voyage,
         wealthglobe,

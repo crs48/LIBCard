@@ -3,6 +3,8 @@
 Project-owned artwork used on this personal card. Raster previews are resized WebP copies; grayscale is a layout preference and does not alter these files.
 
 - [xnet.svg](./xnet.svg) — [original](https://cdn.jsdelivr.net/gh/crs48/xNet@main/site/public/favicon.svg)
+- [diffcity.svg](./diffcity.svg) — [original](https://diff.city/favicon.svg)
+- [diffcity-preview.webp](./diffcity-preview.webp) — [original](https://diff.city/screenshots/guide-code-notes-1440.webp)
 - [xnet-preview.webp](./xnet-preview.webp) — [original](https://cdn.jsdelivr.net/gh/crs48/xNet@main/site/public/images/workbench-light.png)
 - [libcard-preview.webp](./libcard-preview.webp) — [original](https://cdn.jsdelivr.net/gh/crs48/LIBCard@main/docs/screenshots/landscape-card.png)
 - [feedme.svg](./feedme.svg) — [original](https://cdn.jsdelivr.net/gh/crs48/feedme@main/public/favicon.svg)
