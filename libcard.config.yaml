@@ -121,14 +121,8 @@ links:
     github: https://github.com/crs48/feedme
     stars: build
     id: feedme
-    description: Support independent work and the people behind it.
-    note: Made for creators
+    description: Support independent work.
     iconImage: /projects/feedme.svg
-    image:
-      src: /projects/feedme-preview.webp
-      alt: Feedme, an open-source way to support creators
-      width: 1200
-      height: 630
   - label: Digital garden
     url: https://crs.garden
     icon: leaf
