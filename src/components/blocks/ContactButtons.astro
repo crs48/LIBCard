@@ -30,10 +30,16 @@ if (block.signal) buttons.push({ href: `https://signal.me/#p/${block.signal}`, l
 if (email) buttons.push({ href: `mailto:${email}`, label: "Email", icon: "mail" });
 
 const external = (href: string) => /^https?:\/\//i.test(href);
+
+// Only reach for the third column once there is something to put in it. A card
+// with just Call and Email is the common case, and an unconditional
+// `sm:grid-cols-3` lays that pair out in a three-column grid from 640px up —
+// the buttons stop two-thirds of the way across with an empty cell beside them.
+const gridClass = `grid w-full grid-cols-2 gap-2${buttons.length > 2 ? " sm:grid-cols-3" : ""}`;
 ---
 {
   buttons.length > 0 && (
-    <div class="grid w-full grid-cols-2 gap-2 sm:grid-cols-3">
+    <div class={gridClass}>
       {buttons.map((b) => (
         <a
           href={b.href}
