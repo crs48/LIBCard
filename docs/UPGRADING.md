@@ -46,6 +46,13 @@ top-level field, so adding it alone will not display a button. Omitted or
 
 ## 2. What's yours vs. the engine
 
+### Metricool and multiple analytics providers
+
+Update the engine before using `provider: metricool` or an `analytics` list.
+Existing single-provider configurations work unchanged. Metricool is optional;
+add your own pixel hash as shown in [analytics configuration](../README.md#analytics-optional).
+Engine updates preserve your analytics settings and never add a tracking account.
+
 ### Light and dark theme appearances
 
 Update the engine before adding `theme.mode`, `theme.modeSwitcher`, or a theme

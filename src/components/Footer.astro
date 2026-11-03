@@ -25,9 +25,12 @@ const poweredByHref = `${LIBCARD_REPO}?ref=card`;
 // Video defaults to a click-to-load facade, so nothing loads until interaction.
 const liveEmbeds = hasLiveEmbeds(cfg);
 const remoteMedia = hasRemoteMedia(cfg);
-// Honest one-liner when cookieless analytics is on — same spirit as the live-
-// embed disclosure above. Only shown when the owner opted in; never by default.
+// Only describe the analytics the owner enabled; keep Metricool's wording
+// neutral instead of extending the existing no-personal-data claim to it.
 const analytics = await getAnalytics();
+const analyticsNotice = analytics.some((provider) => provider.provider === "metricool")
+  ? "This page uses analytics to count visits."
+  : "This page counts anonymous visits — no cookies, no personal data.";
 
 const credits = footerCredits(cfg, meta, {
   base: import.meta.env.BASE_URL,
@@ -65,8 +68,8 @@ const credits = footerCredits(cfg, meta, {
   }
   {remoteMedia && <p class="mt-1 text-[0.7rem] text-muted/80">Some project images load from third parties.</p>}
   {
-    analytics && (
-      <p class="mt-1 text-[0.7rem] text-muted/80">This page counts anonymous visits — no cookies, no personal data.</p>
+    analytics.length > 0 && (
+      <p class="mt-1 text-[0.7rem] text-muted/80">{analyticsNotice}</p>
     )
   }
   {cfg.footer.designGallery && <DesignSwitcher current={cfg.design ?? "classic"} preview={preview} />}

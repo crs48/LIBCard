@@ -28,10 +28,8 @@ const faviconPng = withBase(base, "/favicon-32.png");
 const appleTouchIcon = withBase(base, "/apple-touch-icon.png");
 const manifest = withBase(base, "/manifest.webmanifest");
 
-// Opt-in, cookieless analytics. Null (the default) emits nothing — the page
-// stays exactly as zero-JS as it was. Each beacon below is the provider's
-// official, cookieless snippet; the GoatCounter `pixel` variant ships NO script
-// and is emitted in the Layout body instead. See docs/explorations/0009.
+// Opt-in script beacons. An empty list emits nothing. Image-only providers
+// (GoatCounter pixel and Metricool) render in the shared Document body instead.
 const analytics = await getAnalytics();
 ---
 <meta charset="utf-8" />
@@ -60,15 +58,17 @@ const analytics = await getAnalytics();
 
 {/* Cookieless analytics beacons (opt-in). The GoatCounter pixel ships no JS
     and is rendered in the body by Layout.astro instead. */}
-{analytics?.provider === "plausible" && (
+{analytics.map((analytics) => <>
+{analytics.provider === "plausible" && (
   <script is:inline defer data-domain={analytics.domain} src={analytics.src}></script>
 )}
-{analytics?.provider === "umami" && (
+{analytics.provider === "umami" && (
   <script is:inline defer src={analytics.src} data-website-id={analytics.websiteId}></script>
 )}
-{analytics?.provider === "cloudflare" && (
+{analytics.provider === "cloudflare" && (
   <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={`{"token": "${analytics.token}"}`}></script>
 )}
-{analytics?.provider === "goatcounter" && analytics.mode === "script" && (
+{analytics.provider === "goatcounter" && analytics.mode === "script" && (
   <script is:inline defer data-goatcounter={`https://${analytics.code}.goatcounter.com/count`} src="//gc.zgo.at/count.js"></script>
 )}
+</>)}

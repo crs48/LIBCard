@@ -590,22 +590,22 @@ const blockSchema = z.discriminatedUnion("type", [
   }).strict(),
 ]);
 
-// --- Privacy-first, cookieless analytics (optional, OFF by default) ----------
+// --- Analytics (optional, OFF by default) ----------------------------------
 //
 // Omit this whole block and the page ships ZERO analytics — and, if nothing else
-// opts into JS, stays zero-JS, exactly like today. Every supported provider is
-// cookieless and (per the vendor) needs no consent banner. Two honesty tiers,
-// mirroring the `stars` modes:
+// opts into JS, stays zero-JS. Accept one provider or a list of distinct
+// providers. Image pixels work without JavaScript:
 //
 //   • goatcounter `mode: pixel` — a single <img>. ZERO JavaScript. Counts
 //     pageviews + referrers; cannot see outbound clicks.
+//   • metricool — its supplied image pixel; visits and geographic data only.
 //   • goatcounter `mode: script`, umami, plausible, cloudflare — a small
 //     (~1–2 KB) cookieless beacon that also tracks outbound link clicks.
 //
 // The provider id/domain/token are PUBLIC identifiers (no secrets), so they live
 // happily in this committed file. Like `embed`/`signup`, this is validated data,
 // never raw HTML — we only ever emit a known provider's official snippet.
-const analyticsSchema = z
+const analyticsProviderSchema = z
   .discriminatedUnion("provider", [
     z
       .object({
@@ -642,8 +642,22 @@ const analyticsSchema = z
         token: z.string().min(1),
       })
       .strict(),
-  ])
-  .optional();
+    z.object({
+      provider: z.literal("metricool"),
+      hash: z.string().regex(/^[a-fA-F0-9]{32}$/, "must be the 32-character hash from the Metricool pixel URL"),
+    }).strict(),
+  ]);
+
+const analyticsSchema = z.union([
+  analyticsProviderSchema,
+  z.array(analyticsProviderSchema).min(1).superRefine((providers, ctx) => {
+    providers.forEach((entry, index) => {
+      if (providers.findIndex((item) => item.provider === entry.provider) !== index) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, path: [index, "provider"], message: "configure each analytics provider only once" });
+      }
+    });
+  }),
+]).optional();
 
 export const libcardSchema = z.object({
   profile: z

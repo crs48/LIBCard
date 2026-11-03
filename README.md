@@ -620,11 +620,11 @@ what the numbers mean, and why there's no funding bar (yet):
 
 ### Analytics (optional)
 
-By default LibCard ships **zero analytics** — nothing counts you, exactly like the rest of the page. If you'd like basic, honest numbers (how many people visit, where they came from, which links they click) you can opt in to a **cookieless, no-consent-banner** provider. Add an `analytics:` block and LibCard injects that provider's official snippet; omit it and nothing changes.
+By default LibCard ships **zero analytics**. Add an `analytics:` block to enable a provider's snippet, or a list to use multiple providers. Omit it to disable analytics.
 
 ```yaml
 analytics:
-  provider: goatcounter   # goatcounter | umami | plausible | cloudflare
+  provider: goatcounter   # goatcounter | umami | plausible | cloudflare | metricool
   code: yourname          # -> yourname.goatcounter.com
   mode: pixel             # pixel (zero-JS) | script
 ```
@@ -638,8 +638,29 @@ Like the `stars` modes, the choice trades insight against LibCard's *"nothing to
 | `umami` | ~2 KB | **yes** (`outboundClicks: true`) | generous free cloud tier; MIT, self-hostable |
 | `plausible` | <1 KB | **yes** (built in) | polished; paid cloud or self-host |
 | `cloudflare` | ~1.5 KB | no | free + unlimited; needs a Web Analytics `token` |
+| `metricool` | **none** (a 1×1 `<img>`) | no | visits and geographic data; needs the pixel's `hash` |
 
-All of these are **cookieless** and store only aggregate data, so no consent banner is required for the default setup ([ePrivacy rules vary by country](https://plausible.io/data-policy) — the strictest EU states are the exception; you stay responsible for your own compliance). The provider id/domain/token are public, so they live right in `libcard.config.yaml` — no GitHub secrets, no CI changes. When analytics is on, the footer shows a short, honest "counts anonymous visits — no cookies" note. Full background and the provider comparison: [`docs/explorations/0009_*_COOKIELESS_ANALYTICS.md`](./docs/explorations/).
+To add Metricool alongside an existing provider:
+
+```yaml
+analytics:
+  - provider: goatcounter
+    code: yourname
+    mode: pixel
+  - provider: metricool
+    hash: "0123456789abcdef0123456789abcdef" # replace with your pixel's hash
+```
+
+Copy the 32-character `hash` from Metricool's tracking pixel URL. LibCard renders
+the image once per page, loads it eagerly without occupying layout space, and
+adds no Metricool script. Each provider can appear only once. Metricool's pixel
+reports visits and geographic data, with fewer metrics than its JavaScript
+integration ([Metricool setup guide](https://help.metricool.com/how-to-connect-your-website-or-blog-to-metricool-ejuy1)).
+
+Provider identifiers are public and belong in `libcard.config.yaml`; no GitHub
+secrets or CI changes are needed. The footer discloses analytics when enabled,
+using a neutral visit-counting notice when Metricool is present. The original
+provider comparison lives in [`docs/explorations/0009_*_COOKIELESS_ANALYTICS.md`](./docs/explorations/).
 
 ### Custom domain (optional)
 

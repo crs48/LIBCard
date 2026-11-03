@@ -55,14 +55,12 @@ export async function getCardMode(): Promise<LibcardConfig["cardMode"]> {
 }
 
 /**
- * The opt-in, cookieless analytics config — or `null` when the owner hasn't
- * enabled it (the default for everyone). Absent block → the page ships zero
- * analytics. BaseHead/Layout use this to decide whether to emit a beacon/pixel,
- * and the footer uses it to show the honest "counts anonymous visits" note.
+ * Normalize the optional single-provider or multi-provider analytics config.
+ * Absent block → no beacons, pixels, or analytics disclosure.
  */
-export async function getAnalytics(): Promise<LibcardAnalytics | null> {
+export async function getAnalytics(): Promise<LibcardAnalytics[]> {
   const cfg = await getConfig();
-  return cfg.analytics ?? null;
+  return cfg.analytics ? (Array.isArray(cfg.analytics) ? cfg.analytics : [cfg.analytics]) : [];
 }
 
 /**
@@ -80,8 +78,8 @@ export function getFeedme(): Promise<FeedmeState | null> {
 
 /** The validated config object's type, inferred from the Zod schema. */
 export type LibcardConfig = Awaited<ReturnType<typeof getConfig>>;
-/** The analytics block, narrowed to non-optional (callers handle the null). */
-export type LibcardAnalytics = NonNullable<LibcardConfig["analytics"]>;
+/** One analytics provider, independent of the config's single/list form. */
+export type LibcardAnalytics = Exclude<NonNullable<LibcardConfig["analytics"]>, unknown[]>;
 export type LibcardLink = LibcardConfig["links"][number];
 export type LibcardSocial = LibcardConfig["socials"][number];
 export type LibcardCardMode = LibcardConfig["cardMode"];

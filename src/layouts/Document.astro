@@ -35,14 +35,12 @@ const showCardMode = card.enabled && !wide;
 // and a transparent body lets the fixed mesh stage (z-index:-2) show through.
 const candidates = preview ? themes.map((theme) => theme.slug) : theme.switcher || theme.random ? [...theme.cycle, ...theme.randomPool] : [theme.name];
 const fx = effectsForSlugs(candidates);
-// Opt-in cookieless analytics. The GoatCounter `pixel` mode is the zero-JS path:
-// a single <img> beacon rendered at the end of the body (no script at all). The
+// Opt-in analytics. GoatCounter pixel and Metricool use image beacons. The
 // Umami auto-tagger decorates outbound links so their clicks are counted; it
 // runs only when the owner left `outboundClicks` on. Everything else (the head
-// beacons) lives in BaseHead. Null `analytics` → none of this renders.
+// beacons) lives in BaseHead. Empty `analytics` → none of this renders.
 const analytics = await getAnalytics();
-const gcPixel = analytics?.provider === "goatcounter" && analytics.mode === "pixel";
-const umamiOutbound = analytics?.provider === "umami" && analytics.outboundClicks;
+const umamiOutbound = analytics.some((provider) => provider.provider === "umami" && provider.outboundClicks);
 // Tag every outbound link so Umami records its click as an "outbound" event.
 // Emitted via set:html so Astro outputs the JS verbatim (a `{…}` child would be
 // parsed as a template expression, not script).
@@ -64,9 +62,10 @@ const umamiTagger =
     {cornerButton && <CornerButton button={cornerButton} />}
     {/* GoatCounter pixel: the zero-JS analytics path — a 1×1 <img> beacon that
         counts the pageview (and referrer) with no script and no cookie. */}
-    {gcPixel && analytics?.provider === "goatcounter" && (
+    {analytics.map((provider) => <>
+    {provider.provider === "goatcounter" && provider.mode === "pixel" && (
       <img
-        src={`https://${analytics.code}.goatcounter.com/count?p=${Astro.url.pathname}`}
+        src={`https://${provider.code}.goatcounter.com/count?p=${Astro.url.pathname}`}
         alt=""
         aria-hidden="true"
         width="1"
@@ -76,6 +75,18 @@ const umamiTagger =
         style="position:absolute;left:-9999px"
       />
     )}
+    {provider.provider === "metricool" && (
+      <img
+        src={`https://tracker.metricool.com/c3po.jpg?hash=${provider.hash}`}
+        alt=""
+        aria-hidden="true"
+        width="1"
+        height="1"
+        loading="eager"
+        style="position:fixed;top:0;left:0;opacity:0;pointer-events:none"
+      />
+    )}
+    </>)}
     {/* Umami outbound-click auto-tagger: marks every external link so its click
         registers as an "outbound" event. Only ships when the owner kept it on. */}
     {umamiOutbound && <script is:inline type="module" set:html={umamiTagger} />}
