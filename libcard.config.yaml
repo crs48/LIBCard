@@ -115,6 +115,16 @@ links:
       alt: LibCard’s digital business card with a QR code
       width: 1200
       height: 555
+  - label: Impulse Mirror
+    url: https://apps.apple.com/us/app/impulse-mirror/id6820470608
+    icon: book-open
+    id: impulse-mirror
+    description: >-
+      An app I made with my ex to help you build a more intentional relationship
+      with technology. Track and journal your impulses to reach for social media,
+      games, or entertainment, and notice the patterns behind them.
+    actionLabel: Find it on the App Store
+    iconImage: /projects/impulse-mirror.jpg
   - label: Feedme
     url: https://feedme.fund/
     icon: coins
@@ -285,6 +295,11 @@ sections:
     title: Selected work
     purpose: work
     items: [ diffcity, xnet, libcard ]
+  - type: links
+    id: intention
+    title: A little more intention
+    purpose: general
+    items: [ impulse-mirror ]
   - type: links
     id: together
     title: Work together

@@ -5,6 +5,7 @@ Project-owned artwork used on this personal card. Raster previews are resized We
 - [xnet.svg](./xnet.svg) — [original](https://cdn.jsdelivr.net/gh/crs48/xNet@main/site/public/favicon.svg)
 - [diffcity.svg](./diffcity.svg) — [original](https://diff.city/favicon.svg)
 - [diffcity-preview.webp](./diffcity-preview.webp) — [original](https://diff.city/screenshots/guide-code-notes-1440.webp)
+- [impulse-mirror.jpg](./impulse-mirror.jpg) — app icon from the [App Store listing](https://apps.apple.com/us/app/impulse-mirror/id6820470608), retrieved through Apple's lookup API
 - [xnet-preview.webp](./xnet-preview.webp) — [original](https://cdn.jsdelivr.net/gh/crs48/xNet@main/site/public/images/workbench-light.png)
 - [libcard-preview.webp](./libcard-preview.webp) — [original](https://cdn.jsdelivr.net/gh/crs48/LIBCard@main/docs/screenshots/landscape-card.png)
 - [feedme.svg](./feedme.svg) — [original](https://cdn.jsdelivr.net/gh/crs48/feedme@main/public/favicon.svg)
